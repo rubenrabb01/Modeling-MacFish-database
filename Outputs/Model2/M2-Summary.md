@@ -1,3 +1,5 @@
+# summary(m2)
+
 Family: gaussian 
   Links: mu = identity; sigma = identity 
 Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid) 
@@ -31,3 +33,30 @@ seasonwinter:fi_specieswels            -2.49      0.98    -4.45    -0.69 1.00   
 Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
 sigma    13.67      0.10    13.47    13.87 1.00     4815     2434
+
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+
+
+# loo(m2, cores = getOption("mc.cores", 1))
+
+Output of model 'm2':
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -35706.0  74.2
+p_loo        45.0   0.9
+looic     71412.0 148.5
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+
+
+
+
+
+
