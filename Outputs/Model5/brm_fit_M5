@@ -1,0 +1,2 @@
+m51<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1 + season | fi_fishid)+(1|fi_species), data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 4000, cores = 4, chains = 4
+,control = list(max_treedepth=30,adapt_delta = 0.98))
