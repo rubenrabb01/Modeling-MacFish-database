@@ -307,25 +307,62 @@ round(head(a_df), 2)
 
 # Sort dataframe containing an estimated alpha's mean and sd for every fi_fishid
 a_df <- a_df[order(a_df$a_mean), ]
-a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank 
+a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank
 
 # Plot fish-level alphas's posterior mean and 95% credible interval
-ggplot(data = a_df, 
-       aes(x = a_rank, 
+ggplot(data = a_df,
+       aes(x = a_rank,
            y = a_mean)) +
-  geom_pointrange(aes(ymin = Q2.5, 
+  geom_pointrange(aes(ymin = Q2.5,
                       ymax = Q97.5),
-                  position = position_jitter(width = 0.1, 
-                                             height = 0)) + 
-  geom_hline(yintercept = mean(a_df$a_mean), 
-             size = 0.5, 
-             col = "red") + 
-  scale_x_continuous("Rank", 
-                     breaks = seq(from = 0, 
-                                  to = 80, 
-                                  by = 5)) + 
-  scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) + 
+                  position = position_jitter(width = 0.1,
+                                             height = 0)) +
+  geom_hline(yintercept = mean(a_df$a_mean),
+             size = 0.5,
+             col = "red") +
+  scale_x_continuous("Rank",
+                     breaks = seq(from = 0,
+                                  to = 80,
+                                  by = 5)) +
+  scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
   theme_bw( base_family = "serif")
 
 
+# The difference between the two fish averages (fish #21 and #29)
+fish_diff <- a_sims[, 21] - a_sims[, 29]
+
+
+# We can investigate the posterior distribution of the difference with descriptive statistics and a histogram as follows:
+
+# Investigate differences of two distributions
+mean <- mean(fish_diff)
+sd <- sd(fish_diff)
+quantile <- quantile(fish_diff, probs = c(0.025, 0.50, 0.975))
+quantile <- data.frame(t(quantile))
+names(quantile) <- c("Q2.5", "Q50", "Q97.5")
+diff_df <- data.frame(mean, sd, quantile)
+round(diff_df, 2)
+
+# Histogram of the differences
+ggplot(data = data.frame(fish_diff),
+       aes(x = fish_diff)) +
+  geom_histogram(color = "black",
+                 fill = "gray",
+                 binwidth = 0.75) +
+  scale_x_continuous("Score diffence between two fishes: #21, #29",
+                     breaks = seq(from = -20,
+                                  to = 20,
+                                  by = 10)) +
+  geom_vline(xintercept = c(mean(fish_diff),
+                            quantile(fish_diff,
+                                     probs = c(0.025, 0.975))),
+             colour = "red",
+             linetype = "longdash") +
+  geom_text(aes(0.45, 20, label = "mean = 0.45"),
+            color = "red",
+            size = 4) +
+  geom_text(aes(9, 50, label = "SD = 3.39"),
+            color = "blue",
+            size = 4) +
+  theme_bw( base_family = "serif")
 
