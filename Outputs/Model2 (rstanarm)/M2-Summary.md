@@ -188,9 +188,9 @@ See help('prior_summary.stanreg') for more details
 ### Posterior means, s.d, 95% credible intervalS, MC errors 
 
 # summary(m2,
-         pars = c("(Intercept)", "sigma", "Sigma[school:(Intercept),(Intercept)]"),
-         probs = c(0.025, 0.975),
-         digits = 2)
+#         pars = c("(Intercept)", "sigma", "Sigma[school:(Intercept),(Intercept)]"),
+#         probs = c(0.025, 0.975),
+#         digits = 2)
 
 Model Info:
 
