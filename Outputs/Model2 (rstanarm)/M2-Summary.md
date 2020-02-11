@@ -184,3 +184,36 @@ Covariance
 ------
 See help('prior_summary.stanreg') for more details
 
+
+### Posterior means, s.d, 95% credible intervalS, MC errors 
+
+# summary(m2,
+         pars = c("(Intercept)", "sigma", "Sigma[school:(Intercept),(Intercept)]"),
+         probs = c(0.025, 0.975),
+         digits = 2)
+
+Model Info:
+
+ function:     stan_lmer
+ family:       gaussian [identity]
+ formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
+ algorithm:    sampling
+ priors:       see help('prior_summary')
+ sample:       4000 (posterior sample size)
+ observations: 8846
+ groups:       fi_fishid (31)
+
+Estimates:
+              mean   sd    2.5%   97.5%
+(Intercept) 26.57   2.25 22.14  31.07  
+sigma       13.67   0.10 13.47  13.87  
+
+Diagnostics:
+            mcse Rhat n_eff
+(Intercept) 0.09 1.01  663 
+sigma       0.00 1.00 3728 
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
+
+
+
