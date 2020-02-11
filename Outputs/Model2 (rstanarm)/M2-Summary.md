@@ -1,7 +1,5 @@
 # summary(m2)
 
-> summary(m2)
-
 Model Info:
 
  function:     stan_lmer
@@ -120,4 +118,69 @@ mean_PPD                                 0.0  1.0  3698
 log-posterior                            0.2  1.0   777 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
-> 
+
+
+### Quick summary
+
+# print(m2, digits = 2)
+
+stan_lmer
+ family:       gaussian [identity]
+ formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
+ observations: 8846
+------
+                                    Median MAD_SD
+(Intercept)                          26.55   2.15
+seasonspring_I                       -1.80   0.84
+seasonspring_II                      14.58   1.64
+seasonsummer                         -3.29   0.68
+seasonwinter                          3.69   0.76
+fi_speciespikeperch                  -7.66   3.12
+fi_specieswels                        0.24   2.91
+seasonspring_I:fi_speciespikeperch    7.58   1.26
+seasonspring_II:fi_speciespikeperch -13.61   2.46
+seasonsummer:fi_speciespikeperch     12.97   1.12
+seasonwinter:fi_speciespikeperch     -3.50   1.18
+seasonspring_I:fi_specieswels         6.85   1.08
+seasonspring_II:fi_specieswels      -10.20   2.17
+seasonsummer:fi_specieswels           4.34   0.87
+seasonwinter:fi_specieswels          -2.90   1.00
+sigma                                13.67   0.10
+
+Error terms:
+ Groups    Name        Std.Dev.
+ fi_fishid (Intercept)  6.93   
+ Residual              13.67   
+Num. levels: fi_fishid 31 
+
+Sample avg. posterior predictive distribution of y:
+         Median MAD_SD
+mean_PPD 26.92   0.20 
+
+------
+For info on the priors used see help('prior_summary.stanreg').
+
+
+### Check the priors used 
+
+# prior_summary(object = m2)       
+
+Priors for model 'm2' 
+------
+Intercept (after predictors centered)
+ ~ normal(location = 0, scale = 10)
+     **adjusted scale = 154.58
+
+Coefficients
+ ~ normal(location = [0,0,0,...], scale = [2.5,2.5,2.5,...])
+     **adjusted scale = [38.65,38.65,38.65,...]
+
+Auxiliary (sigma)
+ ~ exponential(rate = 1)
+     **adjusted scale = 15.46 (adjusted rate = 1/adjusted scale)
+
+Covariance
+ ~ decov(reg. = 1, conc. = 1, shape = 1, scale = 1)
+------
+See help('prior_summary.stanreg') for more details
+
