@@ -272,3 +272,60 @@ signma_y <- as.matrix(m2, pars = "sigma")
 # draws for sigma_alpha^2
 sigma_alpha <- as.matrix(m2, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")
 
+
+
+### Obtaining means, s.d., medians and 95% credible intervals
+
+# In fish_inter, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (fi_fishid:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
+
+# Compute mean, SD, median, and 95% credible interval of varying intercepts
+
+# Posterior mean and SD of each alpha
+a_mean <- apply(X = fish_inter,     # posterior mean
+                MARGIN = 2,
+                FUN = mean)
+a_sd <- apply(X = fish_inter,       # posterior SD
+              MARGIN = 2,
+              FUN = sd)
+
+# Posterior median and 95% credible interval
+a_quant <- apply(X = fish_inter,
+                 MARGIN = 2,
+                 FUN = quantile,
+                 probs = c(0.025, 0.50, 0.975))
+a_quant <- data.frame(t(a_quant))
+names(a_quant) <- c("Q2.5", "Q50", "Q97.5")
+
+# Combine summary statistics of posterior simulation draws
+a_df <- data.frame(a_mean, a_sd, a_quant)
+round(head(a_df), 2)
+
+
+### Plots
+
+# Caterpillar plot to show the fully Bayes estimates for the fi_fishid varying intercepts in rank order together with their 95% credible intervals
+
+# Sort dataframe containing an estimated alpha's mean and sd for every fi_fishid
+a_df <- a_df[order(a_df$a_mean), ]
+a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank 
+
+# Plot fish-level alphas's posterior mean and 95% credible interval
+ggplot(data = a_df, 
+       aes(x = a_rank, 
+           y = a_mean)) +
+  geom_pointrange(aes(ymin = Q2.5, 
+                      ymax = Q97.5),
+                  position = position_jitter(width = 0.1, 
+                                             height = 0)) + 
+  geom_hline(yintercept = mean(a_df$a_mean), 
+             size = 0.5, 
+             col = "red") + 
+  scale_x_continuous("Rank", 
+                     breaks = seq(from = 0, 
+                                  to = 80, 
+                                  by = 5)) + 
+  scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) + 
+  theme_bw( base_family = "serif")
+
+
+
