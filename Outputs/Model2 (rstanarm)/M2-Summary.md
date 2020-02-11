@@ -188,7 +188,7 @@ See help('prior_summary.stanreg') for more details
 ### Posterior means, s.d, 95% credible intervalS, MC errors 
 
 # summary(m2,
-#         pars = c("(Intercept)", "sigma", "Sigma[school:(Intercept),(Intercept)]"),
+#         pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"),
 #         probs = c(0.025, 0.975),
 #         digits = 2)
 
@@ -204,16 +204,71 @@ Model Info:
  groups:       fi_fishid (31)
 
 Estimates:
-              mean   sd    2.5%   97.5%
-(Intercept) 26.57   2.25 22.14  31.07  
-sigma       13.67   0.10 13.47  13.87  
+                                           mean   sd    2.5%   97.5%
+(Intercept)                              26.57   2.25 22.14  31.07  
+sigma                                    13.67   0.10 13.47  13.87  
+Sigma[fi_fishid:(Intercept),(Intercept)] 48.08  14.24 28.00  82.63  
 
 Diagnostics:
-            mcse Rhat n_eff
-(Intercept) 0.09 1.01  663 
-sigma       0.00 1.00 3728 
+                                         mcse Rhat n_eff
+(Intercept)                              0.09 1.01  663 
+sigma                                    0.00 1.00 3728 
+Sigma[fi_fishid:(Intercept),(Intercept)] 0.45 1.00 1010 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 
 
+### Extract the posterior draws for all parameters
+
+# sims <- as.matrix(m2)
+# dim(sims)
+
+[1] 4000   48
+
+# para_name <- colnames(sims)
+# para_name
+
+ [1] "(Intercept)"                              "seasonspring_I"                          
+ [3] "seasonspring_II"                          "seasonsummer"                            
+ [5] "seasonwinter"                             "fi_speciespikeperch"                     
+ [7] "fi_specieswels"                           "seasonspring_I:fi_speciespikeperch"      
+ [9] "seasonspring_II:fi_speciespikeperch"      "seasonsummer:fi_speciespikeperch"        
+[11] "seasonwinter:fi_speciespikeperch"         "seasonspring_I:fi_specieswels"           
+[13] "seasonspring_II:fi_specieswels"           "seasonsummer:fi_specieswels"             
+[15] "seasonwinter:fi_specieswels"              "b[(Intercept) fi_fishid:T449202_1]"      
+[17] "b[(Intercept) fi_fishid:T449203_1]"       "b[(Intercept) fi_fishid:T449204_1]"      
+[19] "b[(Intercept) fi_fishid:T449207_1]"       "b[(Intercept) fi_fishid:T449208_1]"      
+[21] "b[(Intercept) fi_fishid:T449209_1]"       "b[(Intercept) fi_fishid:T449213_1]"      
+[23] "b[(Intercept) fi_fishid:T449215_1]"       "b[(Intercept) fi_fishid:T449268_1]"      
+[25] "b[(Intercept) fi_fishid:T449269_1]"       "b[(Intercept) fi_fishid:T449270_2]"      
+[27] "b[(Intercept) fi_fishid:T449271_1]"       "b[(Intercept) fi_fishid:T449272_1]"      
+[29] "b[(Intercept) fi_fishid:T449274_1]"       "b[(Intercept) fi_fishid:T449275_1]"      
+[31] "b[(Intercept) fi_fishid:T449276_1]"       "b[(Intercept) fi_fishid:T449277_1]"      
+[33] "b[(Intercept) fi_fishid:T449278_1]"       "b[(Intercept) fi_fishid:T449280_1]"      
+[35] "b[(Intercept) fi_fishid:T449282_1]"       "b[(Intercept) fi_fishid:T449284_1]"      
+[37] "b[(Intercept) fi_fishid:T449285_1]"       "b[(Intercept) fi_fishid:T449286_1]"      
+[39] "b[(Intercept) fi_fishid:T449287_1]"       "b[(Intercept) fi_fishid:T449288_1]"      
+[41] "b[(Intercept) fi_fishid:T449310_1]"       "b[(Intercept) fi_fishid:T449313_1]"      
+[43] "b[(Intercept) fi_fishid:T449314_1]"       "b[(Intercept) fi_fishid:T449317_1]"      
+[45] "b[(Intercept) fi_fishid:T449318_1]"       "b[(Intercept) fi_fishid:T449319_1]"      
+[47] "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
+
+
+### Obtain fi_fishid-level varying intercept a_j
+
+# draws for overall mean
+mu_a_sims <- as.matrix(m2, pars = "(Intercept)")
+
+# draws for 30 fishes' fi_fishid-level error
+fish_err <- as.matrix(m2, regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")
+
+# draws for 30 fishes' varying intercepts
+fish_inter <- as.numeric(mu_a_sims) + fish_err
+
+# Obtain sigma_y and sigma_alpha^2
+# draws for sigma_y
+signma_y <- as.matrix(m2, pars = "sigma")
+
+# draws for sigma_alpha^2
+sigma_alpha <- as.matrix(m2, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")
 
