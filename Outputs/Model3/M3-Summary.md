@@ -1,3 +1,9 @@
+
+### Bayesian mixed-effects model fitted with brms  
+
+`m3<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1|fi_species), 
+        data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
+
 `summary(m3)`
 
 ```
@@ -58,3 +64,13 @@ Monte Carlo SE of elpd_loo is 0.1.
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ````
+
+plot(m3)
+
+![M3_1](/Plots/M3_1.png "M3_1")
+![M3_2](/Plots/M3_2.png "M3_2")
+![M3_3](/Plots/M3_3.png "M3_3")
+![M3_4](/Plots/M3_4.png "M3_4")
+![M3_5](/Plots/M3_5.png "M3_5")
+![M3_6](/Plots/M3_6.png "M3_6")
+

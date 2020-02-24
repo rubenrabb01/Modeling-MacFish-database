@@ -44,6 +44,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 
 `loo(m2, cores = getOption("mc.cores", 1))`
 
+```
 Output of model 'm2':
 Computed from 4000 by 8846 log-likelihood matrix
 
@@ -56,4 +57,15 @@ Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
+```
+
+plot(m2)
+
+![M2_1](/Plots/M2_1.png "M2_1")
+![M2_2](/Plots/M2_2.png "M2_2")
+![M2_3](/Plots/M2_3.png "M2_3")
+![M2_4](/Plots/M2_4.png "M2_4")
+![M2_5](/Plots/M2_5.png "M2_5")
+
+
 
