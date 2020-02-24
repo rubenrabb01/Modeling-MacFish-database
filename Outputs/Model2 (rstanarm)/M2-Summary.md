@@ -1,4 +1,4 @@
-#### summary(m2)
+##### summary(m2)
 ```{r, echo=FALSE, eval=TRUE}
 
 Model Info:
@@ -119,10 +119,11 @@ mean_PPD                                 0.0  1.0  3698
 log-posterior                            0.2  1.0   777 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
+```
 
+##### Quick summary
 
-### Quick summary
-
+```
 # print(m2, digits = 2)
 
 stan_lmer
