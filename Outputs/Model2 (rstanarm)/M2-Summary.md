@@ -1,4 +1,4 @@
-### Summary for m2 fit 
+### RESULTS OF M2 FIT 
 `summary(m2)`
 
 ```{r, echo=FALSE, eval=TRUE}
@@ -123,11 +123,11 @@ log-posterior                            0.2  1.0   777
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
 
-##### Quick summary
+##### QUICK SUMMARY
+`print(m2, digits = 2)`
+
 
 ```
-# print(m2, digits = 2)
-
 stan_lmer
  family:       gaussian [identity]
  formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
@@ -165,11 +165,10 @@ mean_PPD 26.92   0.20
 For info on the priors used see help('prior_summary.stanreg').
 
 ```
-##### Check the priors used 
+### CHECK PRIORS USED 
+`prior_summary(object = m2)`
 
 ```{r, echo=FALSE, eval=TRUE}
-prior_summary(object = m2)       
-
 Priors for model 'm2' 
 ------
 Intercept (after predictors centered)
@@ -190,14 +189,10 @@ Covariance
 See help('prior_summary.stanreg') for more details
 ```
 
-##### Posterior means, s.d, 95% credible intervalS, MC errors 
+### POSTERIOR MEANS, S.D, 95% CREDIBLE INTERVALS, MC ERRORS 
+`summary(m2, pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
 
 ```
-# summary(m2,
-#         pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"),
-#         probs = c(0.025, 0.975),
-#         digits = 2)
-
 Model Info:
 
  function:     stan_lmer
@@ -225,11 +220,12 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ```
 
-##### Extract the posterior draws for all parameters
+### EXTRACT THE POSTERIOR DRAWS FOR ALL PARAMETERS
+`sims <- as.matrix(m2)
+dim(sims)`
 
 ```{r, echo=FALSE, eval=TRUE}
-# sims <- as.matrix(m2)
-# dim(sims)
+
 [1] 4000   48
 
 # para_name <- colnames(sims)
