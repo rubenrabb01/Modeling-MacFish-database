@@ -1,3 +1,4 @@
+```{r, echo=FALSE, eval=TRUE}
 # summary(m2)
 
 Model Info:
@@ -160,7 +161,9 @@ mean_PPD 26.92   0.20
 ------
 For info on the priors used see help('prior_summary.stanreg').
 
+```
 
+```{r, echo=FALSE, eval=TRUE}
 ### Check the priors used 
 
 # prior_summary(object = m2)       
@@ -217,10 +220,12 @@ Sigma[fi_fishid:(Intercept),(Intercept)] 0.45 1.00 1010
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 
+```
 
-### Extract the posterior draws for all parameters
+
 
 ```{r, echo=FALSE, eval=TRUE}
+### Extract the posterior draws for all parameters
 # sims <- as.matrix(m2)
 # dim(sims)
 [1] 4000   48
