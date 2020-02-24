@@ -1,5 +1,3 @@
-`m2<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, 
-        family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
 
 `summary(m2)`
 
@@ -43,8 +41,8 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-`loo(m2, cores = getOption("mc.cores", 1))`
 
+`loo(m2, cores = getOption("mc.cores", 1))`
 
 ```
 Output of model 'm2':
@@ -60,4 +58,14 @@ Monte Carlo SE of elpd_loo is 0.1.
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
+
+plot(m2)
+
+![M2_1](/Plots/M2_1.png "M2_1")
+![M2_2](/Plots/M2_2.png "M2_2")
+![M2_3](/Plots/M2_3.png "M2_3")
+![M2_4](/Plots/M2_4.png "M2_4")
+![M2_5](/Plots/M2_5.png "M2_5")
+
+
 
