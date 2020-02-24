@@ -1,5 +1,6 @@
-### summary(m31)
+`summary(m31)`
 
+```
  Family: gaussian 
   Links: mu = identity; sigma = identity 
 Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_species) 
@@ -40,9 +41,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
 There were 42 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+```
 
+`loo(m31, cores = getOption("mc.cores", 1))`
 
-### loo(m31, cores = getOption("mc.cores", 1))
+```
 Computed from 4000 by 8846 log-likelihood matrix
          Estimate    SE
 elpd_loo -36508.9  66.4
@@ -53,3 +56,4 @@ Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
+```
