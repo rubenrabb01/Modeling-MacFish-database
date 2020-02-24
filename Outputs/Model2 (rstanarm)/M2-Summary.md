@@ -1,4 +1,5 @@
 ### RESULTS OF M2 FIT 
+
 `summary(m2)`
 
 ```{r, echo=FALSE, eval=TRUE}
@@ -123,9 +124,9 @@ log-posterior                            0.2  1.0   777
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
 
-##### QUICK SUMMARY
-`print(m2, digits = 2)`
+##### Quick Summary
 
+`print(m2, digits = 2)`
 
 ```
 stan_lmer
@@ -165,7 +166,8 @@ mean_PPD 26.92   0.20
 For info on the priors used see help('prior_summary.stanreg').
 
 ```
-### CHECK PRIORS USED 
+### Check priors used 
+
 `prior_summary(object = m2)`
 
 ```{r, echo=FALSE, eval=TRUE}
@@ -189,8 +191,10 @@ Covariance
 See help('prior_summary.stanreg') for more details
 ```
 
-### POSTERIOR MEANS, S.D, 95% CREDIBLE INTERVALS, MC ERRORS 
-`summary(m2, pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
+### Posterior means, s.d., 95% credible intervals, MC errors
+
+`summary(m2, pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"),
+          probs = c(0.025, 0.975), digits = 2)`
 
 ```
 Model Info:
@@ -220,16 +224,17 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ```
 
-### EXTRACT THE POSTERIOR DRAWS FOR ALL PARAMETERS
+### Extract the posterior draws for all parameters
+
 `sims <- as.matrix(m2)
-dim(sims)`
+dim(sims)
+para_name <- colnames(sims)
+para_name`
 
 ```{r, echo=FALSE, eval=TRUE}
 
 [1] 4000   48
 
-# para_name <- colnames(sims)
-# para_name
 
  [1] "(Intercept)"                              "seasonspring_I"                          
  [3] "seasonspring_II"                          "seasonsummer"                            
@@ -257,33 +262,31 @@ dim(sims)`
 [47] "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
 ```
 
-##### Obtain fi_fishid-level varying intercept a_j
+### Obtain fi_fishid-level varying intercept a_j
 
-###### draws for overall mean
+#### draws for overall mean
 
-``` 
-mu_a_sims <- as.matrix(m2, pars = "(Intercept)")
-```` 
-###### draws for 30 fishes' fi_fishid-level error
-```
-fish_err <- as.matrix(m2, regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")
-```
-###### draws for 30 fishes' varying intercepts
-```
-fish_inter <- as.numeric(mu_a_sims) + fish_err
-```
-##### Obtain sigma_y and sigma_alpha^2
+`mu_a_sims <- as.matrix(m2, pars = "(Intercept)")`
 
-###### draws for sigma_y
-```
-signma_y <- as.matrix(m2, pars = "sigma")
-```
+### draws for 30 fishes' fi_fishid-level error
 
-###### draws for sigma_alpha^2
+`fish_err <- as.matrix(m2, regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")`
 
-```
-sigma_alpha <- as.matrix(m2, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")
-```
+### draws for 30 fishes' varying intercepts
+
+`fish_inter <- as.numeric(mu_a_sims) + fish_err`
+
+
+## Obtain sigma_y and sigma_alpha^2
+
+### draws for sigma_y
+
+`signma_y <- as.matrix(m2, pars = "sigma")`
+
+### draws for sigma_alpha^2
+
+`sigma_alpha <- as.matrix(m2, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")`
+
 
 ##### Obtaining means, s.d., medians and 95% credible intervals
 
