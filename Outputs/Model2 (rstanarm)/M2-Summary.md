@@ -1,8 +1,8 @@
 ### Summary for m2 fit 
 
-```{r, echo=FALSE, eval=TRUE}
+#### summary(m2)
 
-summary(m2)
+```{r, echo=FALSE, eval=TRUE}
 
 Model Info:
 
