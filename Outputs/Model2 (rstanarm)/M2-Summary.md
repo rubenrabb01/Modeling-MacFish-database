@@ -1,4 +1,4 @@
-### Bayesian mixed-effects model fitted with stan 
+### Bayesian mixed-effects model fitted with stan (rstanarm) 
 
 `m2<-stan_lmer(formula= ranged2d ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
