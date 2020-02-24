@@ -1,4 +1,4 @@
-### summary(m3)
+`summary(m3)`
 
 ```
  Family: gaussian 
@@ -43,7 +43,7 @@ There were 203 divergent transitions after warmup. Increasing adapt_delta above 
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ```
 
-### loo(m3, cores = getOption("mc.cores", 1))
+`loo(m3, cores = getOption("mc.cores", 1))`
 
 ```
 Computed from 4000 by 8846 log-likelihood matrix
