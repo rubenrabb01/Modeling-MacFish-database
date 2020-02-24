@@ -1,4 +1,4 @@
-##### Summary for m2 fit 
+### Summary for m2 fit 
 
 ```{r, echo=FALSE, eval=TRUE}
 
