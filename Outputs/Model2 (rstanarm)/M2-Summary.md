@@ -1,4 +1,8 @@
-### RESULTS OF M2 FIT 
+### Bayesian mixed-effects model fitted with stan 
+
+`m2<-stan_lmer(formula= ranged2d ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
+
+### Results for m2 fit
 
 `summary(m2)`
 
