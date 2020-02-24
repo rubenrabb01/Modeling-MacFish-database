@@ -338,7 +338,8 @@ a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank`
 
 ###### Plot fish-level alphas's posterior mean and 95% credible interval
 
-`ggplot(data = a_df,
+```
+ggplot(data = a_df,
        aes(x = a_rank,
            y = a_mean)) +
   geom_pointrange(aes(ymin = Q2.5,
@@ -353,8 +354,8 @@ a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank`
                                   to = 80,
                                   by = 5)) +
   scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
-  theme_bw( base_family = "serif")`
-
+  theme_bw( base_family = "serif")
+```
 
 ###### The difference between the two fish averages (fish #21 and #29)
 
@@ -375,7 +376,8 @@ round(diff_df, 2)`
 
 ###### Histogram of the differences
 
-`ggplot(data = data.frame(fish_diff),
+```
+ggplot(data = data.frame(fish_diff),
        aes(x = fish_diff)) +
   geom_histogram(color = "black",
                  fill = "gray",
@@ -396,4 +398,4 @@ round(diff_df, 2)`
             color = "blue",
             size = 4) +
   theme_bw( base_family = "serif")`
-
+```
