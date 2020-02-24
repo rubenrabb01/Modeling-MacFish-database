@@ -72,5 +72,5 @@ plot(m3)
 ![M3_3](/Plots/M3_3.png "M3_3")
 ![M3_4](/Plots/M3_4.png "M3_4")
 ![M3_5](/Plots/M3_5.png "M3_5")
-
+![M3_6](/Plots/M3_6.png "M3_6")
 
