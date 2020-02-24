@@ -1,5 +1,5 @@
-```{r, echo=FALSE, eval=TRUE}
 # summary(m2)
+```{r, echo=FALSE, eval=TRUE}
 
 Model Info:
 
