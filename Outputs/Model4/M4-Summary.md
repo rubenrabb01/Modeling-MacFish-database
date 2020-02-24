@@ -1,5 +1,12 @@
-### summary(m4)
+### Bayesian mixed-effects model fitted with brms 
 
+`m4<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1 | fi_fishid)+(1|fi_species), data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 4000, cores = 4, chains = 4 ,control = list(max_treedepth=30,adapt_delta = 0.98))`                                       
+
+# change max_treedepth, iterations and adapt_delta
+
+`summary(m4)`
+
+```
  Family: gaussian 
   Links: mu = identity; sigma = identity 
 Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid) + (1 | fi_species) 
@@ -43,11 +50,11 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
 There were 207 divergent transitions after warmup. Increasing adapt_delta above 0.98 may help.
+```
 
+`loo(m4, cores = getOption("mc.cores", 1))`
 
-# loo(m4, cores = getOption("mc.cores", 1))
-
-
+```
 Computed from 12000 by 8846 log-likelihood matrix
 
          Estimate    SE
@@ -56,6 +63,6 @@ p_loo        44.9   0.9
 looic     71411.9 148.5
 ------
 Monte Carlo SE of elpd_loo is 0.1.
-
+```
 
 
