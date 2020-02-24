@@ -43,9 +43,10 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-
 `loo(m2, cores = getOption("mc.cores", 1))`
 
+
+```
 Output of model 'm2':
 Computed from 4000 by 8846 log-likelihood matrix
 
@@ -58,4 +59,5 @@ Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
+```
 
