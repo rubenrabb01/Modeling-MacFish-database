@@ -220,10 +220,14 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Extract the posterior draws for all parameters
 
+```{r, echo=FALSE, eval=TRUE}
 # sims <- as.matrix(m2)
 # dim(sims)
-
 [1] 4000   48
+```
+
+
+
 
 # para_name <- colnames(sims)
 # para_name
