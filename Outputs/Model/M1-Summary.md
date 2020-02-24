@@ -1,6 +1,10 @@
+### Bayesian mixed.effects model fitted with brms
 
-### summary(m1)
+`brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species, data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
 
+`summary(m1)`
+
+```
 Family: gaussian 
   Links: mu = identity; sigma = identity 
 Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species 
@@ -33,9 +37,11 @@ sigma    14.99      0.11    14.77    15.21 1.00     6069     2894
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
+```
 
-### loo(m1, cores = getOption("mc.cores", 1))
+`loo(m1, cores = getOption("mc.cores", 1))`
 
+```
 Computed from 4000 by 8846 log-likelihood matrix
 
          Estimate    SE
@@ -47,5 +53,16 @@ Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
+````
+
+plot(m1)
+
+![M1_1](/Plots/M3_1.png "M1_1")
+![M1_2](/Plots/M3_2.png "M1_2")
+![M1_3](/Plots/M3_3.png "M1_3")
+![M1_4](/Plots/M3_4.png "M1_4")
+![M1_5](/Plots/M3_5.png "M1_5")
+![M1_6](/Plots/M3_6.png "M1_6")
+
 
 
