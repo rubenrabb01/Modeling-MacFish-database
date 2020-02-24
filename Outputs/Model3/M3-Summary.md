@@ -1,6 +1,6 @@
-# summary(m3)
+### summary(m3)
 
- Family: gaussian 
+ `Family: gaussian 
   Links: mu = identity; sigma = identity 
 Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_species) 
    Data: mean.ranged2d (Number of observations: 8846) 
@@ -39,12 +39,12 @@ is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 Warning message:
 There were 203 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help.
-See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup 
+See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup`
 
 
-# loo(m3, cores = getOption("mc.cores", 1))
+### loo(m3, cores = getOption("mc.cores", 1))
 
-Computed from 4000 by 8846 log-likelihood matrix
+`Computed from 4000 by 8846 log-likelihood matrix
 
          Estimate    SE
 elpd_loo -36509.0  66.4
@@ -54,5 +54,5 @@ looic     73018.1 132.7
 Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
-See help('pareto-k-diagnostic') for details.
+See help('pareto-k-diagnostic') for details.`
 
