@@ -1,6 +1,6 @@
 ### Summary for m2 fit 
 
-#### summary(m2)
+`summary(m2)' 
 
 ```{r, echo=FALSE, eval=TRUE}
 
