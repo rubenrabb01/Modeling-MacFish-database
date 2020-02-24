@@ -1,5 +1,6 @@
-`summary(m31)`
+`m31<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1|fi_species), data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4, control = list(adapt_delta = 0.95))`
 
+`summary(m31)`
 ```
  Family: gaussian 
   Links: mu = identity; sigma = identity 
