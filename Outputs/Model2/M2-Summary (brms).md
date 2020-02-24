@@ -1,3 +1,7 @@
+### Bayesian mixed-effects model fitted with brms 
+
+
+### Results for m2 fit
 
 `summary(m2)`
 
