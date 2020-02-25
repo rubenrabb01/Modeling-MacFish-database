@@ -53,7 +53,7 @@ Output of model 'm2':
 Computed from 4000 by 8846 log-likelihood matrix
 
          Estimate    SE
-elpd_loo -35706.0  74.2
+elpd_loo -35706.0  74.2       # Expected log predictive density (ELPD)
 p_loo        45.0   0.9
 looic     71412.0 148.5
 ------
