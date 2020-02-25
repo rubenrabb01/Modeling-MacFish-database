@@ -53,7 +53,8 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ```
 ### Compute approximate Leave-one-out Cross-Validation (LOO CV) Information Criterion (LOOIC)
 
-`loo(m31, cores = getOption("mc.cores", 1))`
+`loo31 <- loo(m31, cores = getOption("mc.cores", 1))`     # Create an object of type loo
+`loo31`
 
 ```
 Computed from 4000 by 8846 log-likelihood matrix
@@ -83,6 +84,19 @@ Warning message:
 'r2' is deprecated.
 Use 'performance::r2()' instead.
 See help("Deprecated") 
+```
+- Alternatively, use the r2_bayes() function from package performance
+
+`library(performance)`
+
+`r2_bayes(m31)`
+
+```
+# Bayesian R2 with Standard Error
+
+  Conditional R2: 0.059 [0.005]
+     Marginal R2: 0.058 [0.016]
+
 ```
 
 `plot(m31)`
