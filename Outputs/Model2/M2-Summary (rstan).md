@@ -266,28 +266,28 @@ para_name`
 [47] "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
 ```
 
-### Obtain fi_fishid-level varying intercept a_j
+- Obtain fi_fishid-level varying intercept a_j
 
-#### draws for overall mean
+ - draws for overall mean
 
 `mu_a_sims <- as.matrix(m2, pars = "(Intercept)")`
 
-#### draws for 30 fishes' fi_fishid-level error
+ - draws for 30 fishes' fi_fishid-level error
 
 `fish_err <- as.matrix(m2, regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")`
 
-#### draws for 30 fishes' varying intercepts
+ - draws for 30 fishes' varying intercepts
 
 `fish_inter <- as.numeric(mu_a_sims) + fish_err`
 
 
-### Obtain sigma_y and sigma_alpha^2
+- Obtain sigma_y and sigma_alpha^2
 
-#### draws for sigma_y
+ -draws for sigma_y
 
 `signma_y <- as.matrix(m2, pars = "sigma")`
 
-#### draws for sigma_alpha^2
+ - draws for sigma_alpha^2
 
 `sigma_alpha <- as.matrix(m2, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")`
 
@@ -296,7 +296,7 @@ para_name`
 
 #### In fish_inter, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (fi_fishid:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
 
-#### Posterior mean and SD of each alpha
+- Posterior mean and SD of each alpha
 
 `a_mean <- apply(X = fish_inter,     # posterior mean
                 MARGIN = 2,
@@ -313,7 +313,7 @@ a_mean
 ```
 
               
-##### Posterior median and 95% credible interval
+ - Posterior median and 95% credible interval
 
 `a_quant <- apply(X = fish_inter,
                  MARGIN = 2,
@@ -325,7 +325,7 @@ a_mean
 `names(a_quant) <- c("Q2.5", "Q50", "Q97.5")`
 
 
-##### Combine summary statistics of posterior simulation draws
+ - Combine summary statistics of posterior simulation draws
 
 `a_df <- data.frame(a_mean, a_sd, a_quant)
 round(head(a_df), 2)`
@@ -335,12 +335,12 @@ round(head(a_df), 2)`
 
 #### Caterpillar plot to show the fully Bayes estimates for the fi_fishid varying intercepts in rank order together with their 95% credible interval
 
-##### Sort dataframe containing an estimated alpha's mean and sd for every fi_fishid
+- Sort dataframe containing an estimated alpha's mean and sd for every fi_fishid
 
 `a_df <- a_df[order(a_df$a_mean), ]
 a_df$a_rank <- c(1 : dim(a_df)[1])  # a vector of fi_fishid rank`
 
-###### Plot fish-level alphas's posterior mean and 95% credible interval
+- Plot fish-level alphas's posterior mean and 95% credible interval
 
 ```
 ggplot(data = a_df,
@@ -361,14 +361,14 @@ ggplot(data = a_df,
   theme_bw( base_family = "serif")
 ```
 
-###### The difference between the two fish averages (fish #21 and #29)
+  - The difference between the two fish averages (fish #21 and #29)
 
 `fish_diff <- a_sims[, 21] - a_sims[, 29]`
 
 
-##### We can investigate the posterior distribution of the difference with descriptive statistics and a histogram as follows:
+  - We can investigate the posterior distribution of the difference with descriptive statistics and a histogram as follows:
 
-###### Investigate differences of two distributions
+  - Investigate differences of two distributions
 
 `mean <- mean(fish_diff)
 sd <- sd(fish_diff)
@@ -378,7 +378,7 @@ names(quantile) <- c("Q2.5", "Q50", "Q97.5")
 diff_df <- data.frame(mean, sd, quantile)
 round(diff_df, 2)`
 
-###### Histogram of the differences
+  - Histogram of the differences
 
 ```
 ggplot(data = data.frame(fish_diff),
