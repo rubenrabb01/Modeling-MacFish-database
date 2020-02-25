@@ -85,7 +85,7 @@ Warning message:
 Use 'performance::r2()' instead.
 See help("Deprecated") 
 ```
-- Alternatively, use the r2_bayes() function from package performance
+- Alternatively, use the r2_bayes() function from *performance* library
 
 `library(performance)`
 
