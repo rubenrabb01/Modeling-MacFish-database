@@ -68,6 +68,22 @@ All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
 
+### Compute conditional and marginal R-squared values for Bayesian mixed modesl (for stanreg and brmsfit)
+
+library(sjstats)
+
+`r2(m31)`
+
+```
+# Bayesian R2 with Standard Error
+
+  Conditional R2: 0.059 [0.005]
+     Marginal R2: 0.058 [0.016]
+Warning message:
+'r2' is deprecated.
+Use 'performance::r2()' instead.
+See help("Deprecated") 
+```
 
 `plot(m31)`
 
