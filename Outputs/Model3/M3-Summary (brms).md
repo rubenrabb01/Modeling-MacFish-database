@@ -57,7 +57,7 @@ See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 Computed from 4000 by 8846 log-likelihood matrix
 
          Estimate    SE
-elpd_loo -36509.0  66.4
+elpd_loo -36509.0  66.4         # Expected log predictive density (ELPD)
 p_loo        16.7   0.5
 looic     73018.1 132.7
 ------
