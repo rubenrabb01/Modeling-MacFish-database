@@ -54,22 +54,6 @@ Monte Carlo SE of elpd_loo is 0.1.
 
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
-````
-
-`loo(m1, cores = getOption("mc.cores", 1))`
-
-```
-Computed from 4000 by 8846 log-likelihood matrix
-
-         Estimate    SE
-elpd_loo -36508.8  66.4
-p_loo        16.5   0.5
-looic     73017.7 132.8
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-All Pareto k estimates are good (k < 0.5).
-See help('pareto-k-diagnostic') for details.
 ```
 
 `plot(m1)`
