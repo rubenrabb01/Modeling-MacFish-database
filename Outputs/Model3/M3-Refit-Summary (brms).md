@@ -68,7 +68,7 @@ All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
 
-### Compute conditional and marginal R-squared values for Bayesian mixed modesl (for stanreg and brmsfit)
+### Compute conditional and marginal R-squared values for Bayesian mixed models (stanreg and brmsfit)
 
 library(sjstats)
 
