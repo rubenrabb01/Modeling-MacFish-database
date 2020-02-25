@@ -1,7 +1,7 @@
 ### Bayesian mixed.effects model fitted with brms
 
-`brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species, 
-          data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
+`m1<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species, data = mean.ranged2d, family="gaussian",
+                              prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
 
 `summary(m1)`
 
