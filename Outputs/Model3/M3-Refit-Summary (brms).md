@@ -51,7 +51,7 @@ Warning message:
 There were 42 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ```
-### Compute approximate Leave-one-out Cross-Validation (LOO) Information Criterion (LOOIC)
+### Compute approximate Leave-one-out Cross-Validation (LOO CV) Information Criterion (LOOIC)
 
 `loo(m31, cores = getOption("mc.cores", 1))`
 
