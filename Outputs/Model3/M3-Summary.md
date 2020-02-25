@@ -78,6 +78,6 @@ See help('pareto-k-diagnostic') for details.
 
 `plot(loo(m3, cores = getOption("mc.cores", 1)))`
 
-![M2_5](/Plots/M3_5.png "M3_5")
+![M3_5](/Plots/M3_5.png "M3_5")
 
 
