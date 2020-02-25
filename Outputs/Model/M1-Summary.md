@@ -56,13 +56,19 @@ All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ````
 
-plot(m1)
+`plot(m1)`
 
 ![M1_1](/Plots/M3_1.png "M1_1")
 ![M1_2](/Plots/M3_2.png "M1_2")
 ![M1_3](/Plots/M3_3.png "M1_3")
 ![M1_4](/Plots/M3_4.png "M1_4")
+
+`stanplot(m1, pars = c("b_Intercept", "b_seasonwinter")) + xlim(c(0, 9))`
+
 ![M1_5](/Plots/M3_5.png "M1_5")
+
+`plot(loo(m1, cores = getOption("mc.cores", 1)))`
+
 ![M1_6](/Plots/M3_6.png "M1_6")
 
 
