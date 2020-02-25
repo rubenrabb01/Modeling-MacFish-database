@@ -39,7 +39,7 @@ Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
 is a crude measure of effective sample size, and Rhat is the potential 
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
-### Compute approximate Leave-one-out Cross-Validation (LOO) Information Criterion (LOOIC)
+### Compute approximate Leave-one-out Cross-Validation (LOO CV) Information Criterion (LOOIC)
 
 `loo(m1, cores = getOption("mc.cores", 1))`
 
