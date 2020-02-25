@@ -1,5 +1,8 @@
 ### Bayesian mixed-effects model fitted with brms 
 
+`m2<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, family="gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
+
+
 
 ### Results for m2 fit
 
@@ -63,13 +66,16 @@ All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
 
-plot(m2)
+`plot(m2)`
 
 ![M2_1](/Plots/M2_1.png "M2_1")
 ![M2_2](/Plots/M2_2.png "M2_2")
 ![M2_3](/Plots/M2_3.png "M2_3")
+
+`stanplot(m2, pars = c("b_Intercept", "b_seasonwinter")) + xlim(c(0, 9))`
+
 ![M2_4](/Plots/M2_4.png "M2_4")
+
+`plot(loo(m2, cores = getOption("mc.cores", 1)))`
+
 ![M2_5](/Plots/M2_5.png "M2_5")
-
-
-
