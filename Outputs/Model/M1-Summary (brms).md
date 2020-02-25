@@ -47,7 +47,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).
 Computed from 4000 by 8846 log-likelihood matrix
 
          Estimate    SE
-elpd_loo -36508.6  66.4
+elpd_loo -36508.6  66.4       # Expected log predictive density (ELPD)
 p_loo        16.3   0.5
 looic     73017.2 132.8
 ------
