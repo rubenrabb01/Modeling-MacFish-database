@@ -70,7 +70,7 @@ See help('pareto-k-diagnostic') for details.
 
 ### Compute conditional and marginal R-squared values for Bayesian mixed models (stanreg and brmsfit)
 
-**library(sjstats)**
+`library(sjstats)`
 
 `r2(m31)`
 
