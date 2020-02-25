@@ -71,13 +71,13 @@ See help('pareto-k-diagnostic') for details.
 ![M3_1](/Plots/M3_1.png "M3_1")
 ![M3_2](/Plots/M3_2.png "M3_2")
 ![M3_3](/Plots/M3_3.png "M3_3")
+![M3_4](/Plots/M3_4.png "M3_4")
 
 `stanplot(m3, pars = c("b_Intercept", "b_seasonwinter")) + xlim(c(0, 9))`
 
-![M3_4](/Plots/M3_4.png "M3_4")
+![M3_5](/Plots/M3_5.png "M3_5")
 
 `plot(loo(m3, cores = getOption("mc.cores", 1)))`
 
-![M3_5](/Plots/M3_5.png "M3_5")
 
 
