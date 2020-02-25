@@ -51,13 +51,14 @@ Warning message:
 There were 42 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help.
 See http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ```
+### Compute approximate Leave-one-out Cross-Validation (LOO) Information Criterion (LOOIC)
 
 `loo(m31, cores = getOption("mc.cores", 1))`
 
 ```
 Computed from 4000 by 8846 log-likelihood matrix
          Estimate    SE
-elpd_loo -36508.9  66.4
+elpd_loo -36508.9  66.4         # Expected log predictive density (ELPD)
 p_loo        16.6   0.5
 looic     73017.8 132.8
 ------
