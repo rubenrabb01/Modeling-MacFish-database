@@ -4,7 +4,7 @@
   - 1: There were 42 divergent transitions after warmup. Increasing `adapt_delta` above 0.95 may help
   - 2: There were 54 transitions after warmup that exceeded the maximum treedepth. Increase `max_treedepth` above 10
                                          
-`m31<-brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species +(1 | fi_species), data = mean.ranged2d, family = "gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4, control = list(adapt_delta = 0.95))`
+`m31 <- brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, family = "gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4, control = list(adapt_delta = 0.95))`
 
 `summary(m31)`
 ```
