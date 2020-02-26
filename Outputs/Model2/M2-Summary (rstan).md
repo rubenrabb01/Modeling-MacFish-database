@@ -507,7 +507,7 @@ b[(Intercept) fi_fishid:T449319_1] 24.816963 30.86029 36.99222
 
 - Combine summary statistics of posterior simulation draws
 
-`a_df <- data.frame(a_mean, a_sd, a_quant)' 
+`a_df <- data.frame(a_mean, a_sd, a_quant)`
 
 `round(head(a_df), 2)`
 
@@ -552,9 +552,8 @@ ggplot(data = a_df,
   scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
   theme_bw( base_family = "serif")
   
-![M2_s1](/Plots/M2_s1.png "M2_s1")
-  
 ```
+![M2_s1](/Plots/M2_s1.png "M2_s1")
 
   - The difference between the two fish averages (fish #21 and #29)
 
