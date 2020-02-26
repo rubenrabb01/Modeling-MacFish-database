@@ -255,7 +255,9 @@ sigma       0.00 1.00 4809
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
+
 `sims <- as.matrix(m1)`
+
 `dim(sims)`
 
 ``` 
