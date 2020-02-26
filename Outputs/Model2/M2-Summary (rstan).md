@@ -718,5 +718,17 @@ All Pareto k estimates are good (k < 0.5)
 - *fi_specieswels* has lot of probability mass on both sides of 0
 - *fi_speciespikeperch*, *seasonspring_I*, seasonwinter:fi_specieswels* and *seasonwinter:fi_speciespikeperch* are much closer to 0
 
-We discuss posterior dependencies in more detail in collinear notebook, but for reference we plot also here paired marginals.
+
+#### Plot paired marginals
+
+mcmc_pairs(as.matrix(m2),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
+"seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
+"seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
+"seasonspring_II","seasonspring_I"))
+
+
+
+
+
+
 
