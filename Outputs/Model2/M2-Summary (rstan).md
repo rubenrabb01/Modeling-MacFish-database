@@ -341,20 +341,22 @@ Sigma[fi_fishid:(Intercept),(Intercept)] 0.45 1.00 1010
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 
-
 ```
 
 ### Extract the posterior draws for all parameters
 
-`sims <- as.matrix(m2)
-dim(sims)
+`sims <- as.matrix(m2)`
+
+`dim(sims)`
 
 ```
 [1] 4000   48
+
 ```
 
-`para_name <- colnames(sims)
-para_name`
+`para_name <- colnames(sims)`
+
+`para_name`
 
 ```
  [1] "(Intercept)"                              "seasonspring_I"                           "seasonspring_II"                         
@@ -374,8 +376,7 @@ para_name`
 [43] "b[(Intercept) fi_fishid:T449314_1]"       "b[(Intercept) fi_fishid:T449317_1]"       "b[(Intercept) fi_fishid:T449318_1]"      
 [46] "b[(Intercept) fi_fishid:T449319_1]"       "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
 
-```{r, echo=FALSE, eval=TRUE}
-
+``` 
 
 - Obtain fi_fishid-level varying intercept a_j
 
