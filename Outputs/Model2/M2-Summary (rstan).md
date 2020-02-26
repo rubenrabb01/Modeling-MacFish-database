@@ -1,4 +1,4 @@
-### Bayesian mixed-effects model fitted with stan 
+## Bayesian mixed-effects model fitted with stan 
 
 *2-level Longitudinal conditional growth model*
 
