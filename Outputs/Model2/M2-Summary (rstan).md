@@ -660,3 +660,16 @@ All Pareto k estimates are good (k < 0.5)
 
 ![M2_s2](/Plots/M2_s2.png "M2_s2")
 
+
+### Analyse posterior
+
+#### Plot posterior
+
+`mcmc_areas(as.matrix(m2), prob_outer = .999)`
+
+![M2_s2](/Plots/M2_s2.png "M2_s2")
+
+
+
+
+
