@@ -640,16 +640,15 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 **Vehtari, A., Gelman, A., and Gabry, J. (2017a).** *Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544)*
 
-**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646
-- First, create a loo object*
+**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
 
+- First, create a loo object
 
 - Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
 
 `plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
 
 ![M2_s2](/Plots/M2_s2.png "M2_s2")
-
 
 `pareto_k_table(loo)`   
 
