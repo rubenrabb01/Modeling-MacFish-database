@@ -1,6 +1,7 @@
 ### Bayesian mixed-effects model fitted with brms 
 
-#### 2-level Longitudinal conditional growth model - random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) 
+- 2-level Longitudinal conditional growth model
+  - Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) 
 
 `m2 <- brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_fishid), data = mean.ranged2d, family = "gaussian", prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
 
