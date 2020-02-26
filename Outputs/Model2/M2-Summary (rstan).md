@@ -650,6 +650,26 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 ![M2_s2](/Plots/M2_s2.png "M2_s2")
 
+There are no highly influential observations, which indicates that the model is correct (i.e. there is no misspecification, Vehtari, Gelman and Gabry, 2017).
+
+
+### Check what would CV say about relevance of covariates
+
+We form 3 models by dropping each of the covariates out
+
+## NOT HERE!!!!!
+
+### Posterior predictive checking
+
+In addition to LOO CV, posterior predictive checks can often detect problems and also provide more information about the reason. Here we test the proportion of 1's predicted by the model and compare them to the observed number of 1's.
+
+`prop_zero <- function(y) mean(y == 1)`
+
+`(prop_zero_test1 <- pp_check(m2, plotfun = "stat", stat = "prop_zero"))`
+
+![M2_s3](/Plots/M2_s3.png "M2_s3")
+
+
 `pareto_k_table(loo)`   
 
 ```
@@ -681,8 +701,7 @@ All Pareto k estimates are good (k < 0.5)
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
-![M2_s3](/Plots/M2_s3.png "M2_s3")
-
+![M2_s4](/Plots/M2_s4.png "M2_s4")
 
 
 
