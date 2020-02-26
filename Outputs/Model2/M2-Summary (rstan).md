@@ -714,6 +714,9 @@ All Pareto k estimates are good (k < 0.5)
 
 ![M2_s5](/Plots/M2_s5.png "M2_s5")
 
+- *seasonspring_II:fi_speciespikeperch* and "seasonspring_II:fi_specieswels" are both marginals significantly away from zero
+- *fi_specieswels* has lot of probability mass on both sides of 0
+- *fi_speciespikeperch*, *seasonspring_I*, seasonwinter:fi_specieswels* and *seasonwinter:fi_speciespikeperch* are much closer to zero
 
-
+We discuss posterior dependencies in more detail in collinear notebook, but for reference we plot also here paired marginals.
 
