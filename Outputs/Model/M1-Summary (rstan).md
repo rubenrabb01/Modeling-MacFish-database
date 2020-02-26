@@ -1,4 +1,4 @@
-### Bayesian mixed-effects model fitted with stan 
+## Bayesian mixed-effects model fitted with stan 
 
 `m1<-stan_glm(formula= sqrt(ranged2d + 1) ~ 1 + season*fi_species, data = mean.ranged2d, seed=350)`
 
