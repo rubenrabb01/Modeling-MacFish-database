@@ -230,11 +230,9 @@ Auxiliary (sigma)
 See help('prior_summary.stanreg') for more details
 ```
 
-`summary(m1,
-+         pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"),
-+         probs = c(0.025, 0.975),
-+         digits = 2)`
+`summary(m1, pars = c("(Intercept)", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
 
+```
 Model Info:
  function:     stan_glm
  family:       gaussian [identity]
@@ -256,15 +254,16 @@ MCMC diagnostics
 sigma       0.00 1.00 4809 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
-> 
-> sims <- as.matrix(m1)
-> dim(sims)
+```
+`sims <- as.matrix(m1)`
+`dim(sims)`
+
+``` 
 [1] 4000   16
-> 
-> para_name <- colnames(sims)
-> para_name
- [1] "(Intercept)"                         "seasonspring_I"                      "seasonspring_II"                     "seasonsummer"                       
- [5] "seasonwinter"                        "fi_speciespikeperch"                 "fi_specieswels"                      "seasonspring_I:fi_speciespikeperch" 
- [9] "seasonspring_II:fi_speciespikeperch" "seasonsummer:fi_speciespikeperch"    "seasonwinter:fi_speciespikeperch"    "seasonspring_I:fi_specieswels"      
-[13] "seasonspring_II:fi_specieswels"      "seasonsummer:fi_specieswels"         "seasonwinter:fi_specieswels"         "sigma"                              
-> 
+
+para_name <- colnames(sims)
+para_name
+[1] "(Intercept)"                         "seasonspring_I"                      "seasonspring_II"                     "seasonsummer"                       
+[5] "seasonwinter"                        "fi_speciespikeperch"                 "fi_specieswels"                      "seasonspring_I:fi_speciespikeperch" 
+[9] "seasonspring_II:fi_speciespikeperch" "seasonsummer:fi_speciespikeperch"    "seasonwinter:fi_speciespikeperch"    "seasonspring_I:fi_specieswels"      
+[13] "seasonspring_II:fi_specieswels"      "seasonsummer:fi_specieswels"         "seasonwinter:fi_specieswels"         "sigma"           ```                
