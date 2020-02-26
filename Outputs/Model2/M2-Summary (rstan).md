@@ -607,17 +607,26 @@ Print a diagnostic table summarizing the estimated Pareto shape parameters and P
 `loo<-loo(m2, cores = getOption("mc.cores", 4))`
 
 
-`pareto_k_table(loo)`
+- Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
+
+`pareto_k_table(loo)`   
 
 ```
 All Pareto k estimates are good (k < 0.5)
 ```
+- Returns an integer vector indicating which observations have Pareto k estimates above threshold
 
 `pareto_k_ids(loo, threshold = 0.5)`
 
+- Returns a vector of the estimated Pareto k parameters
+
 `pareto_k_values(loo)`
 
+- returns a vector of the estimated PSIS effective sample sizes
+
 `psis_n_eff_values(loo)`
+
+- Returns the Monte Carlo standard error (MCSE) estimate for PSIS-LOO. MCSE will be NA if any Pareto k values are above threshold
 
 `mcse_loo(loo, threshold = 0.7)`
 
