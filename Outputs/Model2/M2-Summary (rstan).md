@@ -600,6 +600,24 @@ ggplot(data = data.frame(fish_diff),
 
 We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
 
+`loo<-loo(m2, cores = getOption("mc.cores", 4))`
+
+`loo`
+
+```
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -35704.5  74.3
+p_loo        44.5   0.9
+looic     71409.0 148.6
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+
 **Diagnostics for Pareto smoothed importance sampling (PSIS)**
 
 Print a diagnostic table summarizing the estimated Pareto shape parameters and PSIS effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter k is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting Vehtari, Gelman, and Gabry (2017a, 2017b) for full details.
@@ -620,31 +638,18 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 **References**
 
-Vehtari, A., Gelman, A., and Gabry, J. (2017a). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544).
+**Vehtari, A., Gelman, A., and Gabry, J. (2017a).** *Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544)*
 
-Vehtari, A., Gelman, A., and Gabry, J. (2017b). Pareto smoothed importance sampling. preprint arXiv:1507.02646
-- First, create a loo object
+**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646
+- First, create a loo object*
 
-
-`loo<-loo(m2, cores = getOption("mc.cores", 4))`
-
-`loo`
-
-```
-Computed from 4000 by 8846 log-likelihood matrix
-
-         Estimate    SE
-elpd_loo -35704.5  74.3
-p_loo        44.5   0.9
-looic     71409.0 148.6
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-All Pareto k estimates are good (k < 0.5).
-See help('pareto-k-diagnostic') for details.
-```
 
 - Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
+
+`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
+
+![M2_s2](/Plots/M2_s2.png "M2_s2")
+
 
 `pareto_k_table(loo)`   
 
@@ -670,13 +675,6 @@ All Pareto k estimates are good (k < 0.5)
 ```
 [1] 0.1016874
 ```
-
-#### S3 method for psis_loo
-
-`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
-
-![M2_s2](/Plots/M2_s2.png "M2_s2")
-
 
 ### Analyse posterior
 
