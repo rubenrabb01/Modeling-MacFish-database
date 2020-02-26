@@ -6,7 +6,7 @@
 
 `m2<-stan_lmer(formula= ranged2d ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
-### Results for m2 fit
+### Fitted Model 2 results 
 
 ```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -728,6 +728,8 @@ All Pareto k estimates are good (k < 0.5)
 
 
 
+
+plot_gp_realizations(m2, data, true_realization, "Posterior Realizations")
 
 
 
