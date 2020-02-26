@@ -612,8 +612,17 @@ If k≥1 then neither the variance nor the mean of the raw importance ratios exi
 
 If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice we have observed good performance for values of k up to 0.7. (Note: If k is greater than 0.5 then WAIC is also likely to fail, but WAIC lacks its own diagnostic.) When using PSIS in the context of approximate LOO-CV, then even if the PSIS estimate has a finite variance the user should consider sampling directly from p(θs|y−i) for any problematic observations i, use k-fold cross-validation, or use a more robust model. Importance sampling is likely to work less well if the marginal posterior p(θs|y) and LOO posterior p(θs|y−i) are much different, which is more likely to happen with a non-robust model and highly influential observation
 
+**Effective sample size and error estimates**
 
+In the case that we obtain the samples from the proposal distribution via MCMC the loo package also computes estimates for the Monte Carlo error and the effective sample size for importance sampling, which are more accurate for PSIS than for IS and TIS (see Vehtari et al (2017b) for details). However, the PSIS effective sample size estimate will be over-optimistic when the estimate of k is greater than 0.7.
+
+**References**
+
+Vehtari, A., Gelman, A., and Gabry, J. (2017a). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544).
+
+Vehtari, A., Gelman, A., and Gabry, J. (2017b). Pareto smoothed importance sampling. preprint arXiv:1507.02646
 - First, create a loo object
+
 
 `loo<-loo(m2, cores = getOption("mc.cores", 4))`
 
@@ -645,7 +654,7 @@ All Pareto k estimates are good (k < 0.5)
 [1] 0.1016874
 ```
 
-# S3 method for psis_loo
+#### S3 method for psis_loo
 
 `plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
 
