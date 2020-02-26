@@ -1,5 +1,9 @@
 ### Bayesian mixed-effects model fitted with stan 
 
+*2-level Longitudinal conditional growth model*
+
+- Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) 
+
 `m2<-stan_lmer(formula= ranged2d ~ 1 + season*fi_species +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
 ### Results for m2 fit
