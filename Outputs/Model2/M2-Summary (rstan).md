@@ -703,6 +703,13 @@ All Pareto k estimates are good (k < 0.5)
 
 ![M2_s4](/Plots/M2_s4.png "M2_s4")
 
+`mcmc_areas(as.matrix(m2), prob_outer = .999, pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
+"seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
+"seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
+"seasonspring_II","seasonspring_I"))`
+
+![M2_s5](/Plots/M2_s5.png "M2_s5")
+
 
 
 
