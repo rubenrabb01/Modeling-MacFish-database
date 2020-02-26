@@ -729,8 +729,6 @@ All Pareto k estimates are good (k < 0.5)
 
 
 
-plot_gp_realizations(m2, data, true_realization, "Posterior Realizations")
-
 
 
 
