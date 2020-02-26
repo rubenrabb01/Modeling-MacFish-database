@@ -610,6 +610,11 @@ ggplot(data = data.frame(fish_diff),
 
 `pareto_k_table(loo)`
 
+```
+All Pareto k estimates are good (k < 0.5)
+
+```
+
 `pareto_k_ids(loo, threshold = 0.5)`
 
 `pareto_k_values(loo)`
@@ -619,10 +624,13 @@ ggplot(data = data.frame(fish_diff),
 `mcse_loo(loo, threshold = 0.7)`
 
 ```
-# S3 method for psis_loo
-
-plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
+[1] 0.1016874
 
 ```
+
+# S3 method for psis_loo
+
+`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
+
 ![M2_s2](/Plots/M2_s2.png "M2_s2")
 
