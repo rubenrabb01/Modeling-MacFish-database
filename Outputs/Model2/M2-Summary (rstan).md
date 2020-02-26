@@ -598,3 +598,31 @@ ggplot(data = data.frame(fish_diff),
   theme_bw( base_family = "serif")`
   
 ```
+
+### Diagnostics for Pareto smoothed importance sampling (PSIS)
+
+#### Print a diagnostic table summarizing the estimated Pareto shape parameters and PSIS effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter k is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting Vehtari, Gelman, and Gabry (2017a, 2017b) for full details.
+
+- First, create a loo object
+
+`loo<-loo(m2, cores = getOption("mc.cores", 4))`
+
+
+`pareto_k_table(loo)`
+
+`pareto_k_ids(loo, threshold = 0.5)`
+
+`pareto_k_values(loo)`
+
+`psis_n_eff_values(loo)`
+
+`mcse_loo(loo, threshold = 0.7)`
+
+```
+# S3 method for psis_loo
+
+plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
+
+```
+![M2_s2](/Plots/M2_s2.png "M2_s2")
+
