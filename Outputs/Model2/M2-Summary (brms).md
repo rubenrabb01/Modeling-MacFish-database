@@ -1,6 +1,6 @@
 ### Bayesian mixed-effects model fitted with brms 
 
-#### 2-level Longitudinal conditional growth model
+*2-level Longitudinal conditional growth model*
 
 - Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) 
 
