@@ -523,7 +523,7 @@ b[(Intercept) fi_fishid:T449317_1]  20.44 3.46 13.59 20.49 27.27      6
 
 ### Plots
 
-#### Caterpillar plot to show the fully Bayes estimates for the fi_fishid varying intercepts in rank order together with their 95% credible interval
+Caterpillar plot to show the fully Bayes estimates for the *fi_fishid* varying intercepts in rank order together with their 95% credible interval
 
 - Sort dataframe containing an estimated alpha's mean and sd for every fi_fishid
 
@@ -620,7 +620,7 @@ See help('pareto-k-diagnostic') for details.
 
 **Diagnostics for Pareto smoothed importance sampling (PSIS)**
 
-Print a diagnostic table summarizing the estimated Pareto shape parameters and PSIS effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter k is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting Vehtari, Gelman, and Gabry (2017a, 2017b) for full details.
+Print a diagnostic table summarizing the estimated Pareto shape parameters and **PSIS** effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter *k* is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting **Vehtari, Gelman, and Gabry (2017a, 2017b)** for full details.
 
 The reliability and approximate convergence rate of the PSIS-based estimates can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution:
 
