@@ -558,7 +558,6 @@ ggplot(data = a_df,
 
 `fish_diff <- a_sims[, 21] - a_sims[, 29]`
 
-
 - We can investigate the posterior distribution of the difference with descriptive statistics and a histogram as follows:
 
  - Investigate differences of two distributions
@@ -597,8 +596,11 @@ ggplot(data = data.frame(fish_diff),
   theme_bw( base_family = "serif")`
   
 ```
+### Cross-validation checking
 
-### Diagnostics for Pareto smoothed importance sampling (PSIS)
+We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
+
+**Diagnostics for Pareto smoothed importance sampling (PSIS)**
 
 Print a diagnostic table summarizing the estimated Pareto shape parameters and PSIS effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter k is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting Vehtari, Gelman, and Gabry (2017a, 2017b) for full details.
 
@@ -626,6 +628,21 @@ Vehtari, A., Gelman, A., and Gabry, J. (2017b). Pareto smoothed importance sampl
 
 `loo<-loo(m2, cores = getOption("mc.cores", 4))`
 
+`loo`
+
+```
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -35704.5  74.3
+p_loo        44.5   0.9
+looic     71409.0 148.6
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
 
 - Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
 
