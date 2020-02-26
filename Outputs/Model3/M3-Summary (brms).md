@@ -1,5 +1,5 @@
 
-### Bayesian mixed-effects model fitted with brms  
+## Bayesian mixed-effects model fitted with brms  
 
 *2-level Longitudinal conditional growth model*
 
