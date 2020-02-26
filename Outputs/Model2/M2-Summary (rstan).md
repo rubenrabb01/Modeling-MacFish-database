@@ -612,7 +612,6 @@ ggplot(data = data.frame(fish_diff),
 
 ```
 All Pareto k estimates are good (k < 0.5)
-
 ```
 
 `pareto_k_ids(loo, threshold = 0.5)`
@@ -625,7 +624,6 @@ All Pareto k estimates are good (k < 0.5)
 
 ```
 [1] 0.1016874
-
 ```
 
 # S3 method for psis_loo
