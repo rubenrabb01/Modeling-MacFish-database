@@ -721,10 +721,10 @@ All Pareto k estimates are good (k < 0.5)
 
 #### Plot paired marginals
 
-mcmc_pairs(as.matrix(m2),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
+`mcmc_pairs(as.matrix(m2),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
 "seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
-"seasonspring_II","seasonspring_I"))
+"seasonspring_II","seasonspring_I"))`
 
 
 
