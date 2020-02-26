@@ -1,4 +1,4 @@
-### Re-fit model 3 using different Bayesian input parameters:
+## Re-fit model 3 using different Bayesian input parameters:
 
 - Increase the value of parameter `adapt_delta` to 0.95 (default is 0.8) as I had the warning messages:
 ```
