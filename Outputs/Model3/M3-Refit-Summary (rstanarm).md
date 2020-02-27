@@ -707,7 +707,7 @@ All Pareto k estimates are good (k < 0.5)
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
 "seasonspring_II","seasonspring_I"))`
 
-![M31_s8](/Plots/M31_s5.png "M31_s8")
+![M31_s8](/Plots/M31_s8.png "M31_s8")
 
 - *seasonspring_II:fi_speciespikeperch* and *seasonspring_II:fi_specieswels* are both marginals significantly away from zero
 - *fi_specieswels* has lot of probability mass on both sides of 0
