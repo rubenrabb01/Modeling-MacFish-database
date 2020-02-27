@@ -591,6 +591,8 @@ This means that the posterior probability that pike is better than pikeperch is 
 
 We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
 
+`library(loo)`
+
 `loo<-loo(m2, cores = getOption("mc.cores", 4))`
 
 `loo`
@@ -692,6 +694,8 @@ All Pareto k estimates are good (k < 0.5)
 
 - Including random effects from *fi_species*
 
+`library(bayesplot)`
+
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
 ![M31_s7](/Plots/M31_s7.png "M31_s7")
@@ -703,7 +707,7 @@ All Pareto k estimates are good (k < 0.5)
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
 "seasonspring_II","seasonspring_I"))`
 
-![M31_s5](/Plots/M31_s5.png "M31_s5")
+![M31_s8](/Plots/M31_s5.png "M31_s8")
 
 - *seasonspring_II:fi_speciespikeperch* and *seasonspring_II:fi_specieswels* are both marginals significantly away from zero
 - *fi_specieswels* has lot of probability mass on both sides of 0
@@ -712,7 +716,9 @@ All Pareto k estimates are good (k < 0.5)
 
 #### Plot paired marginals
 
-`mcmc_pairs(as.matrix(m2),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
+`mcmc_pairs(as.matrix(m31),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
 "seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
 "seasonspring_II","seasonspring_I"))`
+
+![M31_s9](/Plots/M31_s9.png "M31_s9")
