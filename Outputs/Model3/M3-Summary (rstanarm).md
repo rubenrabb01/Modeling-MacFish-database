@@ -490,18 +490,18 @@ Here I'll explore the posterior distribution of the differences between each two
   
 ![M3_s2](/Plots/M3_s2.png "M3_s2")
 
-The expected difference comes to 5.11 with a standard deviation of 4.46 and a wide range of uncertainty. The 95% credible interval is [-3.64, 13.66], so we are 95% certain that the true value of the difference between the two schools lies within the range, given the data
+The expected difference comes to 0.45 with a standard deviation of 3.39 and a wide range of uncertainty. The 95% credible interval is [-25.72,31.2], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
 
-We also can get the proportion of the time that School 60501 has a higher mean than School 68271:
+We also can get the proportion of the time that pike has a higher mean than pikeperch:
 
-`prop.table(table(a_sims[, 21] > a_sims[, 51]))`
+`prop.table(table(a_sims[, 1] > a_sims[, 2]))`
 
 ```
   FALSE    TRUE 
-0.11725 0.88275
+0.47975 0.52025 
 ```
 
-This means that the posterior probability that School 60501 is better than School 68271 is 88.3%. Any pair of schools within the sample of schools can be compared in this manner.
+This means that the posterior probability that pike is better than pikeperch is 52%. Any pair of species within the sample of species can be compared in this manner.
 
 - The difference between the pikeperch and wels averages is:
 
