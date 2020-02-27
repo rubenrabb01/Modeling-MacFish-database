@@ -23,9 +23,10 @@ dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv
 `setwd("C:/IBU/Fishecudb/")`                                                      
                                                                        
 `dist2dam.dt <- data.table(readr::read_csv("Teri_dis2data_predatory_fullarray.csv"))`  
-*Include the function readr for reading timestamp or there may be reading erros*
+
+**Note**: Include the function *readr* for reading timestamp or there may be reading errors
                                                                             
-#### Fast load of full dataset                                                 
+### Fast load of full dataset                                                 
 
 `dist2dam.dt <- read.csv("Teri_dis2data_predatory_fullarray.csv")`
                                              
