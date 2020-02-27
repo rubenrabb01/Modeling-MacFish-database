@@ -709,9 +709,9 @@ All Pareto k estimates are good (k < 0.5)
 
 ![M31_s8](/Plots/M31_s8.png "M31_s8")
 
-- *seasonspring_II:fi_speciespikeperch* and *seasonspring_II:fi_specieswels* are both marginals significantly away from zero
-- *fi_specieswels* has lot of probability mass on both sides of 0
-- *fi_speciespikeperch*, *seasonspring_I*, seasonwinter:fi_specieswels* and *seasonwinter:fi_speciespikeperch* are much closer to 0
+- *seasonspring_I:fi_specieswels*,*seasonsummer:fi_speciespikeperch*, *seasonspring_I:fi_speciespikeperch*, *seasonspring_II:fi_speciespikeperch* are marginal     significantly away from zero
+- *fi_specieswels* and *fi_speciespikeperch* have both lot of probability mass on both sides of 0
+- *seasonspring_I*, *seasonwinter:fi_speciespikeperch*  and *seasonspring_II:fi_specieswels* are much closer to 0
 
 
 #### Plot paired marginals
