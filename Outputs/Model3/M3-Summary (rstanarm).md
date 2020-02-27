@@ -1,8 +1,8 @@
-## Bayesian mixed-effects model fitted with stan 
+## Bayesian mixed-effects model fitted with rstanarm 
 
 *2-level Longitudinal conditional growth model*
 
-- Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) 
+- Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) / Varying intercept   model with a single predictor / Non-growth model
 
 `m3 <- stan_lmer(formula=sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, seed=350)`
 
