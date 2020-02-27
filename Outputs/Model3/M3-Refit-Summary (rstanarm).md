@@ -692,13 +692,13 @@ All Pareto k estimates are good (k < 0.5)
 
 #### Plot posterior
 
-- Including random effects from *fi_fishid*
+- Including random effects from *fi_species*
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
-![M31_s4](/Plots/M31_s4.png "M31_s4")
+![M31_s5](/Plots/M31_s5.png "M31_s5")
 
-- Excluding random effects from *fi_fishid*
+- Excluding random effects from *fi_species*
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999, pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
 "seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
@@ -718,8 +718,3 @@ All Pareto k estimates are good (k < 0.5)
 "seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
 "seasonspring_II","seasonspring_I"))`
-
-
-
-
-
