@@ -451,7 +451,7 @@ Here I'll explore the posterior distribution of the differences between each two
 
 - The difference between the pike and pikeperch averages is:
 
-`fish_diff1 <- a_sims[, 1] - a_sims[, 2]`
+`fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
 `mean <- mean(fish_diff1)`
 `sd <- sd(fish_diff1)`
@@ -505,7 +505,7 @@ This means that the posterior probability that School 60501 is better than Schoo
 
 - The difference between the pikeperch and wels averages is:
 
-`fish_diff2 <- a_sims[, 2] - a_sims[, 3]`
+`fish_diff2 <- fish_inter[, 2] - fish_inter[, 3]`
 
 `mean <- mean(fish_diff2)`
 `sd <- sd(fish_diff2)`
@@ -546,7 +546,7 @@ This means that the posterior probability that School 60501 is better than Schoo
 
 - The difference between the pike and wels averages is:
 
-`fish_diff3 <- a_sims[, 1] - a_sims[, 3]`
+`fish_diff3 <- fish_inter[, 1] - fish_inter[, 3]`
 
 `mean <- mean(fish_diff3)`
 `sd <- sd(fish_diff3)`
