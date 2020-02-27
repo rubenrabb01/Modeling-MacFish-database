@@ -587,8 +587,6 @@ This means that the posterior probability that pike is better than pikeperch is 
 ![M31_s4](/Plots/M31_s4.png "M31_s4")
 
 
-
-```
 ### Cross-validation checking
 
 We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
@@ -635,13 +633,13 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 **Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
 
-- First, create a loo object
+- First, create a *loo* object
 
 - Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
 
 `plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
 
-![M31_s2](/Plots/M31_s2.png "M31_s2")
+![M31_s5](/Plots/M31_s5.png "M31_s5")
 
 There are no highly influential observations, which indicates that the model is correct (i.e. there is no misspecification, Vehtari, Gelman and Gabry, 2017).
 
@@ -660,7 +658,7 @@ In addition to LOO CV, posterior predictive checks can often detect problems and
 
 `(prop_zero_test1 <- pp_check(m2, plotfun = "stat", stat = "prop_zero"))`
 
-![M31_s3](/Plots/M31_s3.png "M31_s3")
+![M31_s6](/Plots/M31_s6.png "M31_s6")
 
 
 `pareto_k_table(loo)`
@@ -696,7 +694,7 @@ All Pareto k estimates are good (k < 0.5)
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
-![M31_s5](/Plots/M31_s5.png "M31_s5")
+![M31_s7](/Plots/M31_s7.png "M31_s7")
 
 - Excluding random effects from *fi_species*
 
