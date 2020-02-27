@@ -2,20 +2,21 @@
 ### CONNECT TO THE SERVER AND IMPORT/LOAD THE DATA
 
 
-con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="localhost", user= "teriuser", password = "t3r1us3r!")
+`con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="localhost", user= "teriuser", password = "t3r1us3r!")`
 
-start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
-end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")
+`start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
+end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")`
 
-start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
-end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")
+`start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
+end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
 
-#setwd("~/Teri/longit_displacement")
-dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
+`setwd("~/Teri/longit_displacement")
+dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
 
-#extracting info for fish
-fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
-fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
+### Extracting info for fish
+
+`fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
+`fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
 
 
 #################################################################################
@@ -25,8 +26,8 @@ fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b
                                                                                 #
 setwd("C:/IBU/Fishecudb/")                                                      #
                                                                                 #
-dist2dam.dt <- data.table(readr::read_csv("Teri_dis2data_predatory_fullarray.csv"))    # Include the function readr to read well timestamp. Otherwise, it reads a different thing
-                                                                                #
+dist2dam.dt <- data.table(readr::read_csv("Teri_dis2data_predatory_fullarray.csv"))  Include radtimestamp. Otherwise, it reads a different thing
+                                                                                
 # for fast load of full dataset                                                 #
 # dist2dam.dt <- read.csv("Teri_dis2data_predatory_fullarray.csv")              #
                                                                                 #
