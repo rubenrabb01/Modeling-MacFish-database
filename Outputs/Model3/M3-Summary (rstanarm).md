@@ -2,7 +2,7 @@
 
 *2-level Longitudinal conditional growth model*
 
-- Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) / Varying intercept   model with a single predictor / Non-growth model
+- Random intercept model + dropping random slope / Random Intercept with One Fixed Level-1 Factor (Non-Random Slope) / Varying intercept   model with a single predictor at the species level 
 
 `m3 <- stan_lmer(formula=sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, seed=350)`
 
