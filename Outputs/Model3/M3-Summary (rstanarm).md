@@ -6,7 +6,7 @@
 
 `m3 <- stan_lmer(formula=sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, seed=350)`
 
-### Fitted Model 2 results 
+### Fitted Model 3 results 
 
 ```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -552,7 +552,7 @@ ggplot(data = a_df,
   theme_bw( base_family = "serif")
   
 ```
-![M2_s1](/Plots/M2_s1.png "M2_s1")
+![M3_s1](/Plots/M3_s1.png "M3_s1")
 
   - The difference between the two fish averages (fish #21 and #29)
 
@@ -648,7 +648,7 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 `plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
 
-![M2_s2](/Plots/M2_s2.png "M2_s2")
+![M3_s2](/Plots/M3_s2.png "M3_s2")
 
 There are no highly influential observations, which indicates that the model is correct (i.e. there is no misspecification, Vehtari, Gelman and Gabry, 2017).
 
@@ -667,7 +667,7 @@ In addition to LOO CV, posterior predictive checks can often detect problems and
 
 `(prop_zero_test1 <- pp_check(m2, plotfun = "stat", stat = "prop_zero"))`
 
-![M2_s3](/Plots/M2_s3.png "M2_s3")
+![M3_s3](/Plots/M3_s3.png "M3_s3")
 
 
 `pareto_k_table(loo)`   
@@ -703,7 +703,7 @@ All Pareto k estimates are good (k < 0.5)
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
-![M2_s4](/Plots/M2_s4.png "M2_s4")
+![M3_s4](/Plots/M3_s4.png "M3_s4")
 
 - Excluding random effects from *fi_fishid* 
 
@@ -712,7 +712,7 @@ All Pareto k estimates are good (k < 0.5)
 "seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
 "seasonspring_II","seasonspring_I"))`
 
-![M2_s5](/Plots/M2_s5.png "M2_s5")
+![M3_s5](/Plots/M3_s5.png "M3_s5")
 
 - *seasonspring_II:fi_speciespikeperch* and *seasonspring_II:fi_specieswels* are both marginals significantly away from zero
 - *fi_specieswels* has lot of probability mass on both sides of 0
