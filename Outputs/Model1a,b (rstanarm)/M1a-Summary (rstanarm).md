@@ -649,7 +649,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 ![M1a_s3](/Plots/M1a_s3.png "M1a_s3")
 
-- The difference between the fish1 and wels fish3 is:
+- The difference between the fish1 and fish3 is:
 
 `fish_diff3 <- fish_inter[, 1] - fish_inter[, 3]`
 
