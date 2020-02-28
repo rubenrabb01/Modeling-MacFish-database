@@ -1,19 +1,19 @@
 ## Bayesian mixed-effects model fitted with brms
 
-`m1 <- brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species, data = mean.ranged2d, family = "gaussian",
+`m0 <- brm(sqrt(ranged2d + 1) ~ 1 + season*fi_species, data = mean.ranged2d, family = "gaussian",
                               prior = prior, warmup = 1000, iter = 2000, cores = 4, chains = 4)`
 
-`summary(m1)`
+`summary(m0)`
 
 ```
-Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species 
-   Data: mean.ranged2d (Number of observations: 8846) 
+Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: sqrt(ranged2d + 1) ~ 1 + season * fi_species
+   Data: mean.ranged2d (Number of observations: 8846)
 Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
-Population-Level Effects: 
+Population-Level Effects:
                                     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
 Intercept                              27.18      0.54    26.11    28.24 1.00     1930     2575
 seasonspring_I                         -2.24      0.90    -4.05    -0.52 1.00     2132     2791
@@ -31,17 +31,17 @@ seasonspring_II:fi_specieswels         -3.72      2.40    -8.61     0.55 1.00   
 seasonsummer:fi_specieswels             4.79      0.96     2.84     6.65 1.00     2189     2563
 seasonwinter:fi_specieswels            -1.74      1.02    -3.76     0.12 1.00     2474     2696
 
-Family Specific Parameters: 
+Family Specific Parameters:
       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
 sigma    14.99      0.11    14.77    15.21 1.00     6069     2894
 
-Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
-is a crude measure of effective sample size, and Rhat is the potential 
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample
+is a crude measure of effective sample size, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 ### Compute approximate Leave-one-out Cross-Validation (LOO CV) Information Criterion (LOOIC)
 
-`loo(m1, cores = getOption("mc.cores", 1))`
+`loo(m0, cores = getOption("mc.cores", 1))`
 
 ```
 Computed from 4000 by 8846 log-likelihood matrix
@@ -57,18 +57,18 @@ All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
 
-`plot(m1)`
+`plot(m0)`
 
 ![M1_1](/Plots/M1_1.png "M1_1")
 ![M1_2](/Plots/M1_2.png "M1_2")
 ![M1_3](/Plots/M1_3.png "M1_3")
 ![M1_4](/Plots/M1_4.png "M1_4")
 
-`stanplot(m1, pars = c("b_Intercept", "b_seasonwinter")) + xlim(c(0, 9))`
+`stanplot(m0, pars = c("b_Intercept", "b_seasonwinter")) + xlim(c(0, 9))`
 
 ![M1_5](/Plots/M1_5.png "M1_5")
 
-`plot(loo(m1, cores = getOption("mc.cores", 1)))`
+`plot(loo(m0, cores = getOption("mc.cores", 1)))`
 
 ![M1_6](/Plots/M1_6.png "M1_6")
 
