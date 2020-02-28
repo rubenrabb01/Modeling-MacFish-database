@@ -265,11 +265,11 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 [1] 4000   10
 
 ```
-
 `para_name <- colnames(sims)`
 
 `para_name`
 
+```
 [1] "(Intercept)"                               "seasonspring_I"
  [3] "seasonspring_II"                           "seasonsummer"
  [5] "seasonwinter"                              "b[(Intercept) fi_species:pike]"
