@@ -1,4 +1,6 @@
-# Consider the simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J and for whom we have examination scores as responses. We can write a two-level varying intercept model with no predictors using the usual two-stage formulation as
+# Model 1: Varying intercept model with no predictors (Variance components model)
+
+Consider the simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J and for whom we have examination scores as responses. We can write a two-level varying intercept model with no predictors using the usual two-stage formulation as
 
 yij=αj+ϵij, where ϵij∼N(0,σ2y)
 αj=μα+uj, where uj∼N(0,σ2α)
