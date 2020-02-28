@@ -1,5 +1,5 @@
 
-### CONNECT TO THE SERVER AND IMPORT/LOAD THE DATA
+### Connect to the server and import/load data
 
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="localhost", user= "teriuser", password = "t3r1us3r!")`
 
