@@ -1,5 +1,5 @@
 
-`m1d<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + season + (1 | fi_species), data = mean.ranged2d, seed=350,control = list(max_treedepth=20, adapt_delta = 0.95))`
+`m1d<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + season + (1 | fi_species), data = mean.ranged2d, seed=350,control = list(max_treedepth=20,adapt_delta = 0.95))`
 
 ### Model 1d results
 
