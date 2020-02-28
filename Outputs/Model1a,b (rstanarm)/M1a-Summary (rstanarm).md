@@ -14,7 +14,7 @@ yij∼N(αj,σ2y),
 
 This model can then be fit using lmer(). We specify an intercept (the predictor “1”) and allow it to vary by the level-2 identifier (fi_species). We also specify the REML = FALSE option to obtain maximum likelihood (ML) estimates as opposed to the default restricted maximum likelihood (REML) estimates.
 
-`m1a<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
+`m1a<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
 ```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
