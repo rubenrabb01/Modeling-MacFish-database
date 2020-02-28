@@ -1,7 +1,7 @@
 
 `m1c<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + (1 | fi_species), data = mean.ranged2d, seed=350)`
 
-### Fitted Model 3 results
+### Model 1c results
 
 ```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
