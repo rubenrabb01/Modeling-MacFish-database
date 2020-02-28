@@ -540,6 +540,32 @@ This means that the posterior probability that pike is better than pikeperch is 
 
 ![M1d_s4](/Plots/M1d_s4.png "M1d_s4")
 
+### Cross-validation checking
+
+We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
+
+`library(loo)`
+
+`loo<-loo(m1d)`
+
+`loo`
+
+```
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -36660.1  65.5
+p_loo         8.2   0.2
+looic     73320.3 131.1
+------
+Monte Carlo SE of elpd_loo is 0.0.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
+
+![M1d_sloo](/Plots/M1d_sloo.png "M1d_sloo")
 
 ### Analyse posterior
 
