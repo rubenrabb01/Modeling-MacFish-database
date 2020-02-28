@@ -83,7 +83,7 @@ probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,
 `setkey(mean.ranged2d,ca_weight_g)`
 
 
-#### calculation of diffenece between maximum and minimum distance as daily range
+#### calculation of difference between maximum and minimum distance as daily range
 
 `full.range.season.t <-  range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]`
 
