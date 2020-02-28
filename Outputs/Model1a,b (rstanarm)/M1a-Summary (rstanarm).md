@@ -692,6 +692,33 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 ![M1a_s4](/Plots/M1a_s4.png "M1a_s4")
 
+### Cross-validation checking
+
+We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
+
+`library(loo)`
+
+`loo<-loo(m1a)`
+
+`loo`
+
+```
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -35890.2  72.5
+p_loo        31.6   0.6
+looic     71780.5 144.9
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
+
+![M1a_sloo](/Plots/M1a_sloo.png "M1a_sloo")
+
 
 ### Analyse posterior
 
