@@ -716,7 +716,6 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 - *fi_fishid:26*,*fi_fishid:27*,*fi_fishid:28*,*fi_fishid:10*,*fi_fishid:19*,*fi_fishid:18* have both lot of probability mass on both sides of 0
 
-
 #### Plot paired marginals
 
 `mcmc_pairs(as.matrix(m1a),pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
@@ -725,6 +724,3 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 "b[(Intercept) fi_fishid:16]", "b[(Intercept) fi_fishid:17]","b[(Intercept) fi_fishid:18]","b[(Intercept) fi_fishid:19]","b[(Intercept) fi_fishid:20]","b[(Intercept) fi_fishid:21]",
 "b[(Intercept) fi_fishid:22]", "b[(Intercept) fi_fishid:23]","b[(Intercept) fi_fishid:24]","b[(Intercept) fi_fishid:25]","b[(Intercept) fi_fishid:26]","b[(Intercept) fi_fishid:27]",
 "b[(Intercept) fi_fishid:28]","b[(Intercept) fi_fishid:29]","b[(Intercept) fi_fishid:30]","b[(Intercept) fi_fishid:31]"))`
-
-![M1a_s7](/Plots/M1a_s7.png "M1a_s7")
-
