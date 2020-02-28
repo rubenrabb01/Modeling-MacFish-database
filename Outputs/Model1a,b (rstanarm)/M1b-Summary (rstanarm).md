@@ -1,4 +1,4 @@
-`m1b<-stan_lmer(formula= sqrt(ranged2d + 1) ~ season + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
+## m1b<-stan_lmer(formula= sqrt(ranged2d + 1) ~ season + (1 | fi_fishid), data = mean.ranged2d, seed=350)
 
 ### Fitted Model 3 results
 
