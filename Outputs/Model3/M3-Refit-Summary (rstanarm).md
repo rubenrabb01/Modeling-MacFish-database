@@ -6,7 +6,7 @@
 http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup 
 2: Examine the pairs() plot to diagnose sampling problems
 ```
-`m31 <- stan_lmer(formula=sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, seed=350)`
+`m31 <- stan_lmer(formula=sqrt(ranged2d + 1) ~ 1 + season*fi_species + (1 | fi_species), data = mean.ranged2d, seed=350, control = list(max_treedepth=20,adapt_delta = 0.95))`
 
 ### Fitted Model 3 results
 
