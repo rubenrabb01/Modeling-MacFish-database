@@ -17,8 +17,6 @@ This model can then be fit using lmer(). We specify an intercept (the predictor 
 `m1a<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
 ```
-
-```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 Chain 1:
 Chain 1: Gradient evaluation took 0.002 seconds
