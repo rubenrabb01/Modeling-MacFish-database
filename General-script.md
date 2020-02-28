@@ -41,10 +41,9 @@ dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv
 `write.csv(fish.info, "fish_info.csv")`                                          
 
 `fish.info <- data.table(read_csv("fish_info.csv"))`                              
-                                                                                
-                                                                                
-m1<-lmer(ca_lon_catch ~ ca_lat_catch*fi_species + (1| fi_species), data=fish.capture,na.action=na.omit)
-probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
+
+`m1<-lmer(ca_lon_catch ~ ca_lat_catch*fi_species + (1| fi_species), data=fish.capture,na.action=na.omit)
+probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)`
 
 
 ### Calculation of range of distances (calculation only from fish we have more than 3 months of data)
