@@ -1,5 +1,4 @@
-
-`m1c<-stan_lmer(formula= sqrt(ranged2d + 1) ~ season +(1 | fi_fishid), data = mean.ranged2d, seed=350)`
+`m1b<-stan_lmer(formula= sqrt(ranged2d + 1) ~ season + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
 ### Fitted Model 3 results
 
@@ -114,7 +113,7 @@ http://mc-stan.org/misc/warnings.html#tail-ess
 
 ### Quick Summary
 
-`print(m1c, digits = 2)`
+`print(m1b, digits = 2)`
 
 ```
 stan_lmer
@@ -144,7 +143,7 @@ Num. levels: fi_fishid 31
 * For info on the priors used see ?prior_summary.stanreg
 ```
 
-`summary(m1c)`
+`summary(m1b)`
 
 ```
 Model Info:
@@ -252,11 +251,11 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Check priors used
 
-`prior_summary(object = m1c)`
+`prior_summary(object = m1b)`
 
 ```{r, echo=FALSE, eval=TRUE}
 
-Priors for model 'm1c'
+Priors for model 'm1b'
 ------
 Intercept (after predictors centered)
   Specified prior:
@@ -284,7 +283,7 @@ See help('prior_summary.stanreg') for more details
 
 ### Posterior means, s.d., 95% credible intervals, MC errors
 
-`summary(m1c, pars = c("(Intercept)", "sigma", "Sigma[fi_species:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
+`summary(m1b, pars = c("(Intercept)", "sigma", "Sigma[fi_species:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
 
 ```
 
@@ -313,7 +312,7 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Extract the posterior draws for all parameters
 
-`sims <- as.matrix(m1c)`
+`sims <- as.matrix(m1b)`
 
 `dim(sims)`
 
@@ -352,11 +351,11 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
  - draws for overall mean
 
-`mu_a_sims <- as.matrix(m1c, pars = "(Intercept)")`
+`mu_a_sims <- as.matrix(m1b, pars = "(Intercept)")`
 
  - draws for 3 fi_species-level error
 
-`fish_err <- as.matrix(m1c,regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")`
+`fish_err <- as.matrix(m1b,regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")`
 
  - draws for 3 species' varying intercepts
 
@@ -366,11 +365,11 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
  -draws for sigma_y
 
-`signma_y <- as.matrix(m1c, pars = "sigma")`
+`signma_y <- as.matrix(m1b, pars = "sigma")`
 
  - draws for sigma_alpha^2
 
-`sigma_alpha <- as.matrix(m1c, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")`
+`sigma_alpha <- as.matrix(m1b, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")`
 
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
@@ -555,7 +554,7 @@ ggplot(data = a_df,
   scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
   theme_bw( base_family = "serif")
 ```
-![M1c_s1](/Plots/M1c_s1.png "M1c_s1")
+![M1b_s1](/Plots/M1b_s1.png "M1b_s1")
 
 ### Differences between species averages
 
@@ -600,7 +599,7 @@ Here I'll explore the posterior distribution of the differences between each two
             size = 4) +
   theme_bw( base_family = "serif")`
 
-![M1c_s2](/Plots/M1c_s2.png "M1c_s2")
+![M1b_s2](/Plots/M1b_s2.png "M1b_s2")
 
 The expected difference comes to 3.88 with a standard deviation of 1.34 and a wide range of uncertainty. The 95% credible interval is [1.21,6.5], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
 
@@ -654,7 +653,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
             size = 4) +
   theme_bw( base_family = "serif")`
 
-![M1c_s3](/Plots/M1c_s3.png "M1c_s3")
+![M1b_s3](/Plots/M1b_s3.png "M1b_s3")
 
 - The difference between the fish1 and wels fish3 is:
 
@@ -695,7 +694,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
             size = 4) +
   theme_bw( base_family = "serif")`
 
-![M1c_s4](/Plots/M1c_s4.png "M1c_s4")
+![M1b_s4](/Plots/M1b_s4.png "M1b_s4")
 
 
 ### Analyse posterior
@@ -706,31 +705,32 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 `library(bayesplot)`
 
-`mcmc_areas(as.matrix(m1c), prob_outer = .999)`
+`mcmc_areas(as.matrix(m1b), prob_outer = .999)`
 
-![M1c_s5](/Plots/M1c_s5.png "M1c_s5")
+![M1b_s5](/Plots/M1b_s5.png "M1b_s5")
 
 - Excluding random effects from *fi_species*
 
-`mcmc_areas(as.matrix(m1c), prob_outer = .999, pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
+`mcmc_areas(as.matrix(m1b), prob_outer = .999, pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
 "b[(Intercept) fi_fishid:4]","b[(Intercept) fi_fishid:5]", "b[(Intercept) fi_fishid:6]", "b[(Intercept) fi_fishid:7]" ,"b[(Intercept) fi_fishid:8]","b[(Intercept) fi_fishid:9]",
 "b[(Intercept) fi_fishid:10]","b[(Intercept) fi_fishid:11]", "b[(Intercept) fi_fishid:12]", "b[(Intercept) fi_fishid:13]","b[(Intercept) fi_fishid:14]","b[(Intercept) fi_fishid:15]",
 "b[(Intercept) fi_fishid:16]", "b[(Intercept) fi_fishid:17]","b[(Intercept) fi_fishid:18]","b[(Intercept) fi_fishid:19]","b[(Intercept) fi_fishid:20]","b[(Intercept) fi_fishid:21]",
 "b[(Intercept) fi_fishid:22]", "b[(Intercept) fi_fishid:23]","b[(Intercept) fi_fishid:24]","b[(Intercept) fi_fishid:25]","b[(Intercept) fi_fishid:26]","b[(Intercept) fi_fishid:27]",
 "b[(Intercept) fi_fishid:28]","b[(Intercept) fi_fishid:29]","b[(Intercept) fi_fishid:30]","b[(Intercept) fi_fishid:31]"))`
 
-![M1c_s6](/Plots/M1c_s6.png "M1c_s6")
+![M1b_s6](/Plots/M1b_s6.png "M1b_s6")
 
 - *fi_fishid:26*,*fi_fishid:27*,*fi_fishid:28*,*fi_fishid:10*,*fi_fishid:19*,*fi_fishid:18* have both lot of probability mass on both sides of 0
 
 
 #### Plot paired marginals
 
-`mcmc_pairs(as.matrix(m1c),pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
+`mcmc_pairs(as.matrix(m1b),pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
 "b[(Intercept) fi_fishid:4]","b[(Intercept) fi_fishid:5]", "b[(Intercept) fi_fishid:6]", "b[(Intercept) fi_fishid:7]" ,"b[(Intercept) fi_fishid:8]","b[(Intercept) fi_fishid:9]",
 "b[(Intercept) fi_fishid:10]","b[(Intercept) fi_fishid:11]", "b[(Intercept) fi_fishid:12]", "b[(Intercept) fi_fishid:13]","b[(Intercept) fi_fishid:14]","b[(Intercept) fi_fishid:15]",
 "b[(Intercept) fi_fishid:16]", "b[(Intercept) fi_fishid:17]","b[(Intercept) fi_fishid:18]","b[(Intercept) fi_fishid:19]","b[(Intercept) fi_fishid:20]","b[(Intercept) fi_fishid:21]",
 "b[(Intercept) fi_fishid:22]", "b[(Intercept) fi_fishid:23]","b[(Intercept) fi_fishid:24]","b[(Intercept) fi_fishid:25]","b[(Intercept) fi_fishid:26]","b[(Intercept) fi_fishid:27]",
 "b[(Intercept) fi_fishid:28]","b[(Intercept) fi_fishid:29]","b[(Intercept) fi_fishid:30]","b[(Intercept) fi_fishid:31]"))`
+
 
 
