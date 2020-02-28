@@ -1,7 +1,6 @@
 
 ### CONNECT TO THE SERVER AND IMPORT/LOAD THE DATA
 
-
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="localhost", user= "teriuser", password = "t3r1us3r!")`
 
 `start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
@@ -45,10 +44,9 @@ dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv
 `m1<-lmer(ca_lon_catch ~ ca_lat_catch*fi_species + (1| fi_species), data=fish.capture,na.action=na.omit)
 probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)`
 
-
 ### Calculation of range of distances (calculation only from fish we have more than 3 months of data)
 
-#### min aand max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
+#### min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
 
 `range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005), max.dist = quantile(distfromdam,0.995) ), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]`
 
@@ -66,7 +64,6 @@ probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,
 
 `mean.ranged2d[, month := month(date)]`
 
-
 #### setting of seasons
 
 `mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I" ]`
@@ -80,7 +77,6 @@ probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,
 `mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]`
 
 `setkey(mean.ranged2d,ca_weight_g)`
-
 
 #### calculation of difference between maximum and minimum distance as daily range
 
@@ -105,4 +101,3 @@ probe_interaction(m1, modx  = fi_species, pred = ca_lat_catch, plot.points=TRUE,
 `qqnorm(model.ranged2d)`
 
 `plot(model.ranged2d)`
-
