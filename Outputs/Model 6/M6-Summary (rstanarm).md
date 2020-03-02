@@ -39,7 +39,6 @@ Num. levels: fi_fishid 31
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg
 ```
-
 `summary(m6)`
 
 ```
@@ -452,8 +451,7 @@ See help('prior_summary.stanreg') for more details
 
 ### Posterior means, s.d., 95% credible intervals, MC errors
 
-`summary(m6, pars = c("b\\[\\(Intercept\\) fi_fishid\\:", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
-#`summary(m6, pars = c("b[(Intercept) fi_fishid", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
+`summary(m6, pars = c("b[(Intercept) fi_fishid", "sigma", "Sigma[fi_fishid:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
 
 ```
 Model Info:
@@ -643,7 +641,6 @@ b[(Intercept) fi_fishid:T449314_1] b[(Intercept) fi_fishid:T449317_1] b[(Interce
                          22.668341                          20.510519                          26.087980
 b[(Intercept) fi_fishid:T449319_1]
                          28.285563
-
 ```
 
 - Posterior SD of each alpha
@@ -811,7 +808,7 @@ ggplot(data = a_df,
 
 Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
 
-- - The difference between the pike and pikeperch averages is:
+- The difference between the pike and pikeperch averages is:
 
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
@@ -859,7 +856,6 @@ We also can get the proportion of the time that pike has a higher mean than pike
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
 ```
-
 FALSE
     1
 ```
