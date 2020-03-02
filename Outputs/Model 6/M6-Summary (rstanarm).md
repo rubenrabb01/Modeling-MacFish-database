@@ -649,6 +649,7 @@ b[(Intercept) fi_fishid:T449319_1]
 
 `a_sd`
 
+```
 b[(Intercept) fi_fishid:T449202_1] b[(Intercept) fi_fishid:T449203_1] b[(Intercept) fi_fishid:T449204_1]
                           4.229106                           1.324974                           7.464405
 b[(Intercept) fi_fishid:T449207_1] b[(Intercept) fi_fishid:T449208_1] b[(Intercept) fi_fishid:T449209_1]
