@@ -500,7 +500,7 @@ This means that the posterior probability that pike is better than pikeperch is 
 
 ![M1d_s3](/Plots/M1d_s3.png "M1d_s3")
 
-- The difference between the fish1 and wels fish3 is:
+- The difference between the pike and wels is:
 
 `fish_diff3 <- fish_inter[, 1] - fish_inter[, 3]`
 
