@@ -355,7 +355,7 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
  - draws for 3 fi_species-level error
 
-`fish_err <- as.matrix(m1b,regex_pars = "b\\[\\(Intercept\\) fi_fishid\\:")`
+`fish_err <- as.matrix(m1b,regex_pars = "b\\[\\(Intercept\\) fi_species\\:")`
 
  - draws for 3 species' varying intercepts
 
