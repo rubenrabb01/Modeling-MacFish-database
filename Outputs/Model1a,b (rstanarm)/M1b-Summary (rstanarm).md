@@ -369,7 +369,7 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
  - draws for sigma_alpha^2
 
-`sigma_alpha <- as.matrix(m1b, pars = "Sigma[fi_fishid:(Intercept),(Intercept)]")`
+`sigma_alpha <- as.matrix(m1b, pars = "Sigma[fi_species:(Intercept),(Intercept)]")`
 
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
