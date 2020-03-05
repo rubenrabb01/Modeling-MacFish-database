@@ -1,15 +1,15 @@
-`m1b<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + season + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
+`m1b<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 +(1 | fi_species), data = mean.ranged2d, seed=350)`
 
 ### Fitted Model 3 results
 
 ```
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-Chain 1:
-Chain 1: Gradient evaluation took 0.001 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+Chain 1: 
+Chain 1: Gradient evaluation took 0.000527 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.27 seconds.
 Chain 1: Adjust your expectations accordingly!
-Chain 1:
-Chain 1:
+Chain 1: 
+Chain 1: 
 Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
 Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
 Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -22,19 +22,19 @@ Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 1:
-Chain 1:  Elapsed Time: 46.753 seconds (Warm-up)
-Chain 1:                35.788 seconds (Sampling)
-Chain 1:                82.541 seconds (Total)
-Chain 1:
+Chain 1: 
+Chain 1:  Elapsed Time: 97.6286 seconds (Warm-up)
+Chain 1:                59.3456 seconds (Sampling)
+Chain 1:                156.974 seconds (Total)
+Chain 1: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
-Chain 2:
-Chain 2: Gradient evaluation took 0.001 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+Chain 2: 
+Chain 2: Gradient evaluation took 0.000426 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 4.26 seconds.
 Chain 2: Adjust your expectations accordingly!
-Chain 2:
-Chain 2:
+Chain 2: 
+Chain 2: 
 Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
 Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
 Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -47,19 +47,19 @@ Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 2:
-Chain 2:  Elapsed Time: 47.561 seconds (Warm-up)
-Chain 2:                40.349 seconds (Sampling)
-Chain 2:                87.91 seconds (Total)
-Chain 2:
+Chain 2: 
+Chain 2:  Elapsed Time: 83.8277 seconds (Warm-up)
+Chain 2:                52.5018 seconds (Sampling)
+Chain 2:                136.33 seconds (Total)
+Chain 2: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
-Chain 3:
-Chain 3: Gradient evaluation took 0.001 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+Chain 3: 
+Chain 3: Gradient evaluation took 0.000434 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 4.34 seconds.
 Chain 3: Adjust your expectations accordingly!
-Chain 3:
-Chain 3:
+Chain 3: 
+Chain 3: 
 Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
 Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
 Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -72,19 +72,19 @@ Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 3:
-Chain 3:  Elapsed Time: 40.583 seconds (Warm-up)
-Chain 3:                40.342 seconds (Sampling)
-Chain 3:                80.925 seconds (Total)
-Chain 3:
+Chain 3: 
+Chain 3:  Elapsed Time: 71.9922 seconds (Warm-up)
+Chain 3:                53.6422 seconds (Sampling)
+Chain 3:                125.634 seconds (Total)
+Chain 3: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
-Chain 4:
-Chain 4: Gradient evaluation took 0.002 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 20 seconds.
+Chain 4: 
+Chain 4: Gradient evaluation took 0.000739 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 7.39 seconds.
 Chain 4: Adjust your expectations accordingly!
-Chain 4:
-Chain 4:
+Chain 4: 
+Chain 4: 
 Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
 Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
 Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -97,18 +97,15 @@ Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 4:
-Chain 4:  Elapsed Time: 55.284 seconds (Warm-up)
-Chain 4:                43.243 seconds (Sampling)
-Chain 4:                98.527 seconds (Total)
-Chain 4:
+Chain 4: 
+Chain 4:  Elapsed Time: 80.3838 seconds (Warm-up)
+Chain 4:                63.4748 seconds (Sampling)
+Chain 4:                143.859 seconds (Total)
+Chain 4: 
 Warning messages:
-1: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-http://mc-stan.org/misc/warnings.html#bulk-ess
-2: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-http://mc-stan.org/misc/warnings.html#tail-ess
+1: There were 18 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup 
+2: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ### Quick Summary
@@ -118,26 +115,21 @@ http://mc-stan.org/misc/warnings.html#tail-ess
 ```
 stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ season + (1 | fi_fishid)
+ formula:      sqrt(ranged2d + 1) ~ 1 + (1 | fi_species)
  observations: 8846
 ------
-                Median MAD_SD
-(Intercept)     25.13   1.28
-seasonspring_I   3.12   0.46
-seasonspring_II  6.32   0.96
-seasonsummer     1.63   0.40
-seasonwinter     1.47   0.43
+            Median MAD_SD
+(Intercept) 26.24   2.49 
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 13.91   0.10
+sigma 15.31   0.11 
 
 Error terms:
- Groups    Name        Std.Dev.
- fi_fishid (Intercept)  7.16
- Residual              13.91
-Num. levels: fi_fishid 31
-
+ Groups     Name        Std.Dev.
+ fi_species (Intercept)  7.47   
+ Residual               15.31   
+Num. levels: fi_species 3 
 ------
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg
@@ -146,105 +138,42 @@ Num. levels: fi_fishid 31
 `summary(m1b)`
 
 ```
+
 Model Info:
  function:     stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ season + (1 | fi_fishid)
+ formula:      sqrt(ranged2d + 1) ~ 1 + (1 | fi_species)
  algorithm:    sampling
  sample:       4000 (posterior sample size)
  priors:       see help('prior_summary')
  observations: 8846
- groups:       fi_fishid (31)
+ groups:       fi_species (3)
 
 Estimates:
-                                           mean   sd    10%   50%   90%
-(Intercept)                               25.2    1.4  23.5  25.1  26.9
-seasonspring_I                             3.1    0.5   2.5   3.1   3.7
-seasonspring_II                            6.3    0.9   5.1   6.3   7.6
-seasonsummer                               1.6    0.4   1.1   1.6   2.1
-seasonwinter                               1.5    0.4   0.9   1.5   2.0
-b[(Intercept) fi_fishid:1]                -2.5    1.5  -4.4  -2.5  -0.6
-b[(Intercept) fi_fishid:2]                -7.0    1.7  -9.1  -6.9  -4.8
-b[(Intercept) fi_fishid:3]                -5.3    1.5  -7.2  -5.3  -3.4
-b[(Intercept) fi_fishid:4]                -7.6    1.5  -9.5  -7.6  -5.7
-b[(Intercept) fi_fishid:5]                -7.9    1.6  -9.9  -7.9  -5.8
-b[(Intercept) fi_fishid:6]                -4.1    1.6  -6.1  -4.1  -2.1
-b[(Intercept) fi_fishid:7]                 5.8    1.7   3.7   5.9   8.0
-b[(Intercept) fi_fishid:8]               -14.4    1.5 -16.3 -14.4 -12.5
-b[(Intercept) fi_fishid:9]                 6.1    1.5   4.2   6.1   8.0
-b[(Intercept) fi_fishid:10]                0.6    1.5  -1.3   0.6   2.6
-b[(Intercept) fi_fishid:11]                0.0    1.5  -2.0   0.0   1.8
-b[(Intercept) fi_fishid:12]               -5.5    1.8  -7.8  -5.5  -3.3
-b[(Intercept) fi_fishid:13]                6.4    1.6   4.3   6.4   8.4
-b[(Intercept) fi_fishid:14]               -8.4    1.7 -10.5  -8.4  -6.3
-b[(Intercept) fi_fishid:15]               10.7    1.5   8.8  10.7  12.6
-b[(Intercept) fi_fishid:16]                7.6    1.5   5.6   7.6   9.4
-b[(Intercept) fi_fishid:17]                6.3    1.5   4.3   6.4   8.2
-b[(Intercept) fi_fishid:18]               -0.5    1.6  -2.5  -0.5   1.5
-b[(Intercept) fi_fishid:19]                3.3    1.5   1.4   3.3   5.1
-b[(Intercept) fi_fishid:20]                3.0    1.5   1.0   3.0   4.9
-b[(Intercept) fi_fishid:21]                5.2    1.6   3.3   5.2   7.3
-b[(Intercept) fi_fishid:22]                5.8    1.5   3.9   5.8   7.7
-b[(Intercept) fi_fishid:23]               -4.2    1.5  -6.1  -4.2  -2.3
-b[(Intercept) fi_fishid:24]                0.2    1.5  -1.8   0.2   2.1
-b[(Intercept) fi_fishid:25]               -8.2    1.5 -10.1  -8.1  -6.3
-b[(Intercept) fi_fishid:26]                0.1    1.5  -1.7   0.1   2.0
-b[(Intercept) fi_fishid:27]                6.7    1.5   4.8   6.7   8.7
-b[(Intercept) fi_fishid:28]               -0.9    1.5  -2.8  -0.9   1.0
-b[(Intercept) fi_fishid:29]              -13.2    1.6 -15.3 -13.2 -11.2
-b[(Intercept) fi_fishid:30]                8.1    1.5   6.2   8.1  10.0
-b[(Intercept) fi_fishid:31]                8.9    1.5   7.1   8.9  10.7
-sigma                                     13.9    0.1  13.8  13.9  14.0
-Sigma[fi_fishid:(Intercept),(Intercept)]  51.3   13.8  35.6  49.1  70.2
+                                            mean   sd    10%   50%   90%
+(Intercept)                                26.3    3.7  22.2  26.2  30.2
+b[(Intercept) fi_species:pike]              0.3    3.7  -3.5   0.4   4.4
+b[(Intercept) fi_species:pikeperch]        -3.1    3.7  -7.0  -3.0   0.9
+b[(Intercept) fi_species:wels]              2.5    3.7  -1.4   2.5   6.6
+sigma                                      15.3    0.1  15.2  15.3  15.5
+Sigma[fi_species:(Intercept),(Intercept)]  55.8  111.2   4.4  18.7 132.4
 
 Fit Diagnostics:
            mean   sd   10%   50%   90%
-mean_PPD 26.9    0.2 26.7  26.9  27.2
+mean_PPD 26.9    0.2 26.6  26.9  27.2 
 
 The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
 
 MCMC diagnostics
-                                         mcse Rhat n_eff
-(Intercept)                              0.1  1.0   252
-seasonspring_I                           0.0  1.0  2011
-seasonspring_II                          0.0  1.0  2571
-seasonsummer                             0.0  1.0  2148
-seasonwinter                             0.0  1.0  2478
-b[(Intercept) fi_fishid:1]               0.1  1.0   302
-b[(Intercept) fi_fishid:2]               0.1  1.0   409
-b[(Intercept) fi_fishid:3]               0.1  1.0   318
-b[(Intercept) fi_fishid:4]               0.1  1.0   320
-b[(Intercept) fi_fishid:5]               0.1  1.0   329
-b[(Intercept) fi_fishid:6]               0.1  1.0   319
-b[(Intercept) fi_fishid:7]               0.1  1.0   399
-b[(Intercept) fi_fishid:8]               0.1  1.0   303
-b[(Intercept) fi_fishid:9]               0.1  1.0   308
-b[(Intercept) fi_fishid:10]              0.1  1.0   313
-b[(Intercept) fi_fishid:11]              0.1  1.0   302
-b[(Intercept) fi_fishid:12]              0.1  1.0   416
-b[(Intercept) fi_fishid:13]              0.1  1.0   360
-b[(Intercept) fi_fishid:14]              0.1  1.0   377
-b[(Intercept) fi_fishid:15]              0.1  1.0   324
-b[(Intercept) fi_fishid:16]              0.1  1.0   311
-b[(Intercept) fi_fishid:17]              0.1  1.0   335
-b[(Intercept) fi_fishid:18]              0.1  1.0   311
-b[(Intercept) fi_fishid:19]              0.1  1.0   307
-b[(Intercept) fi_fishid:20]              0.1  1.0   328
-b[(Intercept) fi_fishid:21]              0.1  1.0   329
-b[(Intercept) fi_fishid:22]              0.1  1.0   314
-b[(Intercept) fi_fishid:23]              0.1  1.0   304
-b[(Intercept) fi_fishid:24]              0.1  1.0   318
-b[(Intercept) fi_fishid:25]              0.1  1.0   300
-b[(Intercept) fi_fishid:26]              0.1  1.0   312
-b[(Intercept) fi_fishid:27]              0.1  1.0   316
-b[(Intercept) fi_fishid:28]              0.1  1.0   324
-b[(Intercept) fi_fishid:29]              0.1  1.0   342
-b[(Intercept) fi_fishid:30]              0.1  1.0   313
-b[(Intercept) fi_fishid:31]              0.1  1.0   318
-sigma                                    0.0  1.0  3435
-Sigma[fi_fishid:(Intercept),(Intercept)] 0.7  1.0   389
-mean_PPD                                 0.0  1.0  3961
-log-posterior                            0.3  1.0   494
+                                          mcse Rhat n_eff
+(Intercept)                               0.1  1.0   699 
+b[(Intercept) fi_species:pike]            0.1  1.0   705 
+b[(Intercept) fi_species:pikeperch]       0.1  1.0   704 
+b[(Intercept) fi_species:wels]            0.1  1.0   699 
+sigma                                     0.0  1.0  2322 
+Sigma[fi_species:(Intercept),(Intercept)] 5.6  1.0   401 
+mean_PPD                                  0.0  1.0  3925 
+log-posterior                             0.1  1.0   965 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
@@ -255,19 +184,13 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ```{r, echo=FALSE, eval=TRUE}
 
-Priors for model 'm1b'
+Priors for model 'm1b' 
 ------
 Intercept (after predictors centered)
   Specified prior:
     ~ normal(location = 0, scale = 10)
   Adjusted prior:
     ~ normal(location = 0, scale = 155)
-
-Coefficients
-  Specified prior:
-    ~ normal(location = [0,0,0,...], scale = [2.5,2.5,2.5,...])
-  Adjusted prior:
-    ~ normal(location = [0,0,0,...], scale = [38.65,38.65,38.65,...])
 
 Auxiliary (sigma)
   Specified prior:
@@ -286,26 +209,27 @@ See help('prior_summary.stanreg') for more details
 `summary(m1b, pars = c("(Intercept)", "sigma", "Sigma[fi_species:(Intercept),(Intercept)]"), probs = c(0.025, 0.975), digits = 2)`
 
 ```
-
 Model Info:
  function:     stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ season + (1 | fi_fishid)
+ formula:      sqrt(ranged2d + 1) ~ 1 + (1 | fi_species)
  algorithm:    sampling
  sample:       4000 (posterior sample size)
  priors:       see help('prior_summary')
  observations: 8846
- groups:       fi_fishid (31)
+ groups:       fi_species (3)
 
 Estimates:
-              mean   sd    2.5%   97.5%
-(Intercept) 25.16   1.36 22.50  27.94
-sigma       13.91   0.10 13.71  14.12
+                                            mean   sd     2.5%   97.5%
+(Intercept)                                26.28   3.67  18.13  35.09 
+sigma                                      15.31   0.12  15.07  15.55 
+Sigma[fi_species:(Intercept),(Intercept)]  55.80 111.16   2.49 389.67 
 
 MCMC diagnostics
-            mcse Rhat n_eff
-(Intercept) 0.09 1.02  252
-sigma       0.00 1.00 3435
+                                          mcse Rhat n_eff
+(Intercept)                               0.14 1.01  699 
+sigma                                     0.00 1.00 2322 
+Sigma[fi_species:(Intercept),(Intercept)] 5.55 1.00  401 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 ```
@@ -317,7 +241,7 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 `dim(sims)`
 
 ```
-[1] 4000   38
+[1] 4000   6
 
 ```
 
@@ -326,25 +250,8 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 `para_name`
 
 ```
- [1] "(Intercept)"                              "seasonspring_I"
- [3] "seasonspring_II"                          "seasonsummer"
- [5] "seasonwinter"                             "b[(Intercept) fi_fishid:1]"
- [7] "b[(Intercept) fi_fishid:2]"               "b[(Intercept) fi_fishid:3]"
- [9] "b[(Intercept) fi_fishid:4]"               "b[(Intercept) fi_fishid:5]"
-[11] "b[(Intercept) fi_fishid:6]"               "b[(Intercept) fi_fishid:7]"
-[13] "b[(Intercept) fi_fishid:8]"               "b[(Intercept) fi_fishid:9]"
-[15] "b[(Intercept) fi_fishid:10]"              "b[(Intercept) fi_fishid:11]"
-[17] "b[(Intercept) fi_fishid:12]"              "b[(Intercept) fi_fishid:13]"
-[19] "b[(Intercept) fi_fishid:14]"              "b[(Intercept) fi_fishid:15]"
-[21] "b[(Intercept) fi_fishid:16]"              "b[(Intercept) fi_fishid:17]"
-[23] "b[(Intercept) fi_fishid:18]"              "b[(Intercept) fi_fishid:19]"
-[25] "b[(Intercept) fi_fishid:20]"              "b[(Intercept) fi_fishid:21]"
-[27] "b[(Intercept) fi_fishid:22]"              "b[(Intercept) fi_fishid:23]"
-[29] "b[(Intercept) fi_fishid:24]"              "b[(Intercept) fi_fishid:25]"
-[31] "b[(Intercept) fi_fishid:26]"              "b[(Intercept) fi_fishid:27]"
-[33] "b[(Intercept) fi_fishid:28]"              "b[(Intercept) fi_fishid:29]"
-[35] "b[(Intercept) fi_fishid:30]"              "b[(Intercept) fi_fishid:31]"
-[37] "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
+ [1] "(Intercept)"                               "b[(Intercept) fi_species:pike]"            "b[(Intercept) fi_species:pikeperch]"      
+[4] "b[(Intercept) fi_species:wels]"            "sigma"                                     "Sigma[fi_species:(Intercept),(Intercept)]"
 ```
 
 - Obtain fi_species-level varying intercept a_j
@@ -383,22 +290,8 @@ In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the
 `a_mean`
 
 ```
- b[(Intercept) fi_fishid:1]  b[(Intercept) fi_fishid:2]  b[(Intercept) fi_fishid:3]  b[(Intercept) fi_fishid:4]
-                   22.65611                    18.19944                    19.88525                    17.55894
- b[(Intercept) fi_fishid:5]  b[(Intercept) fi_fishid:6]  b[(Intercept) fi_fishid:7]  b[(Intercept) fi_fishid:8]
-                   17.28012                    21.05662                    30.99756                    10.75575
- b[(Intercept) fi_fishid:9] b[(Intercept) fi_fishid:10] b[(Intercept) fi_fishid:11] b[(Intercept) fi_fishid:12]
-                   31.27791                    25.78777                    25.12406                    19.66371
-b[(Intercept) fi_fishid:13] b[(Intercept) fi_fishid:14] b[(Intercept) fi_fishid:15] b[(Intercept) fi_fishid:16]
-                   31.51873                    16.75917                    35.87383                    32.74001
-b[(Intercept) fi_fishid:17] b[(Intercept) fi_fishid:18] b[(Intercept) fi_fishid:19] b[(Intercept) fi_fishid:20]
-                   31.48980                    24.66353                    28.43429                    28.13015
-b[(Intercept) fi_fishid:21] b[(Intercept) fi_fishid:22] b[(Intercept) fi_fishid:23] b[(Intercept) fi_fishid:24]
-                   30.38893                    30.98828                    20.95587                    25.31297
-b[(Intercept) fi_fishid:25] b[(Intercept) fi_fishid:26] b[(Intercept) fi_fishid:27] b[(Intercept) fi_fishid:28]
-                   16.98690                    25.30700                    31.89658                    24.28129
-b[(Intercept) fi_fishid:29] b[(Intercept) fi_fishid:30] b[(Intercept) fi_fishid:31]
-                   11.92271                    33.27116                    34.05940
+      b[(Intercept) fi_species:pike] b[(Intercept) fi_species:pikeperch]      b[(Intercept) fi_species:wels] 
+                      26.6229074472                       23.2183412354                       28.7566086400 
 ```
 
 - Posterior SD of each alpha
@@ -408,22 +301,8 @@ b[(Intercept) fi_fishid:29] b[(Intercept) fi_fishid:30] b[(Intercept) fi_fishid:
 `a_sd`
 
 ```
- b[(Intercept) fi_fishid:1]  b[(Intercept) fi_fishid:2]  b[(Intercept) fi_fishid:3]  b[(Intercept) fi_fishid:4]
-                  0.8263131                   1.1394806                   0.7942932                   0.8005113
- b[(Intercept) fi_fishid:5]  b[(Intercept) fi_fishid:6]  b[(Intercept) fi_fishid:7]  b[(Intercept) fi_fishid:8]
-                  0.8885192                   0.8458977                   1.1408305                   0.7903641
- b[(Intercept) fi_fishid:9] b[(Intercept) fi_fishid:10] b[(Intercept) fi_fishid:11] b[(Intercept) fi_fishid:12]
-                  0.8015428                   0.8075408                   0.7976819                   1.2810792
-b[(Intercept) fi_fishid:13] b[(Intercept) fi_fishid:14] b[(Intercept) fi_fishid:15] b[(Intercept) fi_fishid:16]
-                  0.9731794                   1.0685387                   0.8626735                   0.7765670
-b[(Intercept) fi_fishid:17] b[(Intercept) fi_fishid:18] b[(Intercept) fi_fishid:19] b[(Intercept) fi_fishid:20]
-                  0.8239524                   0.8664141                   0.7767939                   0.8618274
-b[(Intercept) fi_fishid:21] b[(Intercept) fi_fishid:22] b[(Intercept) fi_fishid:23] b[(Intercept) fi_fishid:24]
-                  0.9153469                   0.8135210                   0.7841159                   0.8707819
-b[(Intercept) fi_fishid:25] b[(Intercept) fi_fishid:26] b[(Intercept) fi_fishid:27] b[(Intercept) fi_fishid:28]
-                  0.8246331                   0.8006935                   0.8369922                   0.8447457
-b[(Intercept) fi_fishid:29] b[(Intercept) fi_fishid:30] b[(Intercept) fi_fishid:31]
-                  1.0132123                   0.7893760                   0.8003434
+  b[(Intercept) fi_species:pike] b[(Intercept) fi_species:pikeperch]      b[(Intercept) fi_species:wels] 
+                     0.289746699925                      0.337437274158                      0.232639097229 
 ```
 
 - Posterior median and 95% credible interval
@@ -435,38 +314,10 @@ b[(Intercept) fi_fishid:29] b[(Intercept) fi_fishid:30] b[(Intercept) fi_fishid:
 `a_quant`
 
 ```
-                                X2.5.     X50.   X97.5.
-b[(Intercept) fi_fishid:1]  21.039233 22.66466 24.27110
-b[(Intercept) fi_fishid:2]  15.907482 18.22637 20.33842
-b[(Intercept) fi_fishid:3]  18.328191 19.86976 21.45812
-b[(Intercept) fi_fishid:4]  15.999759 17.56155 19.12451
-b[(Intercept) fi_fishid:5]  15.509073 17.27775 19.01179
-b[(Intercept) fi_fishid:6]  19.439338 21.05059 22.71890
-b[(Intercept) fi_fishid:7]  28.803231 31.00057 33.24051
-b[(Intercept) fi_fishid:8]   9.192346 10.76231 12.28624
-b[(Intercept) fi_fishid:9]  29.700500 31.29055 32.83017
-b[(Intercept) fi_fishid:10] 24.228957 25.77952 27.37900
-b[(Intercept) fi_fishid:11] 23.591380 25.11840 26.69825
-b[(Intercept) fi_fishid:12] 17.075011 19.65923 22.23857
-b[(Intercept) fi_fishid:13] 29.665896 31.50691 33.43216
-b[(Intercept) fi_fishid:14] 14.672277 16.76525 18.85662
-b[(Intercept) fi_fishid:15] 34.171084 35.87971 37.57096
-b[(Intercept) fi_fishid:16] 31.259941 32.74592 34.20499
-b[(Intercept) fi_fishid:17] 29.846664 31.50175 33.11319
-b[(Intercept) fi_fishid:18] 22.993019 24.66778 26.34030
-b[(Intercept) fi_fishid:19] 26.936516 28.42474 29.94146
-b[(Intercept) fi_fishid:20] 26.403976 28.11346 29.78938
-b[(Intercept) fi_fishid:21] 28.599080 30.39238 32.23709
-b[(Intercept) fi_fishid:22] 29.386802 30.97695 32.58063
-b[(Intercept) fi_fishid:23] 19.422230 20.96221 22.49107
-b[(Intercept) fi_fishid:24] 23.657090 25.30873 27.01251
-b[(Intercept) fi_fishid:25] 15.390873 16.97898 18.59500
-b[(Intercept) fi_fishid:26] 23.778603 25.29774 26.86074
-b[(Intercept) fi_fishid:27] 30.310147 31.88194 33.55023
-b[(Intercept) fi_fishid:28] 22.640965 24.29641 25.93419
-b[(Intercept) fi_fishid:29]  9.970949 11.91553 13.94426
-b[(Intercept) fi_fishid:30] 31.726599 33.28491 34.80199
-b[(Intercept) fi_fishid:31] 32.465772 34.06298 35.61404
+                                            X2.5.          X50.        X97.5.
+b[(Intercept) fi_species:pike]      26.0726268909 26.6212198161 27.1938044536
+b[(Intercept) fi_species:pikeperch] 22.5510861846 23.2166098789 23.8863850205
+b[(Intercept) fi_species:wels]      28.2987068282 28.7573083349 29.2143059972
 ```
 
 `names(a_quant) <- c("X2.5.", "X50.", "X97.5.")`
@@ -478,14 +329,10 @@ b[(Intercept) fi_fishid:31] 32.465772 34.06298 35.61404
 `round(head(a_df), 2)`
 
 ```
-                           a_mean a_sd X2.5.  X50. X97.5.
-b[(Intercept) fi_fishid:1]  22.66 0.83 21.04 22.66  24.27
-b[(Intercept) fi_fishid:2]  18.20 1.14 15.91 18.23  20.34
-b[(Intercept) fi_fishid:3]  19.89 0.79 18.33 19.87  21.46
-b[(Intercept) fi_fishid:4]  17.56 0.80 16.00 17.56  19.12
-b[(Intercept) fi_fishid:5]  17.28 0.89 15.51 17.28  19.01
-b[(Intercept) fi_fishid:6]  21.06 0.85 19.44 21.05  22.72
-
+                                    a_mean a_sd X2.5.  X50. X97.5.
+b[(Intercept) fi_species:pike]       26.62 0.29 26.07 26.62  27.19
+b[(Intercept) fi_species:pikeperch]  23.22 0.34 22.55 23.22  23.89
+b[(Intercept) fi_species:wels]       28.76 0.23 28.30 28.76  29.21
 ```
 
 ### Plots
@@ -498,38 +345,10 @@ Caterpillar plot to show the fully Bayes estimates for the *fi_species* varying 
 
 `a_df`
 ```
-                              a_mean      a_sd     X2.5.     X50.   X97.5.
-b[(Intercept) fi_fishid:8]  10.75575 0.7903641  9.192346 10.76231 12.28624
-b[(Intercept) fi_fishid:29] 11.92271 1.0132123  9.970949 11.91553 13.94426
-b[(Intercept) fi_fishid:14] 16.75917 1.0685387 14.672277 16.76525 18.85662
-b[(Intercept) fi_fishid:25] 16.98690 0.8246331 15.390873 16.97898 18.59500
-b[(Intercept) fi_fishid:5]  17.28012 0.8885192 15.509073 17.27775 19.01179
-b[(Intercept) fi_fishid:4]  17.55894 0.8005113 15.999759 17.56155 19.12451
-b[(Intercept) fi_fishid:2]  18.19944 1.1394806 15.907482 18.22637 20.33842
-b[(Intercept) fi_fishid:12] 19.66371 1.2810792 17.075011 19.65923 22.23857
-b[(Intercept) fi_fishid:3]  19.88525 0.7942932 18.328191 19.86976 21.45812
-b[(Intercept) fi_fishid:23] 20.95587 0.7841159 19.422230 20.96221 22.49107
-b[(Intercept) fi_fishid:6]  21.05662 0.8458977 19.439338 21.05059 22.71890
-b[(Intercept) fi_fishid:1]  22.65611 0.8263131 21.039233 22.66466 24.27110
-b[(Intercept) fi_fishid:28] 24.28129 0.8447457 22.640965 24.29641 25.93419
-b[(Intercept) fi_fishid:18] 24.66353 0.8664141 22.993019 24.66778 26.34030
-b[(Intercept) fi_fishid:11] 25.12406 0.7976819 23.591380 25.11840 26.69825
-b[(Intercept) fi_fishid:26] 25.30700 0.8006935 23.778603 25.29774 26.86074
-b[(Intercept) fi_fishid:24] 25.31297 0.8707819 23.657090 25.30873 27.01251
-b[(Intercept) fi_fishid:10] 25.78777 0.8075408 24.228957 25.77952 27.37900
-b[(Intercept) fi_fishid:20] 28.13015 0.8618274 26.403976 28.11346 29.78938
-b[(Intercept) fi_fishid:19] 28.43429 0.7767939 26.936516 28.42474 29.94146
-b[(Intercept) fi_fishid:21] 30.38893 0.9153469 28.599080 30.39238 32.23709
-b[(Intercept) fi_fishid:22] 30.98828 0.8135210 29.386802 30.97695 32.58063
-b[(Intercept) fi_fishid:7]  30.99756 1.1408305 28.803231 31.00057 33.24051
-b[(Intercept) fi_fishid:9]  31.27791 0.8015428 29.700500 31.29055 32.83017
-b[(Intercept) fi_fishid:17] 31.48980 0.8239524 29.846664 31.50175 33.11319
-b[(Intercept) fi_fishid:13] 31.51873 0.9731794 29.665896 31.50691 33.43216
-b[(Intercept) fi_fishid:27] 31.89658 0.8369922 30.310147 31.88194 33.55023
-b[(Intercept) fi_fishid:16] 32.74001 0.7765670 31.259941 32.74592 34.20499
-b[(Intercept) fi_fishid:30] 33.27116 0.7893760 31.726599 33.28491 34.80199
-b[(Intercept) fi_fishid:31] 34.05940 0.8003434 32.465772 34.06298 35.61404
-b[(Intercept) fi_fishid:15] 35.87383 0.8626735 34.171084 35.87971 37.57096
+                                           a_mean           a_sd         X2.5.          X50.        X97.5.
+b[(Intercept) fi_species:pikeperch] 23.2183412354 0.337437274158 22.5510861846 23.2166098789 23.8863850205
+b[(Intercept) fi_species:pike]      26.6229074472 0.289746699925 26.0726268909 26.6212198161 27.1938044536
+b[(Intercept) fi_species:wels]      28.7566086400 0.232639097229 28.2987068282 28.7573083349 29.2143059972
 ```
 
 `a_df$a_rank <- c(1 : dim(a_df)[1])`    # a vector of fi_species rank
