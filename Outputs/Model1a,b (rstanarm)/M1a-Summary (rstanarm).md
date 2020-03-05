@@ -527,7 +527,7 @@ b[(Intercept) fi_fishid:31] 35.70593 0.7357061 34.27616 35.70234 37.12118
 b[(Intercept) fi_fishid:15] 37.23900 0.8278314 35.58431 37.22210 38.85242
 ```
 
-`a_df$a_rank <- c(1 : dim(a_df)[1])`    # a vector of fi_species rank
+`a_df$a_rank <- c(1 : dim(a_df)[1])`    # a vector of fi_fishid rank
 
 - Plot fish-level alphas's posterior mean and 95% credible interval
 
