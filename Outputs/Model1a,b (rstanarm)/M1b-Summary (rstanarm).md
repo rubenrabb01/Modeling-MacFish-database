@@ -379,7 +379,7 @@ ggplot(data = a_df,
 
 Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
 
-- The difference between the fish 1 and fish 2 averages is:
+- The difference between the pike and pikeperch averages is:
 
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
@@ -392,8 +392,8 @@ Here I'll explore the posterior distribution of the differences between each two
 `round(diff_df1, 2)`
 
 ```
-  mean   sd Q2.5  Q50 Q97.5
-1 4.46 1.36 1.88 4.44  7.16
+  mean   sd Q2.5 Q50 Q97.5
+1  3.4 0.44 2.51 3.4  4.28
 
 ```
 `ggplot(data = data.frame(fish_diff1),
@@ -401,7 +401,7 @@ Here I'll explore the posterior distribution of the differences between each two
   geom_histogram(color = "black",
                  fill = "gray",
                  binwidth = 0.75) +
-  scale_x_continuous("Score diffence between fish1 and fish2",
+  scale_x_continuous("Score diffence between pike and pikeperch",
                      breaks = seq(from = -20,
                                   to = 20,
                                   by = 10)) +
@@ -410,10 +410,10 @@ Here I'll explore the posterior distribution of the differences between each two
                                      probs = c(0.025, 0.975))),
              colour = "red",
              linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = 4.46"),
+  geom_text(aes(0.45, 20, label = "mean = 3.4"),
             color = "red",
             size = 4) +
-  geom_text(aes(9, 50, label = "SD = 1.36"),
+  geom_text(aes(9, 50, label = "SD = 0.44"),
             color = "blue",
             size = 4) +
   theme_bw( base_family = "serif")`
@@ -427,13 +427,13 @@ We also can get the proportion of the time that pike has a higher mean than pike
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
 ```
-  FALSE    TRUE
-0.00075 0.99925
+TRUE 
+   1 
 ```
 
-This means that the posterior probability that fish1 is better than fish2 is 99.9%. Any pair of fishes within the sample of fishes can be compared in this manner.
+This means that the posterior probability that pike is better than pikeperch is 100%. Any pair of fishes within the sample of fishes can be compared in this manner.
 
-- The difference between the fish2 and fish3 averages is:
+- The difference between the pikeperch and wels averages averages is:
 
 `fish_diff2 <- fish_inter[, 2] - fish_inter[, 3]`
 
@@ -447,7 +447,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 ```
    mean   sd  Q2.5   Q50 Q97.5
-1 -1.69 1.36 -4.35 -1.66  1.01
+1 -5.54 0.41 -6.36 -5.54 -4.72
 
 ```
 `ggplot(data = data.frame(fish_diff2),
@@ -455,7 +455,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
   geom_histogram(color = "black",
                  fill = "gray",
                  binwidth = 0.75) +
-  scale_x_continuous("Score diffence between fish2 and fish3",
+  scale_x_continuous("Score diffence between pikeperch and wels",
                      breaks = seq(from = -20,
                                   to = 20,
                                   by = 10)) +
@@ -464,17 +464,17 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
                                      probs = c(0.025, 0.975))),
              colour = "red",
              linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = -1.69"),
+  geom_text(aes(0.45, 20, label = "mean = -5.54"),
             color = "red",
             size = 4) +
-  geom_text(aes(9, 50, label = "SD = 1.36"),
+  geom_text(aes(9, 50, label = "SD = 0.41"),
             color = "blue",
             size = 4) +
   theme_bw( base_family = "serif")`
 
 ![M1b_s3](/Plots/M1b_s3.png "M1b_s3")
 
-- The difference between the fish1 and wels fish3 is:
+- The difference between the  pike and wels averages is:
 
 `fish_diff3 <- fish_inter[, 1] - fish_inter[, 3]`
 
@@ -487,8 +487,8 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 `round(diff_df3, 2)`
 
 ```
-  mean  sd Q2.5  Q50 Q97.5
-1 2.77 1.1 0.62 2.78  4.89
+   mean   sd  Q2.5   Q50 Q97.5
+1 -5.54 0.37 -2.87 -2.13  -1.4
 
 ```
 `ggplot(data = data.frame(fish_diff3),
@@ -496,7 +496,7 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
   geom_histogram(color = "black",
                  fill = "gray",
                  binwidth = 0.75) +
-  scale_x_continuous("Score diffence between fish1 and fish3",
+  scale_x_continuous("Score diffence between pike and wels",
                      breaks = seq(from = -20,
                                   to = 20,
                                   by = 10)) +
@@ -505,10 +505,10 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
                                      probs = c(0.025, 0.975))),
              colour = "red",
              linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = 2.77"),
+  geom_text(aes(0.45, 20, label = "mean = -5.54"),
             color = "red",
             size = 4) +
-  geom_text(aes(9, 50, label = "SD = 1.1"),
+  geom_text(aes(9, 50, label = "SD = 0.37"),
             color = "blue",
             size = 4) +
   theme_bw( base_family = "serif")`
@@ -530,26 +530,16 @@ This means that the posterior probability that fish1 is better than fish2 is 99.
 
 - Excluding random effects from *fi_species*
 
-`mcmc_areas(as.matrix(m1b), prob_outer = .999, pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
-"b[(Intercept) fi_fishid:4]","b[(Intercept) fi_fishid:5]", "b[(Intercept) fi_fishid:6]", "b[(Intercept) fi_fishid:7]" ,"b[(Intercept) fi_fishid:8]","b[(Intercept) fi_fishid:9]",
-"b[(Intercept) fi_fishid:10]","b[(Intercept) fi_fishid:11]", "b[(Intercept) fi_fishid:12]", "b[(Intercept) fi_fishid:13]","b[(Intercept) fi_fishid:14]","b[(Intercept) fi_fishid:15]",
-"b[(Intercept) fi_fishid:16]", "b[(Intercept) fi_fishid:17]","b[(Intercept) fi_fishid:18]","b[(Intercept) fi_fishid:19]","b[(Intercept) fi_fishid:20]","b[(Intercept) fi_fishid:21]",
-"b[(Intercept) fi_fishid:22]", "b[(Intercept) fi_fishid:23]","b[(Intercept) fi_fishid:24]","b[(Intercept) fi_fishid:25]","b[(Intercept) fi_fishid:26]","b[(Intercept) fi_fishid:27]",
-"b[(Intercept) fi_fishid:28]","b[(Intercept) fi_fishid:29]","b[(Intercept) fi_fishid:30]","b[(Intercept) fi_fishid:31]"))`
+`mcmc_areas(as.matrix(m1b), prob_outer = .999, pars = c("(Intercept)",  "b[(Intercept) fi_species:pikeperch]", "b[(Intercept) fi_species:pike]","b[(Intercept) fi_species:wels]"))`
 
 ![M1b_s6](/Plots/M1b_s6.png "M1b_s6")
 
-- *fi_fishid:26*,*fi_fishid:27*,*fi_fishid:28*,*fi_fishid:10*,*fi_fishid:19*,*fi_fishid:18* have both lot of probability mass on both sides of 0
+- The three species have lot of probability mass on both sides of 0
 
 
 #### Plot paired marginals
 
-`mcmc_pairs(as.matrix(m1b),pars = c("(Intercept)",  "b[(Intercept) fi_fishid:1]", "b[(Intercept) fi_fishid:2]","b[(Intercept) fi_fishid:3]",
-"b[(Intercept) fi_fishid:4]","b[(Intercept) fi_fishid:5]", "b[(Intercept) fi_fishid:6]", "b[(Intercept) fi_fishid:7]" ,"b[(Intercept) fi_fishid:8]","b[(Intercept) fi_fishid:9]",
-"b[(Intercept) fi_fishid:10]","b[(Intercept) fi_fishid:11]", "b[(Intercept) fi_fishid:12]", "b[(Intercept) fi_fishid:13]","b[(Intercept) fi_fishid:14]","b[(Intercept) fi_fishid:15]",
-"b[(Intercept) fi_fishid:16]", "b[(Intercept) fi_fishid:17]","b[(Intercept) fi_fishid:18]","b[(Intercept) fi_fishid:19]","b[(Intercept) fi_fishid:20]","b[(Intercept) fi_fishid:21]",
-"b[(Intercept) fi_fishid:22]", "b[(Intercept) fi_fishid:23]","b[(Intercept) fi_fishid:24]","b[(Intercept) fi_fishid:25]","b[(Intercept) fi_fishid:26]","b[(Intercept) fi_fishid:27]",
-"b[(Intercept) fi_fishid:28]","b[(Intercept) fi_fishid:29]","b[(Intercept) fi_fishid:30]","b[(Intercept) fi_fishid:31]"))`
+`mcmc_pairs(as.matrix(m1b),pars = c("(Intercept)",  "b[(Intercept) fi_species:pikeperch]", "b[(Intercept) fi_species:pike]","b[(Intercept) fi_species:wels]"))`
 
-
+![M1b_s7](/Plots/M1b_s7.png "M1b_s7")
 
