@@ -117,34 +117,34 @@ Chain 4:
 ```
 stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
+ formula:      ranged2d ~ 1 + season * fi_species + (1 | fi_fishid)
  observations: 8846
 ------
-                                    Median MAD_SD
-(Intercept)                          26.55   2.15
-seasonspring_I                       -1.80   0.84
-seasonspring_II                      14.58   1.64
-seasonsummer                         -3.29   0.68
-seasonwinter                          3.69   0.76
-fi_speciespikeperch                  -7.66   3.12
-fi_specieswels                        0.24   2.91
-seasonspring_I:fi_speciespikeperch    7.58   1.26
-seasonspring_II:fi_speciespikeperch -13.61   2.46
-seasonsummer:fi_speciespikeperch     12.97   1.12
-seasonwinter:fi_speciespikeperch     -3.50   1.18
-seasonspring_I:fi_specieswels         6.85   1.08
-seasonspring_II:fi_specieswels      -10.20   2.17
-seasonsummer:fi_specieswels           4.34   0.87
-seasonwinter:fi_specieswels          -2.90   1.00
+                                    Median  MAD_SD 
+(Intercept)                          966.82  122.00
+seasonspring_I                      -135.45   49.07
+seasonspring_II                     1014.34  104.74
+seasonsummer                        -249.56   42.42
+seasonwinter                         196.17   46.95
+fi_speciespikeperch                 -413.91  184.80
+fi_specieswels                       -82.15  162.40
+seasonspring_I:fi_speciespikeperch   534.21   76.61
+seasonspring_II:fi_speciespikeperch -967.62  147.40
+seasonsummer:fi_speciespikeperch     784.70   67.35
+seasonwinter:fi_speciespikeperch    -168.71   74.23
+seasonspring_I:fi_specieswels        562.69   62.63
+seasonspring_II:fi_specieswels      -740.38  134.57
+seasonsummer:fi_specieswels          412.09   53.80
+seasonwinter:fi_specieswels         -154.31   59.60
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 13.67   0.10 
+sigma 822.64   5.99
 
 Error terms:
  Groups    Name        Std.Dev.
- fi_fishid (Intercept)  6.93   
- Residual              13.67   
+ fi_fishid (Intercept) 372     
+ Residual              823     
 Num. levels: fi_fishid 31 
 
 ------
@@ -158,7 +158,7 @@ Num. levels: fi_fishid 31
 Model Info:
  function:     stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
+ formula:      ranged2d ~ 1 + season * fi_species + (1 | fi_fishid)
  algorithm:    sampling
  sample:       4000 (posterior sample size)
  priors:       see help('prior_summary')
@@ -166,117 +166,116 @@ Model Info:
  groups:       fi_fishid (31)
 
 Estimates:
-                                           mean   sd    10%   50%   90%
-(Intercept)                               26.6    2.2  23.7  26.5  29.4
-seasonspring_I                            -1.8    0.8  -2.9  -1.8  -0.7
-seasonspring_II                           14.6    1.7  12.4  14.6  16.9
-seasonsummer                              -3.3    0.7  -4.2  -3.3  -2.4
-seasonwinter                               3.7    0.8   2.7   3.7   4.6
-fi_speciespikeperch                       -7.6    3.4 -11.9  -7.7  -3.2
-fi_specieswels                             0.2    3.0  -3.5   0.2   3.9
-seasonspring_I:fi_speciespikeperch         7.6    1.3   5.9   7.6   9.2
-seasonspring_II:fi_speciespikeperch      -13.7    2.5 -16.9 -13.6 -10.5
-seasonsummer:fi_speciespikeperch          13.0    1.1  11.6  13.0  14.4
-seasonwinter:fi_speciespikeperch          -3.5    1.2  -5.0  -3.5  -2.0
-seasonspring_I:fi_specieswels              6.8    1.1   5.5   6.8   8.1
-seasonspring_II:fi_specieswels           -10.2    2.2 -13.0 -10.2  -7.5
-seasonsummer:fi_specieswels                4.3    0.9   3.2   4.3   5.4
-seasonwinter:fi_specieswels               -2.9    1.0  -4.2  -2.9  -1.7
-b[(Intercept) fi_fishid:T449202_1]        -1.0    2.7  -4.5  -0.9   2.2
-b[(Intercept) fi_fishid:T449203_1]         6.1    2.3   3.2   6.1   9.1
-b[(Intercept) fi_fishid:T449204_1]        -2.1    2.5  -5.2  -2.1   1.1
-b[(Intercept) fi_fishid:T449207_1]        -8.2    2.3 -11.2  -8.2  -5.3
-b[(Intercept) fi_fishid:T449208_1]       -10.0    2.7 -13.5  -9.9  -6.9
-b[(Intercept) fi_fishid:T449209_1]        -0.5    2.3  -3.4  -0.5   2.5
-b[(Intercept) fi_fishid:T449213_1]        10.4    2.7   7.0  10.5  13.6
-b[(Intercept) fi_fishid:T449215_1]         6.4    2.7   2.9   6.5   9.8
-b[(Intercept) fi_fishid:T449268_1]         6.7    1.9   4.2   6.7   9.1
-b[(Intercept) fi_fishid:T449269_1]         4.8    2.0   2.2   4.8   7.3
-b[(Intercept) fi_fishid:T449270_2]         5.5    2.4   2.5   5.5   8.5
-b[(Intercept) fi_fishid:T449271_1]         0.3    2.3  -2.6   0.3   3.3
-b[(Intercept) fi_fishid:T449272_1]        11.3    2.3   8.3  11.3  14.3
-b[(Intercept) fi_fishid:T449274_1]         7.5    1.9   5.0   7.5   9.9
-b[(Intercept) fi_fishid:T449275_1]         6.1    1.9   3.6   6.1   8.6
-b[(Intercept) fi_fishid:T449276_1]         1.8    1.9  -0.7   1.9   4.2
-b[(Intercept) fi_fishid:T449277_1]         0.5    2.3  -2.4   0.6   3.5
-b[(Intercept) fi_fishid:T449278_1]        -9.8    2.0 -12.3  -9.8  -7.3
-b[(Intercept) fi_fishid:T449280_1]        -2.4    2.0  -5.0  -2.5   0.1
-b[(Intercept) fi_fishid:T449282_1]       -15.0    2.0 -17.7 -15.0 -12.5
-b[(Intercept) fi_fishid:T449284_1]        -5.7    1.9  -8.2  -5.7  -3.3
-b[(Intercept) fi_fishid:T449285_1]        -6.0    2.4  -9.1  -6.0  -2.9
-b[(Intercept) fi_fishid:T449286_1]        -1.5    2.0  -4.0  -1.5   1.0
-b[(Intercept) fi_fishid:T449287_1]        -7.0    2.3 -10.0  -7.0  -4.0
-b[(Intercept) fi_fishid:T449288_1]         3.5    2.0   0.9   3.5   6.0
-b[(Intercept) fi_fishid:T449310_1]         1.1    2.7  -2.3   1.2   4.3
-b[(Intercept) fi_fishid:T449313_1]        -0.8    2.6  -4.2  -0.6   2.5
-b[(Intercept) fi_fishid:T449314_1]        -1.3    2.0  -3.9  -1.3   1.1
-b[(Intercept) fi_fishid:T449317_1]        -6.1    2.7  -9.7  -6.0  -2.7
-b[(Intercept) fi_fishid:T449318_1]         1.3    2.0  -1.2   1.4   3.9
-b[(Intercept) fi_fishid:T449319_1]         4.3    1.9   1.8   4.3   6.7
-sigma                                     13.7    0.1  13.5  13.7  13.8
-Sigma[fi_fishid:(Intercept),(Intercept)]  48.1   14.2  32.5  45.5  67.0
+                                           mean     sd       10%      50%      90%   
+(Intercept)                                 968.3    123.4    810.5    966.8   1124.3
+seasonspring_I                             -135.1     49.8   -199.3   -135.4    -71.4
+seasonspring_II                            1016.6    104.7    883.9   1014.3   1149.7
+seasonsummer                               -249.7     42.6   -305.2   -249.6   -195.8
+seasonwinter                                196.6     46.9    136.6    196.2    256.5
+fi_speciespikeperch                        -414.0    187.0   -655.8   -413.9   -181.9
+fi_specieswels                              -87.3    161.0   -294.8    -82.2    113.3
+seasonspring_I:fi_speciespikeperch          533.9     77.0    436.3    534.2    632.1
+seasonspring_II:fi_speciespikeperch        -967.8    152.3  -1163.4   -967.6   -772.7
+seasonsummer:fi_speciespikeperch            783.2     66.9    698.1    784.7    868.4
+seasonwinter:fi_speciespikeperch           -169.8     73.3   -265.1   -168.7    -75.3
+seasonspring_I:fi_specieswels               561.4     63.4    479.8    562.7    642.3
+seasonspring_II:fi_specieswels             -742.8    134.4   -914.5   -740.4   -573.5
+seasonsummer:fi_specieswels                 412.6     53.7    344.7    412.1    483.5
+seasonwinter:fi_specieswels                -154.3     59.0   -230.4   -154.3    -78.4
+b[(Intercept) fi_fishid:T449202_1]          -43.5    146.1   -231.1    -45.6    146.4
+b[(Intercept) fi_fishid:T449203_1]          530.3    127.4    367.7    532.3    688.8
+b[(Intercept) fi_fishid:T449204_1]         -119.1    136.5   -297.0   -116.2     55.8
+b[(Intercept) fi_fishid:T449207_1]         -480.7    127.3   -644.6   -477.4   -322.5
+b[(Intercept) fi_fishid:T449208_1]         -463.6    146.5   -648.6   -469.2   -275.7
+b[(Intercept) fi_fishid:T449209_1]         -123.3    127.1   -289.2   -121.0     34.8
+b[(Intercept) fi_fishid:T449213_1]          541.8    147.1    355.2    537.3    731.5
+b[(Intercept) fi_fishid:T449215_1]          363.5    151.1    174.6    360.3    557.8
+b[(Intercept) fi_fishid:T449268_1]          390.1    106.7    253.2    391.5    527.0
+b[(Intercept) fi_fishid:T449269_1]          310.8    108.0    172.7    312.1    450.7
+b[(Intercept) fi_fishid:T449270_2]          297.2    129.1    129.7    298.8    464.0
+b[(Intercept) fi_fishid:T449271_1]           38.3    128.3   -127.8     42.4    195.1
+b[(Intercept) fi_fishid:T449272_1]          657.6    128.1    492.5    659.9    819.5
+b[(Intercept) fi_fishid:T449274_1]          367.9    105.3    230.9    367.7    503.2
+b[(Intercept) fi_fishid:T449275_1]          282.8    105.9    147.1    283.2    415.4
+b[(Intercept) fi_fishid:T449276_1]           91.3    106.5    -47.6     91.1    226.8
+b[(Intercept) fi_fishid:T449277_1]          -75.1    127.1   -234.2    -72.7     84.8
+b[(Intercept) fi_fishid:T449278_1]         -527.6    106.3   -666.1   -526.9   -391.4
+b[(Intercept) fi_fishid:T449280_1]           18.5    107.0   -120.2     21.2    154.6
+b[(Intercept) fi_fishid:T449282_1]         -613.3    113.1   -758.6   -610.7   -470.6
+b[(Intercept) fi_fishid:T449284_1]         -278.9    105.7   -413.8   -277.6   -143.0
+b[(Intercept) fi_fishid:T449285_1]         -342.5    132.4   -511.8   -341.9   -174.0
+b[(Intercept) fi_fishid:T449286_1]         -224.4    106.2   -361.0   -223.5    -90.7
+b[(Intercept) fi_fishid:T449287_1]         -392.2    127.6   -557.8   -389.2   -230.9
+b[(Intercept) fi_fishid:T449288_1]           98.3    108.6    -41.5     97.1    235.6
+b[(Intercept) fi_fishid:T449310_1]          -42.3    145.8   -225.8    -45.1    139.2
+b[(Intercept) fi_fishid:T449313_1]            9.0    145.9   -174.3      3.4    196.0
+b[(Intercept) fi_fishid:T449314_1]         -168.5    105.9   -301.8   -166.8    -33.1
+b[(Intercept) fi_fishid:T449317_1]         -404.0    151.9   -595.8   -409.0   -203.8
+b[(Intercept) fi_fishid:T449318_1]           44.8    107.8    -93.2     46.8    183.6
+b[(Intercept) fi_fishid:T449319_1]          200.7    105.8     64.3    201.0    337.5
+sigma                                       822.6      6.2    814.9    822.6    830.7
+Sigma[fi_fishid:(Intercept),(Intercept)] 138145.7  39534.5  94977.8 132102.8 189374.5
 
 Fit Diagnostics:
-           mean   sd   10%   50%   90%
-mean_PPD 26.9    0.2 26.7  26.9  27.2 
+           mean   sd    10%   50%   90%
+mean_PPD 962.6   12.6 946.3 962.6 978.9
 
 The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
 
 MCMC diagnostics
-                                         mcse Rhat n_eff
-(Intercept)                              0.1  1.0   663 
-seasonspring_I                           0.0  1.0  1943 
-seasonspring_II                          0.0  1.0  2236 
-seasonsummer                             0.0  1.0  1970 
-seasonwinter                             0.0  1.0  2179 
-fi_speciespikeperch                      0.1  1.0   903 
-fi_specieswels                           0.1  1.0   845 
-seasonspring_I:fi_speciespikeperch       0.0  1.0  2126 
-seasonspring_II:fi_speciespikeperch      0.1  1.0  2077 
-seasonsummer:fi_speciespikeperch         0.0  1.0  2034 
-seasonwinter:fi_speciespikeperch         0.0  1.0  2255 
-seasonspring_I:fi_specieswels            0.0  1.0  2015 
-seasonspring_II:fi_specieswels           0.0  1.0  2371 
-seasonsummer:fi_specieswels              0.0  1.0  2018 
-seasonwinter:fi_specieswels              0.0  1.0  2197 
-b[(Intercept) fi_fishid:T449202_1]       0.1  1.0  1066 
-b[(Intercept) fi_fishid:T449203_1]       0.1  1.0   673 
-b[(Intercept) fi_fishid:T449204_1]       0.1  1.0   719 
-b[(Intercept) fi_fishid:T449207_1]       0.1  1.0   675 
-b[(Intercept) fi_fishid:T449208_1]       0.1  1.0  1058 
-b[(Intercept) fi_fishid:T449209_1]       0.1  1.0   732 
-b[(Intercept) fi_fishid:T449213_1]       0.1  1.0  1114 
-b[(Intercept) fi_fishid:T449215_1]       0.1  1.0  1133 
-b[(Intercept) fi_fishid:T449268_1]       0.1  1.0   868 
-b[(Intercept) fi_fishid:T449269_1]       0.1  1.0   856 
-b[(Intercept) fi_fishid:T449270_2]       0.1  1.0   729 
-b[(Intercept) fi_fishid:T449271_1]       0.1  1.0   670 
-b[(Intercept) fi_fishid:T449272_1]       0.1  1.0   695 
-b[(Intercept) fi_fishid:T449274_1]       0.1  1.0   876 
-b[(Intercept) fi_fishid:T449275_1]       0.1  1.0   877 
-b[(Intercept) fi_fishid:T449276_1]       0.1  1.0   866 
-b[(Intercept) fi_fishid:T449277_1]       0.1  1.0   708 
-b[(Intercept) fi_fishid:T449278_1]       0.1  1.0   908 
-b[(Intercept) fi_fishid:T449280_1]       0.1  1.0   889 
-b[(Intercept) fi_fishid:T449282_1]       0.1  1.0  1009 
-b[(Intercept) fi_fishid:T449284_1]       0.1  1.0   859 
-b[(Intercept) fi_fishid:T449285_1]       0.1  1.0   720 
-b[(Intercept) fi_fishid:T449286_1]       0.1  1.0   916 
-b[(Intercept) fi_fishid:T449287_1]       0.1  1.0   777 
-b[(Intercept) fi_fishid:T449288_1]       0.1  1.0   941 
-b[(Intercept) fi_fishid:T449310_1]       0.1  1.0  1073 
-b[(Intercept) fi_fishid:T449313_1]       0.1  1.0  1109 
-b[(Intercept) fi_fishid:T449314_1]       0.1  1.0   874 
-b[(Intercept) fi_fishid:T449317_1]       0.1  1.0  1060 
-b[(Intercept) fi_fishid:T449318_1]       0.1  1.0   887 
-b[(Intercept) fi_fishid:T449319_1]       0.1  1.0   911 
-sigma                                    0.0  1.0  3728 
-Sigma[fi_fishid:(Intercept),(Intercept)] 0.4  1.0  1010 
-mean_PPD                                 0.0  1.0  3698 
-log-posterior                            0.2  1.0   777 
+                                         mcse   Rhat   n_eff
+(Intercept)                                 3.8    1.0 1063 
+seasonspring_I                              1.0    1.0 2359 
+seasonspring_II                             2.2    1.0 2297 
+seasonsummer                                0.9    1.0 2045 
+seasonwinter                                1.1    1.0 1937 
+fi_speciespikeperch                         5.9    1.0 1020 
+fi_specieswels                              5.2    1.0  967 
+seasonspring_I:fi_speciespikeperch          1.5    1.0 2577 
+seasonspring_II:fi_speciespikeperch         3.0    1.0 2608 
+seasonsummer:fi_speciespikeperch            1.4    1.0 2253 
+seasonwinter:fi_speciespikeperch            1.5    1.0 2415 
+seasonspring_I:fi_specieswels               1.3    1.0 2387 
+seasonspring_II:fi_specieswels              2.8    1.0 2301 
+seasonsummer:fi_specieswels                 1.1    1.0 2199 
+seasonwinter:fi_specieswels                 1.3    1.0 2226 
+b[(Intercept) fi_fishid:T449202_1]          4.4    1.0 1079 
+b[(Intercept) fi_fishid:T449203_1]          3.9    1.0 1079 
+b[(Intercept) fi_fishid:T449204_1]          3.9    1.0 1217 
+b[(Intercept) fi_fishid:T449207_1]          3.8    1.0 1110 
+b[(Intercept) fi_fishid:T449208_1]          4.4    1.0 1101 
+b[(Intercept) fi_fishid:T449209_1]          3.8    1.0 1101 
+b[(Intercept) fi_fishid:T449213_1]          4.5    1.0 1080 
+b[(Intercept) fi_fishid:T449215_1]          4.4    1.0 1190 
+b[(Intercept) fi_fishid:T449268_1]          3.3    1.0 1063 
+b[(Intercept) fi_fishid:T449269_1]          3.3    1.0 1096 
+b[(Intercept) fi_fishid:T449270_2]          3.8    1.0 1148 
+b[(Intercept) fi_fishid:T449271_1]          3.8    1.0 1131 
+b[(Intercept) fi_fishid:T449272_1]          3.9    1.0 1104 
+b[(Intercept) fi_fishid:T449274_1]          3.2    1.0 1075 
+b[(Intercept) fi_fishid:T449275_1]          3.3    1.0 1047 
+b[(Intercept) fi_fishid:T449276_1]          3.3    1.0 1056 
+b[(Intercept) fi_fishid:T449277_1]          3.8    1.0 1117 
+b[(Intercept) fi_fishid:T449278_1]          3.3    1.0 1032 
+b[(Intercept) fi_fishid:T449280_1]          3.3    1.0 1077 
+b[(Intercept) fi_fishid:T449282_1]          3.4    1.0 1112 
+b[(Intercept) fi_fishid:T449284_1]          3.3    1.0 1040 
+b[(Intercept) fi_fishid:T449285_1]          3.8    1.0 1215 
+b[(Intercept) fi_fishid:T449286_1]          3.3    1.0 1063 
+b[(Intercept) fi_fishid:T449287_1]          3.9    1.0 1059 
+b[(Intercept) fi_fishid:T449288_1]          3.3    1.0 1090 
+b[(Intercept) fi_fishid:T449310_1]          4.3    1.0 1123 
+b[(Intercept) fi_fishid:T449313_1]          4.5    1.0 1060 
+b[(Intercept) fi_fishid:T449314_1]          3.3    1.0 1042 
+b[(Intercept) fi_fishid:T449317_1]          4.4    1.0 1201 
+b[(Intercept) fi_fishid:T449318_1]          3.2    1.0 1115 
+b[(Intercept) fi_fishid:T449319_1]          3.2    1.0 1061 
+sigma                                       0.1    1.0 3282 
+Sigma[fi_fishid:(Intercept),(Intercept)] 1185.9    1.0 1111 
+mean_PPD                                    0.2    1.0 4031 
+log-posterior                               0.2    1.0  988 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
-
 ```
 
 ### Check priors used 
@@ -291,25 +290,24 @@ Intercept (after predictors centered)
   Specified prior:
     ~ normal(location = 0, scale = 10)
   Adjusted prior:
-    ~ normal(location = 0, scale = 155)
+    ~ normal(location = 0, scale = 9149)
 
 Coefficients
   Specified prior:
     ~ normal(location = [0,0,0,...], scale = [2.5,2.5,2.5,...])
   Adjusted prior:
-    ~ normal(location = [0,0,0,...], scale = [38.65,38.65,38.65,...])
+    ~ normal(location = [0,0,0,...], scale = [2287.26,2287.26,2287.26,...])
 
 Auxiliary (sigma)
   Specified prior:
     ~ exponential(rate = 1)
   Adjusted prior:
-    ~ exponential(rate = 0.065)
+    ~ exponential(rate = 0.0011)
 
 Covariance
  ~ decov(reg. = 1, conc. = 1, shape = 1, scale = 1)
 ------
 See help('prior_summary.stanreg') for more details
-
 ```
 
 ### Posterior means, s.d., 95% credible intervals, MC errors
@@ -320,7 +318,7 @@ See help('prior_summary.stanreg') for more details
 Model Info:
  function:     stan_lmer
  family:       gaussian [identity]
- formula:      sqrt(ranged2d + 1) ~ 1 + season * fi_species + (1 | fi_fishid)
+ formula:      ranged2d ~ 1 + season * fi_species + (1 | fi_fishid)
  algorithm:    sampling
  sample:       4000 (posterior sample size)
  priors:       see help('prior_summary')
@@ -328,19 +326,18 @@ Model Info:
  groups:       fi_fishid (31)
 
 Estimates:
-                                           mean   sd    2.5%   97.5%
-(Intercept)                              26.57   2.25 22.14  31.07  
-sigma                                    13.67   0.10 13.47  13.87  
-Sigma[fi_fishid:(Intercept),(Intercept)] 48.08  14.24 28.00  82.63  
+                                           mean      sd        2.5%      97.5%  
+(Intercept)                                 968.30    123.44    730.22   1216.03
+sigma                                       822.63      6.16    810.43    834.61
+Sigma[fi_fishid:(Intercept),(Intercept)] 138145.65  39534.52  81222.48 234009.14
 
 MCMC diagnostics
-                                         mcse Rhat n_eff
-(Intercept)                              0.09 1.01  663 
-sigma                                    0.00 1.00 3728 
-Sigma[fi_fishid:(Intercept),(Intercept)] 0.45 1.00 1010 
+                                         mcse    Rhat    n_eff
+(Intercept)                                 3.79    1.01 1063 
+sigma                                       0.11    1.00 3282 
+Sigma[fi_fishid:(Intercept),(Intercept)] 1185.90    1.00 1111 
 
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
-
 ```
 
 ### Extract the posterior draws for all parameters
@@ -375,7 +372,6 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 [40] "b[(Intercept) fi_fishid:T449288_1]"       "b[(Intercept) fi_fishid:T449310_1]"       "b[(Intercept) fi_fishid:T449313_1]"      
 [43] "b[(Intercept) fi_fishid:T449314_1]"       "b[(Intercept) fi_fishid:T449317_1]"       "b[(Intercept) fi_fishid:T449318_1]"      
 [46] "b[(Intercept) fi_fishid:T449319_1]"       "sigma"                                    "Sigma[fi_fishid:(Intercept),(Intercept)]"
-
 ``` 
 
 - Obtain fi_fishid-level varying intercept a_j
@@ -414,22 +410,23 @@ In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the
 
 `a_mean' 
 
-```b[(Intercept) fi_fishid:T449202_1] b[(Intercept) fi_fishid:T449203_1] b[(Intercept) fi_fishid:T449204_1] b[(Intercept) fi_fishid:T449207_1] 
-                          25.57162                           32.69192                           24.48862                           18.34202 
+```
+b[(Intercept) fi_fishid:T449202_1] b[(Intercept) fi_fishid:T449203_1] b[(Intercept) fi_fishid:T449204_1] b[(Intercept) fi_fishid:T449207_1] 
+                     924.809551472                     1498.573236990                      849.198390936                      487.584765701 
 b[(Intercept) fi_fishid:T449208_1] b[(Intercept) fi_fishid:T449209_1] b[(Intercept) fi_fishid:T449213_1] b[(Intercept) fi_fishid:T449215_1] 
-                          16.52584                           26.12149                           36.98002                           32.99841 
+                     504.700363657                      844.966894634                     1510.080568054                     1331.841436573 
 b[(Intercept) fi_fishid:T449268_1] b[(Intercept) fi_fishid:T449269_1] b[(Intercept) fi_fishid:T449270_2] b[(Intercept) fi_fishid:T449271_1] 
-                          33.23976                           31.35621                           32.03577                           26.88533 
+                    1358.384251851                     1279.072876306                     1265.520046318                     1006.631783706 
 b[(Intercept) fi_fishid:T449272_1] b[(Intercept) fi_fishid:T449274_1] b[(Intercept) fi_fishid:T449275_1] b[(Intercept) fi_fishid:T449276_1] 
-                          37.86413                           34.02502                           32.69888                           28.40233 
+                    1625.874169370                     1336.248297568                     1251.140568122                     1059.565422139 
 b[(Intercept) fi_fishid:T449277_1] b[(Intercept) fi_fishid:T449278_1] b[(Intercept) fi_fishid:T449280_1] b[(Intercept) fi_fishid:T449282_1] 
-                          27.11228                           16.78636                           24.12406                           11.53634 
+                     893.246688289                      440.730476414                      986.817759524                      355.020305693 
 b[(Intercept) fi_fishid:T449284_1] b[(Intercept) fi_fishid:T449285_1] b[(Intercept) fi_fishid:T449286_1] b[(Intercept) fi_fishid:T449287_1] 
-                          20.88890                           20.58268                           25.07346                           19.55353 
+                     689.406591633                      625.838764840                      743.935105063                      576.065198794 
 b[(Intercept) fi_fishid:T449288_1] b[(Intercept) fi_fishid:T449310_1] b[(Intercept) fi_fishid:T449313_1] b[(Intercept) fi_fishid:T449314_1] 
-                          30.04009                           27.68933                           25.80439                           25.24224 
+                    1066.567426346                      926.043166974                      977.291008562                      799.838217954 
 b[(Intercept) fi_fishid:T449317_1] b[(Intercept) fi_fishid:T449318_1] b[(Intercept) fi_fishid:T449319_1] 
-                          20.43668                           27.89507                           30.86861 
+                     564.342155705                     1013.101214510                     1169.013826030 
 ```       
       
 - Posterior SD of each alpha  
@@ -440,22 +437,21 @@ b[(Intercept) fi_fishid:T449317_1] b[(Intercept) fi_fishid:T449318_1] b[(Interce
 
 ```
 b[(Intercept) fi_fishid:T449202_1] b[(Intercept) fi_fishid:T449203_1] b[(Intercept) fi_fishid:T449204_1] b[(Intercept) fi_fishid:T449207_1] 
-                         3.3949620                          0.8856418                          1.3731967                          0.8760182 
+                    188.6835981608                      52.6323505672                      82.0120393960                      52.6899293050 
 b[(Intercept) fi_fishid:T449208_1] b[(Intercept) fi_fishid:T449209_1] b[(Intercept) fi_fishid:T449213_1] b[(Intercept) fi_fishid:T449215_1] 
-                         3.4089368                          0.8513227                          3.3955890                          3.4656475 
+                    189.4396460829                      51.9438346630                     188.5762477297                     192.2625964195 
 b[(Intercept) fi_fishid:T449268_1] b[(Intercept) fi_fishid:T449269_1] b[(Intercept) fi_fishid:T449270_2] b[(Intercept) fi_fishid:T449271_1] 
-                         3.0498827                          3.0584610                          1.0028200                          0.9144566 
+                    165.2177758195                     166.7127483204                      60.2278926606                      56.1807941353 
 b[(Intercept) fi_fishid:T449272_1] b[(Intercept) fi_fishid:T449274_1] b[(Intercept) fi_fishid:T449275_1] b[(Intercept) fi_fishid:T449276_1] 
-                         0.9101332                          3.0340077                          3.0453675                          3.0371532 
+                     55.0555003235                     164.3991425317                     166.3687116862                     165.2479668204 
 b[(Intercept) fi_fishid:T449277_1] b[(Intercept) fi_fishid:T449278_1] b[(Intercept) fi_fishid:T449280_1] b[(Intercept) fi_fishid:T449282_1] 
-                         0.8751876                          3.0330799                          3.0493375                          3.0783485 
+                     53.4992940733                     165.8050300906                     165.7580870197                     168.9331760725 
 b[(Intercept) fi_fishid:T449284_1] b[(Intercept) fi_fishid:T449285_1] b[(Intercept) fi_fishid:T449286_1] b[(Intercept) fi_fishid:T449287_1] 
-                         3.0435887                          1.1676847                          3.0526302                          0.9049456 
+                    164.6380060016                      70.7972904300                     165.0037290420                      56.6101060746 
 b[(Intercept) fi_fishid:T449288_1] b[(Intercept) fi_fishid:T449310_1] b[(Intercept) fi_fishid:T449313_1] b[(Intercept) fi_fishid:T449314_1] 
-                         3.0841526                          3.4016266                          3.3867785                          3.0524458 
+                    167.3209480228                     188.1765508947                     188.5249112539                     164.2500019094 
 b[(Intercept) fi_fishid:T449317_1] b[(Intercept) fi_fishid:T449318_1] b[(Intercept) fi_fishid:T449319_1] 
-                         3.4576413                          3.0742162                          3.0192146 
-
+                    192.7697680466                     165.6339600243                     164.7892489994
 ```
 
 - Posterior median and 95% credible interval 
@@ -467,38 +463,38 @@ b[(Intercept) fi_fishid:T449317_1] b[(Intercept) fi_fishid:T449318_1] b[(Interce
 `a_quant`
 
 ```
-                                       Q2.5      Q50    Q97.5
-b[(Intercept) fi_fishid:T449202_1] 18.786492 25.64586 32.21240
-b[(Intercept) fi_fishid:T449203_1] 30.968932 32.68488 34.37875
-b[(Intercept) fi_fishid:T449204_1] 21.854413 24.48542 27.29991
-b[(Intercept) fi_fishid:T449207_1] 16.569753 18.36722 20.07356
-b[(Intercept) fi_fishid:T449208_1]  9.533023 16.58894 23.24038
-b[(Intercept) fi_fishid:T449209_1] 24.440893 26.11920 27.79348
-b[(Intercept) fi_fishid:T449213_1] 30.199911 37.02422 43.59982
-b[(Intercept) fi_fishid:T449215_1] 26.111198 33.09104 39.78390
-b[(Intercept) fi_fishid:T449268_1] 27.209116 33.24243 39.49058
-b[(Intercept) fi_fishid:T449269_1] 25.379257 31.37731 37.40663
-b[(Intercept) fi_fishid:T449270_2] 30.122649 32.01582 34.05571
-b[(Intercept) fi_fishid:T449271_1] 25.082376 26.88198 28.69621
-b[(Intercept) fi_fishid:T449272_1] 36.124887 37.85047 39.66779
-b[(Intercept) fi_fishid:T449274_1] 28.052893 34.03260 40.31389
-b[(Intercept) fi_fishid:T449275_1] 26.664900 32.67339 38.94626
-b[(Intercept) fi_fishid:T449276_1] 22.360119 28.44338 34.49349
-b[(Intercept) fi_fishid:T449277_1] 25.366254 27.11441 28.83569
-b[(Intercept) fi_fishid:T449278_1] 10.783262 16.78165 22.72761
-b[(Intercept) fi_fishid:T449280_1] 18.029573 24.10573 30.22800
-b[(Intercept) fi_fishid:T449282_1]  5.426500 11.54105 17.80320
-b[(Intercept) fi_fishid:T449284_1] 14.920524 20.86228 27.04462
-b[(Intercept) fi_fishid:T449285_1] 18.233357 20.58904 22.91009
-b[(Intercept) fi_fishid:T449286_1] 19.058784 25.09037 31.14333
-b[(Intercept) fi_fishid:T449287_1] 17.809102 19.54287 21.29708
-b[(Intercept) fi_fishid:T449288_1] 23.875974 30.09545 36.23062
-b[(Intercept) fi_fishid:T449310_1] 20.972183 27.74927 34.38901
-b[(Intercept) fi_fishid:T449313_1] 18.991607 25.82146 32.43882
-b[(Intercept) fi_fishid:T449314_1] 19.159665 25.23451 31.37988
-b[(Intercept) fi_fishid:T449317_1] 13.586034 20.48557 27.27263
-b[(Intercept) fi_fishid:T449318_1] 21.795274 27.85288 34.07173
-b[(Intercept) fi_fishid:T449319_1] 24.816963 30.86029 36.99222
+                                            X2.5.           X50.         X97.5.
+b[(Intercept) fi_fishid:T449202_1]  560.714425049  921.411964824 1306.737093943
+b[(Intercept) fi_fishid:T449203_1] 1394.581448391 1498.937309220 1601.130433653
+b[(Intercept) fi_fishid:T449204_1]  686.507451907  850.341355086 1005.647369341
+b[(Intercept) fi_fishid:T449207_1]  383.813835110  487.543939081  589.695563543
+b[(Intercept) fi_fishid:T449208_1]  139.125960467  503.573418186  883.316137331
+b[(Intercept) fi_fishid:T449209_1]  743.722301815  845.620324379  944.402220260
+b[(Intercept) fi_fishid:T449213_1] 1144.861542628 1510.487236421 1874.066990943
+b[(Intercept) fi_fishid:T449215_1]  958.397420464 1329.990218477 1711.154546514
+b[(Intercept) fi_fishid:T449268_1] 1038.487869401 1354.989854453 1689.545860547
+b[(Intercept) fi_fishid:T449269_1]  956.546611240 1273.993467657 1612.082897627
+b[(Intercept) fi_fishid:T449270_2] 1147.487027256 1265.565251279 1382.730134208
+b[(Intercept) fi_fishid:T449271_1]  895.230799170 1007.157535561 1112.989961532
+b[(Intercept) fi_fishid:T449272_1] 1518.452490987 1625.734326963 1729.871028413
+b[(Intercept) fi_fishid:T449274_1] 1026.372783619 1331.773929191 1672.569881825
+b[(Intercept) fi_fishid:T449275_1]  926.538762176 1246.311176139 1585.365795670
+b[(Intercept) fi_fishid:T449276_1]  744.980124807 1052.463227551 1393.852514016
+b[(Intercept) fi_fishid:T449277_1]  789.832759968  893.657299774  997.657403421
+b[(Intercept) fi_fishid:T449278_1]  126.608151820  432.730487423  776.480294267
+b[(Intercept) fi_fishid:T449280_1]  669.805189502  981.102762659 1316.693374412
+b[(Intercept) fi_fishid:T449282_1]   33.915041925  351.111792811  695.081601765
+b[(Intercept) fi_fishid:T449284_1]  371.028217128  685.128967542 1017.682728656
+b[(Intercept) fi_fishid:T449285_1]  487.835819147  624.043112802  767.748929191
+b[(Intercept) fi_fishid:T449286_1]  428.119190876  738.230492001 1079.122789603
+b[(Intercept) fi_fishid:T449287_1]  464.865548699  575.690398650  681.946778444
+b[(Intercept) fi_fishid:T449288_1]  748.782713206 1064.011197310 1404.293582437
+b[(Intercept) fi_fishid:T449310_1]  555.973321954  922.233388778 1301.203899999
+b[(Intercept) fi_fishid:T449313_1]  616.027593548  973.754325427 1358.904603179
+b[(Intercept) fi_fishid:T449314_1]  494.598475793  796.062189300 1130.116587249
+b[(Intercept) fi_fishid:T449317_1]  192.738653095  563.400059857  942.739678607
+b[(Intercept) fi_fishid:T449318_1]  692.378159196 1009.487946094 1345.215324511
+b[(Intercept) fi_fishid:T449319_1]  854.222585625 1165.537354164 1502.891679909
 
 ```
 
@@ -511,15 +507,15 @@ b[(Intercept) fi_fishid:T449319_1] 24.816963 30.86029 36.99222
 `round(head(a_df), 2)`
 
 ```
-                                   a_mean a_sd  Q2.5   Q50 Q97.5 a_rank
-b[(Intercept) fi_fishid:T449282_1]  11.54 3.08  5.43 11.54 17.80      1
-b[(Intercept) fi_fishid:T449208_1]  16.53 3.41  9.53 16.59 23.24      2
-b[(Intercept) fi_fishid:T449278_1]  16.79 3.03 10.78 16.78 22.73      3
-b[(Intercept) fi_fishid:T449207_1]  18.34 0.88 16.57 18.37 20.07      4
-b[(Intercept) fi_fishid:T449287_1]  19.55 0.90 17.81 19.54 21.30      5
-b[(Intercept) fi_fishid:T449317_1]  20.44 3.46 13.59 20.49 27.27      6
-
+                                    a_mean   a_sd    Q2.5     Q50   Q97.5
+b[(Intercept) fi_fishid:T449202_1]  924.81 188.68  560.71  921.41 1306.74
+b[(Intercept) fi_fishid:T449203_1] 1498.57  52.63 1394.58 1498.94 1601.13
+b[(Intercept) fi_fishid:T449204_1]  849.20  82.01  686.51  850.34 1005.65
+b[(Intercept) fi_fishid:T449207_1]  487.58  52.69  383.81  487.54  589.70
+b[(Intercept) fi_fishid:T449208_1]  504.70 189.44  139.13  503.57  883.32
+b[(Intercept) fi_fishid:T449209_1]  844.97  51.94  743.72  845.62  944.40
 ```
+# SEGUIR DESDE AQUI!!!!!!!
 
 ### Plots
 
