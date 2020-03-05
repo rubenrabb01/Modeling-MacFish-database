@@ -380,7 +380,7 @@ In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the
 
 `a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)`
 
-`a_mean'
+`a_mean`
 
 ```
  b[(Intercept) fi_fishid:1]  b[(Intercept) fi_fishid:2]  b[(Intercept) fi_fishid:3]  b[(Intercept) fi_fishid:4]
