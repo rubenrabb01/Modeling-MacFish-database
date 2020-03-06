@@ -515,7 +515,6 @@ b[(Intercept) fi_fishid:T449207_1]  487.58  52.69  383.81  487.54  589.70
 b[(Intercept) fi_fishid:T449208_1]  504.70 189.44  139.13  503.57  883.32
 b[(Intercept) fi_fishid:T449209_1]  844.97  51.94  743.72  845.62  944.40
 ```
-# SEGUIR DESDE AQUI!!!!!!!
 
 ### Plots
 
@@ -550,21 +549,27 @@ ggplot(data = a_df,
 ```
 ![M2_s1](/Plots/M2_s1.png "M2_s1")
 
-  - The difference between the two fish averages (fish #21 and #29)
+ 
+### Differences between species averages
 
-`fish_diff <- a_sims[, 21] - a_sims[, 29]`
+Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
 
-- We can investigate the posterior distribution of the difference with descriptive statistics and a histogram as follows:
+ - The difference between the two fish averages (fish #21 and #29)
 
- - Investigate differences of two distributions
+`fish_diff <- fish_inter[, 21] - fish_inter[, 29]`
 
-`mean <- mean(fish_diff)`
-`sd <- sd(fish_diff)`
-`quantile <- quantile(fish_diff, probs = c(0.025, 0.50, 0.975))`
+`mean <- mean(fish_diff1)`
+`sd <- sd(fish_diff1)`
+`quantile <- quantile(fish_diff1, probs = c(0.025, 0.50, 0.975))`
 `quantile <- data.frame(t(quantile))`
 `names(quantile) <- c("Q2.5", "Q50", "Q97.5")`
-`diff_df <- data.frame(mean, sd, quantile)`
-`round(diff_df, 2)`
+`diff_df1 <- data.frame(mean, sd, quantile)`
+`round(diff_df1, 2)`
+
+```
+   mean     sd    Q2.5    Q50  Q97.5
+1 125.06 185.18 -259.03 133.09 494.62
+```
 
   - Histogram of the differences
 
@@ -583,36 +588,46 @@ ggplot(data = data.frame(fish_diff),
                                      probs = c(0.025, 0.975))),
              colour = "red",
              linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = 0.45"),
+  geom_text(aes(0.45, 20, label = "mean = 125.06"),
             color = "red",
             size = 4) +
-  geom_text(aes(9, 50, label = "SD = 3.39"),
+  geom_text(aes(9, 50, label = "SD = 185.18"),
             color = "blue",
             size = 4) +
-  theme_bw( base_family = "serif")`
-  
+  theme_bw( base_family = "serif")
 ```
-### Cross-validation checking
+![M2_s2](/Plots/M2_s2.png "M2_s2")
 
-We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
+The expected difference comes to 3.30 with a standard deviation of 0.46 and a wide range of uncertainty. The 95% credible interval is [2.48,4.29], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
 
-`loo<-loo(m2, cores = getOption("mc.cores", 4))`
+We also can get the proportion of the time that pike has a higher mean than pikeperch:
 
-`loo`
+`prop.table(table(fish_inter[, 21] > fish_inter[, 29]))`
 
 ```
-Computed from 4000 by 8846 log-likelihood matrix
-
-         Estimate    SE
-elpd_loo -35704.5  74.3
-p_loo        44.5   0.9
-looic     71409.0 148.6
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-All Pareto k estimates are good (k < 0.5).
-See help('pareto-k-diagnostic') for details.
+ FALSE   TRUE
+0.2405 0.7595
 ```
+
+This means that the posterior probability that pike is better than pikeperch is 76%. Any pair of fishes within the sample of fishes can be compared in this manner.
+
+- The difference between the pikeperch and wels averages is:
+
+
+
+### Analyse posterior
+
+#### Plot posterior
+
+- Including random effects from *fi_fishid*
+
+`library(bayesplot)`
+
+`mcmc_areas(as.matrix(m2), prob_outer = .999)`
+
+![M2_s3](/Plots/M2_s3.png "M2_s3")
+
+
 
 **Diagnostics for Pareto smoothed importance sampling (PSIS)**
 
@@ -638,13 +653,36 @@ In the case that we obtain the samples from the proposal distribution via MCMC t
 
 **Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
 
+### Cross-validation checking
+
+We can use Pareto-smoothed importance sampling LOO CV as model checking tool (2017b)
+
 - First, create a loo object
 
 - Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
 
+`library(loo)`
+
 `plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
 
-![M2_s2](/Plots/M2_s2.png "M2_s2")
+`loo`
+
+```
+Computed from 4000 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -71952.3 136.1
+p_loo        48.4   2.0
+looic    143904.7 272.1
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
+
+![M2_sloo](/Plots/M2_sloo.png "M2_sloo")
 
 There are no highly influential observations, which indicates that the model is correct (i.e. there is no misspecification, Vehtari, Gelman and Gabry, 2017).
 
@@ -653,18 +691,18 @@ There are no highly influential observations, which indicates that the model is 
 
 We form 3 models by dropping each of the covariates out
 
-## NOT HERE!!!!!
-
 ### Posterior predictive checking
 
 In addition to LOO CV, posterior predictive checks can often detect problems and also provide more information about the reason. Here we test the proportion of 1's predicted by the model and compare them to the observed number of 1's.
 
-`prop_zero <- function(y) mean(y == 1)`
+`prop_zero <- function(y) mean(y == 0)`
 
 `(prop_zero_test1 <- pp_check(m2, plotfun = "stat", stat = "prop_zero"))`
 
-![M2_s3](/Plots/M2_s3.png "M2_s3")
+![M2_s4](/Plots/M2_s4.png "M2_s4")
 
+
+`library(loo)`
 
 `pareto_k_table(loo)`   
 
@@ -688,7 +726,7 @@ All Pareto k estimates are good (k < 0.5)
 `mcse_loo(loo, threshold = 0.7)`
 
 ```
-[1] 0.1016874
+[1] 0.110971542634
 ```
 
 ### Analyse posterior
@@ -699,28 +737,7 @@ All Pareto k estimates are good (k < 0.5)
 
 `mcmc_areas(as.matrix(m2), prob_outer = .999)`
 
-![M2_s4](/Plots/M2_s4.png "M2_s4")
-
-- Excluding random effects from *fi_fishid* 
-
-`mcmc_areas(as.matrix(m2), prob_outer = .999, pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
-"seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
-"seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
-"seasonspring_II","seasonspring_I"))`
-
 ![M2_s5](/Plots/M2_s5.png "M2_s5")
-
-- *seasonspring_II:fi_speciespikeperch* and *seasonspring_II:fi_specieswels* are both marginals significantly away from zero
-- *fi_specieswels* has lot of probability mass on both sides of 0
-- *fi_speciespikeperch*, *seasonspring_I*, seasonwinter:fi_specieswels* and *seasonwinter:fi_speciespikeperch* are much closer to 0
-
-
-#### Plot paired marginals
-
-`mcmc_pairs(as.matrix(m2),pars = c("(Intercept)","seasonwinter:fi_specieswels","seasonspring_II:fi_specieswels","seasonspring_I:fi_specieswels",
-"seasonwinter:fi_speciespikeperch","seasonsummer:fi_speciespikeperch","seasonspring_II:fi_speciespikeperch",
-"seasonspring_I:fi_speciespikeperch","fi_specieswels","fi_speciespikeperch","seasonwinter","seasonsummer",
-"seasonspring_II","seasonspring_I"))`
 
 
 
