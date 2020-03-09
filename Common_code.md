@@ -376,3 +376,176 @@ before fitting the model.
 
 ```
 ![M_r_2_1](/Plots/M_r_2_1.png "M_r_2_1")
+
+
+##MULTIMODEL SELECTION AND INFERENCE
+
+### FIT MIXED-EFFECTS MODEL WITH LMER (RANDOM EFFECTS)
+
+- Need to convert to factor to prevent errors:
+
+`mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)`
+`mean.ranged2d$season <- as.factor(mean.ranged2d$season)`
+
+- Transfom character variable *fi_fishid* to a numeric index:
+
+`mean.ranged2d$fi_fishid <- as.numeric(factor(mean.ranged2d$fi_fishid, levels=unique(mean.ranged2d$fi_fishid)))`
+
+- Define mixed-effects function:
+
+`mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=F,...)}`
+
+- Apply correction to *getfit* function in order to allow integration between glmulti and lme4:
+
+```
+setMethod('getfit', 'merMod', function(object, ...) {
+summ=summary(object)$coef
+summ1=summ[,1:2]
+if (length(dimnames(summ)[[1]])==1) {
+    summ1=matrix(summ1, nr=1, dimnames=list(c("(Intercept)"),c("Estimate","Std. Error")))
+}
+cbind(summ1, df=rep(10000,length(fixef(object))))
+})
+```
+**Note**: *Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+
+
+- Define glmulti formula for fixed effects:
+
+`model.glmulti = as.formula(paste("sqrt(ranged2d+1)~ 1 + fi_species + season + ca_tl_mm"))`
+
+- Define a candidate models object and run multi-model selection:
+
+`glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
+method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T,
+control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
+
+**Note**: *We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)*
+
+### SUMMARY RESULTS
+
+- Importance variable and unconditional variance estimates:
+
+`coef(glmulti.cand.mod)`
+
+```
+                                              Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
+ca_tl_mm:seasonspring_I              1.76124825953e-57 1.71990731173e-113         2 8.21388536861e-55 8.12930056346e-57
+ca_tl_mm:seasonspring_II            -1.22599562048e-57 1.41576847282e-113         2 8.21388536861e-55 7.37559019073e-57
+ca_tl_mm:seasonsummer               -4.04089503077e-57 6.78148486205e-113         2 8.21388536861e-55 1.61422124151e-56
+ca_tl_mm:seasonwinter                7.33287815890e-58 4.52788516209e-114         2 8.21388536861e-55 4.17107848059e-57
+ca_tl_mm:fi_speciespikeperch         2.19540299132e-37  1.95109120125e-73         3 3.63599178768e-38 8.65843587275e-37
+ca_tl_mm:fi_specieswels             -7.31054255785e-38  2.15991735036e-74         3 3.63599178768e-38 2.88084058112e-37
+ca_tl_mm                             2.51074054202e-13  2.70722764153e-23        13 2.70577660459e-10 1.01991281205e-11
+(Intercept)                          2.61552563251e+01  4.49678737705e+00        18 1.00000000000e+00 4.15673019417e+00
+fi_speciespikeperch                 -6.91458911936e+00  1.09621149966e+01        13 1.00000000000e+00 6.49004691763e+00
+fi_specieswels                       7.53688698731e-01  7.66969438235e+00        13 1.00000000000e+00 5.42862308213e+00
+seasonspring_I                      -1.78335008444e+00  7.16543756942e-01        13 1.00000000000e+00 1.65928893767e+00
+seasonspring_II                      1.47140444790e+01  2.99868263631e+00        13 1.00000000000e+00 3.39442261349e+00
+seasonsummer                        -3.27096265441e+00  5.05706451425e-01        13 1.00000000000e+00 1.39395869955e+00
+seasonwinter                         3.65412808772e+00  5.96397368876e-01        13 1.00000000000e+00 1.51380006298e+00
+fi_speciespikeperch:seasonspring_I   7.53080204284e+00  1.68016417905e+00         5 1.00000000000e+00 2.54083533375e+00
+fi_specieswels:seasonspring_I        6.81287029896e+00  1.12863658382e+00         5 1.00000000000e+00 2.08246504959e+00
+fi_speciespikeperch:seasonspring_II -1.37377787038e+01  6.45921870177e+00         5 1.00000000000e+00 4.98185008285e+00
+fi_specieswels:seasonspring_II      -1.04744084707e+01  4.85249405666e+00         5 1.00000000000e+00 4.31800524604e+00
+fi_speciespikeperch:seasonsummer     1.29330641692e+01  1.24290338269e+00         5 1.00000000000e+00 2.18534165807e+00
+fi_specieswels:seasonsummer          4.32905800498e+00  8.14273959919e-01         5 1.00000000000e+00 1.76882933769e+00
+fi_speciespikeperch:seasonwinter    -3.46463971852e+00  1.47792433304e+00         5 1.00000000000e+00 2.38301490839e+00
+fi_specieswels:seasonwinter         -2.91402369630e+00  9.50449610609e-01         5 1.00000000000e+00 1.91101989384e+00
+
+```
+
+- Model metrics
+
+`plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)
+dev.off()`
+
+![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
+
+`plot(glmulti.cand.mod, type = "p")`
+
+![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
+
+`plot(glmulti.cand.mod, type = "w")`
+
+![M_r_2_5](/Plots/M_r_2_5.png "M_r_2_5")
+
+`plot(glmulti.cand.mod, type = "s")`
+
+![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
+
+
+`options(digits=12)
+best.model<-glmulti.cand.mod@objects[[1]]
+print(glmulti.cand.mod@objects[[1]])`
+
+```
+Linear mixed model fit by maximum likelihood  ['lmerModLmerTest']
+Formula: paste(deparse(formula), random)
+   Data: mean.ranged2d
+        AIC         BIC      logLik    deviance    df.resid
+ 71518.5943  71653.2610 -35740.2971  71480.5943        8827
+Random effects:
+ Groups    Name        Std.Dev.      Corr
+ fi_fishid (Intercept) 19.6975820906
+           date         0.0014994607 -1.0000000
+ Residual              13.6547759192
+Number of obs: 8846, groups:  fi_fishid, 31
+Fixed Effects:
+                        (Intercept)                  fi_speciespikeperch                       fi_specieswels                       seasonspring_I                      seasonspring_II
+                       26.155256326                         -6.914589120                          0.753688698                         -1.783350084                         14.714044479
+                       seasonsummer                         seasonwinter   fi_speciespikeperch:seasonspring_I        fi_specieswels:seasonspring_I  fi_speciespikeperch:seasonspring_II
+                       -3.270962654                          3.654128088                          7.530802043                          6.812870299                        -13.737778704
+     fi_specieswels:seasonspring_II     fi_speciespikeperch:seasonsummer          fi_specieswels:seasonsummer     fi_speciespikeperch:seasonwinter          fi_specieswels:seasonwinter
+                      -10.474408471                         12.933064169                          4.329058005                         -3.464639719                         -2.914023696
+convergence code 0; 1 optimizer warnings; 0 lme4 warnings
+```
+
+`aiccvalues<-summary(glmulti.cand.mod)$icvalues`
+
+`as.data.frame(summary(glmulti.cand.mod)$icvalues)`
+
+´´´
+   summary(glmulti.cand.mod)$icvalues
+1                       71518.6803937
+2                       71565.5139064
+3                       71565.5139064
+4                       71565.5139064
+5                       71565.5139064
+6                       71692.4813913
+7                       71692.4813913
+8                       71767.0335604
+9                       71767.7531019
+10                      71802.3614677
+11                      71802.3643362
+12                      71804.2740590
+13                      71817.4141958
+14                      71822.0853109
+15                      71869.9082069
+16                      71895.6250939
+17                      71898.0593460
+18                      71898.9819136
+```
+
+`model.weights<-summary(glmulti.cand.mod)$modelweights`
+
+`plot(aiccvalues,model.weights)`
+
+![M_r_2_7](/Plots/M_r_2_7.png "M_r_2_7")
+
+`print(glmulti.cand.mod)`
+
+```
+glmulti.analysis
+Method: h / Fitting: mixed.glmulti / IC used: aicc
+Level: 2 / Marginality: TRUE
+From 18 models:
+Best IC: 71518.6803937446
+Best model:
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + season:fi_species"
+Evidence weight: 0.999999999729422
+Worst IC: 71898.9819135795
+1 models within 2 IC units.
+0 models to reach 95% of evidence weight.
+```
+
