@@ -217,7 +217,7 @@ Grouping variables:
 
 ```
 Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
-Formula: sqrt(ranged2d + 1) ~ fi_species * season + (1 + fi_species |      fi_fishid) + (1 + season | fi_fishid)
+Formula: sqrt(ranged2d + 1) ~ fi_species * season + (1 + fi_species | fi_fishid) + (1 + season | fi_fishid)
    Data: mean.ranged2d
 Control: lmerControl(optimizer = "optimx", optCtrl = list(method = "L-BFGS-B"))
 
@@ -268,7 +268,111 @@ Use print(x, correlation=TRUE)  or
 convergence code: 0
 boundary (singular) fit: see ?isSingular
 ```
-
 `qqnorm(model.ranged2d)`
 
 `plot(model.ranged2d)`
+
+![M_r_1](/Plots/M_r_1.png "M_r_1")
+
+### Let's try a model including the interaction with the variable fish length 
+
+`m_r_2 <- lmer(sqrt(ranged2d+1) ~ ca_tl_mm*fi_species + (1 + season|fi_fishid), data =mean.ranged2d,REML = T, control = lmerControl(optimizer = "bobyqa"))`
+
+`summ(m_r_2)`
+
+```
+MODEL INFO:
+Observations: 8846
+Dependent Variable: sqrt(ranged2d + 1)
+Type: Mixed effects linear regression 
+
+MODEL FIT:
+AIC = 70242.75, BIC = 70398.68 
+
+FIXED EFFECTS:
+--------------------------------------------------------------------------
+                                      Est.    S.E.   t val.    d.f.      p
+---------------------------------- ------- ------- -------- ------- ------
+(Intercept)                          -6.36    7.45    -0.85   23.77   0.40
+ca_tl_mm                              0.04    0.01     4.46   22.93   0.00
+fi_speciespikeperch                  55.23   18.67     2.96   24.02   0.01
+fi_specieswels                       46.98   10.52     4.46   23.39   0.00
+ca_tl_mm:fi_speciespikeperch         -0.10    0.04    -2.85   23.73   0.01
+ca_tl_mm:fi_specieswels              -0.05    0.01    -4.57   23.02   0.00
+--------------------------------------------------------------------------
+
+p values calculated using Satterthwaite d.f.
+
+RANDOM EFFECTS:
+-----------------------------------------
+   Group        Parameter      Std. Dev. 
+----------- ----------------- -----------
+ fi_fishid     (Intercept)       7.66    
+ fi_fishid   seasonspring_I      9.40    
+ fi_fishid   seasonspring_II     11.75   
+ fi_fishid    seasonsummer       9.67    
+ fi_fishid    seasonwinter       8.97    
+ Residual                        12.50   
+-----------------------------------------
+
+Grouping variables:
+-----------------------------
+   Group     # groups   ICC  
+----------- ---------- ------
+ fi_fishid      31      0.27 
+-----------------------------
+Warning message:
+In summ.merMod(m_r_2) :
+  Could not calculate r-squared. Try removing missing data
+before fitting the model.
+```
+`probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)`
+
+```
+Using data mean.ranged2d from global environment. This could cause incorrect results if mean.ranged2d has been altered since the model was fit. You can manually provide the
+data to the "data =" argument.
+Using data mean.ranged2d from global environment. This could cause incorrect results if mean.ranged2d has been altered since the model was fit. You can manually provide the
+data to the "data =" argument.
+SIMPLE SLOPES ANALYSIS 
+
+When fi_species = wels: 
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm             -0.01   0.01    -1.46   0.16
+Conditional intercept         32.62   2.36    13.83   0.00
+
+When fi_species = pike: 
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm              0.04   0.01     4.46   0.00
+Conditional intercept         33.73   2.60    12.96   0.00
+
+When fi_species = pikeperch: 
+
+                               Est.    S.E.   t val.      p
+--------------------------- ------- ------- -------- ------
+Slope of ca_tl_mm             -0.06    0.04    -1.69   0.10
+Conditional intercept         -4.58   14.77    -0.31   0.76
+
+Warning messages:
+1: Johnson-Neyman intervals are not available for factor moderators. 
+2: In summ.merMod(model, confint = TRUE, ci.width = ci.width, vifs = FALSE,  :
+  Could not calculate r-squared. Try removing missing data
+before fitting the model.
+
+3: In summ.merMod(newmod, model.fit = FALSE, confint = TRUE, ci.width = ci.width,  :
+  Could not calculate r-squared. Try removing missing data
+before fitting the model.
+
+4: In summ.merMod(newmod, model.fit = FALSE, confint = TRUE, ci.width = ci.width,  :
+  Could not calculate r-squared. Try removing missing data
+before fitting the model.
+
+5: In summ.merMod(newmod, model.fit = FALSE, confint = TRUE, ci.width = ci.width,  :
+  Could not calculate r-squared. Try removing missing data
+before fitting the model.
+
+```
+![M_r_2_1](/Plots/M_r_2_1.png "M_r_2_1")
