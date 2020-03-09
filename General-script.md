@@ -1,7 +1,7 @@
 ### Load all necessary libraries
 
-
-`library(sjstats)
+```
+library(sjstats)
 library(sjmisc)
 library(sjPlot)
 library(lsmeans)
@@ -61,7 +61,8 @@ library(RColorBrewer)
 library(tidyverse)
 library(dplyr)
 library(relaimpo)
-library(MCMCglmm)    ###multivariate glm`
+library(MCMCglmm)    ###multivariate glm
+```
 
 ### Connect to the server and import/load data
 
