@@ -1,3 +1,67 @@
+### Load all necessary libraries
+
+
+`library(sjstats)
+library(sjmisc)
+library(sjPlot)
+library(lsmeans)
+library(multcompView)
+library(tidyverse)
+library(data.table)
+library(RPostgreSQL)
+library(maptools)
+library(lubridate)
+library(rgdal)
+library(postGIStools)
+library(ggplot2)
+library(brglm)
+library(brms)
+library(interactions)
+library(lmerTest)
+library(effects)
+library(lme4)
+library(glmulti)
+library(geepack)
+library(rJava)
+library(car)
+library(languageR)
+library(AICcmodavg)
+library(MASS)
+library(randomForest)
+library(rpart)
+library(randomForestExplainer)
+library(scatterplot3d)
+library(randomForestSRC)
+library(missRanger)
+library(rfUtilities) # to test model significance
+library(caret) # to get leave-one
+library(ggplot2)
+library(MuMIn)
+library(reshape2)
+library(ggeffects)
+library(jtools)
+library(interactions) # All functionalities of the jtools library (sim_slope, probe_interactions, etc.) have been moved to this package
+library(VGAM)
+library(VGAMdata)
+library(VIF)
+library(lsr)
+library(effsize)
+library(rstan)
+library(brm)
+library(merTools)       ## for random-effects plot
+library(rptR)        ###REPEATABILITY ESTIMATION FOR GAUSSIAN AND NON-GAUSSIAN DATA
+library(car)         ###REGRESIÓN función Anova
+library(corrplot)    ###CORRELACIONES
+library(glmm)        ###GENERALIZED LINEAR MIXED MODELS
+library(bestglm)     ###SELECCIÓN MODELOS LINEALES GENERALIZADOS
+library(languageR)
+library(ordinal)
+library(Hmisc)
+library(RColorBrewer)
+library(tidyverse)
+library(dplyr)
+library(relaimpo)
+library(MCMCglmm)    ###multivariate glm`
 
 ### Connect to the server and import/load data
 
