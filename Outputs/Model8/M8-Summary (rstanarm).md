@@ -966,7 +966,7 @@ See help('pareto-k-diagnostic') for details.
 
 `mcmc_areas(as.matrix(m8), prob_outer = .999, pars = c("(Intercept)","b[(Intercept) fi_fishid:T449202_1]", "b[(Intercept) fi_fishid:T449203_1]"))`
 
-![M8_s3(/Plots/M8_s3.png "M8_s3")
+![M8_s3](/Plots/M8_s3.png "M8_s3")
 
 
 #### Plot paired marginals
