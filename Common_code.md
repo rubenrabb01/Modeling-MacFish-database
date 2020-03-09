@@ -505,8 +505,7 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 `as.data.frame(summary(glmulti.cand.mod)$icvalues)`
 
-´´´
-   summary(glmulti.cand.mod)$icvalues
+```   summary(glmulti.cand.mod)$icvalues
 1                       71518.6803937
 2                       71565.5139064
 3                       71565.5139064
@@ -548,4 +547,3 @@ Worst IC: 71898.9819135795
 1 models within 2 IC units.
 0 models to reach 95% of evidence weight.
 ```
-
