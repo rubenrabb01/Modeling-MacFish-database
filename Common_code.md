@@ -454,7 +454,6 @@ fi_speciespikeperch:seasonwinter    -3.46463971852e+00  1.47792433304e+00       
 fi_specieswels:seasonwinter         -2.91402369630e+00  9.50449610609e-01         5 1.00000000000e+00 1.91101989384e+00
 
 ```
-
 - Model metrics
 
 `plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)
@@ -474,10 +473,11 @@ dev.off()`
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
+`options(digits=12)`
 
-`options(digits=12)
-best.model<-glmulti.cand.mod@objects[[1]]
-print(glmulti.cand.mod@objects[[1]])`
+`best.model<-glmulti.cand.mod@objects[[1]]`
+
+`print(glmulti.cand.mod@objects[[1]])`
 
 ```
 Linear mixed model fit by maximum likelihood  ['lmerModLmerTest']
