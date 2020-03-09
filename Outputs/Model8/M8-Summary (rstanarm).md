@@ -962,10 +962,6 @@ See help('pareto-k-diagnostic') for details.
 
 `library(bayesplot)`
 
-`mcmc_areas(as.matrix(m8), prob_outer = .999)`
-
-![M8_s5](/Plots/M8_s5.png "M8_s5")
-
 - Excluding random effects from *fi_fishid*
 
 `mcmc_areas(as.matrix(m8), prob_outer = .999, pars = c("(Intercept)","b[(Intercept) fi_fishid:T449202_1]", "b[(Intercept) fi_fishid:T449203_1]"))`
