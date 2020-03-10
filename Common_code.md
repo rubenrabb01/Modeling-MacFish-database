@@ -385,6 +385,7 @@ before fitting the model.
 - Need to convert to factor to prevent errors:
 
 `mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)`
+
 `mean.ranged2d$season <- as.factor(mean.ranged2d$season)`
 
 - Transfom character variable *fi_fishid* to a numeric index:
@@ -472,7 +473,9 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 
 `options(digits=12)`
+
 `best.model<-glmulti.cand.mod@objects[[1]]`
+
 `print(glmulti.cand.mod@objects[[1]])`
 
 ```
@@ -497,7 +500,6 @@ Fixed Effects:
                      12.91029231560                        4.31169398801                       -3.45615553340                       -2.91280877200
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
-
 `aiccvalues<-summary(glmulti.cand.mod)$icvalues`
 
 `as.data.frame(summary(glmulti.cand.mod)$icvalues)`
@@ -523,7 +525,6 @@ summary(glmulti.cand.mod)$icvalues
 17                      71882.9964473
 18                      71891.3339893
 ```
-
 `model.weights<-summary(glmulti.cand.mod)$modelweights`
 
 `plot(aiccvalues,model.weights)`
@@ -551,9 +552,7 @@ Worst IC: 71891.3339893277
 4 models within 2 IC units.
 3 models to reach 95% of evidence weight.
 ```
-
 `coef(glmulti.cand.mod)`
-
 ```
                                              Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
 ca_tl_mm:seasonspring_I              3.97388107192e-70 8.93180574208e-139         2 1.89871428844e-67 1.85255151745e-69
@@ -603,7 +602,6 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 17                                                                                              sqrt(ranged2d + 1) ~ 1 71882.9964473 2.19114781226e-83
 18                                                                                   sqrt(ranged2d + 1) ~ 1 + ca_tl_mm 71891.3339893 3.38998234835e-85
 ```
-
 `print(glmulti.cand.mod)`
 
 ```
@@ -625,7 +623,6 @@ Worst IC: 71891.3339893277
 4 models within 2 IC units.
 3 models to reach 95% of evidence weight.
 ```
-
 `summary(glmulti.cand.mod)`
 
 ```
@@ -668,4 +665,5 @@ $modelweights
 $includeobjects
 [1] TRUE
 ```
+
 
