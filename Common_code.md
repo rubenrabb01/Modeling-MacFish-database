@@ -430,34 +430,33 @@ control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore"
 
 ```
                                               Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
-ca_tl_mm:seasonspring_I              1.76124825953e-57 1.71990731173e-113         2 8.21388536861e-55 8.12930056346e-57
-ca_tl_mm:seasonspring_II            -1.22599562048e-57 1.41576847282e-113         2 8.21388536861e-55 7.37559019073e-57
-ca_tl_mm:seasonsummer               -4.04089503077e-57 6.78148486205e-113         2 8.21388536861e-55 1.61422124151e-56
-ca_tl_mm:seasonwinter                7.33287815890e-58 4.52788516209e-114         2 8.21388536861e-55 4.17107848059e-57
-ca_tl_mm:fi_speciespikeperch         2.19540299132e-37  1.95109120125e-73         3 3.63599178768e-38 8.65843587275e-37
-ca_tl_mm:fi_specieswels             -7.31054255785e-38  2.15991735036e-74         3 3.63599178768e-38 2.88084058112e-37
-ca_tl_mm                             2.51074054202e-13  2.70722764153e-23        13 2.70577660459e-10 1.01991281205e-11
-(Intercept)                          2.61552563251e+01  4.49678737705e+00        18 1.00000000000e+00 4.15673019417e+00
-fi_speciespikeperch                 -6.91458911936e+00  1.09621149966e+01        13 1.00000000000e+00 6.49004691763e+00
-fi_specieswels                       7.53688698731e-01  7.66969438235e+00        13 1.00000000000e+00 5.42862308213e+00
-seasonspring_I                      -1.78335008444e+00  7.16543756942e-01        13 1.00000000000e+00 1.65928893767e+00
-seasonspring_II                      1.47140444790e+01  2.99868263631e+00        13 1.00000000000e+00 3.39442261349e+00
-seasonsummer                        -3.27096265441e+00  5.05706451425e-01        13 1.00000000000e+00 1.39395869955e+00
-seasonwinter                         3.65412808772e+00  5.96397368876e-01        13 1.00000000000e+00 1.51380006298e+00
-fi_speciespikeperch:seasonspring_I   7.53080204284e+00  1.68016417905e+00         5 1.00000000000e+00 2.54083533375e+00
-fi_specieswels:seasonspring_I        6.81287029896e+00  1.12863658382e+00         5 1.00000000000e+00 2.08246504959e+00
-fi_speciespikeperch:seasonspring_II -1.37377787038e+01  6.45921870177e+00         5 1.00000000000e+00 4.98185008285e+00
-fi_specieswels:seasonspring_II      -1.04744084707e+01  4.85249405666e+00         5 1.00000000000e+00 4.31800524604e+00
-fi_speciespikeperch:seasonsummer     1.29330641692e+01  1.24290338269e+00         5 1.00000000000e+00 2.18534165807e+00
-fi_specieswels:seasonsummer          4.32905800498e+00  8.14273959919e-01         5 1.00000000000e+00 1.76882933769e+00
-fi_speciespikeperch:seasonwinter    -3.46463971852e+00  1.47792433304e+00         5 1.00000000000e+00 2.38301490839e+00
-fi_specieswels:seasonwinter         -2.91402369630e+00  9.50449610609e-01         5 1.00000000000e+00 1.91101989384e+00
-
+ca_tl_mm:seasonspring_I              3.97388107192e-70 8.93180574208e-139         2 1.89871428844e-67 1.85255151745e-69
+ca_tl_mm:seasonspring_II            -2.63187445743e-70 7.09909231322e-139         2 1.89871428844e-67 1.65158934093e-69
+ca_tl_mm:seasonsummer               -9.39477417751e-70 3.66635322182e-138         2 1.89871428844e-67 3.75333917015e-69
+ca_tl_mm:seasonwinter                1.75580226775e-70 2.52930032818e-139         2 1.89871428844e-67 9.85827343300e-70
+ca_tl_mm:fi_speciespikeperch         7.33808778808e-35  2.17965680905e-68         3 1.21739675047e-35 2.89397462511e-34
+ca_tl_mm:fi_specieswels             -2.44474126601e-35  2.41532994843e-69         3 1.21739675047e-35 9.63360627480e-35
+ca_tl_mm                             2.54984596247e-03  6.79228396711e-05        13 9.99996909539e-01 1.61550600515e-02
+(Intercept)                          2.40307208729e+01  4.32897637861e+01        18 1.00000000000e+00 1.28971356468e+01
+fi_speciespikeperch                 -5.76886593752e+00  2.54313854746e+01        13 1.00000000000e+00 9.88520476678e+00
+fi_specieswels                      -5.88001378356e-02  3.10445014729e+01        13 1.00000000000e+00 1.09217694488e+01
+seasonspring_I                      -1.76402939590e+00  7.20398185679e-01        13 1.00000000000e+00 1.66374577170e+00
+seasonspring_II                      1.47186050546e+01  3.00120584039e+00        13 1.00000000000e+00 3.39585041048e+00
+seasonsummer                        -3.25310444437e+00  5.06948163563e-01        13 1.00000000000e+00 1.39566901413e+00
+seasonwinter                         3.64967749749e+00  5.97291978216e-01        13 1.00000000000e+00 1.51493500444e+00
+fi_speciespikeperch:seasonspring_I   7.50659025187e+00  1.68895469981e+00         5 1.00000000000e+00 2.54747341352e+00
+fi_specieswels:seasonspring_I        6.79421452422e+00  1.13490353579e+00         5 1.00000000000e+00 2.08823867158e+00
+fi_speciespikeperch:seasonspring_II -1.37366358811e+01  6.46524417298e+00         5 1.00000000000e+00 4.98417319640e+00
+fi_specieswels:seasonspring_II      -1.04740151788e+01  4.85669544200e+00         5 1.00000000000e+00 4.31987414877e+00
+fi_speciespikeperch:seasonsummer     1.29102922408e+01  1.24583762595e+00         5 1.00000000000e+00 2.18791971202e+00
+fi_specieswels:seasonsummer          4.31169391795e+00  8.16253673398e-01         5 1.00000000000e+00 1.77097827625e+00
+fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00         5 1.00000000000e+00 2.38483304433e+00
+fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
 ```
+
 - Model metrics
 
-`plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)
-dev.off()`
+`plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)`
 
 ![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
 
@@ -473,31 +472,31 @@ dev.off()`
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
-`options(digits=12)`
 
-`best.model<-glmulti.cand.mod@objects[[1]]`
-
-`print(glmulti.cand.mod@objects[[1]])`
+`options(digits=12)'
+'best.model<-glmulti.cand.mod@objects[[1]]'
+'print(glmulti.cand.mod@objects[[1]])`
 
 ```
-Linear mixed model fit by maximum likelihood  ['lmerModLmerTest']
+Linear mixed model fit by REML ['lmerModLmerTest']
 Formula: paste(deparse(formula), random)
    Data: mean.ranged2d
-        AIC         BIC      logLik    deviance    df.resid
- 71518.5943  71653.2610 -35740.2971  71480.5943        8827
+REML criterion at convergence: 71465.0136
 Random effects:
- Groups    Name        Std.Dev.      Corr
- fi_fishid (Intercept) 19.6975820906
-           date         0.0014994607 -1.0000000
- Residual              13.6547759192
+ Groups    Name        Std.Dev.       Corr
+ fi_fishid (Intercept) 23.31207778820
+           date         0.00186829445 -0.9999732
+ Residual              13.65505150088
 Number of obs: 8846, groups:  fi_fishid, 31
 Fixed Effects:
-                        (Intercept)                  fi_speciespikeperch                       fi_specieswels                       seasonspring_I                      seasonspring_II
-                       26.155256326                         -6.914589120                          0.753688698                         -1.783350084                         14.714044479
-                       seasonsummer                         seasonwinter   fi_speciespikeperch:seasonspring_I        fi_specieswels:seasonspring_I  fi_speciespikeperch:seasonspring_II
-                       -3.270962654                          3.654128088                          7.530802043                          6.812870299                        -13.737778704
-     fi_specieswels:seasonspring_II     fi_speciespikeperch:seasonsummer          fi_specieswels:seasonsummer     fi_speciespikeperch:seasonwinter          fi_specieswels:seasonwinter
-                      -10.474408471                         12.933064169                          4.329058005                         -3.464639719                         -2.914023696
+                        (Intercept)                  fi_speciespikeperch                       fi_specieswels                       seasonspring_I
+                     24.03071953287                       -5.76887179686                       -0.05880964371                       -1.76402947592
+                    seasonspring_II                         seasonsummer                         seasonwinter                             ca_tl_mm
+                     14.71860509541                       -3.25310449657                        3.64967750199                        0.00254985384
+ fi_speciespikeperch:seasonspring_I        fi_specieswels:seasonspring_I  fi_speciespikeperch:seasonspring_II       fi_specieswels:seasonspring_II
+                      7.50659036387                        6.79421462518                      -13.73663592024                      -10.47401534263
+   fi_speciespikeperch:seasonsummer          fi_specieswels:seasonsummer     fi_speciespikeperch:seasonwinter          fi_specieswels:seasonwinter
+                     12.91029231560                        4.31169398801                       -3.45615553340                       -2.91280877200
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
 
@@ -505,25 +504,26 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 `as.data.frame(summary(glmulti.cand.mod)$icvalues)`
 
-```   summary(glmulti.cand.mod)$icvalues
-1                       71518.6803937
-2                       71565.5139064
-3                       71565.5139064
-4                       71565.5139064
-5                       71565.5139064
-6                       71692.4813913
-7                       71692.4813913
-8                       71767.0335604
-9                       71767.7531019
-10                      71802.3614677
-11                      71802.3643362
-12                      71804.2740590
-13                      71817.4141958
-14                      71822.0853109
-15                      71869.9082069
-16                      71895.6250939
-17                      71898.0593460
-18                      71898.9819136
+´´´
+   summary(glmulti.cand.mod)$icvalues
+1                       71505.1087679
+2                       71505.1087679
+3                       71505.1087679
+4                       71505.1087679
+5                       71527.7105534
+6                       71664.5099943
+7                       71664.5099943
+8                       71737.1715651
+9                       71797.9793696
+10                      71801.1812122
+11                      71809.6002216
+12                      71814.5624886
+13                      71827.6013337
+14                      71842.3928875
+15                      71868.8848324
+16                      71872.8068276
+17                      71882.9964473
+18                      71891.3339893
 ```
 
 `model.weights<-summary(glmulti.cand.mod)$modelweights`
@@ -534,16 +534,139 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 `print(glmulti.cand.mod)`
 
+glmulti.analysis
+Method: h / Fitting: mixed.glmulti / IC used: aicc
+Level: 2 / Marginality: TRUE
+From 18 models:
+Best IC: 71505.1087678507
+Best model:
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    season:ca_tl_mm"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    fi_species:ca_tl_mm"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    fi_species:ca_tl_mm + season:ca_tl_mm"
+Evidence weight: 0.249999227384688
+Worst IC: 71891.3339893277
+4 models within 2 IC units.
+3 models to reach 95% of evidence weight.
+```
+
+`coef(glmulti.cand.mod)`
+
+```
+                                             Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
+ca_tl_mm:seasonspring_I              3.97388107192e-70 8.93180574208e-139         2 1.89871428844e-67 1.85255151745e-69
+ca_tl_mm:seasonspring_II            -2.63187445743e-70 7.09909231322e-139         2 1.89871428844e-67 1.65158934093e-69
+ca_tl_mm:seasonsummer               -9.39477417751e-70 3.66635322182e-138         2 1.89871428844e-67 3.75333917015e-69
+ca_tl_mm:seasonwinter                1.75580226775e-70 2.52930032818e-139         2 1.89871428844e-67 9.85827343300e-70
+ca_tl_mm:fi_speciespikeperch         7.33808778808e-35  2.17965680905e-68         3 1.21739675047e-35 2.89397462511e-34
+ca_tl_mm:fi_specieswels             -2.44474126601e-35  2.41532994843e-69         3 1.21739675047e-35 9.63360627480e-35
+ca_tl_mm                             2.54984596247e-03  6.79228396711e-05        13 9.99996909539e-01 1.61550600515e-02
+(Intercept)                          2.40307208729e+01  4.32897637861e+01        18 1.00000000000e+00 1.28971356468e+01
+fi_speciespikeperch                 -5.76886593752e+00  2.54313854746e+01        13 1.00000000000e+00 9.88520476678e+00
+fi_specieswels                      -5.88001378356e-02  3.10445014729e+01        13 1.00000000000e+00 1.09217694488e+01
+seasonspring_I                      -1.76402939590e+00  7.20398185679e-01        13 1.00000000000e+00 1.66374577170e+00
+seasonspring_II                      1.47186050546e+01  3.00120584039e+00        13 1.00000000000e+00 3.39585041048e+00
+seasonsummer                        -3.25310444437e+00  5.06948163563e-01        13 1.00000000000e+00 1.39566901413e+00
+seasonwinter                         3.64967749749e+00  5.97291978216e-01        13 1.00000000000e+00 1.51493500444e+00
+fi_speciespikeperch:seasonspring_I   7.50659025187e+00  1.68895469981e+00         5 1.00000000000e+00 2.54747341352e+00
+fi_specieswels:seasonspring_I        6.79421452422e+00  1.13490353579e+00         5 1.00000000000e+00 2.08823867158e+00
+fi_speciespikeperch:seasonspring_II -1.37366358811e+01  6.46524417298e+00         5 1.00000000000e+00 4.98417319640e+00
+fi_specieswels:seasonspring_II      -1.04740151788e+01  4.85669544200e+00         5 1.00000000000e+00 4.31987414877e+00
+fi_speciespikeperch:seasonsummer     1.29102922408e+01  1.24583762595e+00         5 1.00000000000e+00 2.18791971202e+00
+fi_specieswels:seasonsummer          4.31169391795e+00  8.16253673398e-01         5 1.00000000000e+00 1.77097827625e+00
+fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00         5 1.00000000000e+00 2.38483304433e+00
+fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
+```
+
+`weightable(glmulti.cand.mod)`
+
+```
+                                                                                                                model          aicc           weights
+1                                          sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species 71505.1087679 2.49999227385e-01
+2                        sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm 71505.1087679 2.49999227385e-01
+3                    sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm 71505.1087679 2.49999227385e-01
+4  sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm 71505.1087679 2.49999227385e-01
+5                                                     sqrt(ranged2d + 1) ~ 1 + fi_species + season + season:fi_species 71527.7105534 3.09046124996e-06
+6                                        sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + fi_species:ca_tl_mm 71664.5099943 6.08698375235e-36
+7                      sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + fi_species:ca_tl_mm + season:ca_tl_mm 71664.5099943 6.08698375235e-36
+8                                                 sqrt(ranged2d + 1) ~ 1 + fi_species + ca_tl_mm + fi_species:ca_tl_mm 71737.1715651 1.01424418564e-51
+9                                                                         sqrt(ranged2d + 1) ~ 1 + fi_species + season 71797.9793696 6.33717255485e-65
+10                                                             sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm 71801.1812122 1.27827491118e-65
+11                                           sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:ca_tl_mm 71809.6002216 1.89871414468e-67
+12                                                                                     sqrt(ranged2d + 1) ~ 1 + season 71814.5624886 1.58824320291e-68
+13                                                                          sqrt(ranged2d + 1) ~ 1 + season + ca_tl_mm 71827.6013337 2.34189688997e-71
+14                                                        sqrt(ranged2d + 1) ~ 1 + season + ca_tl_mm + season:ca_tl_mm 71842.3928875 1.43754901777e-74
+15                                                                                 sqrt(ranged2d + 1) ~ 1 + fi_species 71868.8848324 2.54079676714e-80
+16                                                                      sqrt(ranged2d + 1) ~ 1 + fi_species + ca_tl_mm 71872.8068276 3.57535756502e-81
+17                                                                                              sqrt(ranged2d + 1) ~ 1 71882.9964473 2.19114781226e-83
+18                                                                                   sqrt(ranged2d + 1) ~ 1 + ca_tl_mm 71891.3339893 3.38998234835e-85
+```
+
+`print(glmulti.cand.mod)`
+
 ```
 glmulti.analysis
 Method: h / Fitting: mixed.glmulti / IC used: aicc
 Level: 2 / Marginality: TRUE
 From 18 models:
-Best IC: 71518.6803937446
+Best IC: 71505.1087678507
 Best model:
-[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + season:fi_species"
-Evidence weight: 0.999999999729422
-Worst IC: 71898.9819135795
-1 models within 2 IC units.
-0 models to reach 95% of evidence weight.
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    season:ca_tl_mm"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    fi_species:ca_tl_mm"
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + "
+[2] "    fi_species:ca_tl_mm + season:ca_tl_mm"
+Evidence weight: 0.249999227384688
+Worst IC: 71891.3339893277
+4 models within 2 IC units.
+3 models to reach 95% of evidence weight.
 ```
+
+`summary(glmulti.cand.mod)`
+
+```
+$name
+[1] "glmulti.analysis"
+
+$method
+[1] "h"
+
+$fitting
+[1] "mixed.glmulti"
+
+$crit
+[1] "aicc"
+
+$level
+[1] 2
+
+$marginality
+[1] TRUE
+
+$confsetsize
+[1] 150
+
+$bestic
+[1] 71505.1087679
+
+$icvalues
+ [1] 71505.1087679 71505.1087679 71505.1087679 71505.1087679 71527.7105534 71664.5099943 71664.5099943 71737.1715651 71797.9793696 71801.1812122
+[11] 71809.6002216 71814.5624886 71827.6013337 71842.3928875 71868.8848324 71872.8068276 71882.9964473 71891.3339893
+
+$bestmodel
+[1] "sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species"
+
+$modelweights
+ [1] 2.49999227385e-01 2.49999227385e-01 2.49999227385e-01 2.49999227385e-01 3.09046124996e-06 6.08698375235e-36 6.08698375235e-36 1.01424418564e-51
+ [9] 6.33717255485e-65 1.27827491118e-65 1.89871414468e-67 1.58824320291e-68 2.34189688997e-71 1.43754901777e-74 2.54079676714e-80 3.57535756502e-81
+[17] 2.19114781226e-83 3.38998234835e-85
+
+$includeobjects
+[1] TRUE
+```
+
