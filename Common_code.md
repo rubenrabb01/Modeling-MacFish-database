@@ -74,8 +74,8 @@ end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")`
 `start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
 end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
 
-`setwd("~/Teri/longit_displacement")
-dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
+`setwd("~/Teri/longit_displacement")`
+`dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
 
 ### Extracting info for fish
 
