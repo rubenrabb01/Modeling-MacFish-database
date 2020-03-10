@@ -473,7 +473,7 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
 
-`options(digits=12)'
+`options(digits=12)`
 `best.model<-glmulti.cand.mod@objects[[1]]`
 `print(glmulti.cand.mod@objects[[1]])`
 
