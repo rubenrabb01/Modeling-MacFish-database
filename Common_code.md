@@ -474,8 +474,8 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 
 `options(digits=12)'
-'best.model<-glmulti.cand.mod@objects[[1]]'
-'print(glmulti.cand.mod@objects[[1]])`
+`best.model<-glmulti.cand.mod@objects[[1]]`
+`print(glmulti.cand.mod@objects[[1]])`
 
 ```
 Linear mixed model fit by REML ['lmerModLmerTest']
@@ -534,6 +534,7 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 `print(glmulti.cand.mod)`
 
+```
 glmulti.analysis
 Method: h / Fitting: mixed.glmulti / IC used: aicc
 Level: 2 / Marginality: TRUE
