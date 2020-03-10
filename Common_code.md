@@ -678,5 +678,49 @@ $modelweights
 $includeobjects
 [1] TRUE
 ```
+## COMPARE MODELS
+
+#### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
+
+`m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+
+`m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+
+`m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+
+`m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+
+`lrtest(m1,m2)`
+
+`lrtest(m1,m3)`
+
+`lrtest(m1,m4)`
+
+`lrtest(m2,m3)`
+
+`lrtest(m2,m4)`
+
+`lrtest(m3,m4)`
+
+## ANALYSE THE FINAL MODEL
+
+#### Test overdispersion 
+
+`m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), data =mean.ranged2d)`
+
+`overdisp(m_final)`    #Overdispersion test
+
+`overdisp_fun <- function(m_final) {
+    rdf <- df.residual(m_final)
+    rp <- residuals(m_final,type="pearson")
+    Pearson.chisq <- sum(rp^2)
+    prat <- Pearson.chisq/rdf
+    pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
+    c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
+}`
+
+`overdisp_fun(m_final)`                 #same result
+
+
 
 
