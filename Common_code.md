@@ -126,12 +126,26 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
 
 `setkey(full.range.season,ca_weight_g)`
 
-### Fit mixed-effects models 
+#### Calculation of body condition (residuals of the regression of body mass on body length)
+
+`condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)`
+
+`summary(condition)`
+
+`mean.ranged2d$r3_condition<-rstandard(condition)`
+
+#### Combine dfs by *fi_fishid*
+
+`fish.capture2 <- as.data.table(fish.capture[,1:3])`
+
+`mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")`
+
+#### Fit mixed-effects models 
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
                        REML = T, control = lmerControl(optimizer = "bobyqa"))`
 
-`model.ranged2d <- lmer(sqrt(ranged2d+1)~season + (1 + season|fi_fishid), data =mean.ranged2d[fi_species == "pikeperch"],
+`model.ranged2d <- lmer(sqrt(ranged2d+1) ~ season + (1 + season|fi_fishid), data =mean.ranged2d[fi_species == "pikeperch"],
                        REML = T, control = lmerControl(optimizer = "bobyqa"))`
 
 #### A more suitable model would be:
@@ -211,8 +225,7 @@ Grouping variables:
 ----------- ---------- ------
  fi_fishid      31      0.04 
 -----------------------------
-```                                    
-                       
+```                                                    
 `summary(model.ranged2d)`
 
 ```
@@ -378,7 +391,7 @@ before fitting the model.
 ![M_r_2_1](/Plots/M_r_2_1.png "M_r_2_1")
 
 
-## MULTIMODEL SELECTION AND INFERENCE
+## MULTI-MODEL SELECTION AND INFERENCE
 
 ### FIT MIXED-EFFECTS MODEL WITH LMER (RANDOM EFFECTS)
 
