@@ -411,14 +411,14 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 
 - Define glmulti formula for fixed effects:
 
-`model.glmulti = as.formula(paste("sqrt(ranged2d+1)~ 1 + fi_species + season + ca_tl_mm"))`
+`model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))`
 
 - Define a candidate models object and run multi-model selection:
 
 `glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
 method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
 
-**Note**: *We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)*
+**Note**: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
 
 ### SUMMARY RESULTS
 
