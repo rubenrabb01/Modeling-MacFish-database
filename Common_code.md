@@ -395,7 +395,7 @@ before fitting the model.
 
 `mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=F,...)}`
 
-- Apply correction to *getfit* function in order to allow integration between glmulti and lme4:
+- Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
 
 ```
 setMethod('getfit', 'merMod', function(object, ...) {
