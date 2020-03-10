@@ -394,7 +394,7 @@ before fitting the model.
 
 - Define a mixed-effects function:
 
-`mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=F,...)}`
+`mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=T,...)}`
 
 - Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
 
