@@ -118,7 +118,7 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
 
 #### calculation of difference between maximum and minimum distance as daily range
 
-`full.range.season.t <-  range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]`
+`full.range.season.t <- range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]`
 
 `full.range.season <- merge(full.range.season.t, fish.info, by= c("fi_fishid"))`
 
@@ -142,7 +142,7 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
                        
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
                       
-'ibrary(optmix)' 
+`ibrary(optmix)` 
   
  `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
@@ -326,6 +326,7 @@ In summ.merMod(m_r_2) :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
 ```
+
 `probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)`
 
 ```
@@ -373,7 +374,6 @@ before fitting the model.
 5: In summ.merMod(newmod, model.fit = FALSE, confint = TRUE, ci.width = ci.width,  :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
-
 ```
 ![M_r_2_1](/Plots/M_r_2_1.png "M_r_2_1")
 
@@ -392,7 +392,7 @@ before fitting the model.
 
 `mean.ranged2d$fi_fishid <- as.numeric(factor(mean.ranged2d$fi_fishid, levels=unique(mean.ranged2d$fi_fishid)))`
 
-- Define mixed-effects function:
+- Define a mixed-effects function:
 
 `mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=F,...)}`
 
@@ -471,7 +471,6 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
-
 `options(digits=12)`
 
 `best.model<-glmulti.cand.mod@objects[[1]]`
@@ -500,6 +499,7 @@ Fixed Effects:
                      12.91029231560                        4.31169398801                       -3.45615553340                       -2.91280877200
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
+
 `aiccvalues<-summary(glmulti.cand.mod)$icvalues`
 
 `as.data.frame(summary(glmulti.cand.mod)$icvalues)`
@@ -553,6 +553,7 @@ Worst IC: 71891.3339893277
 3 models to reach 95% of evidence weight.
 ```
 `coef(glmulti.cand.mod)`
+
 ```
                                              Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
 ca_tl_mm:seasonspring_I              3.97388107192e-70 8.93180574208e-139         2 1.89871428844e-67 1.85255151745e-69
@@ -578,7 +579,6 @@ fi_specieswels:seasonsummer          4.31169391795e+00  8.16253673398e-01       
 fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00         5 1.00000000000e+00 2.38483304433e+00
 fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
 ```
-
 `weightable(glmulti.cand.mod)`
 
 ```
