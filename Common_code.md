@@ -409,7 +409,6 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 ```
 **Note**: *Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
 
-
 - Define glmulti formula for fixed effects:
 
 `model.glmulti = as.formula(paste("sqrt(ranged2d+1)~ 1 + fi_species + season + ca_tl_mm"))`
@@ -417,8 +416,7 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 - Define a candidate models object and run multi-model selection:
 
 `glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
-method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T,
-control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
+method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
 
 **Note**: *We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)*
 
@@ -504,8 +502,8 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 `as.data.frame(summary(glmulti.cand.mod)$icvalues)`
 
-´´´
-   summary(glmulti.cand.mod)$icvalues
+```
+summary(glmulti.cand.mod)$icvalues
 1                       71505.1087679
 2                       71505.1087679
 3                       71505.1087679
