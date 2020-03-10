@@ -150,7 +150,7 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
 - The result is the same using the *nlminb* method
   
 - Therefore, we need to look at the origin of those issues and define a new more suitable model. 
-Including fi_species both as a fixed effect and a random slope for fi_fishid is probably causing those warnings from 
+Including fi_species both as a fixed effect and a random slope for *fi_fishid* is probably causing those warnings from 
 the model running out of d.f. to estimate intercepts-slopes correlations. 
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid)+ (1 + season|fi_fishid), data =mean.ranged2d,
