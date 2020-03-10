@@ -142,7 +142,7 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
                        
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
                       
-`ibrary(optmix)` 
+`library(optmix)` 
   
  `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
