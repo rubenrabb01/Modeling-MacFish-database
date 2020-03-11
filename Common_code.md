@@ -66,13 +66,13 @@ library(brglm)
 library(MUMIn)
 library(brms)
 ```
-### 🔹 Connect to the server and import/load data
+### Connect to the server and import/load data
 
-##### library(tidyverse)
-##### library(data.table)
-##### library(RPostgreSQL)
-
-
+```
+library(tidyverse)
+library(data.table)
+library(RPostgreSQL)
+```
 ```
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
@@ -89,7 +89,7 @@ setwd("~/Teri/longit_displacement")
 dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
 ```
 
-### 🔹 Extracting info for fish
+### Extracting info for fish
 
 ```
 fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
@@ -97,9 +97,9 @@ fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM 
 fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
 ```
 
-### 🔹 Calculation of range of distances (calculation only from fish we have more than 3 months of data)
+### Calculation of range of distances (calculation only from fish we have more than 3 months of data)
 
-#### min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
+#### 🔹 min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
 
 ```
 range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005), max.dist = quantile(distfromdam,0.995) ), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]
@@ -109,7 +109,7 @@ range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("
 range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))
 ```
 
-#### daily diffrence between min and max distance from dam 
+#### 🔹 daily diffrence between min and max distance from dam 
 
 ```
 mean.ranged2d.t <- range.d2d[, .(ranged2d = max.dist-min.dist,meand2d = (min.dist +max.dist)/2), by = .(date, fi_fishid)]
@@ -121,7 +121,7 @@ mean.ranged2d[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 mean.ranged2d[, month := month(date)]
 ```
 
-#### setting of seasons
+ #### 🔹 setting of seasons
 
 ```
 mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I"]
@@ -137,7 +137,7 @@ mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
 setkey(mean.ranged2d,ca_weight_g)
 ```
 
-#### calculation of difference between maximum and minimum distance as daily range
+#### 🔹 calculation of difference between maximum and minimum distance as daily range
 
 ```
 full.range.season.t <- range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]
@@ -149,7 +149,7 @@ full.range.season[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 setkey(full.range.season,ca_weight_g)
 ```
 
-#### Calculation of body condition (residuals of the regression of body mass on body length)
+#### 🔹 Calculation of body condition (residuals of the regression of body mass on body length)
 
 ```
 condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
@@ -159,7 +159,7 @@ summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
 
-#### Combine dfs by _fi_fishid_
+#### 🔹 Combine dfs by _fi_fishid_
 
 ```
 fish.capture2 <- as.data.table(fish.capture[,1:3])
@@ -167,7 +167,7 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
-#### Fit mixed-effects models 
+#### 🔹 Fit mixed-effects models 
 
 ```
 model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
@@ -177,7 +177,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ season + (1 + season|fi_fishid), data 
                    REML = T, control = lmerControl(optimizer = "bobyqa"))             
 ```
 
-#### A more realistic model would be:
+#### 🔹 A more realistic model would be:
 
 ```
 model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
@@ -214,7 +214,7 @@ library(jtools)
 library(interactions)       # jtools is now deprecated and all its functionalities have passed to the interactions package
 ```
 
-#### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
+#### 🔹 Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
 ```
 summ(model.ranged2d)                           # default summary output without standardising/transforming variables
