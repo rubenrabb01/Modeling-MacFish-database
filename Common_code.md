@@ -716,7 +716,9 @@ $includeobjects
 
 #### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
 
-`library(lrtest)`
+```
+library(lrtest)
+```
 
 ```diff
 + m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
