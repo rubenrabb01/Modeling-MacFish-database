@@ -821,7 +821,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 `m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), data =mean.ranged2d)`
 
-`overdisp(m_final)`    #Overdispersion test
+`overdisp(m_final)`    # Overdispersion test
 
 `overdisp_fun <- function(m_final) {
     rdf <- df.residual(m_final)
@@ -836,4 +836,5 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 
 #### library(interactions)
+
 
