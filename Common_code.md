@@ -678,10 +678,12 @@ Worst IC: 71891.3339893277
 4 models within 2 IC units.
 3 models to reach 95% of evidence weight.
 ```
+
 - Return AICc values and model weigths, ranked from lower to higher and from higher to lower, respectively
 
 ```
-weightable(glmulti.cand.mod)`
+weightable(glmulti.cand.mod)
+
 ```
 
 ```
@@ -775,7 +777,12 @@ $includeobjects
 
 ## COMPARE MODELS
 
-### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
+### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models. I use here the library *lrtest* but you may well do it using the *anova()* function in the *car* package using type=LRT" or manually in this way:
+
+```
+LRT <- as.numeric(-2 * logLik(m2) + 2 * logLik(m1))                       
+pchisq(LRT, df = length(coef(m2)) - length(coef(m1)), lower.tail = FALSE)
+```
 
 ```
 library(lrtest)
@@ -901,7 +908,6 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
  m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid),  REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), data=mean.ranged2d,na.action=na.omit)
 ```
 
-
 #### Test overdispersion 
 
 - There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is # ¿?????  . However, I provide the function required to properly calculate the ratio of summ
@@ -937,7 +943,6 @@ r.squaredGLMM(m_final)
 ```
 confint(m_final, method="boot", nsim=1000)          
 ```
-
 
 
 
