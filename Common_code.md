@@ -75,10 +75,6 @@ library(data.table)
 library(RPostgreSQL)
 ```
 
-<span style="color:blue">some *This is Blue italic.* text</span>
-
-<font color='red'>test blue color font</font>
-
 **My Bold Text, in red color.**{: style="color: red; opacity: 0.80;" }
 
 RED APPLE (&#x1F34E;): 🍎
@@ -101,7 +97,6 @@ DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
 UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
 DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
-```
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
 `start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")`
@@ -115,7 +110,7 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 `setwd("~/Teri/longit_displacement")`
 
 `dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
-```
+
 ### Extracting info for fish
 
 `fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
@@ -128,7 +123,7 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
 `range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005), max.dist = quantile(distfromdam,0.995) ), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]`
 
-`range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("min.dist",  "max.dist") )`
+`range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("min.dist",  "max.dist"))`
 
 `range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))`
 
@@ -144,13 +139,13 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
 #### setting of seasons
 
-`mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I" ]`
+`mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I"]`
 
-`mean.ranged2d[date > "2017-06-20" & date <= "2017-09-20", season := "summer" ]`
+`mean.ranged2d[date > "2017-06-20" & date <= "2017-09-20", season := "summer"]`
 
-`mean.ranged2d[date > "2017-09-20" & date <= "2017-12-20", season := "autumn" ]`
+`mean.ranged2d[date > "2017-09-20" & date <= "2017-12-20", season := "autumn"]`
 
-`mean.ranged2d[date > "2017-12-20" & date <= "2018-03-20", season := "winter" ]`
+`mean.ranged2d[date > "2017-12-20" & date <= "2018-03-20", season := "winter"]`
 
 `mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]`
 
@@ -174,7 +169,7 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
 `mean.ranged2d$r3_condition<-rstandard(condition)`
 
-#### Combine dfs by *fi_fishid*
+#### Combine dfs by _fi_fishid_
 
 `fish.capture2 <- as.data.table(fish.capture[,1:3])`
 
@@ -183,16 +178,16 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 #### Fit mixed-effects models 
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
-                       REML = T, control = lmerControl(optimizer = "bobyqa"))`
+                   REML = T, control = lmerControl(optimizer = "bobyqa"))`
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ season + (1 + season|fi_fishid), data =mean.ranged2d[fi_species == "pikeperch"],
-                       REML = T, control = lmerControl(optimizer = "bobyqa"))`
+                   REML = T, control = lmerControl(optimizer = "bobyqa"))`
 
-#### A more suitable model would be:
+#### A more realistic model would be:
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
-                       , REML=T, control=lmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",
-                       check.nobs.vs.nRE="ignore"))`
+                    REML=T, control=lmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",
+                    check.nobs.vs.nRE="ignore"))`
                        
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
 
@@ -210,7 +205,7 @@ Including fi_species both as a fixed effect and a random slope for *fi_fishid* i
 the model running out of d.f. to estimate intercepts-slopes correlations. 
 
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid)+ (1 + season|fi_fishid), data =mean.ranged2d,
-                       , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
+                   , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
  
 ```
 library(effects)
@@ -729,6 +724,7 @@ $includeobjects
 
 ```
 library(lrtest)
+
 ```
 
 ```diff
@@ -758,6 +754,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 - m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
 `lrtest(m1,m3)`
+
 ```
 Likelihood ratio test
 
@@ -778,6 +775,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 - m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
 `lrtest(m1,m4)`
+
 ```
 Likelihood ratio test
 
@@ -819,7 +817,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-
 `lrtest(m2,m4)`
 
 ```
@@ -853,7 +850,4 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 `overdisp_fun(m_final)`                 #same result
 
-```
-library(interactions)
-```
 
