@@ -69,9 +69,11 @@ library(brms)
 ```
 ### Connect to the server and import/load data
 
-#### library(tidyverse)
-#### library(data.table)
-#### library(RPostgreSQL)
+```
+library(tidyverse)
+library(data.table)
+library(RPostgreSQL)
+```
 
 <span style="color:blue">some *This is Blue italic.* text</span>
 
@@ -714,7 +716,7 @@ $includeobjects
 ```
 ## COMPARE MODELS
 
-#### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
+### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
 
 ```
 library(lrtest)
@@ -842,7 +844,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 `overdisp_fun(m_final)`                 #same result
 
-
-#### library(interactions)
-
+```
+library(interactions)
+```
 
