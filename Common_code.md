@@ -724,7 +724,6 @@ $includeobjects
 
 ```
 library(lrtest)
-
 ```
 
 ```diff
@@ -790,7 +789,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
-- So, model 2 is better than model 1 but how is that compared to models 3 and4? We can not compare models 2 and 3 using LRT as the have non-nested fixed effects despite their same random-effects structure. In this case we should base solely on their AIC values.  
+- So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4? We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values.  
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
@@ -808,7 +807,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
     fi_species:ca_tl_mm + (date | fi_fishid)
   #Df LogLik Df Chisq Pr(>Chisq)
 1  24 -35764
-2  22 -35616 -2 296.8  < 2.2e-16 ***
+2  22 -35616 -2 296.8  < 2.2e-16 ***     # This high p-value indicates the test is not correct or invalid
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
@@ -830,6 +829,8 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 1  24 -35764
 2  26 -35766  2 3.5776     0.1672
 ```
+
+- The comparison between models 2 and 4 is not significant indicating that including additional parameters is not likely to explain a better piorportion of the variance in the response variable. Therefore, *model 2* is preferred to models 1 and 4. For now we can take *model2* as our final best model ("m_final"). 
 
 ## ANALYSE THE FINAL MODEL
 
