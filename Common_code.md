@@ -692,15 +692,97 @@ $includeobjects
 
 `lrtest(m1,m2)`
 
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    season:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  20 -35733
+2  24 -35764  4 63.973  4.234e-13 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
 `lrtest(m1,m3)`
 
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  20 -35733
+2  22 -35616  2 232.83  < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+```
 `lrtest(m1,m4)`
+
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + season:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  20 -35733
+2  26 -35766  6 67.551  1.298e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
 
 `lrtest(m2,m3)`
 
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    season:ca_tl_mm + (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df Chisq Pr(>Chisq)
+1  24 -35764
+2  22 -35616 -2 296.8  < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
 `lrtest(m2,m4)`
 
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    season:ca_tl_mm + (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + season:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  24 -35764
+2  26 -35766  2 3.5776     0.1672
+```
+
 `lrtest(m3,m4)`
+
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + (date | fi_fishid)
+Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species +
+    fi_species:ca_tl_mm + season:ca_tl_mm + (date | fi_fishid)
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  22 -35616
+2  26 -35766  4 300.38  < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
 
 ## ANALYSE THE FINAL MODEL
 
