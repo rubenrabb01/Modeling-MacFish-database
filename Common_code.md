@@ -213,6 +213,15 @@ the model running out of d.f. to estimate intercepts-slopes correlations.
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
  
 ```
+library(effects)
+library(lme4)
+library(jtools)
+library(interactions)
+library(lmerTest)
+```
+`summ(model.ranged2d)`
+
+```
 MODEL INFO:
 Observations: 8846
 Dependent Variable: sqrt(ranged2d + 1)
