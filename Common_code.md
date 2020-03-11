@@ -66,7 +66,7 @@ library(brglm)
 library(MUMIn)
 library(brms)
 ```
-### 📗 Connect to the server and import/load data
+### 🔹 Connect to the server and import/load data
 
 ##### library(tidyverse)
 ##### library(data.table)
@@ -89,7 +89,7 @@ setwd("~/Teri/longit_displacement")
 dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
 ```
 
-### 📗 Extracting info for fish
+### 🔹 Extracting info for fish
 
 ```
 fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
@@ -97,7 +97,7 @@ fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM 
 fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
 ```
 
-### 📗 Calculation of range of distances (calculation only from fish we have more than 3 months of data)
+### 🔹 Calculation of range of distances (calculation only from fish we have more than 3 months of data)
 
 #### min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
 
