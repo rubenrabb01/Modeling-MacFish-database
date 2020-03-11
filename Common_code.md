@@ -904,11 +904,8 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 #### Test overdispersion 
 
-- There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is ##¿?????  . However, I provide the function required to properly calculate the ratio of summ
+- There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is # ¿?????  . However, I provide the function required to properly calculate the ratio of summ
 
-```
-overdisp(m_final)    # Overdispersion test
-```
 ```
 overdisp_fun <- function(m_final) {
     rdf <- df.residual(m_final)
@@ -919,7 +916,7 @@ overdisp_fun <- function(m_final) {
     c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
 }
 
-overdisp_fun(m_final)                 #same result
+overdisp_fun(m_final)                 
 ```
 
 #### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
