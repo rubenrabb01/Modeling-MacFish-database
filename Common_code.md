@@ -74,28 +74,6 @@ library(data.table)
 library(RPostgreSQL)
 ```
 
-**My Bold Text, in red color.**{: style="color: red; opacity: 0.80;" }
-
-RED APPLE (&#x1F34E;): 🍎
-GREEN APPLE (&#x1F34F;): 🍏
-BLUE HEART (&#x1F499;): 💙
-GREEN HEART (&#x1F49A;): 💚
-YELLOW HEART (&#x1F49B;): 💛
-PURPLE HEART (&#x1F49C;): 💜
-GREEN BOOK (&#x1F4D7;): 📗
-BLUE BOOK (&#x1F4D8;): 📘
-ORANGE BOOK (&#x1F4D9;): 📙
-LARGE RED CIRCLE (&#x1F534;): 🔴
-LARGE BLUE CIRCLE (&#x1F535;): 🔵
-LARGE ORANGE DIAMOND (&#x1F536;): 🔶
-LARGE BLUE DIAMOND (&#x1F537;): 🔷
-SMALL ORANGE DIAMOND (&#x1F538;): 🔸
-SMALL BLUE DIAMOND (&#x1F539;): 🔹
-UP-POINTING RED TRIANGLE (&#x1F53A;): 🔺
-DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
-UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
-DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
-
 ```
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
@@ -520,7 +498,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-🔴 Using lmer in glmulti makes the *coef()* function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+🔴 `Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference`
 
 - Define glmulti formula for fixed effects:
 
@@ -871,7 +849,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4?
 
-🔴 We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values.  
+🔴 `We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values`
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
@@ -937,3 +915,34 @@ overdisp_fun <- function(m_final) {
 overdisp_fun(m_final)                 #same result
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+RED APPLE (&#x1F34E;): 🍎
+GREEN APPLE (&#x1F34F;): 🍏
+BLUE HEART (&#x1F499;): 💙
+GREEN HEART (&#x1F49A;): 💚
+YELLOW HEART (&#x1F49B;): 💛
+PURPLE HEART (&#x1F49C;): 💜
+GREEN BOOK (&#x1F4D7;): 📗
+BLUE BOOK (&#x1F4D8;): 📘
+ORANGE BOOK (&#x1F4D9;): 📙
+LARGE RED CIRCLE (&#x1F534;): 🔴
+LARGE BLUE CIRCLE (&#x1F535;): 🔵
+LARGE ORANGE DIAMOND (&#x1F536;): 🔶
+LARGE BLUE DIAMOND (&#x1F537;): 🔷
+SMALL ORANGE DIAMOND (&#x1F538;): 🔸
+SMALL BLUE DIAMOND (&#x1F539;): 🔹
+UP-POINTING RED TRIANGLE (&#x1F53A;): 🔺
+DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
+UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
+DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
