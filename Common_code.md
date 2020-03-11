@@ -309,8 +309,9 @@ Grouping variables:
  fi_fishid      31      0.04 
 -----------------------------
 ```                                                    
-`summary(model.ranged2d)`
-
+```
+summary(model.ranged2d)
+```
 ```
 Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
 Formula: sqrt(ranged2d + 1) ~ fi_species * season + (1 + fi_species | fi_fishid) + (1 + season | fi_fishid)
@@ -364,17 +365,21 @@ Use print(x, correlation=TRUE)  or
 convergence code: 0
 boundary (singular) fit: see ?isSingular
 ```
-`qqnorm(model.ranged2d)`
+```
+qqnorm(model.ranged2d)
 
-`plot(model.ranged2d)`
+plot(model.ranged2d)
+```
 
 ![M_r_1](/Plots/M_r_1.png "M_r_1")
 
 ### Let's try a model including the interaction with the variable fish length 
 
-`m_r_2 <- lmer(sqrt(ranged2d+1) ~ ca_tl_mm*fi_species + (1 + season|fi_fishid), data =mean.ranged2d,REML = T, control = lmerControl(optimizer = "bobyqa"))`
+```
+m_r_2 <- lmer(sqrt(ranged2d+1) ~ ca_tl_mm*fi_species + (1 + season|fi_fishid), data =mean.ranged2d,REML = T, control = lmerControl(optimizer = "bobyqa"))
 
-`summ(m_r_2)`
+summ(m_r_2)
+```
 
 ```
 MODEL INFO:
@@ -422,8 +427,9 @@ In summ.merMod(m_r_2) :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
 ```
-
-`probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)`
+```
+probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
+```
 
 ```
 Using data mean.ranged2d from global environment. This could cause incorrect results if mean.ranged2d has been altered since the model was fit. You can manually provide the
@@ -485,17 +491,23 @@ library(glmulti)
 
 - Need to convert to factor to prevent errors:
 
-`mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)`
+```
+mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
 
-`mean.ranged2d$season <- as.factor(mean.ranged2d$season)`
+mean.ranged2d$season <- as.factor(mean.ranged2d$season)
+```
 
 - Transfom character variable *fi_fishid* to a numeric index:
 
-`mean.ranged2d$fi_fishid <- as.numeric(factor(mean.ranged2d$fi_fishid, levels=unique(mean.ranged2d$fi_fishid)))`
+```
+mean.ranged2d$fi_fishid <- as.numeric(factor(mean.ranged2d$fi_fishid, levels=unique(mean.ranged2d$fi_fishid)))
+```
 
 - Define a mixed-effects function:
 
-`mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=T,...)}`
+```
+mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=T,...)}
+```
 
 - Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
 
@@ -513,12 +525,16 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 
 - Define glmulti formula for fixed effects:
 
-`model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))`
+```
+model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))
+```
 
 - Define a candidate models object and run multi-model selection and inference:
 
-`glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
-method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
+```
+glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
+method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)
+```
 
 **Note**: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
 
@@ -526,7 +542,9 @@ method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=a
 
 - Obtain average estimates of terms: return coefficients and unconditional variance estimates
 
-`coef(glmulti.cand.mod)`
+```
+coef(glmulti.cand.mod)
+```
 
 ```
                                               Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
@@ -556,13 +574,17 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 ### Plots and model metrics 
 
-`plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)`
+```
+plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)
+```
 
 ![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
 
 - Plot the **IC profile** from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
 
-`plot(glmulti.cand.mod, type = "p")`
+```
+plot(glmulti.cand.mod, type = "p")
+```
 
 ![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
 
@@ -570,24 +592,29 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 - Plot the normalized evidence weights of the models. The vertical line delineates models that total 95% evidence weight. 
 
-`plot(glmulti.cand.mod, type = "w")`
+```
+plot(glmulti.cand.mod, type = "w")
+```
 
 ![M_r_2_5](/Plots/M_r_2_5.png "M_r_2_5")
 
 - Plot the relative evidence weight represents the estimated importance for each term according to their Akaike weights, given by the sum of the relative evidence weights of all the models in which the term appears
 
-`plot(glmulti.cand.mod, type = "s")`
+```
+plot(glmulti.cand.mod, type = "s")
+```
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
 - Summary of best fitted model 
 
-`options(digits=12)`
+```
+options(digits=12)
 
-`best.model<-glmulti.cand.mod@objects[[1]]`
+best.model<-glmulti.cand.mod@objects[[1]]
 
-`print(glmulti.cand.mod@objects[[1]])`
-
+print(glmulti.cand.mod@objects[[1]])
+```
 ```
 Linear mixed model fit by REML ['lmerModLmerTest']
 Formula: paste(deparse(formula), random)
@@ -613,10 +640,11 @@ convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 
 - Visualize the candidate models ordered according to their level of complexity depending on the number of predictors
 
-`aiccvalues<-summary(glmulti.cand.mod)$icvalues`
+```
+aiccvalues<-summary(glmulti.cand.mod)$icvalues
 
-`as.data.frame(summary(glmulti.cand.mod)$icvalues)`
-
+as.data.frame(summary(glmulti.cand.mod)$icvalues)
+```
 ```
 summary(glmulti.cand.mod)$icvalues
 1                       71505.1087679
@@ -638,15 +666,22 @@ summary(glmulti.cand.mod)$icvalues
 17                      71882.9964473
 18                      71891.3339893
 ```
-`model.weights<-summary(glmulti.cand.mod)$modelweights`
 
-`plot(aiccvalues,model.weights)`
+```
+model.weights<-summary(glmulti.cand.mod)$modelweights
+```
+
+```
+plot(aiccvalues,model.weights)
+```
 
 ![M_r_2_7](/Plots/M_r_2_7.png "M_r_2_7")
 
 - Summary of multi-model selection and inference analysi (best and worst models, IC value, evidence weight, etc.)
 
-`print(glmulti.cand.mod)`
+```
+print(glmulti.cand.mod)
+```
 
 ```
 glmulti.analysis
@@ -669,7 +704,9 @@ Worst IC: 71891.3339893277
 ```
 - Return AICc values and model weigths, ranked from lower to higher and from higher to lower, respectively
 
-`weightable(glmulti.cand.mod)`
+```
+weightable(glmulti.cand.mod)`
+```
 
 ```
                                                                                                                 model          aicc           weights
@@ -692,7 +729,9 @@ Worst IC: 71891.3339893277
 17                                                                                              sqrt(ranged2d + 1) ~ 1 71882.9964473 2.19114781226e-83
 18                                                                                   sqrt(ranged2d + 1) ~ 1 + ca_tl_mm 71891.3339893 3.38998234835e-85
 ```
-`print(glmulti.cand.mod)`
+```
+print(glmulti.cand.mod)
+```
 
 ```
 glmulti.analysis
@@ -713,7 +752,9 @@ Worst IC: 71891.3339893277
 4 models within 2 IC units.
 3 models to reach 95% of evidence weight.
 ```
-`summary(glmulti.cand.mod)`
+```
+summary(glmulti.cand.mod)
+```
 
 ```
 $name
@@ -755,6 +796,7 @@ $modelweights
 $includeobjects
 [1] TRUE
 ```
+
 ## COMPARE MODELS
 
 ### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
@@ -768,9 +810,9 @@ library(lrtest)
 
 - m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-
-`lrtest(m1,m2)` 
-
+```
+lrtest(m1,m2) 
+```
 ```
 Likelihood ratio test
 
@@ -789,8 +831,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-`lrtest(m1,m3)`
-
+```
+lrtest(m1,m3)
+```
 ```
 Likelihood ratio test
 
@@ -810,8 +853,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-`lrtest(m1,m4)`
-
+```
+lrtest(m1,m4)
+```
 ```
 Likelihood ratio test
 
@@ -833,8 +877,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-`lrtest(m2,m3)`
-
+```
+lrtest(m2,m3)
+```
 ```
 Likelihood ratio test
 
@@ -853,8 +898,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 ```
-`lrtest(m2,m4)`
-
+```
+lrtest(m2,m4)
+```
 ```
 Likelihood ratio test
 
@@ -873,19 +919,20 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 #### Test overdispersion 
 
-`m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), data =mean.ranged2d)`
+```
+m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), data =mean.ranged2d)
 
-`overdisp(m_final)`    # Overdispersion test
+overdisp(m_final)    # Overdispersion test
 
-`overdisp_fun <- function(m_final) {
+overdisp_fun <- function(m_final) {
     rdf <- df.residual(m_final)
     rp <- residuals(m_final,type="pearson")
     Pearson.chisq <- sum(rp^2)
     prat <- Pearson.chisq/rdf
     pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
     c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
-}`
+}
 
-`overdisp_fun(m_final)`                 #same result
-
+overdisp_fun(m_final)                 #same result
+```
 
