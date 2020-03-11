@@ -947,7 +947,9 @@ confint(m_final, method="boot", nsim=1000)
 
 
 
-
+qqnorm(residuals(m_final))
+hist(residuals(m_final))
+summary(m_final)
 
 
 RED APPLE (&#x1F34E;): 🍎
