@@ -432,7 +432,7 @@ before fitting the model.
 ## MULTI-MODEL SELECTION AND INFERENCE
 
 `library(rJava)`
-``library(glmulti)``
+`library(glmulti)`
 
 ### Search best possible mixed-effects models fitted to the data
 
