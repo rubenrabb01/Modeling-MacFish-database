@@ -74,6 +74,7 @@ library(brms)
 #### library(RPostgreSQL)
 
 <span style="color:blue">some *This is Blue italic.* text</span>
+<font color='red'>test blue color font</font>
 
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
