@@ -99,22 +99,25 @@ DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
 UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
 DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
-```diff
-+ this text is highlighted in green
-- this text is highlighted in red
 ```
-```diff
-+ con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
-start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
-end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")
-start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
-end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")
-setwd("~/Teri/longit_displacement")
-- dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
+`con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
+
+`start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")`
+
+`end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")`
+
+`start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")`
+
+`end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
+
+`setwd("~/Teri/longit_displacement")`
+
+`dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
 ```
 ### Extracting info for fish
 
 `fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
+
 `fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
 
 ### Calculation of range of distances (calculation only from fish we have more than 3 months of data)
@@ -707,13 +710,15 @@ $includeobjects
 
 #### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
 
-`m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+```diff
++ m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 
-`m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 
-`m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+m3 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 
-`m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
+- m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
+``` 
 
 #### library(lrtest)
 
