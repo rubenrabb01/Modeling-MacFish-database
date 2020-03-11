@@ -103,18 +103,18 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 + this text is highlighted in green
 - this text is highlighted in red
 ```
+```diff
++ con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
-`con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
+start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
+end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")
 
-`start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
-end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")`
+start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
+end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")
 
-`start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
-end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
-
-`setwd("~/Teri/longit_displacement")`
-`dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
-
+setwd("~/Teri/longit_displacement")
+- dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
+```
 ### Extracting info for fish
 
 `fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))`
