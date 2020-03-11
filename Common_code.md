@@ -431,8 +431,8 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-#### library(rJava)
-#### library(glmulti)
+`library(rJava)`
+``library(glmulti)``
 
 ### Search best possible mixed-effects models fitted to the data
 
@@ -563,6 +563,8 @@ Fixed Effects:
                      12.91029231560                        4.31169398801                       -3.45615553340                       -2.91280877200
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
+
+- Visualize the candidate models ordered according to their level of complexity depending on the number of predictors
 
 `aiccvalues<-summary(glmulti.cand.mod)$icvalues`
 
@@ -710,7 +712,7 @@ $includeobjects
 
 #### Perform Log-Likelihood Ratio Tests (LRT) between the first and the remaining three best models
 
-#### library(lrtest)
+`library(lrtest)`
 
 ```diff
 + m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
