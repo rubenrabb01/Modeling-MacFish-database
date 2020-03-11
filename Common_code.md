@@ -6,9 +6,6 @@ library(sjmisc)
 library(sjPlot)
 library(lsmeans)
 library(multcompView)
-library(tidyverse)
-library(data.table)
-library(RPostgreSQL)
 library(maptools)
 library(lubridate)
 library(rgdal)
@@ -16,7 +13,6 @@ library(postGIStools)
 library(ggplot2)
 library(brglm)
 library(brms)
-library(interactions)
 library(lmerTest)
 library(effects)
 library(lme4)
@@ -62,9 +58,20 @@ library(tidyverse)
 library(dplyr)
 library(relaimpo)
 library(MCMCglmm)    ###multivariate glm
+library(maptools)
+library(lubridate)
+library(rgdal)
+library(postGIStools)
+library(ggplot2)
+library(brglm)
+library(MUMIn)
+library(brms)
 ```
-
 ### Connect to the server and import/load data
+
+#### library(tidyverse)
+#### library(data.table)
+#### library(RPostgreSQL)
 
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
@@ -156,7 +163,7 @@ end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
                        
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
                       
-`library(optmix)` 
+#### library(optmix) 
   
  `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
@@ -393,7 +400,10 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-### SEARCH BEST POSSIBLE MIXED-EFFECTS MODELS FITTED TO THE DATA. 
+#### library(rJava)
+#### library(glmulti)
+
+### Search best possible mixed-effects models fitted to the data
 
 - Need to convert to factor to prevent errors:
 
@@ -434,7 +444,7 @@ method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=a
 
 **Note**: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
 
-### RESULTS SUMMARY
+### Results summary
 
 - Obtain average estimates of terms: return coefficients and unconditional variance estimates
 
@@ -466,19 +476,19 @@ fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00       
 fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
 ```
 
-### PLOTS AND MODEL METRICS
+### Plots and model metrics 
 
 `plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)`
 
 ![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
 
-- Plot the IC profile from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
+- Plot the **IC profile** from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
 
 `plot(glmulti.cand.mod, type = "p")`
 
 ![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
 
-- Relative likelihood, expressed by RL = exp (-(IC(i)-IC(best)/2), is the difference between a model and the best (first) model (i.e., the odds that a model is the best in the whole set)
+- Relative likelihood, expressed by RL = exp **(-(IC(i)-IC(best)/2)**, is the difference between a model and the best (first) model (i.e., the odds that a model is the best in the whole set)
 
 - Plot the normalized evidence weights of the models. The vertical line delineates models that total 95% evidence weight
 
@@ -677,6 +687,8 @@ $includeobjects
 
 `m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
 
+#### library(lrtest)
+
 `lrtest(m1,m2)`   # LRT 
 
 ```
@@ -791,5 +803,5 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 `overdisp_fun(m_final)`                 #same result
 
 
-
+#### library(interactions)
 
