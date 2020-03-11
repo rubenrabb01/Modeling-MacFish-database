@@ -217,7 +217,7 @@ library(interactions)       # jtools is now deprecated and all its functionaliti
 
 #### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
-`summ(model.ranged2d)`                           # default summary output without standardising/transforming variables` 
+`summ(model.ranged2d)                           # default summary output without standardising/transforming variables` 
 
 `summ(m2, center = TRUE)                         # input variables are mean-centered`
 
