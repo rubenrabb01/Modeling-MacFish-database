@@ -207,14 +207,27 @@ the model running out of d.f. to estimate intercepts-slopes correlations.
 `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid)+ (1 + season|fi_fishid), data =mean.ranged2d,
                    , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
  
+
+### Results summary with transformation of variables
+
 ```
-library(effects)
-library(lme4)
 library(jtools)
-library(interactions)
-library(lmerTest)
+library(interactions)       # jtools is now deprecated and all its functionalities have passed to the interactions package
 ```
-`summ(model.ranged2d)`
+
+#### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
+
+`summ(model.ranged2d)`                           # default summary output without standardising/transforming variables` 
+
+`summ(m2, center = TRUE)                         # input variables are mean-centered`
+
+`summ(m2, robust = "HC1")                        # report robust standard errors (default is "HC3")`
+
+`summ(m2, scale = TRUE)                          # scaled predictors/coefficients`
+
+`summ(m2, confint = TRUE, digits = 3)            # otain confidence interval`
+
+`summ(m2,  center = TRUE,scale = TRUE,n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman Ref.)`
 
 ```
 MODEL INFO:
