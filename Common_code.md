@@ -194,9 +194,9 @@ library(optmix)
  ```
  model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))
+                                
 ```
-                       
-- The result is the same using the *nlminb* method
+- The result is the same using the *"nlminb"* method or the *"Nelder_Mead"* optimizer
   
 - Therefore, we need to look at the origin of those issues and define a new more suitable model. 
 Including fi_species both as a fixed effect and a random slope for *fi_fishid* is probably causing those warnings from 
@@ -850,8 +850,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 🔺 `We can not compare models 2 and 3 using LRT as they have non-nested fixed terms despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values`
 
-anova(mm2,m3)
-
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
 
@@ -897,13 +895,21 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 ## ANALYSE THE FINAL MODEL
 
-#### Test overdispersion 
+- Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and the **Nelder_Mead** optimizer seems to correct solve them 
 
 ```
-m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), data =mean.ranged2d)
+ m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid),  REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), data=mean.ranged2d,na.action=na.omit)
+```
 
+
+#### Test overdispersion 
+
+- There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is ##¿?????  . However, I provide the function required to properly calculate the ratio of summ
+
+```
 overdisp(m_final)    # Overdispersion test
-
+```
+```
 overdisp_fun <- function(m_final) {
     rdf <- df.residual(m_final)
     rp <- residuals(m_final,type="pearson")
@@ -915,6 +921,12 @@ overdisp_fun <- function(m_final) {
 
 overdisp_fun(m_final)                 #same result
 ```
+
+#### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
+
+```
+library (MuMIn)
+```
 ```
 r.squaredGLMM(m_final)  
 ```
@@ -923,8 +935,11 @@ r.squaredGLMM(m_final)
 [1,] 0.0257772 0.6764458
 ```
 
+#### Compute confidence intervals using parametric bootstrap
 
-
+```
+confint(m_final, method="boot", nsim=1000)          
+```
 
 
 
