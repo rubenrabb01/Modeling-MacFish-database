@@ -193,8 +193,10 @@ DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
                        check.nobs.vs.nRE="ignore"))`
                        
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
-                      
-#### library(optmix) 
+
+```
+library(optmix)
+```
   
  `model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
                        , REML = FALSE, control = lmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')))`  
@@ -431,8 +433,10 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-`library(rJava)`
-`library(glmulti)`
+```
+library(rJava)
+library(glmulti)
+```
 
 ### Search best possible mixed-effects models fitted to the data
 
