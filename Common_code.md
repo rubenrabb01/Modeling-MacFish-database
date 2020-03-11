@@ -69,9 +69,9 @@ library(brms)
 ### Connect to the server and import/load data
 
 ```
-library(tidyverse)
-library(data.table)
-library(RPostgreSQL)
+📙library(tidyverse)
+📙library(data.table)
+📙library(RPostgreSQL)
 ```
 
 ```
@@ -498,7 +498,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-🔼 `Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference`
+🔺 `Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference`
 
 - Define glmulti formula for fixed effects:
 
@@ -849,7 +849,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4?
 
-🔼 `We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values`
+🔺 `We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values`
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
