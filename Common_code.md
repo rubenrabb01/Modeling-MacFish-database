@@ -99,10 +99,9 @@ DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
 UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
 DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
-
 ```diff
-this text is highlighted in green
-this text is highlighted in red
++ this text is highlighted in green
+- this text is highlighted in red
 ```
 
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
