@@ -478,13 +478,15 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 ![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
 
-- Relative likelihood, expressed by RL = exp (-(IC######i-IC######*/2), where IC is the difference
-#between a model and the best model (*), interpreted as the odds that a model is the best in the whole set
+- Relative likelihood, expressed by RL = exp (-(IC(i)-IC(best)/2), is the difference between a model and the best (first) model (i.e., the odds that a model is the best in the whole set)
 
+- Plot the normalized evidence weights of the models. The vertical line delineates models that total 95% evidence weight
 
 `plot(glmulti.cand.mod, type = "w")`
 
 ![M_r_2_5](/Plots/M_r_2_5.png "M_r_2_5")
+
+- 
 
 `plot(glmulti.cand.mod, type = "s")`
 
