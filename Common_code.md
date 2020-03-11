@@ -77,6 +77,8 @@ library(brms)
 
 <font color='red'>test blue color font</font>
 
+**My Bold Text, in red color.**{: style="color: red; opacity: 0.80;" }
+
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
 `start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
