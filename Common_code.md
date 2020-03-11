@@ -393,7 +393,7 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-### FIT MIXED-EFFECTS MODEL WITH LMER (RANDOM EFFECTS)
+### SEARCH BEST POSSIBLE MIXED-EFFECTS MODELS FITTED TO THE DATA. 
 
 - Need to convert to factor to prevent errors:
 
@@ -427,16 +427,16 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 
 `model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))`
 
-- Define a candidate models object and run multi-model selection:
+- Define a candidate models object and run multi-model selection and inference:
 
 `glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
 method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)`
 
 **Note**: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
 
-### SUMMARY RESULTS
+### RESULTS SUMMARY
 
-- Importance variable and unconditional variance estimates:
+- Obtain average estimates of terms: return coefficients and unconditional variance estimates
 
 `coef(glmulti.cand.mod)`
 
@@ -466,15 +466,21 @@ fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00       
 fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
 ```
 
-- Model metrics
+### PLOTS AND MODEL METRICS
 
 `plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)`
 
 ![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
 
+- Plot the IC profile from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
+
 `plot(glmulti.cand.mod, type = "p")`
 
 ![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
+
+- Relative likelihood, expressed by RL = exp (-(IC######i-IC######*/2), where IC is the difference
+#between a model and the best model (*), interpreted as the odds that a model is the best in the whole set
+
 
 `plot(glmulti.cand.mod, type = "w")`
 
@@ -483,6 +489,8 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 `plot(glmulti.cand.mod, type = "s")`
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
+
+- Summary of best fitted model 
 
 `options(digits=12)`
 
@@ -544,6 +552,8 @@ summary(glmulti.cand.mod)$icvalues
 
 ![M_r_2_7](/Plots/M_r_2_7.png "M_r_2_7")
 
+- Summary of multi-model selection and inference analysi (best and worst models, IC value, evidence weight, etc.)
+
 `print(glmulti.cand.mod)`
 
 ```
@@ -565,33 +575,8 @@ Worst IC: 71891.3339893277
 4 models within 2 IC units.
 3 models to reach 95% of evidence weight.
 ```
-`coef(glmulti.cand.mod)`
+- Return AICc values and model weigths, ranked from lower to higher and from higher to lower, respectively
 
-```
-                                             Estimate   Uncond. variance Nb models        Importance  +/- (alpha=0.05)
-ca_tl_mm:seasonspring_I              3.97388107192e-70 8.93180574208e-139         2 1.89871428844e-67 1.85255151745e-69
-ca_tl_mm:seasonspring_II            -2.63187445743e-70 7.09909231322e-139         2 1.89871428844e-67 1.65158934093e-69
-ca_tl_mm:seasonsummer               -9.39477417751e-70 3.66635322182e-138         2 1.89871428844e-67 3.75333917015e-69
-ca_tl_mm:seasonwinter                1.75580226775e-70 2.52930032818e-139         2 1.89871428844e-67 9.85827343300e-70
-ca_tl_mm:fi_speciespikeperch         7.33808778808e-35  2.17965680905e-68         3 1.21739675047e-35 2.89397462511e-34
-ca_tl_mm:fi_specieswels             -2.44474126601e-35  2.41532994843e-69         3 1.21739675047e-35 9.63360627480e-35
-ca_tl_mm                             2.54984596247e-03  6.79228396711e-05        13 9.99996909539e-01 1.61550600515e-02
-(Intercept)                          2.40307208729e+01  4.32897637861e+01        18 1.00000000000e+00 1.28971356468e+01
-fi_speciespikeperch                 -5.76886593752e+00  2.54313854746e+01        13 1.00000000000e+00 9.88520476678e+00
-fi_specieswels                      -5.88001378356e-02  3.10445014729e+01        13 1.00000000000e+00 1.09217694488e+01
-seasonspring_I                      -1.76402939590e+00  7.20398185679e-01        13 1.00000000000e+00 1.66374577170e+00
-seasonspring_II                      1.47186050546e+01  3.00120584039e+00        13 1.00000000000e+00 3.39585041048e+00
-seasonsummer                        -3.25310444437e+00  5.06948163563e-01        13 1.00000000000e+00 1.39566901413e+00
-seasonwinter                         3.64967749749e+00  5.97291978216e-01        13 1.00000000000e+00 1.51493500444e+00
-fi_speciespikeperch:seasonspring_I   7.50659025187e+00  1.68895469981e+00         5 1.00000000000e+00 2.54747341352e+00
-fi_specieswels:seasonspring_I        6.79421452422e+00  1.13490353579e+00         5 1.00000000000e+00 2.08823867158e+00
-fi_speciespikeperch:seasonspring_II -1.37366358811e+01  6.46524417298e+00         5 1.00000000000e+00 4.98417319640e+00
-fi_specieswels:seasonspring_II      -1.04740151788e+01  4.85669544200e+00         5 1.00000000000e+00 4.31987414877e+00
-fi_speciespikeperch:seasonsummer     1.29102922408e+01  1.24583762595e+00         5 1.00000000000e+00 2.18791971202e+00
-fi_specieswels:seasonsummer          4.31169391795e+00  8.16253673398e-01         5 1.00000000000e+00 1.77097827625e+00
-fi_speciespikeperch:seasonwinter    -3.45615550384e+00  1.48018037634e+00         5 1.00000000000e+00 2.38483304433e+00
-fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01         5 1.00000000000e+00 1.91260294435e+00
-```
 `weightable(glmulti.cand.mod)`
 
 ```
@@ -690,7 +675,7 @@ $includeobjects
 
 `m4 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + fi_species:ca_tl_mm + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)`
 
-`lrtest(m1,m2)`
+`lrtest(m1,m2)`   # LRT 
 
 ```
 Likelihood ratio test
