@@ -99,6 +99,12 @@ DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
 UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
 DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
+
+```diff
++ this text is highlighted in green
+- this text is highlighted in red
+```
+
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
 `start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
