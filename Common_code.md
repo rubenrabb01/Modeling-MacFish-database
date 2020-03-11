@@ -97,19 +97,21 @@ DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
 UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
 DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
 
-`con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
+```
+con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
-`start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")`
+start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
 
-`end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")`
+end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")
 
-`start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")`
+start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
 
-`end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")`
+end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")
 
-`setwd("~/Teri/longit_displacement")`
+setwd("~/Teri/longit_displacement")
 
-`dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))`
+dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
+```
 
 ### Extracting info for fish
 
