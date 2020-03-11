@@ -520,7 +520,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-**Note**: *Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+🔴 Using lmer in glmulti makes the *coef()* function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
 
 - Define glmulti formula for fixed effects:
 
@@ -535,7 +535,7 @@ glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.r
 method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)
 ```
 
-(&#x1F534;): Note: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
+**Note**: _We have selected an exhaustive screening method (method="h") and specification for all possible interactions between variables (level=2)_
 
 ### Results summary
 
@@ -869,7 +869,9 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 
-- So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4? We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values.  
+- So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4?
+
+🔴 We can not compare models 2 and 3 using LRT as they have non-nested fixed effects despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values.  
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
