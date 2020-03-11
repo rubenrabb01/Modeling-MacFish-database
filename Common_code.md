@@ -73,6 +73,8 @@ library(brms)
 #### library(data.table)
 #### library(RPostgreSQL)
 
+<span style="color:blue">some *This is Blue italic.* text</span>
+
 `con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")`
 
 `start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
