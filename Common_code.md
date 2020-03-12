@@ -772,7 +772,7 @@ $includeobjects
 
 ## COMPARE MODELS
 
-- Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. I use here the library *lrtest* but you may well do it using the *anova()* function in the *car* package specifying by type=LRT" or manually as follows:
+- Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. I use here the library *lrtest* but you may well do it using the *anova()* function in the *car* package specifying by type="LRT" or manually as follows:
 
 ```
 LRT <- as.numeric(-2 * logLik(m2) + 2 * logLik(m1))                       
