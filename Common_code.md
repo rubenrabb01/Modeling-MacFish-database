@@ -65,7 +65,9 @@ library(brms)
 ### Connect to the server and import/load data
 
 📗`library(tidyverse)     
+
    library(data.table)  
+   
    library(RPostgreSQL)`
    
 ```
