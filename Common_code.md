@@ -923,9 +923,8 @@ overdisp_fun(m_final)
 
 #### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
 
-```
 📗 `library (MuMIn)`
-```
+
 ```
 r.squaredGLMM(m_final)  
 ```
