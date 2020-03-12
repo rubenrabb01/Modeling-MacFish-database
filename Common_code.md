@@ -988,8 +988,35 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 📗 `library(phia)`
 
+- To obtain marginal means, specify only a factor. For example:
+
+```
+interactionMeans(m_final, factors="fi_species")
+```
+```
+  fi_species adjusted mean SE of link
+1       pike      26.61821   2.843918
+2  pikeperch      27.75892   4.218982
+3       wels      27.51327   2.994344
+```
+```
+interactionMeans(m_final, factors="season")
+```
+```
+     season adjusted mean SE of link
+1    autumn      25.13013   1.669153
+2  spring_I      26.47517   1.657828
+3 spring_II      31.52853   2.278390
+4    summer      26.64644   1.577263
+5    winter      26.70372   1.907980
+```
+
+- For both factor levels
+
 ```
 (m_final.means <- interactionMeans(m_final))
+``` 
+```
    fi_species    season adjusted mean SE of link
 1        pike    autumn      24.81254   2.878192
 2   pikeperch    autumn      24.16954   4.274128
@@ -1007,29 +1034,16 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 14  pikeperch    winter      28.43469   4.877400
 15       wels    winter      26.61347   3.419067
 ```
-
-#This function calculates by default the cell means for the interactions of highest order between
-#factors. To obtain means of lower-order interactions, the optional argument factors admits a character
-#vector with the names of the factors that are included in the desired interaction.2
-#If this argument gives only one factor, the result will be the means of its zeroth-order interaction (i.e. the marginal
-
 ```
-interactionMeans(m_final, factors="season")
-     season adjusted mean SE of link
-1    autumn      25.13013   1.669153
-2  spring_I      26.47517   1.657828
-3 spring_II      31.52853   2.278390
-4    summer      26.64644   1.577263
-5    winter      26.70372   1.907980
-
-means for that factor). Thus, for instance:
+interactionMeans(m_final, factors=c("season","fi_species"))
 ```
 ```
-plot(interactionMeans(m_final, factors="season"))
-
+plot(interactionMeans(m_final, factors=c("season","fi_species")))
+```
+```
 plot(m_final.means)
 ```
-
+![m_final_inter_1](/Plots/m_final_inter_1.png "m_final_inter_1")
 
 
 
