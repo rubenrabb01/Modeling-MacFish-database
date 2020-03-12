@@ -213,7 +213,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 #### 🔹 Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
 ```
-summ(model.ranged2d)                           # default summary output without standardising/transforming variables
+summ(model.ranged2d)                            # default summary output without standardising/transforming variables
 
 summ(m2, center = TRUE)                         # input variables are mean-centered
 
@@ -223,7 +223,7 @@ summ(m2, scale = TRUE)                          # scaled predictors/coefficients
 
 summ(m2, confint = TRUE, digits = 3)            # otain confidence interval
 
-summ(m2,  center = TRUE,scale = TRUE,n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman Ref.)
+summ(m2,  center = TRUE,scale = TRUE,n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman 2008)
 ```
 ```
 MODEL INFO:
@@ -945,6 +945,9 @@ qqnorm(residuals(m_final))
 hist(residuals(m_final))
 summary(m_final)
 
+## References
+
+*Gelman, A. 2008* _Scaling regression inputs by dividing by two standard deviations. Statistics in Medicine. 27, 2865-2873. (DOI 10.1002/sim.3107)_
 
 RED APPLE (&#x1F34E;): 🍎
 GREEN APPLE (&#x1F34F;): 🍏
