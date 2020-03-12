@@ -956,6 +956,84 @@ hist(residuals(m_final))
 
 summary(m_final)
 
+
+
+
+#### Explore the interactions terms
+
+- We check if the interaction between variables is actually significant before proceeding with a in-depth exploration of the interaction. To do so, let's check the residuals of the models and the ANOVA table
+
+```
+par(mfcol=c(1,2))
+
+Anova(m_final)
+```
+```
+Analysis of Deviance Table (Type II Wald chisquare tests)
+
+Response: sqrt(ranged2d + 1)
+                    Chisq Df Pr(>Chisq)    
+fi_species         0.8484  2     0.6543    
+season            40.6673  4  3.150e-08 ***
+ca_tl_mm           0.2205  1     0.6387    
+fi_species:season 66.9027  8  2.027e-11 ***
+season:ca_tl_mm    3.6753  4     0.4517    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+- We see that the interaction between _fi_species_ and _season_ is significant, so let's further explore this effect.
+
+- There is an interaction effect, and this can be represented as the adjusted mean of the response for the corresponding interaction of factors. Use the function _interactionMeans_ in the package _phia_ to obtain the adjusted mean and SE from the model coefficients:
+
+📗 `library(phia)`
+
+```
+(m_final.means <- interactionMeans(m_final))
+   fi_species    season adjusted mean SE of link
+1        pike    autumn      24.81254   2.878192
+2   pikeperch    autumn      24.16954   4.274128
+3        wels    autumn      26.40833   3.029441
+4        pike  spring_I      26.15813   2.864160
+5   pikeperch  spring_I      23.31361   4.242279
+6        wels  spring_I      29.95378   3.010449
+7        pike spring_II      33.71909   3.990624
+8   pikeperch spring_II      33.47812   5.735293
+9        wels spring_II      27.38838   4.127118
+10       pike    summer      23.33831   2.715172
+11  pikeperch    summer      29.39862   4.043883
+12       wels    summer      27.20238   2.877929
+13       pike    winter      25.06299   3.288052
+14  pikeperch    winter      28.43469   4.877400
+15       wels    winter      26.61347   3.419067
+```
+
+#This function calculates by default the cell means for the interactions of highest order between
+#factors. To obtain means of lower-order interactions, the optional argument factors admits a character
+#vector with the names of the factors that are included in the desired interaction.2
+#If this argument gives only one factor, the result will be the means of its zeroth-order interaction (i.e. the marginal
+
+```
+interactionMeans(m_final, factors="season")
+     season adjusted mean SE of link
+1    autumn      25.13013   1.669153
+2  spring_I      26.47517   1.657828
+3 spring_II      31.52853   2.278390
+4    summer      26.64644   1.577263
+5    winter      26.70372   1.907980
+
+means for that factor). Thus, for instance:
+```
+```
+plot(interactionMeans(m_final, factors="season"))
+
+plot(m_final.means)
+```
+
+
+
+
+
 ## References
 
 **Gelman, A. 2008.** _Scaling regression inputs by dividing by two standard deviations. Statistics in Medicine. 27, 2865-2873. (DOI 10.1002/sim.3107)_
