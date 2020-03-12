@@ -939,10 +939,15 @@ r.squaredGLMM(m_final)
 confint(m_final, method="boot", nsim=1000)          
 ```
 
+#### QQ plot and hidtogram of residuals 
 
-
+```
 qqnorm(residuals(m_final))
 hist(residuals(m_final))
+```
+
+
+
 summary(m_final)
 
 ## References
