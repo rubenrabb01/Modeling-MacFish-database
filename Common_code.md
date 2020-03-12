@@ -947,7 +947,7 @@ summary(m_final)
 
 ## References
 
-*Gelman, A. 2008* _Scaling regression inputs by dividing by two standard deviations. Statistics in Medicine. 27, 2865-2873. (DOI 10.1002/sim.3107)_
+_Gelman, A. 2008._ Scaling regression inputs by dividing by two standard deviations. Statistics in Medicine. 27, 2865-2873. (DOI 10.1002/sim.3107)
 
 RED APPLE (&#x1F34E;): 🍎
 GREEN APPLE (&#x1F34F;): 🍏
