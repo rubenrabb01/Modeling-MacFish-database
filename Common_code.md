@@ -13,10 +13,8 @@ library(postGIStools)
 library(ggplot2)
 library(brglm)
 library(brms)
-library(lmerTest)
 library(effects)
 library(lme4)
-library(glmulti)
 library(geepack)
 library(car)
 library(languageR)
@@ -34,8 +32,6 @@ library(ggplot2)
 library(MuMIn)
 library(reshape2)
 library(ggeffects)
-library(jtools)
-library(interactions) # All functionalities of the jtools library (sim_slope, probe_interactions, etc.) have been moved to this package
 library(VGAM)
 library(VGAMdata)
 library(VIF)
@@ -168,6 +164,10 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
 #### 🔹 Fit mixed-effects models 
+
+```
+library(lmerTest)
+```
 
 ```
 model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
