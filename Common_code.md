@@ -166,9 +166,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 
 #### 🔹 Fit mixed-effects models 
 
-```
-library(lmerTest)
-```
+📗 `library(lmerTest)`
 
 ```
 model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
@@ -188,9 +186,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 
 - The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
 
-```
-library(optmix)
-```
+📗 `library(optmix)`
   
  ```
  model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
@@ -210,10 +206,8 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 
 ### Results summary with transformation of variables
 
-```
-library(jtools)
-library(interactions)       # jtools is now deprecated and all its functionalities have passed to the interactions package
-```
+📗 `library(jtools)`
+📗 `library(interactions)`       # jtools is now deprecated and all its functionalities have passed to the interactions package
 
 #### 🔹 Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
@@ -459,10 +453,8 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-```
-library(rJava)
-library(glmulti)
-```
+📗 `library(rJava)`
+📗 `library(glmulti)`
 
 ### Search best possible mixed-effects models fitted to the data
 
@@ -787,7 +779,7 @@ pchisq(LRT, df = length(coef(m2)) - length(coef(m1)), lower.tail = FALSE)
 - Alternatively, here we use the *lrtest¨* library to compare models 
 
 ```
-library(lrtest)
+📗 `library(lrtest)`
 ```
 
 ```diff
@@ -930,7 +922,7 @@ overdisp_fun(m_final)
 #### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
 
 ```
-library (MuMIn)
+📗 `library (MuMIn)`
 ```
 ```
 r.squaredGLMM(m_final)  
