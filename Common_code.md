@@ -492,7 +492,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-🔺 `Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference`
+🔺 _Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference_
 
 - Define glmulti formula for fixed effects:
 
