@@ -898,7 +898,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 ## ANALYSE THE FINAL MODEL
 
-- Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and the **Nelder_Mead** optimizer seems to correct solve them 
+- Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and the **Nelder_Mead** optimizer seems to solve them 
 
 ```
  m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid),  REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), data=mean.ranged2d,na.action=na.omit)
