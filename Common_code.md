@@ -64,10 +64,10 @@ library(brms)
 ```
 ### Connect to the server and import/load data
 
-`library(tidyverse)  📗     
-library(data.table)  📗
-library(RPostgreSQL) 📗
-`
+📗`library(tidyverse)     
+   library(data.table)  
+   library(RPostgreSQL)`
+   
 ```
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
