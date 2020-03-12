@@ -943,10 +943,15 @@ confint(m_final, method="boot", nsim=1000)
 
 ```
 qqnorm(residuals(m_final))
+```
 
+![m_final_qq](/Plots/m_final_qq.png "m_final_qq")
+
+```
 hist(residuals(m_final))
 ```
 
+![m_final_hist](/Plots/m_final_hist.png "m_final_hist")
 
 
 summary(m_final)
