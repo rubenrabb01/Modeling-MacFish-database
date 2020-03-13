@@ -837,7 +837,7 @@ $includeobjects
 
 - Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. There are different ways of performing a LRT:
  
- 1. Using the _bootMer_ function from the _lme4_ package to compute 100 **bootstrapped log-likelihood**:
+### 1. Using the _bootMer_ function from the _lme4_ package to compute 100 bootstrapped log-likelihood:
   
 ```
 boot_m_1 <-bootMer(m1, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
@@ -887,14 +887,14 @@ lrt <- as.numeric(-2 * (-35732.51) + 2 * (-35764.49))
 lrt.b <- -2 * boot_m_1$t + 2 * boot_m_2$t
 ```
 
-2. With the formula of a LRT:
+### 2. With the formula of a LRT:
 
 ```
 LRT <- as.numeric(-2 * logLik(m2) + 2 * logLik(m1))                       
 pchisq(LRT, df = length(coef(m2)) - length(coef(m1)), lower.tail = FALSE)
 ```
 
-3. Using the *anova()* function in the *car* package specifying by type="LRT":
+### 3. Using the *anova()* function in the *car* package specifying by type="LRT":
 
 ```
 anova(m2, m1, type="LRT")
@@ -911,7 +911,8 @@ m2:     season:ca_tl_mm + (date | fi_fishid)
 m1 20 71497 71639 -35729    71457                         
 m2 24 71501 71671 -35727    71453 4.3571      4     0.3598
 ```
-- Using  the *lrtest* function in **lmtest** library:
+
+### 4. Using  the *lrtest* function in **lmtest** library:
 
 ```
 📗 `library(lmtest)`
