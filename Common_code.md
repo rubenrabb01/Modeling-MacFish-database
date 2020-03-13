@@ -912,7 +912,7 @@ m1 20 71497 71639 -35729    71457
 m2 24 71501 71671 -35727    71453 4.3571      4     0.3598
 ```
 
-### 4. Using  the *lrtest* function in **lmtest** library:
+### 4. Using  the *lrtest* function in _lmtest_ library:
 
 ```
 📗 `library(lmtest)`
