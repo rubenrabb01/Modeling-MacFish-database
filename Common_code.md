@@ -174,20 +174,20 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
  - Conditional non-growth model / Random intercept model
  
 ```
- model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1|fi_fishid), data =mean.ranged2d,
+ model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species * season + (1|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))
 ```
 
  - Unconditional growth model  /  Random-slope-intercept model
  
 ```
-  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + date + (1 + date|fi_fishid), data =mean.ranged2d,
+  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + date + (1 + date|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))
                    
-  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_fishid), data =mean.ranged2d,
+  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))         
                    
-  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_species), data =mean.ranged2d,
+  model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_species), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
  
@@ -835,16 +835,86 @@ $includeobjects
 
 ## COMPARE MODELS
 
-- Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. I use here the library *lrtest* but you may well do it using the *anova()* function in the *car* package specifying by type="LRT" or manually as follows:
+- Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. There are different ways of performing a LRT:
+ 
+ 1. Using the _bootMer_ function from the _lme4_ package to compute 100 **bootstrapped log-likelihood**:
+  
+```
+boot_m_1 <-bootMer(m1, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+boot_m_1
+```
+```  
+PARAMETRIC BOOTSTRAP
+
+
+Call:
+bootMer(x = m1, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+
+
+Bootstrap Statistics :
+     original    bias    std. error
+t1* -35732.51 -51.48284    68.00746
+```
+``` 
+boot_m_2 <- bootMer(m2, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+boot_m_2
+```
+```
+PARAMETRIC BOOTSTRAP
+
+
+Call:
+bootMer(x = m2, FUN = function(x) as.numeric(logLik(x)), nsim = 100)
+
+
+Bootstrap Statistics :
+     original    bias    std. error
+t1* -35764.49 -54.38482    65.61975
+```
+
+ - Obtain observed Chi^2 value of the LRT
+ 
+```  
+lrt <- as.numeric(-2 * logLik(m1) + 2 * logLik(m2))
+lrt <- as.numeric(-2 * (-35732.51) + 2 * (-35764.49))
+```
+```
+[1] -63.96
+```
+  - Compute 100 bootstrapped LRT
+
+```
+lrt.b <- -2 * boot_m_1$t + 2 * boot_m_2$t
+```
+
+2. With the formula of a LRT:
 
 ```
 LRT <- as.numeric(-2 * logLik(m2) + 2 * logLik(m1))                       
 pchisq(LRT, df = length(coef(m2)) - length(coef(m1)), lower.tail = FALSE)
 ```
-- Alternatively, here we use the *lrtest* library to compare models 
+
+3. Using the *anova()* function in the *car* package specifying by type="LRT":
 
 ```
-📗 `library(lrtest)`
+anova(m2, m1, type="LRT")
+```
+```
+refitting model(s) with ML (instead of REML)
+Data: mean.ranged2d
+Models:
+m1: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + 
+m1:     (date | fi_fishid)
+m2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + 
+m2:     season:ca_tl_mm + (date | fi_fishid)
+   Df   AIC   BIC logLik deviance  Chisq Chi Df Pr(>Chisq)
+m1 20 71497 71639 -35729    71457                         
+m2 24 71501 71671 -35727    71453 4.3571      4     0.3598
+```
+- Using  the *lrtest* function in **lmtest** library:
+
+```
+📗 `library(lmtest)`
 ```
 
 ```diff
