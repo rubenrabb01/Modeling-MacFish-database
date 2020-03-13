@@ -887,7 +887,7 @@ lrt <- as.numeric(-2 * (-35732.51) + 2 * (-35764.49))
 lrt.b <- -2 * boot_m_1$t + 2 * boot_m_2$t
 ```
 
-#### 2. With the LRT formula EXPRESSION AS FOLLOWS:
+#### 2. With the LRT formula:
 
 ```
 LRT <- as.numeric(-2 * logLik(m2) + 2 * logLik(m1))                       
