@@ -1148,7 +1148,7 @@ interactionMeans(m_final, factors="season")
 - For both factor levels
 
 ```
-(m_final.means <- interactionMeans(m_final))
+(m_final.means <- interactionMeans(m_final))  # interactionMeans(m_final, factors=c("season","fi_species"))
 ``` 
 ```
    fi_species    season adjusted mean SE of link
@@ -1167,15 +1167,9 @@ interactionMeans(m_final, factors="season")
 13       pike    winter      25.06299   3.288052
 14  pikeperch    winter      28.43469   4.877400
 15       wels    winter      26.61347   3.419067
+````
 ```
-```
-interactionMeans(m_final, factors=c("season","fi_species"))
-```
-```
-plot(interactionMeans(m_final, factors=c("season","fi_species")))
-```
-```
-plot(m_final.means)
+plot(m_final.means)      # plot(interactionMeans(m_final, factors=c("season","fi_species")))
 ```
 ![m_final_inter_1](/Plots/m_final_inter_1.png "m_final_inter_1")
 
