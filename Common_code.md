@@ -1181,7 +1181,7 @@ library(sjPlot)
 library(ggplot2)
 theme_set(theme_sjplot())
 ```
-#### Re-fit the model adjusted to a Gamma distribution
+#### Re-fit the model using a Gamma distribution
 
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit)
@@ -1279,6 +1279,13 @@ Conditional intercept         7.17   0.19    37.46   0.00
 There were 12 warnings (use warnings() to see them)
 ```
 ![m_final_slope](/Plots/m_final_slope.png "m_final_slope")
+
+- Now, we use a nested design of fish id within species and fit the model with the adaptive Gaussian quadrature using the argument _naGQ=0_ 
+
+```
+m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
+```
+
 
 
 ## References
