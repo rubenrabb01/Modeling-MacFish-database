@@ -1087,9 +1087,9 @@ hist(residuals(m_final))
 
 ![m_final_hist](/Plots/m_final_hist.png "m_final_hist")
 
-
+```
 summary(m_final)
-
+```
 
 
 
