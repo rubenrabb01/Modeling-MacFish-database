@@ -276,17 +276,17 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 #### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
 ```
-summ(model.ranged2d)                            # default summary output without standardising/transforming variables
+summ(model.ranged2d)                              # default summary output without standardising/transforming variables
 
-summ(m2, center = TRUE)                         # input variables are mean-centered
+summ(m2, center = TRUE)                           # input variables are mean-centered
 
-summ(m2, robust = "HC1")                        # report robust standard errors (default is "HC3")
+summ(m2, robust = "HC1")                          # report robust standard errors (default is "HC3")
 
-summ(m2, scale = TRUE)                          # scaled predictors/coefficients
+summ(m2, scale = TRUE)                            # scaled predictors/coefficients
 
-summ(m2, confint = TRUE, digits = 3)            # otain confidence interval
+summ(m2, confint = TRUE, digits = 3)              # otain confidence interval
 
-summ(m2,  center = TRUE,scale = TRUE,n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman 2008)
+summ(m2,  center = TRUE, scale = TRUE, n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman 2008)
 ```
 ```
 MODEL INFO:
@@ -1091,8 +1091,6 @@ hist(residuals(m_final))
 summary(m_final)
 ```
 
-
-
 #### Explore the interactions terms
 
 - We check if the interaction between variables is actually significant before proceeding with a in-depth exploration of the interaction. To do so, let's check the residuals of the models and the ANOVA table
@@ -1285,7 +1283,7 @@ There were 12 warnings (use warnings() to see them)
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
 ```
-
+summ(m_final,  center = TRUE, scale = TRUE, n.sd = 2) 
 
 
 ## References
