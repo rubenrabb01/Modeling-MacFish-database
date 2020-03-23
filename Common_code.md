@@ -417,7 +417,9 @@ plot(model.ranged2d)
 
 ![M_r_1](/Plots/M_r_1.png "M_r_1")
 
-### Let's try a model including the interaction with the variable fish length 
+### What is the effect of fish body length on the distance travelled? Are there differences between species across seasons?
+
+Now, we fit a model including the Size × Species interaction. The addition of this interaction fits three regression lines, one for each species, so that the coefficient estimate for Species (i.e., δ01) measures the average difference in the intercepts of each species  while the coefficient for the interaction itself (i.e., δ11) measures the difference in their slopes. 
 
 ```
 m_r_2 <- lmer(sqrt(ranged2d+1) ~ ca_tl_mm*fi_species + (1 + season|fi_fishid), data =mean.ranged2d,REML = T, control = lmerControl(optimizer = "bobyqa"))
