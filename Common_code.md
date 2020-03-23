@@ -521,7 +521,7 @@ before fitting the model.
 
 - The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that larger body lengths are associated with higher mean range distances travelled only in pike
 
-🔴 However, if you look at the plot, negative values denote that the linearity of the model is not typical for this data and therefore, you we should re-fit the model using a corrected distribution for the distance range variable
+🔺 However, if you look at the plot, negative values denote that the linearity of the model is not typical for this data and therefore, you we should re-fit the model using a corrected distribution for the distance range variable
 
 
 ## MULTI-MODEL SELECTION AND INFERENCE
@@ -1201,7 +1201,7 @@ Warning messages:
  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
  - Rescale variables?
 ```
-🔴 The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
+🔺 The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
 ```
 summ(m_final)
 ```
