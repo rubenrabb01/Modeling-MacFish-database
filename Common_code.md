@@ -1184,8 +1184,7 @@ theme_set(theme_sjplot())
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit)
 ```
-- The model fitted is not optimal and we get warning message. We'll re-fit the model later but now continue analysing this model: 
-``` 
+```
 Warning messages:
 1: In (function (fn, par, lower = rep.int(-Inf, n), upper = rep.int(Inf,  :
   failure to converge in 10000 evaluations
@@ -1196,6 +1195,7 @@ Warning messages:
  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
  - Rescale variables?
 ```
+🔴 The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
 ```
 summ(m_final)
 ```
@@ -1263,10 +1263,12 @@ Grouping variables:
  fi_fishid      31      0.13 
 -----------------------------
 ```
+- Perform simple slope analysis:
 
+```
 probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
 SIMPLE SLOPES ANALYSIS 
-
+```
 ``` 
 
 When fi_species = wels: 
