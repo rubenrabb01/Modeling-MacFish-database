@@ -166,28 +166,28 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 
 ## Are there differences in distance travelled between species and across seasons?
 
-- Before fitting a model we need to pose some questions:
+Before fitting a model we need to pose some questions:
 
-   - Do we have any evidence to think that distance should vary between species? And between individuals?
+ - Do we have any evidence to think that distance should vary between species? And between individuals?
 
-   - Should be there more variability between individuals than within individuals (repeated measures)?   
+ - Should be there more variability between individuals than within individuals (repeated measures)?   
 
-   - What model to fit? What fixed-efects and random-effects should we include? 
+ - What model to fit? What fixed-efects and random-effects should we include? 
 
-- We are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fit longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
+We are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fit longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
 
 ### Fit different L2 mixed-effects models
 
 📗 `library(lmerTest)`
 
-- **Conditional non-growth model / Random intercept model**
+**Conditional non-growth model / Random intercept model**
  
 ```
  model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species * season + (1|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))
 ```
 
- - **Unconditional growth model  /  Random-slope-intercept model**
+**Unconditional growth model  /  Random-slope-intercept model**
  
 ```
   model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + date + (1 + date|fi_fishid), data = mean.ranged2d,
@@ -199,8 +199,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
   model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_species), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
- 
-- **Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect**
+ **Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect**
  
 ```
   model.ranged2d_3 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 + season|fi_fishid), data =mean.ranged2d,
@@ -212,8 +211,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
   model.ranged2d_4 <- lmer(sqrt(ranged2d+1) ~ 1 + fi_species * ca_tl_mm + (1 + season|fi_species), data =mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
-
-- **Conditional growth model random intercept model + dropping intercept-slope covariance**
+**Conditional growth model random intercept model + dropping intercept-slope covariance**
  
 ```
    model.ranged2d_5 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 | fi_fishid) + (0 + season | fi_fishid)"), data         =mean.ranged2d, REML = T, control = lmerControl(optimizer = "bobyqa"))
@@ -238,12 +236,7 @@ m6 <- sim_formula("y ~ time * treatment + (1 + time | subject) + (1 + time | clu
 #3-level Longitudinal conditional (nested) growth model - random intercept and slope model
 m7 <- sim_formula("y ~ time * treatment + (1 + time | cluster:subject) + (1 + time | cluster)")
 ```
-
-
-
 ```
-
-
 model.ranged2d <- lmer(sqrt(ranged2d+1) ~ season + (1 + season|fi_fishid), data =mean.ranged2d[fi_species == "pikeperch"],
                    REML = T, control = lmerControl(optimizer = "bobyqa"))             
 ```
@@ -419,14 +412,14 @@ plot(model.ranged2d)
 
 ### What is the effect of fish body length on the distance travelled? Are there differences between species across seasons?
 
-Now, we fit a model including the Size × Species interaction. The addition of this interaction fits three regression lines, one for each species, so that the coefficient estimate for Species (i.e., δ01) measures the average difference in the intercepts of each species  while the coefficient for the interaction itself (i.e., δ11) measures the difference in their slopes. 
+Now, let's fit a model including the Size × Species interaction. The addition of this interaction fits three regression lines, one for each species, so that the coefficient estimate for Species (i.e., δ01) measures the average difference in the intercepts of each species  while the coefficient for the interaction itself (i.e., δ11) measures the difference in their slopes. 
 
 ```
 m_r_2 <- lmer(sqrt(ranged2d+1) ~ ca_tl_mm*fi_species + (1 + season|fi_fishid), data =mean.ranged2d,REML = T, control = lmerControl(optimizer = "bobyqa"))
-
+```
+```
 summ(m_r_2)
 ```
-
 ```
 MODEL INFO:
 Observations: 8846
@@ -687,7 +680,6 @@ Fixed Effects:
                      12.91029231560                        4.31169398801                       -3.45615553340                       -2.91280877200
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
-
 Visualize the candidate models ordered according to their level of complexity depending on the number of predictors
 
 ```
@@ -720,7 +712,6 @@ summary(glmulti.cand.mod)$icvalues
 ```
 model.weights<-summary(glmulti.cand.mod)$modelweights
 ```
-
 ```
 plot(aiccvalues,model.weights)
 ```
