@@ -462,7 +462,7 @@ In summ.merMod(m_r_2) :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
 ```
-#### Simple slope analysis
+### Simple slope analysis
 ```
 probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
 ```
