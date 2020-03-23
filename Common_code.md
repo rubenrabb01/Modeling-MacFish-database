@@ -174,7 +174,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 
    - What model to fit? What fixed-efects and random-effects should we include? 
 
-- What we know is taht we are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fir longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
+- We are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fit longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
 
 ### Fit different L2 mixed-effects models
 
