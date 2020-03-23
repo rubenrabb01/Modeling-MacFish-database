@@ -176,7 +176,9 @@ Before fitting a model we need to pose some questions:
 
 We are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fit longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
 
-### Fit different L2 mixed-effects models
+## SELECTING RANDOM-EFFECTS 
+
+Let's fit different L2 mixed-effects models:
 
 📗 `library(lmerTest)`
 
@@ -236,11 +238,6 @@ m6 <- sim_formula("y ~ time * treatment + (1 + time | subject) + (1 + time | clu
 #3-level Longitudinal conditional (nested) growth model - random intercept and slope model
 m7 <- sim_formula("y ~ time * treatment + (1 + time | cluster:subject) + (1 + time | cluster)")
 ```
-```
-model.ranged2d <- lmer(sqrt(ranged2d+1) ~ season + (1 + season|fi_fishid), data =mean.ranged2d[fi_species == "pikeperch"],
-                   REML = T, control = lmerControl(optimizer = "bobyqa"))             
-```
-
 #### A more realistic model would be:
 
 ```
@@ -249,7 +246,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
                     check.nobs.vs.nRE="ignore"))
 ```
 
-- The output shows warnings of non-convergence so let's try a different optimizer such as the Nelder-Mead optimisation routine:
+- The output shows warnings of non-convergence so let's try a different optimizer such as the _Nelder-Mead_ optimisation routine:
 
 📗 `library(optmix)`
   
