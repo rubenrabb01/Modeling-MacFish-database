@@ -164,7 +164,7 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
-## ARE THERE ANY DIFFERENCE BETWEEN SPECIES AND SEASONS IN DISTANCE TRAVELLED 
+## Are there differences in distance travelled between species and across seasons?
 
 - Before fitting a model we need to pose some questions:
 
