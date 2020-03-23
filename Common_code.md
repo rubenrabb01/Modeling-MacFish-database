@@ -1305,6 +1305,7 @@ The slope of body length is positive and significantly different from zero in pi
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
 ```
+```
 summ(m_final,  center = TRUE, scale = TRUE, n.sd = 2) 
 ``` 
 
