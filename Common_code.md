@@ -462,6 +462,7 @@ In summ.merMod(m_r_2) :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
 ```
+Perform a simpel slope analysis:
 ```
 probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
 ```
@@ -513,6 +514,9 @@ before fitting the model.
 before fitting the model.
 ```
 ![M_r_2_1](/Plots/M_r_2_1.png "M_r_2_1")
+
+- - The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that larger body lengths are associated with higher mean range distances travelled only in pike
+
 
 
 ## MULTI-MODEL SELECTION AND INFERENCE
@@ -1266,9 +1270,10 @@ Perform simple slope analysis:
 
 ```
 probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
-SIMPLE SLOPES ANALYSIS 
 ```
-``` 
+```
+SIMPLE SLOPES ANALYSIS 
+
 
 When fi_species = wels: 
 
@@ -1295,11 +1300,11 @@ There were 12 warnings (use warnings() to see them)
 ```
 ![m_final_slope](/Plots/m_final_slope.png "m_final_slope")
 
-- The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that body size is crucial to mean range distance only in one species.
+- As above, the slope of body length is only significant (and positive) in pike
 
+#### Fit another model with a nested design of fish id within speciesa, using Gamma distribution and adaptive Gaussian quadrature
 
-
-Now, we use a nested design of fish id within species and fit the model with the adaptive Gaussian quadrature using the argument _naGQ=0_ 
+To specify for an adaptive Gaussian quadrature we use the argument _naGQ=0_ 
 
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
@@ -1307,6 +1312,74 @@ m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_
 ```
 summ(m_final,  center = TRUE, scale = TRUE, n.sd = 2) 
 ``` 
+```
+MODEL INFO:
+Observations: 7311
+Dependent Variable: ranged2d
+Type: Mixed effects generalized linear regression
+Error Distribution: Gamma
+Link function: log 
+
+MODEL FIT:
+AIC = 114109.82, BIC = 114365.02
+Pseudo-R² (fixed effects) =  NA
+Pseudo-R² (total) =  NA 
+
+FIXED EFFECTS:
+---------------------------------------------------------------------------------
+                                                      Est.   S.E.   t val.      p
+-------------------------------------------------- ------- ------ -------- ------
+(Intercept)                                           7.31   0.10    74.94   0.00
+fi_speciespikeperch                                  -0.41   0.66    -0.62   0.53
+fi_specieswels                                       -0.46   0.12    -3.81   0.00
+seasonspring_I                                       -0.16   0.06    -2.73   0.01
+seasonspring_II                                       0.56   0.10     5.54   0.00
+seasonsummer                                         -0.46   0.05    -8.67   0.00
+seasonwinter                                          0.02   0.06     0.27   0.78
+ca_tl_mm                                              1.53   0.26     5.85   0.00
+fi_speciespikeperch:seasonspring_I                    0.68   0.41     1.68   0.09
+fi_specieswels:seasonspring_I                         0.57   0.08     7.35   0.00
+fi_speciespikeperch:seasonspring_II                  -2.41   0.69    -3.51   0.00
+fi_specieswels:seasonspring_II                       -0.49   0.14    -3.42   0.00
+fi_speciespikeperch:seasonsummer                      2.04   0.32     6.28   0.00
+fi_specieswels:seasonsummer                           0.67   0.07     9.78   0.00
+fi_speciespikeperch:seasonwinter                     -0.66   0.35    -1.92   0.05
+fi_specieswels:seasonwinter                          -0.15   0.07    -2.10   0.04
+fi_speciespikeperch:ca_tl_mm                         -1.03   1.12    -0.92   0.36
+fi_specieswels:ca_tl_mm                              -1.35   0.30    -4.56   0.00
+seasonspring_I:ca_tl_mm                              -0.10   0.16    -0.58   0.56
+seasonspring_II:ca_tl_mm                             -1.00   0.24    -4.24   0.00
+seasonsummer:ca_tl_mm                                -0.59   0.15    -3.96   0.00
+seasonwinter:ca_tl_mm                                -1.30   0.15    -8.86   0.00
+fi_speciespikeperch:seasonspring_I:ca_tl_mm           0.01   0.68     0.01   0.99
+fi_specieswels:seasonspring_I:ca_tl_mm                0.03   0.19     0.14   0.89
+fi_speciespikeperch:seasonspring_II:ca_tl_mm         -2.38   1.20    -1.98   0.05
+fi_specieswels:seasonspring_II:ca_tl_mm               1.33   0.29     4.60   0.00
+fi_speciespikeperch:seasonsummer:ca_tl_mm             2.55   0.55     4.62   0.00
+fi_specieswels:seasonsummer:ca_tl_mm                  0.53   0.17     3.13   0.00
+fi_speciespikeperch:seasonwinter:ca_tl_mm             0.02   0.58     0.04   0.97
+fi_specieswels:seasonwinter:ca_tl_mm                  1.66   0.17     9.74   0.00
+---------------------------------------------------------------------------------
+
+RANDOM EFFECTS:
+---------------------------------------------
+   Group          Parameter        Std. Dev. 
+----------- --------------------- -----------
+ fi_fishid       (Intercept)         0.20    
+ fi_fishid   fi_speciespikeperch     0.20    
+ fi_fishid     fi_specieswels        0.04    
+ Residual                            0.66    
+---------------------------------------------
+
+Grouping variables:
+-----------------------------
+   Group     # groups   ICC  
+----------- ---------- ------
+ fi_fishid      31      0.08 
+-----------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
 
 
 
