@@ -164,12 +164,21 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
-### Waht model to fit? Waht fixed-efects and random-effects should we include? 
+## ARE THERE ANY DIFFERENCE BETWEEN SPECIES AND SEASONS IN DISTANCE TRAVELLED 
+
+- Before fitting a model we need to pose some questions:
+
+   - Do we have any evidence to think that distance should vary between species? And between individuals?
+
+   - Should be there more variability between individuals than within individuals (repeated measures)?   
+
+   - What model to fit? What fixed-efects and random-effects should we include? 
+
+- What we know is taht we are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fir longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
+
+### Fit different L2 mixed-effects models
 
 📗 `library(lmerTest)`
-
-
-To investigate species differences in their change over time we fit a series of 2L mixed-effects longitudinal models:
 
 - **Conditional non-growth model / Random intercept model**
  
