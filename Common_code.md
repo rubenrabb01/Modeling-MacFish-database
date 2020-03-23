@@ -190,14 +190,14 @@ Let's fit different L2 mixed-effects models:
 
 📗 `library(lmerTest)`
 
-**Conditional non-growth model / Random intercept model**
+- _Conditional non-growth model / Random intercept model_
  
 ```
  model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species * season + (1|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))
 ```
 
-**Unconditional growth model  /  Random-slope-intercept model**
+- _Unconditional growth model  /  Random-slope-intercept model_
  
 ```
   model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + date + (1 + date|fi_fishid), data = mean.ranged2d,
@@ -209,7 +209,7 @@ Let's fit different L2 mixed-effects models:
   model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + season + (1 + season|fi_species), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
- **Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect**
+- _Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect_
  
 ```
   model.ranged2d_3 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 + season|fi_fishid), data =mean.ranged2d,
@@ -221,7 +221,7 @@ Let's fit different L2 mixed-effects models:
   model.ranged2d_4 <- lmer(sqrt(ranged2d+1) ~ 1 + fi_species * ca_tl_mm + (1 + season|fi_species), data =mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
-**Conditional growth model random intercept model + dropping intercept-slope covariance**
+- _Conditional growth model random intercept model + dropping intercept-slope covariance_
  
 ```
    model.ranged2d_5 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 | fi_fishid) + (0 + season | fi_fishid)"), data         =mean.ranged2d, REML = T, control = lmerControl(optimizer = "bobyqa"))
