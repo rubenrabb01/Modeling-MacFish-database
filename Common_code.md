@@ -169,9 +169,9 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 📗 `library(lmerTest)`
 
 
-- To investigate species differences in their change over time we fit a series of 2L mixed-effects longitudinal models:
+To investigate species differences in their change over time we fit a series of 2L mixed-effects longitudinal models:
 
- - Conditional non-growth model / Random intercept model
+- Conditional non-growth model / Random intercept model
  
 ```
  model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species * season + (1|fi_fishid), data = mean.ranged2d,
@@ -191,7 +191,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
  
- - Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect
+- Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect
  
 ```
   model.ranged2d_3 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 + season|fi_fishid), data =mean.ranged2d,
@@ -204,7 +204,7 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
 
- - Conditional growth model random intercept model + dropping intercept-slope covariance
+- Conditional growth model random intercept model + dropping intercept-slope covariance
  
 ```
    model.ranged2d_5 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 | fi_fishid) + (0 + season | fi_fishid)"), data         =mean.ranged2d, REML = T, control = lmerControl(optimizer = "bobyqa"))
@@ -523,7 +523,7 @@ before fitting the model.
 
 ### Search best possible mixed-effects models fitted to the data
 
-- Need to convert to factor to prevent errors:
+Need to convert to factor to prevent errors:
 
 ```
 mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
@@ -531,19 +531,19 @@ mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
 mean.ranged2d$season <- as.factor(mean.ranged2d$season)
 ```
 
-- Transfom character variable *fi_fishid* to a numeric index:
+Transfom character variable *fi_fishid* to a numeric index:
 
 ```
 mean.ranged2d$fi_fishid <- as.numeric(factor(mean.ranged2d$fi_fishid, levels=unique(mean.ranged2d$fi_fishid)))
 ```
 
-- Define a mixed-effects function:
+Define a mixed-effects function:
 
 ```
 mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=mean.ranged2d,REML=T,...)}
 ```
 
-- Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
+Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
 
 ```
 setMethod('getfit', 'merMod', function(object, ...) {
@@ -557,13 +557,13 @@ cbind(summ1, df=rep(10000,length(fixef(object))))
 ```
 🔺 _Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference_
 
-- Define glmulti formula for fixed effects:
+Define glmulti formula for fixed effects:
 
 ```
 model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))
 ```
 
-- Define a candidate models object and run multi-model selection and inference:
+Define a candidate models object and run multi-model selection and inference:
 
 ```
 glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=mean.ranged2d,
@@ -574,7 +574,7 @@ method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=a
 
 ### Results summary
 
-- Obtain average estimates of terms: return coefficients and unconditional variance estimates
+Obtain average estimates of terms: return coefficients and unconditional variance estimates
 
 ```
 coef(glmulti.cand.mod)
@@ -614,7 +614,7 @@ plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black
 
 ![M_r_2_3](/Plots/M_r_2_3.png "M_r_2_3")
 
-- Plot the **IC profile** from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
+Plot the **IC profile** from the best to the worst models. The horizontal line is two units above the best model representing the optimal of candidate models set
 
 ```
 plot(glmulti.cand.mod, type = "p")
@@ -622,9 +622,9 @@ plot(glmulti.cand.mod, type = "p")
 
 ![M_r_2_4](/Plots/M_r_2_4.png "M_r_2_4")
 
-- Relative likelihood, expressed by RL = exp **(-(IC(i)-IC(best)/2)**, is the difference between a model and the best (first) model (i.e., the odds that a model is the best in the whole set)
+Relative likelihood, expressed by RL = exp **(-(IC(i)-IC(best)/2)**, is the difference between a model and the best (first) model (i.e., the odds that a model is the best in the whole set)
 
-- Plot the normalized evidence weights of the models. The vertical line delineates models that total 95% evidence weight. 
+Plot the normalized evidence weights of the models. The vertical line delineates models that total 95% evidence weight. 
 
 ```
 plot(glmulti.cand.mod, type = "w")
@@ -632,7 +632,7 @@ plot(glmulti.cand.mod, type = "w")
 
 ![M_r_2_5](/Plots/M_r_2_5.png "M_r_2_5")
 
-- Plot the relative evidence weight represents the estimated importance for each term according to their Akaike weights, given by the sum of the relative evidence weights of all the models in which the term appears
+Plot the relative evidence weight represents the estimated importance for each term according to their Akaike weights, given by the sum of the relative evidence weights of all the models in which the term appears
 
 ```
 plot(glmulti.cand.mod, type = "s")
@@ -640,7 +640,7 @@ plot(glmulti.cand.mod, type = "s")
 
 ![M_r_2_6](/Plots/M_r_2_6.png "M_r_2_6")
 
-- Summary of best fitted model 
+Summary of best fitted model 
 
 ```
 options(digits=12)
@@ -672,7 +672,7 @@ Fixed Effects:
 convergence code 0; 1 optimizer warnings; 0 lme4 warnings
 ```
 
-- Visualize the candidate models ordered according to their level of complexity depending on the number of predictors
+Visualize the candidate models ordered according to their level of complexity depending on the number of predictors
 
 ```
 aiccvalues<-summary(glmulti.cand.mod)$icvalues
@@ -711,7 +711,7 @@ plot(aiccvalues,model.weights)
 
 ![M_r_2_7](/Plots/M_r_2_7.png "M_r_2_7")
 
-- Summary of multi-model selection and inference analysi (best and worst models, IC value, evidence weight, etc.)
+Summary of multi-model selection and inference analysi (best and worst models, IC value, evidence weight, etc.)
 
 ```
 print(glmulti.cand.mod)
@@ -737,7 +737,7 @@ Worst IC: 71891.3339893277
 3 models to reach 95% of evidence weight.
 ```
 
-- Return AICc values and model weigths, ranked from lower to higher and from higher to lower, respectively
+Return AICc values and model weigths, ranked from lower to higher and from higher to lower, respectively
 
 ```
 weightable(glmulti.cand.mod)
@@ -835,7 +835,7 @@ $includeobjects
 
 ## COMPARE MODELS
 
-- Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. There are different ways of performing a LRT:
+Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. There are different ways of performing a LRT:
  
 #### 1. Using the _bootMer_ function from the _lme4_ package to compute 100 bootstrapped log-likelihood:
   
@@ -1032,7 +1032,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 ## ANALYSE THE FINAL MODEL
 
-- Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and the **Nelder_Mead** optimizer seems to solve them 
+Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and the **Nelder_Mead** optimizer seems to solve them 
 
 ```
  m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid),  REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), data=mean.ranged2d,na.action=na.omit)
@@ -1040,7 +1040,7 @@ Model 2: sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_spe
 
 #### Test overdispersion 
 
-- There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is # ¿?????  . However, I provide the function required to properly calculate the ratio of summ
+There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is # ¿?????  . However, I provide the function required to properly calculate the ratio of summ
 
 ```
 overdisp_fun <- function(m_final) {
@@ -1120,7 +1120,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 📗 `library(phia)`
 
-- To obtain marginal means, specify only a factor. For example:
+To obtain marginal means, specify only a factor. For example:
 
 ```
 interactionMeans(m_final, factors="fi_species")
@@ -1142,7 +1142,6 @@ interactionMeans(m_final, factors="season")
 4    summer      26.64644   1.577263
 5    winter      26.70372   1.907980
 ```
-
 - For both factor levels
 
 ```
@@ -1263,7 +1262,7 @@ Grouping variables:
  fi_fishid      31      0.13 
 -----------------------------
 ```
-- Perform simple slope analysis:
+Perform simple slope analysis:
 
 ```
 probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
@@ -1296,11 +1295,11 @@ There were 12 warnings (use warnings() to see them)
 ```
 ![m_final_slope](/Plots/m_final_slope.png "m_final_slope")
 
-The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that body size is crucial to mean range distance only in one species.
+- The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that body size is crucial to mean range distance only in one species.
 
 
 
-- Now, we use a nested design of fish id within species and fit the model with the adaptive Gaussian quadrature using the argument _naGQ=0_ 
+Now, we use a nested design of fish id within species and fit the model with the adaptive Gaussian quadrature using the argument _naGQ=0_ 
 
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
