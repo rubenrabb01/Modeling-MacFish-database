@@ -164,7 +164,7 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
-## Are there differences in distance travelled between species and across seasons?
+# Are there differences in distance travelled between species and across seasons?
 
 Before fitting a model we need to pose some questions:
 
@@ -176,7 +176,7 @@ Before fitting a model we need to pose some questions:
 
 We are interested in investigating differences in change over time between species. Since we have repeated-measures at the individual level we need to fit longitudinal mixed-effects models with either a random intercept and slope or a random intercept alone
 
-## SELECTING RANDOM-EFFECTS 
+### SELECTING RANDOM-EFFECTS 
 
 Let's fit different L2 mixed-effects models:
 
