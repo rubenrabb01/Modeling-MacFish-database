@@ -178,6 +178,14 @@ We are interested in investigating differences in change over time between speci
 
 ### SELECTING RANDOM-EFFECTS 
 
+First, transform variables:
+
+```
+mean.ranged2d$season <- as.factor(mean.ranged2d$season)
+mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
+mean.ranged2d$fi_fishid <- as.factor(mean.ranged2d$fi_fishid)
+mean.ranged2d$fi_fishid <- as.numeric(mean.ranged2d$fi_fishid)
+```
 Let's fit different L2 mixed-effects models:
 
 📗 `library(lmerTest)`
