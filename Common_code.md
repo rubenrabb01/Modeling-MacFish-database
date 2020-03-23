@@ -96,7 +96,7 @@ fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b
 
 ### Calculation of range of distances (calculation only from fish we have more than 3 months of data)
 
-#### min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
+- min and max was set as 0.5% and 99.5% quantiles to reduce influence of single false positions
 
 ```
 range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005), max.dist = quantile(distfromdam,0.995) ), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]
@@ -106,7 +106,7 @@ range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("
 range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))
 ```
 
-#### daily diffrence between min and max distance from dam 
+- daily diffrence between min and max distance from dam 
 
 ```
 mean.ranged2d.t <- range.d2d[, .(ranged2d = max.dist-min.dist,meand2d = (min.dist +max.dist)/2), by = .(date, fi_fishid)]
@@ -118,7 +118,7 @@ mean.ranged2d[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 mean.ranged2d[, month := month(date)]
 ```
 
- #### setting of seasons
+- setting of seasons
 
 ```
 mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I"]
@@ -134,7 +134,7 @@ mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
 setkey(mean.ranged2d,ca_weight_g)
 ```
 
-#### calculation of difference between maximum and minimum distance as daily range
+- calculation of difference between maximum and minimum distance as daily range
 
 ```
 full.range.season.t <- range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]
@@ -146,7 +146,7 @@ full.range.season[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 setkey(full.range.season,ca_weight_g)
 ```
 
-#### Calculation of body condition (residuals of the regression of body mass on body length)
+- Calculation of body condition (residuals of the regression of body mass on body length)
 
 ```
 condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
@@ -156,7 +156,7 @@ summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
 
-#### Combine dfs by _fi_fishid_
+- Combine dfs by _fi_fishid_
 
 ```
 fish.capture2 <- as.data.table(fish.capture[,1:3])
