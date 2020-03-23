@@ -462,7 +462,7 @@ In summ.merMod(m_r_2) :
   Could not calculate r-squared. Try removing missing data
 before fitting the model.
 ```
-Perform a simpel slope analysis:
+#### Simple slope analysis
 ```
 probe_interaction(m_r_2, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
 ```
@@ -1267,7 +1267,7 @@ Grouping variables:
  fi_fishid      31      0.13 
 -----------------------------
 ```
-Perform simple slope analysis:
+#### Simple slope analysis
 
 ```
 probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
@@ -1303,7 +1303,7 @@ There were 12 warnings (use warnings() to see them)
 
 - As above, the slope of body length is only significant (and positive) in pike
 
-#### Fit another model with a nested design of fish id within speciesa, using Gamma distribution and adaptive Gaussian quadrature
+#### Fit another model with a nested design of fish id within species, using Gamma distribution and adaptive Gaussian quadrature
 
 To specify for an adaptive Gaussian quadrature we use the argument _naGQ=0_ 
 
