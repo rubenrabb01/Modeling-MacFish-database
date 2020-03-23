@@ -164,21 +164,21 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
-#### Fit mixed-effects models of various types
+### Fit different mixed-effects models 
 
 📗 `library(lmerTest)`
 
 
 To investigate species differences in their change over time we fit a series of 2L mixed-effects longitudinal models:
 
-- Conditional non-growth model / Random intercept model
+- **Conditional non-growth model / Random intercept model**
  
 ```
  model.ranged2d_1 <- lmer(sqrt(ranged2d+1) ~ fi_species * season + (1|fi_fishid), data = mean.ranged2d,
                    REML = T, control = lmerControl(optimizer = "bobyqa"))
 ```
 
- - Unconditional growth model  /  Random-slope-intercept model
+ - **Unconditional growth model  /  Random-slope-intercept model**
  
 ```
   model.ranged2d_2 <- lmer(sqrt(ranged2d+1) ~ 1 + date + (1 + date|fi_fishid), data = mean.ranged2d,
@@ -191,7 +191,7 @@ To investigate species differences in their change over time we fit a series of 
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
  
-- Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect
+- **Conditional growth model (Random Intercept and Slope for One Level-1 Factor) / random-slope-intercept model for the species*season     interaction effect**
  
 ```
   model.ranged2d_3 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 + season|fi_fishid), data =mean.ranged2d,
@@ -204,7 +204,7 @@ To investigate species differences in their change over time we fit a series of 
                    REML = T, control = lmerControl(optimizer = "bobyqa"))                       
 ```
 
-- Conditional growth model random intercept model + dropping intercept-slope covariance
+- **Conditional growth model random intercept model + dropping intercept-slope covariance**
  
 ```
    model.ranged2d_5 <- lmer(sqrt(ranged2d+1) ~ 1 + season * fi_species + (1 | fi_fishid) + (0 + season | fi_fishid)"), data         =mean.ranged2d, REML = T, control = lmerControl(optimizer = "bobyqa"))
