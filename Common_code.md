@@ -1184,6 +1184,18 @@ theme_set(theme_sjplot())
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit)
 ```
+- The model fitted is not optimal and we get warning message. We'll re-fit the model later but now continue analysing this model: 
+``` 
+Warning messages:
+1: In (function (fn, par, lower = rep.int(-Inf, n), upper = rep.int(Inf,  :
+  failure to converge in 10000 evaluations
+2: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 1.023 (tol = 0.001, component 1)
+3: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
+ - Rescale variables?
+```
 ```
 summ(m_final)
 ```
@@ -1250,8 +1262,12 @@ Grouping variables:
 ----------- ---------- ------
  fi_fishid      31      0.13 
 -----------------------------
-> probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
+```
+
+probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
 SIMPLE SLOPES ANALYSIS 
+
+``` 
 
 When fi_species = wels: 
 
@@ -1277,6 +1293,10 @@ Conditional intercept         7.17   0.19    37.46   0.00
 There were 12 warnings (use warnings() to see them)
 ```
 ![m_final_slope](/Plots/m_final_slope.png "m_final_slope")
+
+The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that body size is crucial to mean range distance only in one species.
+
+
 
 - Now, we use a nested design of fish id within species and fit the model with the adaptive Gaussian quadrature using the argument _naGQ=0_ 
 
