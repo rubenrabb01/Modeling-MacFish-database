@@ -1315,21 +1315,21 @@ There were 12 warnings (use warnings() to see them)
 To specify for an adaptive Gaussian quadrature we use the argument _naGQ=0_ 
 
 ```
-m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
+m_final <- glmer(sqrt(ranged2d + 1) ~ 1 + fi_species*season*ca_tl_mm + (1 + fi_species|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit, nAGQ = 0)   
 ```
 ```
-summ(m_final,  center = TRUE, scale = TRUE, n.sd = 2) 
-``` 
+summ(m_final) 
+```
 ```
 MODEL INFO:
-Observations: 7311
-Dependent Variable: ranged2d
+Observations: 8846
+Dependent Variable: sqrt(ranged2d + 1)
 Type: Mixed effects generalized linear regression
 Error Distribution: Gamma
 Link function: log 
 
 MODEL FIT:
-AIC = 114109.82, BIC = 114365.02
+AIC = 74125.79, BIC = 74388.04
 Pseudo-R² (fixed effects) =  NA
 Pseudo-R² (total) =  NA 
 
@@ -1337,60 +1337,188 @@ FIXED EFFECTS:
 ---------------------------------------------------------------------------------
                                                       Est.   S.E.   t val.      p
 -------------------------------------------------- ------- ------ -------- ------
-(Intercept)                                           7.31   0.10    74.94   0.00
-fi_speciespikeperch                                  -0.41   0.66    -0.62   0.53
-fi_specieswels                                       -0.46   0.12    -3.81   0.00
-seasonspring_I                                       -0.16   0.06    -2.73   0.01
-seasonspring_II                                       0.56   0.10     5.54   0.00
-seasonsummer                                         -0.46   0.05    -8.67   0.00
-seasonwinter                                          0.02   0.06     0.27   0.78
-ca_tl_mm                                              1.53   0.26     5.85   0.00
-fi_speciespikeperch:seasonspring_I                    0.68   0.41     1.68   0.09
-fi_specieswels:seasonspring_I                         0.57   0.08     7.35   0.00
-fi_speciespikeperch:seasonspring_II                  -2.41   0.69    -3.51   0.00
-fi_specieswels:seasonspring_II                       -0.49   0.14    -3.42   0.00
-fi_speciespikeperch:seasonsummer                      2.04   0.32     6.28   0.00
-fi_specieswels:seasonsummer                           0.67   0.07     9.78   0.00
-fi_speciespikeperch:seasonwinter                     -0.66   0.35    -1.92   0.05
-fi_specieswels:seasonwinter                          -0.15   0.07    -2.10   0.04
-fi_speciespikeperch:ca_tl_mm                         -1.03   1.12    -0.92   0.36
-fi_specieswels:ca_tl_mm                              -1.35   0.30    -4.56   0.00
-seasonspring_I:ca_tl_mm                              -0.10   0.16    -0.58   0.56
-seasonspring_II:ca_tl_mm                             -1.00   0.24    -4.24   0.00
-seasonsummer:ca_tl_mm                                -0.59   0.15    -3.96   0.00
-seasonwinter:ca_tl_mm                                -1.30   0.15    -8.86   0.00
-fi_speciespikeperch:seasonspring_I:ca_tl_mm           0.01   0.68     0.01   0.99
-fi_specieswels:seasonspring_I:ca_tl_mm                0.03   0.19     0.14   0.89
-fi_speciespikeperch:seasonspring_II:ca_tl_mm         -2.38   1.20    -1.98   0.05
-fi_specieswels:seasonspring_II:ca_tl_mm               1.33   0.29     4.60   0.00
-fi_speciespikeperch:seasonsummer:ca_tl_mm             2.55   0.55     4.62   0.00
-fi_specieswels:seasonsummer:ca_tl_mm                  0.53   0.17     3.13   0.00
-fi_speciespikeperch:seasonwinter:ca_tl_mm             0.02   0.58     0.04   0.97
-fi_specieswels:seasonwinter:ca_tl_mm                  1.66   0.17     9.74   0.00
+(Intercept)                                           2.30   0.17    13.37   0.00
+fi_speciespikeperch                                   2.01   0.58     3.45   0.00
+fi_specieswels                                        1.53   0.28     5.40   0.00
+seasonspring_I                                        0.05   0.14     0.40   0.69
+seasonspring_II                                       1.14   0.22     5.24   0.00
+seasonsummer                                          0.30   0.12     2.50   0.01
+seasonwinter                                          1.28   0.12    10.55   0.00
+ca_tl_mm                                              0.00   0.00     5.58   0.00
+fi_speciespikeperch:seasonspring_I                   -0.66   0.34    -1.91   0.06
+fi_specieswels:seasonspring_I                        -0.34   0.19    -1.79   0.07
+fi_speciespikeperch:seasonspring_II                   1.22   0.69     1.77   0.08
+fi_specieswels:seasonspring_II                       -1.26   0.33    -3.81   0.00
+fi_speciespikeperch:seasonsummer                     -3.42   0.30   -11.40   0.00
+fi_specieswels:seasonsummer                          -0.41   0.16    -2.50   0.01
+fi_speciespikeperch:seasonwinter                     -1.58   0.32    -4.93   0.00
+fi_specieswels:seasonwinter                          -2.27   0.17   -13.24   0.00
+fi_speciespikeperch:ca_tl_mm                         -0.00   0.00    -3.58   0.00
+fi_specieswels:ca_tl_mm                              -0.00   0.00    -6.05   0.00
+seasonspring_I:ca_tl_mm                              -0.00   0.00    -0.95   0.34
+seasonspring_II:ca_tl_mm                             -0.00   0.00    -3.19   0.00
+seasonsummer:ca_tl_mm                                -0.00   0.00    -3.72   0.00
+seasonwinter:ca_tl_mm                                -0.00   0.00    -9.46   0.00
+fi_speciespikeperch:seasonspring_I:ca_tl_mm           0.00   0.00     2.86   0.00
+fi_specieswels:seasonspring_I:ca_tl_mm                0.00   0.00     2.85   0.00
+fi_speciespikeperch:seasonspring_II:ca_tl_mm         -0.00   0.00    -2.85   0.00
+fi_specieswels:seasonspring_II:ca_tl_mm               0.00   0.00     3.33   0.00
+fi_speciespikeperch:seasonsummer:ca_tl_mm             0.01   0.00    13.43   0.00
+fi_specieswels:seasonsummer:ca_tl_mm                  0.00   0.00     3.91   0.00
+fi_speciespikeperch:seasonwinter:ca_tl_mm             0.00   0.00     3.38   0.00
+fi_specieswels:seasonwinter:ca_tl_mm                  0.00   0.00    12.57   0.00
 ---------------------------------------------------------------------------------
 
 RANDOM EFFECTS:
 ---------------------------------------------
    Group          Parameter        Std. Dev. 
 ----------- --------------------- -----------
- fi_fishid       (Intercept)         0.20    
- fi_fishid   fi_speciespikeperch     0.20    
- fi_fishid     fi_specieswels        0.04    
- Residual                            0.66    
+ fi_fishid       (Intercept)         0.12    
+ fi_fishid   fi_speciespikeperch     0.15    
+ fi_fishid     fi_specieswels        0.27    
+ Residual                            0.57    
 ---------------------------------------------
 
 Grouping variables:
 -----------------------------
    Group     # groups   ICC  
 ----------- ---------- ------
- fi_fishid      31      0.08 
+ fi_fishid      31      0.04 
 -----------------------------
-
-Continuous predictors are mean-centered and scaled by 2 s.d.
 ```
+Slope analysis
 
+```
+probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
+```
+```
+SIMPLE SLOPES ANALYSIS 
 
+When fi_species = wels: 
 
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm             -0.00   0.00    -2.70   0.01
+Conditional intercept          3.39   0.07    47.67   0.00
+
+When fi_species = pikeperch: 
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm             -0.00   0.00    -2.52   0.01
+Conditional intercept          1.73   0.48     3.60   0.00
+
+When fi_species = pike: 
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of ca_tl_mm             0.00   0.00     5.58   0.00
+Conditional intercept         3.47   0.06    57.83   0.00
+```
+![m_final_slope_gamma](/Plots/m_final_slope_gamma.png "m_final_slope_gamma")
+
+Fit a model droping the random slope fi_species
+
+```
+m_final <- glmer(sqrt(ranged2d + 1) ~ 1 + fi_species*season*ca_tl_mm + (1|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit)  
+```
+```
+summ(m_final)
+```
+```
+MODEL INFO:
+Observations: 8846
+Dependent Variable: sqrt(ranged2d + 1)
+Type: Mixed effects generalized linear regression
+Error Distribution: Gamma
+Link function: log 
+
+MODEL FIT:
+AIC = 74117.22, BIC = 74344.02
+Pseudo-R² (fixed effects) =  NA
+Pseudo-R² (total) =  NA 
+
+FIXED EFFECTS:
+---------------------------------------------------------------------------------
+                                                      Est.   S.E.   t val.      p
+-------------------------------------------------- ------- ------ -------- ------
+(Intercept)                                           2.30   0.35     6.62   0.00
+fi_speciespikeperch                                   2.01   0.89     2.25   0.02
+fi_specieswels                                        1.53   0.50     3.09   0.00
+seasonspring_I                                        0.05   0.15     0.35   0.73
+seasonspring_II                                       1.15   0.32     3.55   0.00
+seasonsummer                                          0.30   0.12     2.53   0.01
+seasonwinter                                          1.28   0.13    10.09   0.00
+ca_tl_mm                                              0.00   0.00     2.75   0.01
+fi_speciespikeperch:seasonspring_I                   -0.66   0.47    -1.42   0.15
+fi_specieswels:seasonspring_I                        -0.35   0.22    -1.54   0.12
+fi_speciespikeperch:seasonspring_II                   1.21   0.98     1.24   0.22
+fi_specieswels:seasonspring_II                       -1.27   0.50    -2.51   0.01
+fi_speciespikeperch:seasonsummer                     -3.43   0.40    -8.60   0.00
+fi_specieswels:seasonsummer                          -0.41   0.17    -2.41   0.02
+fi_speciespikeperch:seasonwinter                     -1.58   0.41    -3.89   0.00
+fi_specieswels:seasonwinter                          -2.27   0.19   -11.90   0.00
+fi_speciespikeperch:ca_tl_mm                         -0.00   0.00    -2.38   0.02
+fi_specieswels:ca_tl_mm                              -0.00   0.00    -3.25   0.00
+seasonspring_I:ca_tl_mm                              -0.00   0.00    -0.84   0.40
+seasonspring_II:ca_tl_mm                             -0.00   0.00    -2.15   0.03
+seasonsummer:ca_tl_mm                                -0.00   0.00    -3.86   0.00
+seasonwinter:ca_tl_mm                                -0.00   0.00    -9.30   0.00
+fi_speciespikeperch:seasonspring_I:ca_tl_mm           0.00   0.00     2.10   0.04
+fi_specieswels:seasonspring_I:ca_tl_mm                0.00   0.00     2.53   0.01
+fi_speciespikeperch:seasonspring_II:ca_tl_mm         -0.00   0.00    -2.03   0.04
+fi_specieswels:seasonspring_II:ca_tl_mm               0.00   0.00     2.16   0.03
+fi_speciespikeperch:seasonsummer:ca_tl_mm             0.01   0.00     9.92   0.00
+fi_specieswels:seasonsummer:ca_tl_mm                  0.00   0.00     4.08   0.00
+fi_speciespikeperch:seasonwinter:ca_tl_mm             0.00   0.00     2.63   0.01
+fi_specieswels:seasonwinter:ca_tl_mm                  0.00   0.00    12.15   0.00
+---------------------------------------------------------------------------------
+
+RANDOM EFFECTS:
+-------------------------------------
+   Group      Parameter    Std. Dev. 
+----------- ------------- -----------
+ fi_fishid   (Intercept)     0.15    
+ Residual                    0.57    
+-------------------------------------
+
+Grouping variables:
+-----------------------------
+   Group     # groups   ICC  
+----------- ---------- ------
+ fi_fishid      31      0.06 
+-----------------------------
+```
+Slope analysis
+
+```
+probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
+```
+```
+SIMPLE SLOPES ANALYSIS 
+
+When fi_species = wels: 
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm             -0.00   0.00    -1.71   0.09
+Conditional intercept          3.39   0.11    29.82   0.00
+
+When fi_species = pikeperch: 
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of ca_tl_mm             -0.00   0.00    -1.60   0.11
+Conditional intercept          1.72   0.76     2.25   0.02
+
+When fi_species = pike: 
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of ca_tl_mm             0.00   0.00     2.72   0.01
+Conditional intercept         3.47   0.12    28.03   0.00
+```
+![m_final_intercept_gamma](/Plots/m_final_intercept_gamma.png "m_final_intercept_gamma")
 
 ## References
 
