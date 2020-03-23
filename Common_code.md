@@ -517,7 +517,7 @@ before fitting the model.
 
 - The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that larger body lengths are associated with higher mean range distances travelled only in pike
 
-- 🔴 However, this analysis is something wrong and the negative estimates of distance range indicate that we should re-fit the model using a corrected distribution for the response
+🔴 However, if you look at the plot, negative values denote that the linearity of the model is not typical for this data and therefore, you we should re-fit the model using a corrected distribution for the distance range variable
 
 
 ## MULTI-MODEL SELECTION AND INFERENCE
