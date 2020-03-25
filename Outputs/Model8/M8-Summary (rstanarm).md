@@ -692,8 +692,6 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
 
-In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (*fi_species*:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
-
 - Posterior mean of each alpha
 
 `a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)`
@@ -872,9 +870,7 @@ ggplot(data = a_df,
 
 ### Differences between species averages
 
-Here I'll explore the posterior distribution of the differences between each two fish individuals with descriptive statistics and histograms
-
-- - The difference between fish 1 and fish 2 is:
+- The difference between fish 1 and fish 2 is:
 
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
@@ -914,10 +910,6 @@ Here I'll explore the posterior distribution of the differences between each two
   theme_bw( base_family = "serif")`
 
 ![M8_s2](/Plots/M8_s2.png "M8_s2")
-
-The expected difference comes to 3.30 with a standard deviation of 0.46 and a wide range of uncertainty. The 95% credible interval is [2.48,4.29], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
-
-We also can get the proportion of the time that pike has a higher mean than pikeperch:
 
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
