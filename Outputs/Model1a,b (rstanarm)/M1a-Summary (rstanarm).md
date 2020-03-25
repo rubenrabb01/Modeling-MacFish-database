@@ -1,18 +1,6 @@
 # Model 1: Varying intercept model with no predictors (Variance components model)
 
-Consider the simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J and for whom we have range distances as responses. We can write a two-level varying intercept model with no predictors using the usual two-stage formulation as
-
-yij=αj+ϵij, where ϵij∼N(0,σ2y)
-αj=μα+uj, where uj∼N(0,σ2α)
-
-where yij is the range distance for the ith fish in the jth fi_species, αj is the varying intercept for the jth fi_species, and μα is the overall mean across fi_species. Alternatively, the model can be expressed in reduced form as
-yij=μα+uj+ϵij.
-. If we further assume that the fish-level errors ϵij are normally distributed with mean 0 and variance σ2y, and that the fi_species-level varying intercepts αj are normally distributed with mean μα and variance σ2α, then the model can be expressed as
-
-yij∼N(αj,σ2y),
-αj∼N(μα,σ2α),
-
-This model can then be fit using lmer(). We specify an intercept (the predictor “1”) and allow it to vary by the level-2 identifier (fi_species). We also specify the REML = FALSE option to obtain maximum likelihood (ML) estimates as opposed to the default restricted maximum likelihood (REML) estimates.
+Consider the simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J and for whom we have range distances as responses. We can write a two-level varying intercept model with no predictors. This model can then be fit using lmer(). We specify an intercept (the predictor “1”) and allow it to vary by the level-2 identifier (fi_species). We also specify the REML = FALSE option to obtain maximum likelihood (ML) estimates.
 
 `m1a<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
@@ -367,8 +355,6 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
-
-In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (*fi_species*:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
 
 - Posterior mean of each alpha
 
