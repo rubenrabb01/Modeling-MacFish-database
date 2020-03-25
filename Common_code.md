@@ -1,67 +1,6 @@
-### Load all necessary libraries
 
-```
-library(sjstats)
-library(sjmisc)
-library(sjPlot)
-library(lsmeans)
-library(multcompView)
-library(maptools)
-library(lubridate)
-library(rgdal)
-library(postGIStools)
-library(ggplot2)
-library(brglm)
-library(brms)
-library(effects)
-library(lme4)
-library(geepack)
-library(car)
-library(languageR)
-library(AICcmodavg)
-library(MASS)
-library(randomForest)
-library(rpart)
-library(randomForestExplainer)
-library(scatterplot3d)
-library(randomForestSRC)
-library(missRanger)
-library(rfUtilities) # to test model significance
-library(caret) # to get leave-one
-library(ggplot2)
-library(MuMIn)
-library(reshape2)
-library(ggeffects)
-library(VGAM)
-library(VGAMdata)
-library(VIF)
-library(lsr)
-library(effsize)
-library(rstan)
-library(brm)
-library(merTools)       ## for random-effects plot
-library(rptR)        ###REPEATABILITY ESTIMATION FOR GAUSSIAN AND NON-GAUSSIAN DATA
-library(car)         ###REGRESIÓN función Anova
-library(corrplot)    ###CORRELACIONES
-library(glmm)        ###GENERALIZED LINEAR MIXED MODELS
-library(bestglm)     ###SELECCIÓN MODELOS LINEALES GENERALIZADOS
-library(languageR)
-library(ordinal)
-library(Hmisc)
-library(RColorBrewer)
-library(tidyverse)
-library(dplyr)
-library(relaimpo)
-library(MCMCglmm)    ###multivariate glm
-library(maptools)
-library(lubridate)
-library(rgdal)
-library(postGIStools)
-library(ggplot2)
-library(brglm)
-library(MUMIn)
-library(brms)
-```
+# MACFISH DATA ANALYSIS  
+
 ### Connect to the server and import/load data
 
 📗 `library(tidyverse)`     
@@ -1523,23 +1462,3 @@ Conditional intercept         3.47   0.12    28.03   0.00
 ## References
 
 **Gelman, A. 2008.** _Scaling regression inputs by dividing by two standard deviations. Statistics in Medicine. 27, 2865-2873. (DOI 10.1002/sim.3107)_
-
-RED APPLE (&#x1F34E;): 🍎
-GREEN APPLE (&#x1F34F;): 🍏
-BLUE HEART (&#x1F499;): 💙
-GREEN HEART (&#x1F49A;): 💚
-YELLOW HEART (&#x1F49B;): 💛
-PURPLE HEART (&#x1F49C;): 💜
-GREEN BOOK (&#x1F4D7;): 📗
-BLUE BOOK (&#x1F4D8;): 📘
-ORANGE BOOK (&#x1F4D9;): 📙
-LARGE RED CIRCLE (&#x1F534;): 🔴
-LARGE BLUE CIRCLE (&#x1F535;): 🔵
-LARGE ORANGE DIAMOND (&#x1F536;): 🔶
-LARGE BLUE DIAMOND (&#x1F537;): 🔷
-SMALL ORANGE DIAMOND (&#x1F538;): 🔸
-SMALL BLUE DIAMOND (&#x1F539;): 🔹
-UP-POINTING RED TRIANGLE (&#x1F53A;): 🔺
-DOWN-POINTING RED TRIANGLE (&#x1F53B;): 🔻
-UP-POINTING SMALL RED TRIANGLE (&#x1F53C;): 🔼
-DOWN-POINTING SMALL RED TRIANGLE (&#x1F53D;): 🔽
