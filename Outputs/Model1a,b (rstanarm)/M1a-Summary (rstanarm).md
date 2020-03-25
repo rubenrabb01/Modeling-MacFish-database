@@ -1,6 +1,6 @@
 # Model 1: Varying intercept model with no predictors (Variance components model)
 
-Consider the simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J and for whom we have range distances as responses. We can write a two-level varying intercept model with no predictors. This model can then be fit using lmer(). We specify an intercept (the predictor “1”) and allow it to vary by the level-2 identifier (fi_species). We also specify the REML = FALSE option to obtain maximum likelihood (ML) estimates.
+Let's take a simplest multilevel model for fishes i=1,...,n nested within fi_species j=1,...,J with range distances as responses. We can write a 2-Level varying intercept model with no predictors. This model can then be fit using lmer(). We specify an intercept (the predictor “1”) and allow it to vary by the level-2 identifier (fi_species). We also specify the REML = FALSE option to obtain maximum likelihood (ML) estimates.
 
 `m1a<-stan_lmer(formula= sqrt(ranged2d + 1) ~ 1 + (1 | fi_fishid), data = mean.ranged2d, seed=350)`
 
