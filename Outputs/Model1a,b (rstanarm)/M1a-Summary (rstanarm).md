@@ -583,9 +583,8 @@ Here I'll explore the posterior distribution of the differences between each two
 
 ![M1a_s2](/Plots/M1a_s2.png "M1a_s2")
 
-The expected difference comes to 3.88 with a standard deviation of 1.34 and a wide range of uncertainty. The 95% credible interval is [1.21,6.5], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
-
-We also can get the proportion of the time that pike has a higher mean than pikeperch:
+The expected difference comes to 3.88 with a standard deviation of 1.34 and a wide range of uncertainty. The 95% credible interval is [1.21,6.5], so we are 95% certain that the true value of the difference between the two fishes lies within that range
+The proportion of  time that fish1 has a higher mean than fish2 is:
 
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
