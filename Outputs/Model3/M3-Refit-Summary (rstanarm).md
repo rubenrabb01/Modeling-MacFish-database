@@ -444,7 +444,7 @@ ggplot(data = a_df,
 ```
 ![M31_s1](/Plots/M31_s1.png "M31_s1")
 
-### Differences between species averages
+### Differences between individual fish averages
 
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
