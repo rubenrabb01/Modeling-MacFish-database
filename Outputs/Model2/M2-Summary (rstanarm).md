@@ -402,8 +402,6 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
 
-In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (*fi_fishid*:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
-
 - Posterior mean of each alpha
 
 `a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)`
@@ -552,9 +550,7 @@ ggplot(data = a_df,
  
 ### Differences between species averages
 
-Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
-
- - The difference between the two fish averages (fish #21 and #29)
+The difference between two fish averages (fish #21 and #29)
 
 `fish_diff <- fish_inter[, 21] - fish_inter[, 29]`
 
@@ -598,9 +594,6 @@ ggplot(data = data.frame(fish_diff),
 ```
 ![M2_s2](/Plots/M2_s2.png "M2_s2")
 
-The expected difference comes to 3.30 with a standard deviation of 0.46 and a wide range of uncertainty. The 95% credible interval is [2.48,4.29], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
-
-We also can get the proportion of the time that pike has a higher mean than pikeperch:
 
 `prop.table(table(fish_inter[, 21] > fish_inter[, 29]))`
 
@@ -608,11 +601,6 @@ We also can get the proportion of the time that pike has a higher mean than pike
  FALSE   TRUE
 0.2405 0.7595
 ```
-
-This means that the posterior probability that pike is better than pikeperch is 76%. Any pair of fishes within the sample of fishes can be compared in this manner.
-
-- The difference between the pikeperch and wels averages is:
-
 
 
 ### Analyse posterior
@@ -627,31 +615,6 @@ This means that the posterior probability that pike is better than pikeperch is 
 
 ![M2_s3](/Plots/M2_s3.png "M2_s3")
 
-
-
-**Diagnostics for Pareto smoothed importance sampling (PSIS)**
-
-Print a diagnostic table summarizing the estimated Pareto shape parameters and **PSIS** effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter *k* is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting **Vehtari, Gelman, and Gabry (2017a, 2017b)** for full details.
-
-The reliability and approximate convergence rate of the PSIS-based estimates can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution:
-
-If k<0.5 then the distribution of raw importance ratios has finite variance and the central limit theorem holds. However, as k approaches 0.5 the RMSE of plain importance sampling (IS) increases significantly while PSIS has lower RMSE.
-
-If 0.5≤k<1 then the variance of the raw importance ratios is infinite, but the mean exists. TIS and PSIS estimates have finite variance by accepting some bias. The convergence of the estimate is slower with increasing k. If k is between 0.5 and approximately 0.7 then we observe practically useful convergence rates and Monte Carlo error estimates with PSIS (the bias of TIS increases faster than the bias of PSIS). If k>0.7 we observe impractical convergence rates and unreliable Monte Carlo error estimates.
-
-If k≥1 then neither the variance nor the mean of the raw importance ratios exists. The convergence rate is close to zero and bias can be large with practical sample sizes.
-
-If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice we have observed good performance for values of k up to 0.7. (Note: If k is greater than 0.5 then WAIC is also likely to fail, but WAIC lacks its own diagnostic.) When using PSIS in the context of approximate LOO-CV, then even if the PSIS estimate has a finite variance the user should consider sampling directly from p(θs|y−i) for any problematic observations i, use k-fold cross-validation, or use a more robust model. Importance sampling is likely to work less well if the marginal posterior p(θs|y) and LOO posterior p(θs|y−i) are much different, which is more likely to happen with a non-robust model and highly influential observation
-
-**Effective sample size and error estimates**
-
-In the case that we obtain the samples from the proposal distribution via MCMC the loo package also computes estimates for the Monte Carlo error and the effective sample size for importance sampling, which are more accurate for PSIS than for IS and TIS (see Vehtari et al (2017b) for details). However, the PSIS effective sample size estimate will be over-optimistic when the estimate of k is greater than 0.7.
-
-**References**
-
-**Vehtari, A., Gelman, A., and Gabry, J. (2017a).** *Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544)*
-
-**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
 
 ### Cross-validation checking
 
@@ -740,7 +703,11 @@ All Pareto k estimates are good (k < 0.5)
 ![M2_s5](/Plots/M2_s5.png "M2_s5")
 
 
+**References**
 
+**Vehtari, A., Gelman, A., and Gabry, J. (2017a).** *Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544)*
+
+**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
 
 
 
