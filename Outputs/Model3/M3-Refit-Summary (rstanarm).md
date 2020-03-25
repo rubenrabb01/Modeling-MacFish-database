@@ -348,8 +348,6 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
 
-In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (*fi_species*:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
-
 - Posterior mean of each alpha
 
 `a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)`
@@ -448,10 +446,6 @@ ggplot(data = a_df,
 
 ### Differences between species averages
 
-Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
-
-- The difference between the pike and pikeperch averages is:
-
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
 `mean <- mean(fish_diff1)`
@@ -491,10 +485,6 @@ Here I'll explore the posterior distribution of the differences between each two
 
 ![M31_s2](/Plots/M31_s2.png "M31_s2")
 
-The expected difference comes to 0.45 with a standard deviation of 3.39 and a wide range of uncertainty. The 95% credible interval is [-25.72,31.2], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
-
-We also can get the proportion of the time that pike has a higher mean than pikeperch:
-
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
 ```
@@ -502,89 +492,7 @@ We also can get the proportion of the time that pike has a higher mean than pike
 0.47975 0.52025
 ```
 
-This means that the posterior probability that pike is better than pikeperch is 52%. Any pair of species within the sample of species can be compared in this manner.
-
-- The difference between the pikeperch and wels averages is:
-
-`fish_diff2 <- fish_inter[, 2] - fish_inter[, 3]`
-
-`mean <- mean(fish_diff2)`
-`sd <- sd(fish_diff2)`
-`quantile <- quantile(fish_diff2, probs = c(0.025, 0.50, 0.975))`
-`quantile <- data.frame(t(quantile))`
-`names(quantile) <- c("Q2.5", "Q50", "Q97.5")`
-`diff_df2 <- data.frame(mean, sd, quantile)`
-`round(diff_df2, 2)`
-
-```
-   mean    sd   Q2.5   Q50 Q97.5
-1 -0.49 14.42 -34.97 -0.08 30.33
-
-```
-`ggplot(data = data.frame(fish_diff2),
-       aes(x = fish_diff2)) +
-  geom_histogram(color = "black",
-                 fill = "gray",
-                 binwidth = 0.75) +
-  scale_x_continuous("Score diffence between pikeperch and wels",
-                     breaks = seq(from = -20,
-                                  to = 20,
-                                  by = 10)) +
-  geom_vline(xintercept = c(mean(fish_diff2),
-                            quantile(fish_diff2,
-                                     probs = c(0.025, 0.975))),
-             colour = "red",
-             linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = 0.45"),
-            color = "red",
-            size = 4) +
-  geom_text(aes(9, 50, label = "SD = 3.39"),
-            color = "blue",
-            size = 4) +
-  theme_bw( base_family = "serif")`
-
-![M31_s3](/Plots/M31_s3.png "M31_s3")
-
-- The difference between the pike and wels averages is:
-
-`fish_diff3 <- fish_inter[, 1] - fish_inter[, 3]`
-
-`mean <- mean(fish_diff3)`
-`sd <- sd(fish_diff3)`
-`quantile <- quantile(fish_diff3, probs = c(0.025, 0.50, 0.975))`
-`quantile <- data.frame(t(quantile))`
-`names(quantile) <- c("Q2.5", "Q50", "Q97.5")`
-`diff_df3 <- data.frame(mean, sd, quantile)`
-`round(diff_df3, 2)`
-
-```
-  mean sd   Q2.5  Q50 Q97.5
-1 0.49 13 -27.49 0.01 30.24
-
-```
-`ggplot(data = data.frame(fish_diff3),
-       aes(x = fish_diff3)) +
-  geom_histogram(color = "black",
-                 fill = "gray",
-                 binwidth = 0.75) +
-  scale_x_continuous("Score diffence between pike and wels",
-                     breaks = seq(from = -20,
-                                  to = 20,
-                                  by = 10)) +
-  geom_vline(xintercept = c(mean(fish_diff3),
-                            quantile(fish_diff3,
-                                     probs = c(0.025, 0.975))),
-             colour = "red",
-             linetype = "longdash") +
-  geom_text(aes(0.45, 20, label = "mean = 0.45"),
-            color = "red",
-            size = 4) +
-  geom_text(aes(9, 50, label = "SD = 3.39"),
-            color = "blue",
-            size = 4) +
-  theme_bw( base_family = "serif")`
-
-![M31_s4](/Plots/M31_s4.png "M31_s4")
+This means that the posterior probability that pike is better than pikeperch is 52%
 
 
 ### Cross-validation checking
@@ -612,45 +520,6 @@ See help('pareto-k-diagnostic') for details.
 ```
 
 **Diagnostics for Pareto smoothed importance sampling (PSIS)**
-
-Print a diagnostic table summarizing the estimated Pareto shape parameters and **PSIS** effective sample sizes, find the indexes of observations for which the estimated Pareto shape parameter *k* is larger than some threshold value, or plot observation indexes vs. diagnostic estimates. The Details section below provides a brief overview of the diagnostics, but we recommend consulting **Vehtari, Gelman, and Gabry (2017a, 2017b)** for full details.
-
-The reliability and approximate convergence rate of the PSIS-based estimates can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution:
-
-If k<0.5 then the distribution of raw importance ratios has finite variance and the central limit theorem holds. However, as k approaches 0.5 the RMSE of plain importance sampling (IS) increases significantly while PSIS has lower RMSE.
-
-If 0.5≤k<1 then the variance of the raw importance ratios is infinite, but the mean exists. TIS and PSIS estimates have finite variance by accepting some bias. The convergence of the estimate is slower with increasing k. If k is between 0.5 and approximately 0.7 then we observe practically useful convergence rates and Monte Carlo error estimates with PSIS (the bias of TIS increases faster than the bias of PSIS). If k>0.7 we observe impractical convergence rates and unreliable Monte Carlo error estimates.
-
-If k≥1 then neither the variance nor the mean of the raw importance ratios exists. The convergence rate is close to zero and bias can be large with practical sample sizes.
-
-If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice we have observed good performance for values of k up to 0.7. (Note: If k is greater than 0.5 then WAIC is also likely to fail, but WAIC lacks its own diagnostic.) When using PSIS in the context of approximate LOO-CV, then even if the PSIS estimate has a finite variance the user should consider sampling directly from p(θs|y−i) for any problematic observations i, use k-fold cross-validation, or use a more robust model. Importance sampling is likely to work less well if the marginal posterior p(θs|y) and LOO posterior p(θs|y−i) are much different, which is more likely to happen with a non-robust model and highly influential observation
-
-**Effective sample size and error estimates**
-
-In the case that we obtain the samples from the proposal distribution via MCMC the loo package also computes estimates for the Monte Carlo error and the effective sample size for importance sampling, which are more accurate for PSIS than for IS and TIS (see Vehtari et al (2017b) for details). However, the PSIS effective sample size estimate will be over-optimistic when the estimate of k is greater than 0.7.
-
-**References**
-
-**Vehtari, A., Gelman, A., and Gabry, J. (2017a).** *Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. Statistics and Computing. 27(5), 1413--1432. doi:10.1007/s11222-016-9696-4 (journal version, preprint arXiv:1507.04544)*
-
-**Vehtari, A., Gelman, A., and Gabry, J. (2017b).** *Pareto smoothed importance sampling. preprint arXiv:1507.02646*
-
-- First, create a *loo* object
-
-- Returns an object of class *pareto_k_table*, which is a matrix with columns "Count", "Proportion", and "Min. n_eff", and has its own print method
-
-`plot(loo, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")`
-
-![M31_s5](/Plots/M31_s5.png "M31_s5")
-
-There are no highly influential observations, which indicates that the model is correct (i.e. there is no misspecification, Vehtari, Gelman and Gabry, 2017).
-
-
-### Check what would CV say about relevance of covariates
-
-We form 3 models by dropping each of the covariates out
-
-## NOT HERE!!!!!
 
 ### Posterior predictive checking
 
