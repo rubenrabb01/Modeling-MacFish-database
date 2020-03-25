@@ -546,7 +546,7 @@ For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure
 
 ### Obtaining means, SD, medians and 95% credible intervals of varying intercepts
 
-In *fish_inter*, we have saved 4,000 posterior draws (from all 4 chains) for the varying intercepts αj of the 30 fishes. For example, the first column of the 4,000 by 30 matrix is a vector of 4,000 posterior simulation draws for the first fish's (*fi_species*:T449202_1) varying intercept α1. One quantitative way to summarize the posterior probability distribution of these 4,000 estimates for α1 is to examine their quantiles.
+In *fish_inter*, we use 4 chains and simulate 4,000 posterior draws for the varying intercepts of the 30 fishes. To quantitatively summarize the posterior probability distribution of these 4,000 estimates we examine their quantiles.
 
 - Posterior mean of each alpha
 
@@ -733,7 +733,7 @@ ggplot(data = a_df,
 
 Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
 
-- - The difference between the pike and pikeperch averages is:
+- The difference between the pike and pikeperch averages is:
 
 `fish_diff1 <- fish_inter[, 1] - fish_inter[, 2]`
 
@@ -775,18 +775,12 @@ Here I'll explore the posterior distribution of the differences between each two
 
 ![M7_s2](/Plots/M7_s2.png "M7_s2")
 
-The expected difference comes to 3.30 with a standard deviation of 0.46 and a wide range of uncertainty. The 95% credible interval is [2.48,4.29], so we are 95% certain that the true value of the difference between the two species lies within the range, given the data
-
-We also can get the proportion of the time that pike has a higher mean than pikeperch:
-
 `prop.table(table(fish_inter[, 1] > fish_inter[, 2]))`
 
 ```
 FALSE  TRUE
 0.975 0.025
 ```
-
-This means that the posterior probability that pike is better than pikeperch is 100%. Any pair of fishes within the sample of fishes can be compared in this manner.
 
 - The difference between the pikeperch and wels averages is:
 
