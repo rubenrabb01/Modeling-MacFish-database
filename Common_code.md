@@ -1,5 +1,5 @@
 
-# MACFISH DATA ANALYSIS  
+# MacFish data anlysis 
 
 ### Connect to the server and import/load data
 
