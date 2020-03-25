@@ -540,7 +540,7 @@ ggplot(data = a_df,
 
 ### Differences between species averages
 
-Here I'll explore the posterior distribution of the differences between each two species with descriptive statistics and histograms
+Here I'll explore the posterior distribution of the differences between each two individual fishes with descriptive statistics and histograms
 
 - The difference between the fish 1 and fish 2 averages is:
 
