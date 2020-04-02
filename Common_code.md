@@ -125,9 +125,26 @@ mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
 mean.ranged2d$fi_fishid <- as.factor(mean.ranged2d$fi_fishid)
 mean.ranged2d$fi_fishid <- as.numeric(mean.ranged2d$fi_fishid)
 ```
-Let's fit different L2 mixed-effects models:
+Let's fit different null/intercept 2-level mixed-effects models:
 
 📗 `library(lmerTest)`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - _Conditional non-growth model / Random intercept model_
  
