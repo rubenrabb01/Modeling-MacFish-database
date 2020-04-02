@@ -681,7 +681,7 @@ plot(aiccvalues,model.weights)
 
 ![M_r_2_7](/Plots/M_r_2_7.png "M_r_2_7")
 
-Summary of multi-model selection and inference analysi (best and worst models, IC value, evidence weight, etc.)
+Summary of multi-model selection and inference analysis (best and worst models, IC value, evidence weight, etc.)
 
 ```
 print(glmulti.cand.mod)
