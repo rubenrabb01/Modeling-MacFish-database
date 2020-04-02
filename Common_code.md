@@ -187,7 +187,7 @@ Let's fit different null/intercept 2-level mixed-effects models:
    model.ranged2d_7 <- lmer(sqrt(ranged2d+1) ~ 1 + season * ca_tl_mm + (1 | fi_species) + (0 + season | fi_species)"), data       =mean.ranged2d, REML = T, control = lmerControl(optimizer = "bobyqa"))
 ```
 
-*The models below are intended for a theoretical overview of a potential sensitivity analysis. This will be deleted later.
+## The models below are intended for a theoretical overview of a potential sensitivity analysis. This piece of code will be deleted later
 ```
 2-level Longitudinal conditional growth model - Random intercept and slope / Random Intercept and Slope for One Level-1 Factor
 m3 <- sim_formula("y ~ time * treatment + (1 + time | subject)")
