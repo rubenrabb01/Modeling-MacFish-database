@@ -48,7 +48,7 @@ range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))
 Daily difference between min and max distance from dam 
 
 ```
-mean.ranged2d.t <- range.d2d[, .(ranged2d = max.dist-min.dist,meand2d = (min.dist +max.dist)/2), by = .(date, fi_fishid)]
+mean.ranged2d.t <- range.d2d[, .(ranged2d = max.dist - min.dist, meand2d = (min.dist + max.dist)/2), by = .(date, fi_fishid)]
 
 mean.ranged2d <- merge(mean.ranged2d.t, fish.info, by= c("fi_fishid"))
 
