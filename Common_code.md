@@ -160,5 +160,5 @@ cum.activity[, cum_displac := cumsum(diff_mean_dist), by = .(fi_fishid)]
 ```
 ggplot(cum.activity, aes(x = date , y =  cum_displac, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_species)
 ```
-
+![cum.activity](/Plots/cum.activity.png "cum.activity")
 
