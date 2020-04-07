@@ -128,3 +128,37 @@ ggplot(distance.range.full, aes(x = ca_weight_g/1000, y=dist.range )) +
   ylab("range of longitudional movement (m)")+ xlab("")
 ```
 ![distance.range.full](/Plots/distance.range.full.png "distance.range.full")
+
+### Calculation of mean depth range 
+
+```
+mean_depth_dt <- dist2dam.dt[day.count > 89, .(mean_depth = mean(dd_depth,na.rm =T)), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]
+
+mean_depth_dt[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I" ]
+
+mean_depth_dt[date > "2017-06-20" & date <= "2017-09-20", season := "summer" ]
+
+mean_depth_dt[date > "2017-09-20" & date <= "2017-12-20", season := "autumn" ]
+
+mean_depth_dt[date > "2017-12-20" & date <= "2018-03-20", season := "winter" ]
+
+mean_depth_dt[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
+
+mean_depth_dt <- merge(mean_depth_dt, fish.info, by= c("fi_fishid"))
+```
+### Calculation of cumulative distance from dam
+
+```
+cum.activity <- mean.ranged2d
+
+setkey(cum.activity, date)
+
+cum.activity[, diff_mean_dist := c( 0, abs(diff(meand2d, lag = 1))), by = .(fi_fishid)]
+
+cum.activity[, cum_displac := cumsum(diff_mean_dist), by = .(fi_fishid)]
+```
+```
+ggplot(cum.activity, aes(x = date , y =  cum_displac, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_species)
+```
+
+
