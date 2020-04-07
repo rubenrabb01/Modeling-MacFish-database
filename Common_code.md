@@ -107,9 +107,7 @@ group_ranged2d <- data.table(group = ranged2d.cld$.group, season = ranged2d.cld$
 group_ranged2d[, label := paste(group, species, sep = "-")]
 ```
 
-### Calculation of overall longtudional range
-
-Ccalculated from mean daily distance from a dam 
+### Calculation of overall longtudional range from mean daily distance from a dam 
 
 ```
 distance.range.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid, season)] 
