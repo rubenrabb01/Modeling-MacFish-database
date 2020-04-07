@@ -389,7 +389,6 @@ Need to convert to factor to prevent errors:
 
 ```
 mean.ranged2d$fi_species <- as.factor(mean.ranged2d$fi_species)
-
 mean.ranged2d$season <- as.factor(mean.ranged2d$season)
 ```
 
@@ -506,9 +505,7 @@ Summary of best fitted model
 
 ```
 options(digits=12)
-
 best.model<-glmulti.cand.mod@objects[[1]]
-
 print(glmulti.cand.mod@objects[[1]])
 ```
 ```
@@ -537,7 +534,6 @@ Visualize the candidate models ordered according to their level of complexity de
 
 ```
 aiccvalues<-summary(glmulti.cand.mod)$icvalues
-
 as.data.frame(summary(glmulti.cand.mod)$icvalues)
 ```
 ```
