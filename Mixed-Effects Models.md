@@ -1048,7 +1048,7 @@ Warning messages:
  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
  - Rescale variables?
 ```
-🔺 The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
+:bangbang:  The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
 ```
 summ(m_final)
 ```
