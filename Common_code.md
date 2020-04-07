@@ -443,7 +443,7 @@ ggplot(data = time.riv.info)+
   )
 dev.off()
 ```
-
+![All_river_excursions_2](/Plots/All_river_excursions2.png "All_river_excursions_2")
 
 
 
