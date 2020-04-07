@@ -379,7 +379,7 @@ before fitting the model.
 
 - The slope of body length is positive and significantly different from zero in pike but not wels and pikeperch, indicating that larger body lengths are associated with higher mean range distances travelled only in pike
 
-🔺 However, if you look at the plot, negative values denote that the linearity of the model is not typical for this data and therefore, you we should re-fit the model using a corrected distribution for the distance range variable
+:bangbang: However, if you look at the plot, negative values denote that the linearity of the model is not typical for this data and therefore, you we should re-fit the model using a corrected distribution for the distance range variable
 
 
 ## MULTI-MODEL SELECTION AND INFERENCE
@@ -422,7 +422,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-🔺 Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+:bangbang: Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
 
 Define glmulti formula for fixed effects:
 
@@ -850,7 +850,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4?
 
-bangbang :bangbang: We can not compare models 2 and 3 using LRT as they have non-nested fixed terms despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values
+:bangbang: We can not compare models 2 and 3 using LRT as they have non-nested fixed terms despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
