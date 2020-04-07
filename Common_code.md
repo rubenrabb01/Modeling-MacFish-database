@@ -198,6 +198,7 @@ Rename receivers to get the same name for winter array
 det_rivout_summer[ht_hsn == 1500118 , rec_position := 2]
 det_rivout_summer[ht_hsn == 1500119 , rec_position := 1]
 ```
+Get detections from winter
 ```
 select.detections.wint.qu <- paste("
                                    SELECT hys_id, dd_timestamp_utc, ht_hsn, fi_fishid, dd_depth, dd_bodytemp FROM teri.detsdepth_rec_fish
@@ -235,6 +236,7 @@ time.riv.info <- merge(time.riv, fish.info, by = c("fi_fishid"))
 time.riv.info[, fi_fishid_fac := factor(fi_fishid, levels = sumtime.rivout$fi_fishid, ordered = T)]
 ```
 Get death time of fish 
+
 ```
 select.deathdate.qu <- paste("SELECT fi_fishid, fs_active_till_utc FROM teri.fishstatus
                              WHERE
@@ -266,3 +268,4 @@ ggplot(data = time.riv.info)+
   )
 dev.off()
 ```
+![All_river_excursions](/Plots/All_river_excursions.png "All_river_excursions")
