@@ -269,3 +269,177 @@ ggplot(data = time.riv.info)+
 dev.off()
 ```
 ![All_river_excursions](/Plots/All_river_excursions.png "All_river_excursions")
+
+### Calculation of time spent in the river 
+
+Select release date
+
+```
+select.releasedate.qu <- paste("SELECT fi_fishid, ca_timestamp_release_utc FROM teri.capture
+                             WHERE
+                             fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+
+release.date <- data.table(dbGetQuery(con,select.releasedate.qu))
+release.date <- release.date[fi_fishid %in% tag.list.tributary, ]
+
+timeactive <- merge(release.date,death.date, by = c("fi_fishid") )
+timeactive[, timeactive := as.numeric(fs_active_till_utc - ca_timestamp_release_utc)*24*60]
+
+prop_time_trib <- merge(sumtime.rivout, timeactive[,.(fi_fishid , timeactive)], by = c("fi_fishid"))
+prop_time_trib[, prop_time := (sum.time/timeactive)*100]
+prop_time_trib <- merge(prop_time_trib, fish.info, by = c("fi_fishid"))
+```
+Select activity out in the river and tributary
+```
+select.fish.qu <- 
+  paste("SELECT fi_fishid
+        FROM teri.fish
+        WHERE
+        fi_species in ('pike', 'wels', 'pikeperch')  ;", sep = "")
+```
+Get tag numbers
+```
+tagid.list <- data.table(dbGetQuery(con,select.fish.qu ))
+tagid.list <- tagid.list[,fi_fishid]
+```
+Get detections from single receivers the tributary (1500118,119) 
+```
+select.detections.qu <- paste("
+                              SELECT hys_id, dd_timestamp_utc, ht_hsn, fi_fishid, dd_depth, dd_bodytemp FROM teri.detsdepth_rec_fish
+                              where 
+                              ht_hsn IN (1500116, 1500118, 1500119) AND
+                              NOT dead AND
+                              dd_timestamp_utc BETWEEN ","'",start.summer.time,"'", "AND","'", end.summer.time,"'", " AND 
+                              fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+
+det_rivout_summer <- data.table(dbGetQuery(con, select.detections.qu ))
+```
+Rename receivers to get the same name for winter array
+
+*rec_position == 1* , the receiver closest to the river
+
+```
+det_rivout_summer[ht_hsn == 1500119 , rec_position := 2]
+det_rivout_summer[ht_hsn == 1500118 , rec_position := 1]
+det_rivout_summer[ht_hsn == 1500116 , rec_position := 3]
+```
+Get detections from winter
+```
+select.detections.wint.qu <- paste("
+                                   SELECT hys_id, dd_timestamp_utc, ht_hsn, fi_fishid, dd_depth, dd_bodytemp FROM teri.detsdepth_rec_fish
+                                   where 
+                                   ht_hsn IN (1500048, 1500049,1500039) AND
+                                   dd_timestamp_utc BETWEEN ","'", start.winter.time,"'", "AND","'", end.winter.time,"'", " AND 
+                                   NOT dead AND
+                                   fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+
+det_rivout_winter <- data.table(dbGetQuery(con, select.detections.wint.qu))
+det_rivout_winter[ht_hsn == 1500039 , rec_position := 3]
+det_rivout_winter[ht_hsn == 1500048 , rec_position := 1]
+det_rivout_winter[ht_hsn == 1500049 , rec_position := 2]
+
+det_rivout <- rbind(det_rivout_summer, det_rivout_winter )
+det_rivout[, no_det := length(dd_timestamp_utc), by = .(fi_fishid)]
+```
+Get only relevant fish (fish with more than x counts specified by number of days)
+
+```
+valid.fish <- unique(dist2dam.dt$fi_fishid)
+det_rivout <- det_rivout[no_det > 1 & rec_position %in% c(1,2) & fi_fishid %in% valid.fish,] 
+setkey(det_rivout, fi_fishid, dd_timestamp_utc)
+```
+Aplication of function for detection of movement direction
+```
+det_rivout[, move_direc := move_direction_river(rec_position), by = .(fi_fishid)]
+det_rivout[, date := as.Date(dd_timestamp_utc)]
+```
+Subset of records indicating location change
+```
+river_time <-det_rivout[move_direc %in% c("Upstream", "Downstream"),]
+river_time[, run_valid := valid_river_run(move_direc), by = .(fi_fishid)]
+```
+Calculation of number of observation
+```
+no_obsr <- river_time[,.(number = length(ht_hsn)), by =.(fi_fishid)]
+
+river_time[, even_obs :=  ifelse(is_even(length(hys_id)) == T, "even", "odd") ,by = .(fi_fishid)] 
+river_time[, obs_id := c(1:nrow(river_time))]
+river_time_exclude <- river_time[even_obs == "odd" ,.SD[.N],  by = fi_fishid]
+
+river_time_sub <- river_time[!obs_id %in% river_time_exclude$obs_id ]
+river_time_sub[, event_id := rep(1:c(nrow(river_time_sub)/2), each = 2)]
+
+river_time_f <- data.table::dcast(river_time_sub[,.(dd_timestamp_utc, fi_fishid, move_direc,event_id)], fi_fishid + event_id ~ move_direc, value.var = "dd_timestamp_utc" )
+river_time_f[, time_diff := as.numeric(Downstream -Upstream)]
+
+river_time_sum <- river_time_f[,.(sum_time = sum(time_diff)), by = .(fi_fishid)]
+river_time_sum[, time_days := sum_time/(60*24)]
+
+river_time_sum <- merge(river_time_sum, fish.info, by = c("fi_fishid"))
+setkey(river_time_sum, time_days)
+
+range(river_time_f$time_diff)
+table(river_time$even_obs)
+
+library(sjmisc)
+
+river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
+
+river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
+
+
+ggplot(det_rivout, aes(y = fi_fishid, x = dd_timestamp_utc, col = move_direc))+geom_point( size = 2)
+
+str(det_rivout)
+
+table(det_rivout[, .(move_direc) ])
+
+unique(det_rivout[, .(fi_fishid, rec_position) ])
+
+table(det_rivout[fi_fishid == "T449319_1", ]$move_direc)
+
+
+time.riv <- time_rivout[,.(time_inriv = range(dd_timestamp_utc), ardep = c("ar", "dep")), by = .(id_detect, fi_fishid)]
+
+time.riv.wide <- data.table::dcast(time.riv, fi_fishid + id_detect ~ ardep, value.var = "time_inriv" )
+time.riv.wide[, time.diff := as.numeric(dep - ar)]
+
+sumtime.rivout <- time.riv.wide[, .(sum.time = sum(time.diff)), by = .(fi_fishid)] 
+setkey(sumtime.rivout, sum.time)
+
+time.riv.info <- merge(time.riv, fish.info, by = c("fi_fishid"))
+time.riv.info[, fi_fishid_fac := factor(fi_fishid, levels = sumtime.rivout$fi_fishid, ordered = T)]
+
+# get death time of fish 
+select.deathdate.qu <- paste("SELECT fi_fishid, fs_active_till_utc FROM teri.fishstatus
+                             WHERE
+                             fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+
+death.date <- data.table(dbGetQuery(con,select.deathdate.qu))
+
+tag.list.tributary <- unique(time.riv.info$fi_fishid)
+
+death.date <- death.date[fi_fishid %in% tag.list.tributary, ]
+death.date.info <- merge(death.date, fish.info, by = c("fi_fishid"))
+
+jpeg("All_river_excursions.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(data = time.riv.info)+
+  geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1)+
+  geom_point(data = death.date.info, aes(y = fi_fishid, x = fs_active_till_utc), col = "red", size = 2)+
+  facet_wrap(~fi_species, scale = "free_y", ncol = 1)+
+  #geom_vline(xintercept = as.POSIXct("2017-11-21"), color = "red", size=1)+
+  theme(
+    text = element_text(size=15),
+    #axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.title.x=element_blank(),
+    strip.background = element_blank(),
+    panel.background = element_blank(),
+    panel.grid.major.x = element_line( size=.1, color="black" ),
+    panel.grid.major.y = element_line( size=.1, color="black" )
+  )
+dev.off()
+
+
+
+
