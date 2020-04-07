@@ -138,15 +138,15 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 ```
 summ(model.ranged2d)                              # default summary output without standardising/transforming variables
 
-summ(m2, center = TRUE)                           # input variables are mean-centered
+summ(model.ranged2d, center = TRUE)                           # input variables are mean-centered
 
-summ(m2, robust = "HC1")                          # report robust standard errors (default is "HC3")
+summ(model.ranged2d, robust = "HC1")                          # report robust standard errors (default is "HC3")
 
-summ(m2, scale = TRUE)                            # scaled predictors/coefficients
+summ(model.ranged2d, scale = TRUE)                            # scaled predictors/coefficients
 
-summ(m2, confint = TRUE, digits = 3)              # otain confidence interval
+summ(model.ranged2d, confint = TRUE, digits = 3)              # otain confidence interval
 
-summ(m2,  center = TRUE, scale = TRUE, n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman 2008)
+summ(model.ranged2d,  center = TRUE, scale = TRUE, n.sd = 2)  # standardized/scaled coefficients dividing by 2 s.d. units (Gelman 2008)
 ```
 ```
 MODEL INFO:
