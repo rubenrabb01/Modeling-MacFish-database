@@ -111,16 +111,19 @@ group_ranged2d[, label := paste(group, species, sep = "-")]
 
 ```
 distance.range.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid, season)] 
+
 distance.range <- merge(distance.range.t, fish.info)
+
 distance.range$season <- factor(distance.range$season, levels=c("spring_I", "summer", "autumn","winter", "spring_II"))
 ```
 ```
 distance.range.full.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid)] 
+
 distance.range.full <- merge(distance.range.full.t, fish.info)
 ```
 ```
-ggplot(distance.range.full, aes(x = ca_weight_g/1000, y=dist.range ))+
- geom_point()+
+ggplot(distance.range.full, aes(x = ca_weight_g/1000, y=dist.range )) +
+  geom_point()+
   facet_wrap(~fi_species, scale="free_x")+
   ylab("range of longitudional movement (m)")+ xlab("")
 ```
