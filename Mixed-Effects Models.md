@@ -109,7 +109,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 
 - The output shows warnings of non-convergence so let's try a different optimizer such as the _Nelder-Mead_ optimisation routine:
 
-📗 `library(optmix)`
+📗 `library(optimx)`
   
  ```
  model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
