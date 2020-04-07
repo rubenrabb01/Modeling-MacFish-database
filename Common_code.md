@@ -11,9 +11,9 @@
 
 :books:
 
-`library(tidyverse)`     
-`library(data.table)`  
-`library(RPostgreSQL)`
+:books:`library(tidyverse)`     
+:books:`library(data.table)`  
+:books:`library(RPostgreSQL)`
 
 ```
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
