@@ -892,7 +892,7 @@ Rename _m2_ to _m_final_ and  re-fit the model. There are convergence issues and
 m_final <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid),  REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), data=mean.ranged2d,na.action=na.omit)
 ```
 
-#### Test overdispersion 
+### Test overdispersion 
 
 There is no need to test for overdisperion in a mixed model with Gaussian distribution. The reason is # ¿?????  . However, I provide the function required to properly calculate the ratio of summ
 
@@ -909,7 +909,7 @@ overdisp_fun <- function(m_final) {
 overdisp_fun(m_final)                 
 ```
 
-#### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
+### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
 
 📗 `library (MuMIn)`
 
@@ -921,13 +921,13 @@ r.squaredGLMM(m_final)
 [1,] 0.0257772 0.6764458
 ```
 
-#### Compute confidence intervals using parametric bootstrap
+### Compute confidence intervals using parametric bootstrap
 
 ```
 confint(m_final, method="boot", nsim=1000)          
 ```
 
-#### QQ plot and hidtogram of residuals 
+### QQ plot and hidtogram of residuals 
 
 ```
 qqnorm(residuals(m_final))
@@ -1025,14 +1025,14 @@ plot(m_final.means)      # plot(interactionMeans(m_final, factors=c("season","fi
 ![m_final_inter_1](/Plots/m_final_inter_1.png "m_final_inter_1")
 
 
-#### Plot marginal effects 
+### Plot marginal effects 
 
 ```
 library(sjPlot)
 library(ggplot2)
 theme_set(theme_sjplot())
 ```
-#### Re-fit the model using a Gamma distribution
+### Re-fit the model using a Gamma distribution
 
 ```
 m_final <- glmer(ranged2d ~ 1 + fi_species*season*ca_tl_mm + (1|fi_fishid), control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore", optimizer = "Nelder_Mead"), family="Gamma"(link='log'), data=mean.ranged2d,na.action=na.omit)
@@ -1116,7 +1116,7 @@ Grouping variables:
  fi_fishid      31      0.13 
 -----------------------------
 ```
-#### Simple slope analysis
+### Simple slope analysis
 
 ```
 probe_interaction(m_final, modx  = fi_species, pred = ca_tl_mm, plot.points=TRUE,cond.int = TRUE, interval = TRUE,jnplot = TRUE)
@@ -1152,7 +1152,7 @@ There were 12 warnings (use warnings() to see them)
 
 - As above, the slope of body length is only significant (and positive) in pike
 
-#### Fit another model with a nested design of fish id within species, using Gamma distribution and adaptive Gaussian quadrature
+### Fit another model with a nested design of fish id within species, using Gamma distribution and adaptive Gaussian quadrature
 
 To specify for an adaptive Gaussian quadrature we use the argument _naGQ=0_ 
 
