@@ -1,5 +1,5 @@
 
-# MacFish database
+# MacFish database (Initial steps)
 
 ### Connect to the server and import/load data
 
