@@ -355,6 +355,8 @@ Application of function for detection of movement direction
 det_rivout[, move_direc := move_direction_river(rec_position), by = .(fi_fishid)]
 det_rivout[, date := as.Date(dd_timestamp_utc)]
 ```
+:interrobang: The _move_direction_river_ function is missing 
+
 Subset of records indicating location change
 ```
 river_time <- det_rivout[move_direc %in% c("Upstream", "Downstream"),]
@@ -444,4 +446,4 @@ dev.off()
 
 
 
-:earth_americas:
+
