@@ -358,7 +358,7 @@ Subset of records indicating location change
 river_time <-det_rivout[move_direc %in% c("Upstream", "Downstream"),]
 river_time[, run_valid := valid_river_run(move_direc), by = .(fi_fishid)]
 ```
-Calculation of number of observation
+Calculation of number of observations
 ```
 no_obsr <- river_time[,.(number = length(ht_hsn)), by =.(fi_fishid)]
 
@@ -380,27 +380,22 @@ setkey(river_time_sum, time_days)
 
 range(river_time_f$time_diff)
 table(river_time$even_obs)
+```
+📗 `library(sjmisc)`
 
-library(sjmisc)
-
+```
 river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
-
 river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
-
-
+```
+```
 ggplot(det_rivout, aes(y = fi_fishid, x = dd_timestamp_utc, col = move_direc))+geom_point( size = 2)
-
+`` 
 str(det_rivout)
-
 table(det_rivout[, .(move_direc) ])
-
 unique(det_rivout[, .(fi_fishid, rec_position) ])
-
 table(det_rivout[fi_fishid == "T449319_1", ]$move_direc)
 
-
 time.riv <- time_rivout[,.(time_inriv = range(dd_timestamp_utc), ardep = c("ar", "dep")), by = .(id_detect, fi_fishid)]
-
 time.riv.wide <- data.table::dcast(time.riv, fi_fishid + id_detect ~ ardep, value.var = "time_inriv" )
 time.riv.wide[, time.diff := as.numeric(dep - ar)]
 
@@ -409,19 +404,19 @@ setkey(sumtime.rivout, sum.time)
 
 time.riv.info <- merge(time.riv, fish.info, by = c("fi_fishid"))
 time.riv.info[, fi_fishid_fac := factor(fi_fishid, levels = sumtime.rivout$fi_fishid, ordered = T)]
-
-# get death time of fish 
+```
+Get death time of fish 
+```
 select.deathdate.qu <- paste("SELECT fi_fishid, fs_active_till_utc FROM teri.fishstatus
                              WHERE
                              fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
 
 death.date <- data.table(dbGetQuery(con,select.deathdate.qu))
-
 tag.list.tributary <- unique(time.riv.info$fi_fishid)
-
 death.date <- death.date[fi_fishid %in% tag.list.tributary, ]
 death.date.info <- merge(death.date, fish.info, by = c("fi_fishid"))
-
+```
+```
 jpeg("All_river_excursions.jpg", width = 9, height=5,  units = 'in', res = 300 )
 ggplot(data = time.riv.info)+
   geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1)+
@@ -439,7 +434,7 @@ ggplot(data = time.riv.info)+
     panel.grid.major.y = element_line( size=.1, color="black" )
   )
 dev.off()
-
+```
 
 
 
