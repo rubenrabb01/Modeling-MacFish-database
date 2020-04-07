@@ -162,3 +162,32 @@ ggplot(cum.activity, aes(x = date , y =  cum_displac, group = fi_fishid, col = f
 ```
 ![cum.activity](/Plots/cum.activity.png "cum.activity")
 
+
+### Calculation of distance to dam development
+
+```
+roundUp <- function(x,to=100)
+{
+  to*(x%/%to + as.logical(x%%to))
+}
+
+mean.ranged2d[, round.d2d := roundUp(meand2d)]
+
+jpeg("All_species_d2d_develop.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(mean.ranged2d,aes(x=date,y=meand2d))+
+  stat_density_2d(geom = "raster", aes(fill = stat(density)), contour = FALSE)+
+  scale_fill_gradient(low = "blue", high = "red")+
+  geom_point(size = 0.01, col = "black")+
+  geom_vline(xintercept = as.Date("2017-11-27"), color = "white", size=0.5)+
+  labs(x ="", y = "distance from dam (m)")+
+  facet_wrap(~fi_species)+
+  theme_bw()+ theme(
+    text = element_text(size=15),
+    axis.text.x = element_text(angle=45, hjust=1),
+    panel.grid = element_blank(),
+    strip.background = element_blank(),
+    legend.title=element_blank())
+dev.off()
+```
+![All_species_d2d_develop](/Plots/All_species_d2d_develop.png "All_species_d2d_develop")
+
