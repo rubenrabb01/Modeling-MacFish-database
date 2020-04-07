@@ -104,3 +104,9 @@ mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
 
 
+group_ranged2d <- data.table(group = ranged2d.cld$.group, season = ranged2d.cld$season, species = ranged2d.cld$fi_species)
+group_ranged2d[, label := paste(group, species, sep = "-")]
+
+
+
+
