@@ -102,3 +102,5 @@ fish.capture2 <- as.data.table(fish.capture[,1:3])
 
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 ```
+
+
