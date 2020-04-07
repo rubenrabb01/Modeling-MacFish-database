@@ -249,13 +249,15 @@ tag.list.tributary <- unique(time.riv.info$fi_fishid)
 death.date <- death.date[fi_fishid %in% tag.list.tributary, ]
 death.date.info <- merge(death.date, fish.info, by = c("fi_fishid"))
 ```
+Plot fish detection and death date
 ```
 jpeg("All_river_excursions.jpg", width = 9, height=5,  units = 'in', res = 300 )
+
 ggplot(data = time.riv.info)+
-  geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1)+
-  geom_point(data = death.date.info, aes(y = fi_fishid, x = fs_active_till_utc), col = "red", size = 2)+
-  facet_wrap(~fi_species, scale = "free_y", ncol = 1)+
-  #geom_vline(xintercept = as.POSIXct("2017-11-21"), color = "red", size=1)+
+  geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1) +
+  geom_point(data = death.date.info, aes(y = fi_fishid, x = fs_active_till_utc), col = "red", size = 2) +
+  facet_wrap(~fi_species, scale = "free_y", ncol = 1) +
+  #geom_vline(xintercept = as.POSIXct("2017-11-21"), color = "red", size=1) +
   theme(
     text = element_text(size=15),
     #axis.text.y=element_blank(),
@@ -355,7 +357,7 @@ det_rivout[, date := as.Date(dd_timestamp_utc)]
 ```
 Subset of records indicating location change
 ```
-river_time <-det_rivout[move_direc %in% c("Upstream", "Downstream"),]
+river_time <- det_rivout[move_direc %in% c("Upstream", "Downstream"),]
 river_time[, run_valid := valid_river_run(move_direc), by = .(fi_fishid)]
 ```
 Calculation of number of observations
@@ -387,9 +389,11 @@ table(river_time$even_obs)
 river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
 river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
 ```
+Plot movement direction detected
 ```
-ggplot(det_rivout, aes(y = fi_fishid, x = dd_timestamp_utc, col = move_direc))+geom_point( size = 2)
-`` 
+ggplot(det_rivout, aes(y = fi_fishid, x = dd_timestamp_utc, col = move_direc)) + geom_point( size = 2)
+``` 
+```
 str(det_rivout)
 table(det_rivout[, .(move_direc) ])
 unique(det_rivout[, .(fi_fishid, rec_position) ])
@@ -416,8 +420,10 @@ tag.list.tributary <- unique(time.riv.info$fi_fishid)
 death.date <- death.date[fi_fishid %in% tag.list.tributary, ]
 death.date.info <- merge(death.date, fish.info, by = c("fi_fishid"))
 ```
+Plot fish detection and death date
 ```
 jpeg("All_river_excursions.jpg", width = 9, height=5,  units = 'in', res = 300 )
+
 ggplot(data = time.riv.info)+
   geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1)+
   geom_point(data = death.date.info, aes(y = fi_fishid, x = fs_active_till_utc), col = "red", size = 2)+
