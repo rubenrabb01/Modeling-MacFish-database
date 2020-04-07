@@ -3,14 +3,6 @@
 
 ### Connect to the server and import/load data
 
-📗 `library(tidyverse)`     
-
-📗 `library(data.table)`  
-   
-📗 `library(RPostgreSQL)`
-
-:books:
-
 :books:`library(tidyverse)`     
 :books:`library(data.table)`  
 :books:`library(RPostgreSQL)`
@@ -391,7 +383,7 @@ setkey(river_time_sum, time_days)
 range(river_time_f$time_diff)
 table(river_time$even_obs)
 ```
-📗 `library(sjmisc)`
+:books: `library(sjmisc)`
 
 ```
 river_time[run_valid == "Valid", .(no_det = (length(dd_timestamp_utc))), by = .(fi_fishid, move_direc)]
