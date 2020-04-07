@@ -12,9 +12,7 @@
 :books:
 
 `library(tidyverse)`     
-
 `library(data.table)`  
-   
 `library(RPostgreSQL)`
 
 ```
