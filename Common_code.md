@@ -124,5 +124,4 @@ ggplot(distance.range.full, aes(x = ca_weight_g/1000, y=dist.range ))+
   facet_wrap(~fi_species, scale="free_x")+
   ylab("range of longitudional movement (m)")+ xlab("")
 ```
-
-
+![distance.range.full](/Plots/distance.range.full.png "distance.range.full")
