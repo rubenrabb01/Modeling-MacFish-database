@@ -350,7 +350,7 @@ valid.fish <- unique(dist2dam.dt$fi_fishid)
 det_rivout <- det_rivout[no_det > 1 & rec_position %in% c(1,2) & fi_fishid %in% valid.fish,] 
 setkey(det_rivout, fi_fishid, dd_timestamp_utc)
 ```
-Aplication of function for detection of movement direction
+Application of function for detection of movement direction
 ```
 det_rivout[, move_direc := move_direction_river(rec_position), by = .(fi_fishid)]
 det_rivout[, date := as.Date(dd_timestamp_utc)]
