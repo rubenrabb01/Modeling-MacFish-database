@@ -445,5 +445,44 @@ dev.off()
 ```
 ![All_river_excursions_2](/Plots/All_river_excursions2.png "All_river_excursions_2")
 
+### Calculation of step length and NSD (NSD  - D2Dt0 distance to dam in time 0)
+
+```
+cum.activity[, D2Dt0 := meand2d[1], by = fi_fishid]
+cum.activity[, NetDist := sqrt((meand2d - D2Dt0)^2)]
+cum.activity[, NSD := (meand2d - D2Dt0)^2]
+```
+```
+ggplot(cum.activity[fi_species == "pikeperch",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_fishid)
+```
+```
+ggplot(cum.activity[fi_species == "pike",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_fishid)
+```
+```
+ggplot(cum.activity[fi_species == "wels",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_fishid)
+``
+`
+jpeg("pikeperch_NSD.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(cum.activity[fi_species == "pikeperch",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_fishid)+
+  ggtitle("pikeperch")+
+  theme(
+    axis.text.x = element_text(angle = 30, vjust = 0.8)
+  )
+dev.off()
+jpeg("pike_NSD.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(cum.activity[fi_species == "pike",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_line()+facet_wrap(~fi_fishid)+
+  ggtitle("pike")+
+theme(
+  axis.text.x = element_text(angle = 30, vjust = 0.8)
+)
+dev.off()
+jpeg("wels_NSD.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(cum.activity[fi_species == "wels",], aes(x = date , y =  NSD, group = fi_fishid, col = fi_fishid))+geom_path()+facet_wrap(~fi_fishid)+
+  ggtitle("wels")+
+  theme(
+    axis.text.x = element_text(angle = 30, vjust = 0.8)
+  )
+dev.off()
+
 
 
