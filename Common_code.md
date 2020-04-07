@@ -13,15 +13,11 @@
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
 start.summer.time <- as.POSIXct('2017-04-27 00:00:00', tz = "UTC")
-
 end.summer.time <-  as.POSIXct('2017-11-20 23:59:59', tz="UTC")
-
 start.winter.time <- as.POSIXct('2017-11-27 00:00:00', tz = "UTC")
-
 end.winter.time <-  as.POSIXct('2018-05-01 23:59:59', tz="UTC")
 
 setwd("~/Teri/longit_displacement")
-
 dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv"))
 ```
 
@@ -29,7 +25,6 @@ dist2dam.dt <- data.table(read_csv("./data/Teri_dis2data_predatory_fullarray.csv
 
 ```
 fish.info <- data.table(dbGetQuery(con, "SELECT ca_tl_mm, ca_weight_g, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
-
 fish.capture <- data.table(dbGetQuery(con, "SELECT ca_lat_catch, ca_lon_catch, b.* FROM teri.capture a INNER JOIN teri.fish b ON a.fi_fishid = b.fi_fishid"))
 ```
 
@@ -39,9 +34,7 @@ Min and max was set as 0.5% and 99.5% quantiles to reduce influence of single fa
 
 ```
 range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005), max.dist = quantile(distfromdam,0.995) ), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]
-
 range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("min.dist",  "max.dist"))
-
 range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))
 ```
 
@@ -49,11 +42,8 @@ Daily difference between min and max distance from dam
 
 ```
 mean.ranged2d.t <- range.d2d[, .(ranged2d = max.dist - min.dist, meand2d = (min.dist + max.dist)/2), by = .(date, fi_fishid)]
-
 mean.ranged2d <- merge(mean.ranged2d.t, fish.info, by= c("fi_fishid"))
-
 mean.ranged2d[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
-
 mean.ranged2d[, month := month(date)]
 ```
 
@@ -61,13 +51,9 @@ Setting of seasons
 
 ```
 mean.ranged2d[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I"]
-
 mean.ranged2d[date > "2017-06-20" & date <= "2017-09-20", season := "summer"]
-
 mean.ranged2d[date > "2017-09-20" & date <= "2017-12-20", season := "autumn"]
-
 mean.ranged2d[date > "2017-12-20" & date <= "2018-03-20", season := "winter"]
-
 mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
 
 setkey(mean.ranged2d,ca_weight_g)
@@ -77,9 +63,7 @@ Calculation of difference between maximum and minimum distance as daily range
 
 ```
 full.range.season.t <- range.d2d[, .(ranged2d = max(max.dist)-min(min.dist)), by = .( fi_fishid)]
-
 full.range.season <- merge(full.range.season.t, fish.info, by= c("fi_fishid"))
-
 full.range.season[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 
 setkey(full.range.season,ca_weight_g)
@@ -89,9 +73,7 @@ Calculation of body condition (residuals of the regression of body mass on body 
 
 ```
 condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
-
 summary(condition)
-
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
 
@@ -111,14 +93,11 @@ group_ranged2d[, label := paste(group, species, sep = "-")]
 
 ```
 distance.range.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid, season)] 
-
 distance.range <- merge(distance.range.t, fish.info)
-
 distance.range$season <- factor(distance.range$season, levels=c("spring_I", "summer", "autumn","winter", "spring_II"))
 ```
 ```
 distance.range.full.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid)] 
-
 distance.range.full <- merge(distance.range.full.t, fish.info)
 ```
 ```
@@ -133,28 +112,19 @@ ggplot(distance.range.full, aes(x = ca_weight_g/1000, y=dist.range )) +
 
 ```
 mean_depth_dt <- dist2dam.dt[day.count > 89, .(mean_depth = mean(dd_depth,na.rm =T)), by = .(date =as.Date(dd_timestamp_utc), fi_fishid)]
-
 mean_depth_dt[date > "2017-04-25" & date <= "2017-06-20", season := "spring_I" ]
-
 mean_depth_dt[date > "2017-06-20" & date <= "2017-09-20", season := "summer" ]
-
 mean_depth_dt[date > "2017-09-20" & date <= "2017-12-20", season := "autumn" ]
-
 mean_depth_dt[date > "2017-12-20" & date <= "2018-03-20", season := "winter" ]
-
 mean_depth_dt[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
-
 mean_depth_dt <- merge(mean_depth_dt, fish.info, by= c("fi_fishid"))
 ```
 ### Calculation of cumulative distance from dam
 
 ```
 cum.activity <- mean.ranged2d
-
 setkey(cum.activity, date)
-
 cum.activity[, diff_mean_dist := c( 0, abs(diff(meand2d, lag = 1))), by = .(fi_fishid)]
-
 cum.activity[, cum_displac := cumsum(diff_mean_dist), by = .(fi_fishid)]
 ```
 ```
@@ -191,3 +161,108 @@ dev.off()
 ```
 ![All_species_d2d_develop](/Plots/All_species_d2d_develop.png "All_species_d2d_develop")
 
+### Calculation of time spent out in the river 
+
+Select species
+
+```
+select.fish.qu <- 
+  paste("SELECT fi_fishid
+        FROM teri.fish
+        WHERE
+        fi_species in ('pike', 'wels', 'pikeperch')  ;", sep = "")
+```
+Get tag numbers
+
+```
+tagid.list <- data.table(dbGetQuery(con,select.fish.qu ))
+tagid.list <- tagid.list[,fi_fishid]
+```
+Get detections from single receivers the tributary (1500118,119)
+```
+select.detections.qu <- paste("
+                              SELECT hys_id, dd_timestamp_utc, ht_hsn, fi_fishid, dd_depth, dd_bodytemp FROM teri.detsdepth_rec_fish
+                              where 
+                              ht_hsn IN (1500118, 1500119) AND
+                              NOT dead AND
+                              dd_timestamp_utc BETWEEN ","'",start.summer.time,"'", "AND","'", end.summer.time,"'", " AND 
+                              fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+```
+```
+det_rivout_summer <- data.table(dbGetQuery(con, select.detections.qu ))
+```
+Rename receivers to get the same name for winter array
+
+*rec_position == 1*, the receiver closest to the river
+```
+det_rivout_summer[ht_hsn == 1500118 , rec_position := 2]
+det_rivout_summer[ht_hsn == 1500119 , rec_position := 1]
+```
+```
+select.detections.wint.qu <- paste("
+                                   SELECT hys_id, dd_timestamp_utc, ht_hsn, fi_fishid, dd_depth, dd_bodytemp FROM teri.detsdepth_rec_fish
+                                   where 
+                                   ht_hsn IN (1500048, 1500049) AND
+                                   dd_timestamp_utc BETWEEN ","'", start.winter.time,"'", "AND","'", end.winter.time,"'", " AND 
+                                   NOT dead AND
+                                   fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+```
+```
+det_rivout_winter <- data.table(dbGetQuery(con, select.detections.wint.qu))
+det_rivout_winter[ht_hsn == 1500048 , rec_position := 2]
+det_rivout_winter[ht_hsn == 1500049 , rec_position := 1]
+det_rivout <- rbind(det_rivout_summer, det_rivout_winter )
+```
+Get only relevant fish (fish with more than x counts specified by number of days)
+
+```
+valid.fish <- unique(dist2dam.dt$fi_fishid)
+
+det_rivout <- det_rivout[fi_fishid %in% valid.fish,] 
+det_rivout[, id_detect := rleid(rec_position), by = fi_fishid]
+det_rivout[, id_det_count := length(rec_position), by = .(id_detect, fi_fishid)]
+
+time_rivout <- det_rivout[rec_position == 1 & id_det_count >= 2, ]
+time.riv <- time_rivout[,.(time_inriv = range(dd_timestamp_utc), ardep = c("ar", "dep")), by = .(id_detect, fi_fishid)]
+
+time.riv.wide <- data.table::dcast(time.riv, fi_fishid + id_detect ~ ardep, value.var = "time_inriv" )
+time.riv.wide[, time.diff := as.numeric(dep - ar)]
+
+sumtime.rivout <- time.riv.wide[, .(sum.time = sum(time.diff)), by = .(fi_fishid)] 
+setkey(sumtime.rivout, sum.time)
+
+time.riv.info <- merge(time.riv, fish.info, by = c("fi_fishid"))
+time.riv.info[, fi_fishid_fac := factor(fi_fishid, levels = sumtime.rivout$fi_fishid, ordered = T)]
+```
+Get death time of fish 
+```
+select.deathdate.qu <- paste("SELECT fi_fishid, fs_active_till_utc FROM teri.fishstatus
+                             WHERE
+                             fi_fishid IN ('", paste(tagid.list, collapse = "','"),"');", sep = "") 
+
+death.date <- data.table(dbGetQuery(con,select.deathdate.qu))
+
+tag.list.tributary <- unique(time.riv.info$fi_fishid)
+  
+death.date <- death.date[fi_fishid %in% tag.list.tributary, ]
+death.date.info <- merge(death.date, fish.info, by = c("fi_fishid"))
+```
+```
+jpeg("All_river_excursions.jpg", width = 9, height=5,  units = 'in', res = 300 )
+ggplot(data = time.riv.info)+
+  geom_line(data = time.riv.info, aes(x = time_inriv, y  = fi_fishid_fac, group = interaction(fi_fishid,id_detect)), size = 1)+
+  geom_point(data = death.date.info, aes(y = fi_fishid, x = fs_active_till_utc), col = "red", size = 2)+
+  facet_wrap(~fi_species, scale = "free_y", ncol = 1)+
+  #geom_vline(xintercept = as.POSIXct("2017-11-21"), color = "red", size=1)+
+  theme(
+    text = element_text(size=15),
+    #axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.title.x=element_blank(),
+    strip.background = element_blank(),
+    panel.background = element_blank(),
+    panel.grid.major.x = element_line( size=.1, color="black" ),
+    panel.grid.major.y = element_line( size=.1, color="black" )
+  )
+dev.off()
+```
