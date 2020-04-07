@@ -10,13 +10,13 @@
 📗 `library(RPostgreSQL)`
 
 :books:
-```
-library(tidyverse)   
 
-library(data.table)
+`library(tidyverse)`     
+
+`library(data.table)`  
    
-library(RPostgreSQL)
-```
+`library(RPostgreSQL)`
+
 ```
 con <-  dbConnect(drv = PostgreSQL(), dbname ="teridb", host="10.0.37.1", user= "teriuser", password = "t3r1us3r!")
 
@@ -363,7 +363,7 @@ Application of function for detection of movement direction
 det_rivout[, move_direc := move_direction_river(rec_position), by = .(fi_fishid)]
 det_rivout[, date := as.Date(dd_timestamp_utc)]
 ```
-:interrobang: The _move_direction_river_ function is missing 
+:warning: The _move_direction_river_ function is missing 
 
 Subset of records indicating location change
 ```
