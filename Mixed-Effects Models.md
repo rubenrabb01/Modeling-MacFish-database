@@ -22,16 +22,7 @@ mean.ranged2d$fi_fishid <- as.numeric(mean.ranged2d$fi_fishid)
 ```
 Let's fit different null/intercept 2-level mixed-effects models:
 
-📗 `library(lmerTest)`
-
-
-
-
-
-
-
-
-
+:books: `library(lmerTest)`
 
 
 
@@ -109,7 +100,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 
 - The output shows warnings of non-convergence so let's try a different optimizer such as the _Nelder-Mead_ optimisation routine:
 
-📗 `library(optimx)`
+:books:`library(optimx)`
   
  ```
  model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi_fishid), data =mean.ranged2d,
@@ -129,9 +120,8 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 
 ### Results summary with transformation of variables
 
-📗 `library(jtools)`
-
-📗 `library(interactions)`       # jtools is now deprecated and all its functionalities have passed to the interactions package
+:books:`library(jtools)`
+:books:`library(interactions)`       # jtools is now deprecated and all its functionalities have passed to the interactions package
 
 #### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
 
@@ -257,7 +247,6 @@ boundary (singular) fit: see ?isSingular
 ```
 ```
 qqnorm(model.ranged2d)
-
 plot(model.ranged2d)
 ```
 
@@ -379,9 +368,8 @@ before fitting the model.
 
 ## MULTI-MODEL SELECTION AND INFERENCE
 
-📗 `library(rJava)`
-
-📗 `library(glmulti)`
+:books:`library(rJava)`
+:books:`library(glmulti)`
 
 ### Search best possible mixed-effects models fitted to the data
 
@@ -416,7 +404,7 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-:bangbang: Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+:warning: Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
 
 Define glmulti formula for fixed effects:
 
@@ -770,7 +758,7 @@ m2 24 71501 71671 -35727    71453 4.3571      4     0.3598
 
 #### 4. Using  the *lrtest* function in _lmtest_ library:
 
-📗 `library(lmtest)`
+:books: `library(lmtest)`
 
 ```diff
 + m1 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
@@ -839,7 +827,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - So, *model 2* is better than *model 1* but how is *model 2* compared to models 3 and 4?
 
-:bangbang: We can not compare models 2 and 3 using LRT as they have non-nested fixed terms despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values
+:warning: We can not compare models 2 and 3 using LRT as they have non-nested fixed terms despite their same random-effects structure. In this case we should look at their pseudo-R^2 and AIC values
 
 ```diff
 + m2 <- lmer(sqrt(ranged2d + 1) ~ 1 + fi_species + season + ca_tl_mm + season:fi_species + season:ca_tl_mm + (date|fi_fishid), REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), data=mean.ranged2d,na.action=na.omit)
@@ -911,7 +899,7 @@ overdisp_fun(m_final)
 
 ### Calculate marginal (associated with fixed effects) and conditional (fixed effects + random effects) R^2 values. These estimates are equivalent 
 
-📗 `library (MuMIn)`
+:books: `library (MuMIn)`
 
 ```
 r.squaredGLMM(m_final)  
@@ -951,7 +939,6 @@ summary(m_final)
 
 ```
 par(mfcol=c(1,2))
-
 Anova(m_final)
 ```
 ```
@@ -972,7 +959,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 - There is an interaction effect, and this can be represented as the adjusted mean of the response for the corresponding interaction of factors. Use the function _interactionMeans_ in the package _phia_ to obtain the adjusted mean and SE from the model coefficients:
 
-📗 `library(phia)`
+:books: `library(phia)`
 
 To obtain marginal means, specify only a factor. For example:
 
@@ -1028,8 +1015,8 @@ plot(m_final.means)      # plot(interactionMeans(m_final, factors=c("season","fi
 ### Plot marginal effects 
 
 ```
-library(sjPlot)
-library(ggplot2)
+:books:library(sjPlot)
+:books:library(ggplot2)
 theme_set(theme_sjplot())
 ```
 ### Re-fit the model using a Gamma distribution
@@ -1048,7 +1035,7 @@ Warning messages:
  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
  - Rescale variables?
 ```
-:bangbang:  The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
+:warning:  The model fitted is not optimal and we get warning message. We'll re-fit the model later but now let's continue analysing this model: 
 ```
 summ(m_final)
 ```
