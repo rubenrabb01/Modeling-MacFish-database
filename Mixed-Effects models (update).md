@@ -121,7 +121,8 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 ### Results summary with transformation of variables
 
 
-:books:`library(jtools)` 
+:books:`library(jtools)`
+
 :books:`library(interactions)` # jtools is now deprecated and all its functionalities have passed to the interactions package
 
 #### Transform and standardize the model results (obtain beta coefficients estimates, instead of frequentist Est ± SE)
