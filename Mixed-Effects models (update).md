@@ -372,6 +372,9 @@ before fitting the model.
 :books:`library(rJava)`
 :books:`library(glmulti)`
 
+:books:`library(rJava)`
+:books:`library(glmulti)` 
+
 ### Search best possible mixed-effects models fitted to the data
 
 Need to convert to factor to prevent errors:
