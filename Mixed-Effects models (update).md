@@ -369,7 +369,6 @@ before fitting the model.
 ## MULTI-MODEL SELECTION AND INFERENCE
 
 :books:`library(rJava)`
-
 :books:`library(glmulti)` 
 
 ### Search best possible mixed-effects models fitted to the data
@@ -459,6 +458,7 @@ fi_specieswels:seasonwinter         -2.91280872759e+00  9.52024929576e-01       
 
 ### Plots and model metrics
 
+:books: `library(effects)`
 ```
 plot(allEffects(glmulti.cand.mod@objects[[1]]),style="stacked",colors = c("black", "grey", "white"), rug = FALSE)
 ```
