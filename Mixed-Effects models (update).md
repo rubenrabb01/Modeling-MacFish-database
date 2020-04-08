@@ -370,9 +370,7 @@ before fitting the model.
 ## MULTI-MODEL SELECTION AND INFERENCE
 
 :books:`library(rJava)`
-:books:`library(glmulti)`
 
-:books:`library(rJava)`
 :books:`library(glmulti)` 
 
 ### Search best possible mixed-effects models fitted to the data
