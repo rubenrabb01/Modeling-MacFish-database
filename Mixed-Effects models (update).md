@@ -124,7 +124,7 @@ model.ranged2d <- lmer(sqrt(ranged2d+1) ~ fi_species*season + (1 + fi_species|fi
 :books:`library(data.table)`  
 :books:`library(RPostgreSQL)`
 
-```
+
 
 :books:`library(jtools)`
 
