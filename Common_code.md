@@ -35,7 +35,6 @@ range.d2d <- dist2dam.dt[day.count > 89, .(min.dist = quantile(distfromdam,0.005
 range.d2d.lg.t <- melt(range.d2d, id= c("date", "fi_fishid"), measure.vars = c("min.dist",  "max.dist"))
 range.d2d.lg <- merge(range.d2d.lg.t, fish.info, by= c("fi_fishid"))
 ```
-
 Daily difference between min and max distance from dam 
 
 ```
@@ -44,7 +43,6 @@ mean.ranged2d <- merge(mean.ranged2d.t, fish.info, by= c("fi_fishid"))
 mean.ranged2d[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 mean.ranged2d[, month := month(date)]
 ```
-
 Setting of seasons
 
 ```
@@ -56,7 +54,6 @@ mean.ranged2d[date > "2018-03-20" & date <= "2018-08-20", season := "spring_II"]
 
 setkey(mean.ranged2d,ca_weight_g)
 ```
-
 Calculation of difference between maximum and minimum distance as daily range
 
 ```
@@ -66,7 +63,6 @@ full.range.season[, fish.name := paste(ca_weight_g/1000,"kg ", fi_sex, sep="")]
 
 setkey(full.range.season,ca_weight_g)
 ```
-
 Calculation of body condition (residuals of the regression of body mass on body length)
 
 ```
@@ -74,13 +70,6 @@ condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
 summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
-
-
-```
-group_ranged2d <- data.table(group = ranged2d.cld$.group, season = ranged2d.cld$season, species = ranged2d.cld$fi_species)
-group_ranged2d[, label := paste(group, species, sep = "-")]
-```
-
 ### Calculation of overall longtudional range from mean daily distance from a dam 
 
 ```
@@ -228,7 +217,6 @@ time.riv.info <- merge(time.riv, fish.info, by = c("fi_fishid"))
 time.riv.info[, fi_fishid_fac := factor(fi_fishid, levels = sumtime.rivout$fi_fishid, ordered = T)]
 ```
 Get death time of fish 
-
 ```
 select.deathdate.qu <- paste("SELECT fi_fishid, fs_active_till_utc FROM teri.fishstatus
                              WHERE
@@ -267,7 +255,6 @@ dev.off()
 ### Calculation of time spent in the river 
 
 Select release date
-
 ```
 select.releasedate.qu <- paste("SELECT fi_fishid, ca_timestamp_release_utc FROM teri.capture
                              WHERE
@@ -311,7 +298,6 @@ det_rivout_summer <- data.table(dbGetQuery(con, select.detections.qu ))
 Rename receivers to get the same name for winter array
 
 *rec_position == 1* , the receiver closest to the river
-
 ```
 det_rivout_summer[ht_hsn == 1500119 , rec_position := 2]
 det_rivout_summer[ht_hsn == 1500118 , rec_position := 1]
@@ -336,7 +322,6 @@ det_rivout <- rbind(det_rivout_summer, det_rivout_winter )
 det_rivout[, no_det := length(dd_timestamp_utc), by = .(fi_fishid)]
 ```
 Get only relevant fish (fish with more than x counts specified by number of days)
-
 ```
 valid.fish <- unique(dist2dam.dt$fi_fishid)
 det_rivout <- det_rivout[no_det > 1 & rec_position %in% c(1,2) & fi_fishid %in% valid.fish,] 
@@ -440,7 +425,6 @@ dev.off()
 ### Calculation of step length and NSD 
 
 **NSD  - D2Dt0 distance to dam in time 0**
-
 ```
 cum.activity[, D2Dt0 := meand2d[1], by = fi_fishid]
 cum.activity[, NetDist := sqrt((meand2d - D2Dt0)^2)]
