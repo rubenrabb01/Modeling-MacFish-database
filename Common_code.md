@@ -75,13 +75,7 @@ summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
 
-Combine dfs by _fi_fishid_
 
-```
-fish.capture2 <- as.data.table(fish.capture[,1:3])
-
-mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
-```
 ```
 group_ranged2d <- data.table(group = ranged2d.cld$.group, season = ranged2d.cld$season, species = ranged2d.cld$fi_species)
 group_ranged2d[, label := paste(group, species, sep = "-")]
@@ -483,7 +477,15 @@ dev.off()
 ```
 ![NSD_wels](/Plots/wels_NSD.png "NSD_wels")
 
+### Create a new dataframe including all variables
 
+:books:`library(plyr)`
+```
+fish.capture2 <- as.data.table(fish.capture[,1:3])
+mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
+mean_depth_dt <- subset(mean_depth_dt,  select=c(fi_fishid, mean_depth))
+data <- join(mean.ranged2d,subset1, by="fi_fishid", type="inner")
+```
 
 
 
