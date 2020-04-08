@@ -380,6 +380,7 @@ Need to convert to factor to prevent errors:
 ```
 data$fi_species <- as.factor(data$fi_species)
 data$season <- as.factor(data$season)
+data$fi_sex <- as.factor(data$fi_sex)
 ```
 
 Transfom character variable *fi_fishid* to a numeric index:
@@ -391,7 +392,7 @@ data$fi_fishid <- as.numeric(factor(data$fi_fishid, levels=unique(data$fi_fishid
 Define a mixed-effects function:
 
 ```
-mixed.glmulti<-function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=data,REML=T,...)}
+mixed.glmulti <- function(formula,data,random="",...){lmer(paste(deparse(formula),random),data=data,REML=T,...)}
 ```
 
 Apply correction to *getfit* function in order to allow integration between *glmulti* and *lme4*:
@@ -406,18 +407,18 @@ if (length(dimnames(summ)[[1]])==1) {
 cbind(summ1, df=rep(10000,length(fixef(object))))
 })
 ```
-:warning: Using lmer in glmulti makes the coef() function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
+:warning: Using _lmer_ in _glmulti_ makes the _coef()_ function invalid. The above is a bugfix correction that needs to be ran before running multi-model selection and inference
 
 Define glmulti formula for fixed effects:
 
 ```
-model.glmulti = as.formula(paste("sqrt(ranged2d+1) ~ 1 + fi_species + season + ca_tl_mm"))
+model.glmulti = as.formula(paste("meand2d ~ 1 + season + ca_tl_mm + ca_weight_g + fi_sex + ca_lat_catch + ca_lon_catch + mean_depth"))
 ```
 
 Define a candidate models object and run multi-model selection and inference:
 
 ```
-glmulti.cand.mod <- glmulti(model.glmulti,random="+(date|fi_fishid)",data=data,
+glmulti.cand.mod <- glmulti(model.glmulti,random=" + (season|fi_fishid)",data=data,
 method="h",fitfunc=mixed.glmulti, intercept=TRUE,marginality=TRUE,level=2,crit=aicc,bunch=3000,confsetsize = 150, plotty = F, report = T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"),na.action=na.omit)
 ```
 
