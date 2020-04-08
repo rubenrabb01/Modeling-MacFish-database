@@ -468,7 +468,7 @@ dev.off()
 fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
 mean_depth_dt <- subset(mean_depth_dt,  select=c(fi_fishid, mean_depth))
-data <- join(mean.ranged2d,subset1, by="fi_fishid", type="inner")
+data <- join(mean.ranged2d,mean_depth_dt, by="fi_fishid", type="inner")
 ```
 
 
