@@ -70,7 +70,7 @@ condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
 summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
-### Calculation of overall longtudional range from mean daily distance from a dam 
+### Calculation of overall longitudinal range from mean daily distance from a dam 
 
 ```
 distance.range.t <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d)), by = .(fi_fishid, season)] 
