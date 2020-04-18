@@ -17,8 +17,7 @@ First, transform variables:
 ```
 data$season <- as.factor(data$season)
 data$fi_species <- as.factor(data$fi_species)
-data$fi_fishid <- as.factor(data$fi_fishid)
-data$fi_fishid <- as.numeric(data$fi_fishid)
+data$res_part <- as.factor(data$res_part)
 ```
 Let's fit different null/intercept 2-level mixed-effects models:
 
