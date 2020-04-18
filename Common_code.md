@@ -509,7 +509,11 @@ Subset prefernce of reservoir parts and merge with full data
 data.res.parts <- subset(parts.pref.info,  select=c(fi_fishid, res_part))
 data <- merge(data, data.res.parts, by = c("fi_fishid"))
 ```
-
+Subset death rate and merge with full data 
+```
+data.death.date.info <- subset(death.date.info,  select=c(fi_fishid, fs_active_till_utc))
+data <- merge(data, data.death.date.info, by = c("fi_fishid"))
+```
 
 
 
