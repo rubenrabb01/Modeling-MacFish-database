@@ -489,7 +489,6 @@ parts.pref.full <- unique(dist2dam.dt[,.(fi_fishid, date, res_part)])
 ### Create a new dataframe including all variables
 
 :books:`library(dplyr)`
-```
 
 Merge mean range with fish captures 
 ```
