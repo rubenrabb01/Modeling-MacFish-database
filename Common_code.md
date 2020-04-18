@@ -461,6 +461,36 @@ dev.off()
 ```
 ![NSD_wels](/Plots/wels_NSD.png "NSD_wels")
 
+
+### Define preference of reservoir parts 
+
+Reservoir parts division according to distance from the dam:
+
+- dam part  - 0 - 1800 m
+- middle part - 1800 - 5200
+- upper part - 5200 - 6600
+- tributary - > 6600
+
+Division to parts
+
+```
+dist2dam.dt[distfromdam <= 1800, res_part := "dam"]
+dist2dam.dt[distfromdam > 1800 & distfromdam <= 5200, res_part := "middle"]
+dist2dam.dt[distfromdam > 5200 & distfromdam <= 6600, res_part := "upper"]
+dist2dam.dt[distfromdam > 6600, res_part := "tributary"]
+```
+
+Daily use - visited reservoir parts by each fish and day
+
+```
+parts.pref.full <- unique(dist2dam.dt[,.(fi_fishid, date, res_part)])
+```
+
+Merge with fish informations 
+```
+parts.pref.info <- merge(parts.pref.full, fish.info, by = c("fi_fishid"))
+```
+
 ### Create a new dataframe including all variables
 
 :books:`library(dplyr)`
