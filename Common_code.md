@@ -514,6 +514,11 @@ Subset death rate and merge with full data
 data.death.date.info <- subset(death.date.info,  select=c(fi_fishid, fs_active_till_utc))
 data <- merge(data, data.death.date.info, by = c("fi_fishid"))
 ```
+Subset active time and merge with full data 
+```
+data.prop_time_trib <- subset(prop_time_trib,  select=c(fi_fishid, sum.time, timeactive, prop_time))
+data<- merge(data, data.prop_time_trib , by = c("fi_fishid"))
+```
 
 
 
