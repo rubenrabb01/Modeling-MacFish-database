@@ -507,7 +507,7 @@ parts.pref.info <- merge(parts.pref.full, fish.info, by = c("fi_fishid"))
 Subset prefernce of reservoir parts and merge with full data 
 ```
 data.res.parts <- subset(parts.pref.info,  select=c(fi_fishid, res_part))
-data<- merge(data, data.res.parts , by = c("fi_fishid"))
+data <- merge(data, data.res.parts, by = c("fi_fishid"))
 ```
 
 
