@@ -486,19 +486,29 @@ Daily use - visited reservoir parts by each fish and day
 parts.pref.full <- unique(dist2dam.dt[,.(fi_fishid, date, res_part)])
 ```
 
-Merge with fish informations 
-```
-parts.pref.info <- merge(parts.pref.full, fish.info, by = c("fi_fishid"))
-```
-
 ### Create a new dataframe including all variables
 
 :books:`library(dplyr)`
 ```
+
+Merge mean range with fish captures 
+```
 fish.capture2 <- as.data.table(fish.capture[,1:3])
 mean.ranged2d <- merge(mean.ranged2d,fish.capture2, by="fi_fishid")
+```
+Subset mean depth and join with mean daily range  
+```
 mean_depth_dt <- subset(mean_depth_dt,  select=c(fi_fishid, date, mean_depth))
 data <- full_join(mean.ranged2d, mean_depth_dt, by = c("fi_fishid", "date"))
+```
+Merge preference of reservoir parts with fish information
+```
+parts.pref.info <- merge(parts.pref.full, fish.info, by = c("fi_fishid"))
+```
+Subset prefernce of reservoir parts and merge with full data 
+```
+data.res.parts <- subset(parts.pref.info,  select=c(fi_fishid, res_part))
+data<- merge(data, data.res.parts , by = c("fi_fishid"))
 ```
 
 
