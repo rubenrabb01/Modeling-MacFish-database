@@ -506,8 +506,9 @@ parts.pref.info <- merge(parts.pref.full, fish.info, by = c("fi_fishid"))
 ```
 Subset preference of reservoir parts and merge with full data 
 ```
-data.res.parts <- subset(parts.pref.info,  select=c(fi_fishid, res_part))
-data <- merge(data, data.res.parts, by = c("fi_fishid"))
+data.res.parts <- subset(parts.pref.info,  select=c(fi_fishid, date, res_part))
+data_poglm <- merge(data, data.res.parts, by = c("fi_fishid", "date"))
+data_poglm <- subset(data_poglm,  select=c(fi_fishid, ca_tl_mm, ca_weight_g, fi_species, season, ca_lat_catch, ca_lon_catch, mean_depth, res_part))
 ```
 Subset death rate and merge with full data 
 ```
