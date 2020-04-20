@@ -56,10 +56,10 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 
 :books:`library(ART)`     
 :books:`library(mlogit)`  
-:books:`library(AICcmodavg)`
-:books:`library(MASS)`
-:books:`library(effects)` 
-:books:`library(lme4)`
-:books:`library(languageR)`
-:books:`library(ordinal)`  
+:books:`library(AICcmodavg)` 
+:books:`library(MASS)` 
+:books:`library(effects)`  
+:books:`library(lme4)` 
+:books:`library(languageR)` 
+:books:`library(ordinal)`   
 
