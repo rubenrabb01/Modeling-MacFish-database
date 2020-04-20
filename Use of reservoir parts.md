@@ -14,7 +14,7 @@ Count use of reservoir parts by season
 ```
 data_poglm <- data_poglm %>% add_count(season, fi_fishid, res_part)
 ```
-Create a new ordered response variable for res_part with 4 categories (0-4) and rename variable body size
+Create a new ordered response variable for res_part with 4 categories (0-3) and rename variable body size
 ```
 data_poglm$res_part_order <- revalue(data_poglm$res_part,c("dam"="0", "middle"="1", "upper"="2", "tributary"="3"))
 colnames(data_poglm)[5] <- "body_size"
