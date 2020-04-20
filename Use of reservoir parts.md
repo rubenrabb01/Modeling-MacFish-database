@@ -39,8 +39,8 @@ winter <- subset(data_poglm,season=="winter")
 
 Our logic for the ordered response in use of reservoir parts is as follows:
 
-- Dam: "0" (Fish show closeness to source and low displacement from it (Stationarity))
-- Middle: "1" (Fish move from dam (out of stationarity))
+- Dam: "0" (Fish show closeness to source and low displacement from it)
+- Middle: "1" (Fish move from dam)
 - Upper: "2" (Fish cover long distance from dam)
 - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
 
