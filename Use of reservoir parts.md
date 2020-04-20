@@ -44,4 +44,14 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 - Upper: "2" (Fish cover long distance from dam)
 - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
 
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
+
+
 
