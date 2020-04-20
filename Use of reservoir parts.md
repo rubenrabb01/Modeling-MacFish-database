@@ -35,13 +35,13 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-### Fit Proportional Odds Model for ordered response of use of reservoir parts
+### Fit Proportional Odds Model to the use of reservoir parts
 
-Our logic is as follows:
+Our logic for the ordered response in use of reservoir parts is as follows:
 
-- Dam: Fish show closeness to source and low displacement from it (Stationarity)
-- Middle: Fish move from dam (out of stationarity)
-- Upper: Fish cover long distance from dam
-- Tributary: Maximum displacement from dam (high prey activity - predation)
+- Dam: "0" ; Fish show closeness to source and low displacement from it (Stationarity)
+- Middle: "1" ; Fish move from dam (out of stationarity)
+- Upper: "2" ; Fish cover long distance from dam
+- Tributary: "3" ; Maximum displacement from dam (high prey activity - predation)
 
 
