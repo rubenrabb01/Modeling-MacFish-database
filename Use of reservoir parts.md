@@ -65,10 +65,8 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
 
-Select random-effects by fitting two _POGLMMs_ and comparing them with LRT
-
+Select random-effects by fitting a series of _POGLMMs_ 
 ```
-
 Cand.mod<-matrix(ncol=1,nrow=11)
 colnames(Cand.mod)<-c("BIC")
 rownames(Cand.mod)<-c(1:11)
@@ -105,8 +103,7 @@ both[do.call(order, both[c("BIC")]), ]
 4      4 12445.84
 1      1 26286.37
 ```
-Fit models including predictors using the random-effects structure of the bestfit model (5)
-
+Fit models including predictors using the random-effects structure of the best-fit model (5)
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
 colnames(Cand.mod)<-c("BIC")
@@ -130,7 +127,6 @@ both<-data.frame(1:11,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
 
-
    model      BIC
 9      9 10845.35
 6      6 10846.90
@@ -144,7 +140,7 @@ both[do.call(order, both[c("BIC")]), ]
 8      8 10850.79
 5      5 10852.72
 ```
-Five best models
+Rename five best models
 ```
 m9<-clmm(res_part_order ~ 1 + mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
 m6<-clmm(res_part_order ~ 1 + body_size+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
@@ -152,9 +148,11 @@ m11<-clmm(res_part_order ~ 1 + mean_depth+fi_species+(1| fi_species) + (1 + mean
 m4<-clmm(res_part_order ~ 1 + body_size*fi_species+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
 m7<-clmm(res_part_order ~ 1 + body_size*mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
 ```
-Compare the first best model with the other four best models
+Compare the first best model with the others 
 ```
 lrtest(m9,m6)
+```
+```
 Likelihood ratio test
 
 Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
@@ -164,8 +162,11 @@ Model 2: res_part_order ~ 1 + body_size + mean_depth + (1 | fi_species) +
   #Df  LogLik Df  Chisq Pr(>Chisq)
 1   8 -5414.7                     
 2   9 -5414.5  1 0.4488     0.5029
-
+```
+```
 lrtest(m9,m11)
+```
+```
 Likelihood ratio test
 
 Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
@@ -175,7 +176,11 @@ Model 2: res_part_order ~ 1 + mean_depth + fi_species + (1 | fi_species) +
   #Df  LogLik Df  Chisq Pr(>Chisq)
 1   8 -5414.7                     
 2  10 -5413.7  2 1.8917     0.3883
-> lrtest(m9,m4)
+```
+```
+lrtest(m9,m4)
+```
+```
 Likelihood ratio test
 
 Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
@@ -185,8 +190,11 @@ Model 2: res_part_order ~ 1 + body_size * fi_species + mean_depth + (1 |
   #Df  LogLik Df  Chisq Pr(>Chisq)
 1   8 -5414.7                     
 2  13 -5411.2  5 7.0085       0.22
-
-lrtest(m9,m7)              # m11 is the absolute best model
+```
+```
+lrtest(m9,m7)             
+```
+```
 Likelihood ratio test
 
 Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
@@ -197,6 +205,7 @@ Model 2: res_part_order ~ 1 + body_size * mean_depth + (1 | fi_species) +
 1   8 -5414.7                     
 2  10 -5414.3  2 0.7465     0.6885
 ```
+Model m11 is the absolute best model
 
 
 
