@@ -103,7 +103,7 @@ both[do.call(order, both[c("BIC")]), ]
 4      4 12445.84
 1      1 26286.37
 ```
-:part_alternation_mark: _Alternatively, compare the two most common RF models
+:part_alternation_mark: _Alternatively_, compare the two most common RF models
 ```
 m_id<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm, link="logit",Hess=T)
 m_id_sp<-clmm(res_part_order ~ 1  + (1| fi_fishid) + (1 | fi_species),data = data_poglm, link="logit",Hess=T)
