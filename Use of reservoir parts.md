@@ -67,4 +67,43 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 
 Select random-effects by fitting two POGLMMs and comparing with LRT
 
+```
+Cand.models3<-matrix(ncol=1,nrow=11)
+colnames(Cand.models3)<-c("BIC")
+rownames(Cand.models3)<-c(1:11)
+
+Cand.models3[1,]<-AIC(clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[2,]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species/fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[3,]<-AIC(clmm(res_part_order ~ 1  + (1 + fi_species| fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[4,]<-AIC(clmm(res_part_order ~ 1  + (1 + fi_species| fi_fishid) + (0 + fi_species| fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[5,]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[6,]<-AIC(clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[7,]<-AIC(clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[8,]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + body_size | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[9,]<-AIC(clmm(res_part_order ~ 1  + (1 + body_size| fi_species) + (1 | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[10,]<-AIC(clmm(res_part_order ~ 1  + (1 + body_size| fi_species) + (1 + body_size | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+Cand.models3[11,]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + date | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+
+Cand.models3
+sort(Cand.models3)
+both<-data.frame(1:11,Cand.models3)
+names(both)<-c("model","BIC")
+both[do.call(order, both[c("BIC")]), ]
+```
+```
+   model      BIC
+5      5 10849.23
+7      7 10851.23
+6      6 11500.64
+11    11 12426.27
+2      2 12426.80
+8      8 12429.32
+9      9 12430.80
+10    10 12433.32
+3      3 12433.84
+4      4 12445.84
+1      1 26286.37
+```
+
+
 
