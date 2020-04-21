@@ -259,7 +259,7 @@ plot(allEffects(para_plot,xlevels=list( seq(405,1660,length=2),fi_species=c("pik
 ```
 ![Res_part_use](/Plots/Res_part_use_6.png "Res_part_use")
 
-## Fit models split by season
+## Model fit by season: SPRING_I
 
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
