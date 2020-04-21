@@ -223,7 +223,13 @@ plot(allEffects(m6,xlevels=list(res_part=seq(0,3,length=2))),rug = FALSE)
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
 
-- Taking 
+- Taking m7 we can see the relationship between body size and water depth
+´´´
+plot(allEffects(m7,xlevels=list( seq(405,1660,length=2),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",
+main="Selection of reservoir parts according to body size and water depth",xlab="Body size",ylab="Response probability",colors = c("white", "grey", "red","green"))
+```
+![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
+
 
 
 
