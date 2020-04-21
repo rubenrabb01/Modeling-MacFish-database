@@ -248,5 +248,13 @@ plot(allEffects(m72,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 ```
 ![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
 
+- If we fit a model of the Species x Size interaction dropping the slope variance between species 
+```
+m_id_sp<-clmm(res_part_order ~ body_size*fi_species+(1| fi_fishid)+(1|fi_species),data = data_poglm, link="logit",Hess=T)
+```
+```
+plot(allEffects(para_plot,xlevels=list( seq(405,1660,length=2),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", main="Selection of reservoir parts by pike, pikerpech and wels",xlab="Body size",ylab="Response probability",colors = c("white", "grey", "red","green"))
+```
+![Res_part_use](/Plots/Res_part_use_6.png "Res_part_use")
 
 
