@@ -212,11 +212,15 @@ Model 2: res_part_order ~ 1 + body_size * mean_depth + (1 | fi_species) +
 1   8 -5414.7                     
 2  10 -5414.3  2 0.7465     0.6885
 ```
-Model m9 is the absolute best model. However, we want test the hypothesis that body size differences ebtween species relate to selection on reservoir parts. For example, taking m6 how are body size and depth related to reservoir use?
+Model m9 is the absolute best model. However, we want test the hypothesis that body size differences ebtween species relate to selection on reservoir parts. 
+
+- Taking m4, are body size and depth related to reservoir use?
 ```
 plot(allEffects(m6,xlevels=list(res_part=seq(0,3,length=2))),rug = FALSE)
 ```
-![Res_part_use](/Plots/Res_part_use.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_1.png "Res_part_use")
+
+- Taking 
 
 
 
