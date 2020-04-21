@@ -19,6 +19,26 @@ Create a new ordered response variable for res_part with 4 categories (0-3) and 
 data_poglm$res_part_order <- revalue(data_poglm$res_part,c("dam"="0", "middle"="1", "upper"="2", "tributary"="3"))
 colnames(data_poglm)[5] <- "body_size"
 ```
+| fi_fishid | date       | ranged2d  | meand2d   | body_size | a_weight_g | _species fish.name | season r | 3_condition d | iff_mean_dist c | um_displac c | a_lat_catch c | a_lon_catch | mean_depth | res_part  | res_part_order |
+|-----------|------------|-----------|-----------|-----------|------------|--------------------|----------|---------------|-----------------|--------------|---------------|-------------|------------|-----------|----------------|
+| T449202_1 | 18/08/2017 | 784.0089  | 8159.387  | 430       | 605        | pikeperch 0.605kg  | summer   | 0.9951284     | 392.0045        | 31275.1      | 48.82551      | 14.4848     | 1.4189065  | middle    | 1              |
+| T449202_1 | 19/05/2017 | 833.4517  | 4841.902  | 430       | 605        | pikeperch 0.605kg  | spring_I | 0.9951284     | 943.9389        | 12855.3      | 48.82551      | 14.4848     | 0.9358156  | middle    | 1              |
+| T449202_1 | 22/01/2018 | 542.878   | 5978.06   | 430       | 605        | pikeperch 0.605kg  | winter   | 0.9951284     | 0               | 70718.22     | 48.82551      | 14.4848     | 7.9581821  | upper     | 2              |
+| T449202_1 | 25/01/2018 | 0         | 8551.391  | 430       | 605        | pikeperch 0.605kg  | winter   | 0.9951284     | 1150.9461       | 73291.55     | 48.82551      | 14.4848     | 1.6873192  | dam       | 0              |
+| T449202_1 | 24/01/2018 | 2301.8921 | 7400.445  | 430       | 605        | pikeperch 0.605kg  | winter   | 0.9951284     | 1422.3851       | 72140.61     | 48.82551      | 14.4848     | 5.5925592  | upper     | 2              |
+| T449276_1 | 16/08/2017 | 0         | 8551.391  | 1030      | 6150       | wels               | summer   | -1.166162     | 392.00447       | 48308.1064   | 48.81964      | 14.48151    | 0.8217852  | middle    | 1              |
+| T449276_1 | 17/08/2017 | 0         | 8551.391  | 1030      | 6150       | wels               | summer   | -1.166162     | 0               | 48308.1064   | 48.81964      | 14.48151    | 0.7696016  | middle    | 1              |
+| T449276_1 | 19/08/2017 | 784.0089  | 8159.387  | 1030      | 6150       | wels               | summer   | -1.166162     | 392.00447       | 48700.1109   | 48.81964      | 14.48151    | 0.6493313  | middle    | 1              |
+| T449276_1 | 20/08/2017 | 2129.6148 | 7486.584  | 1030      | 6150       | wels               | summer   | -1.166162     | 672.80295       | 49372.9139   | 48.81964      | 14.48151    | 0.6721918  | dam       | 0              |
+| T449276_1 | 21/08/2017 | 2093.8532 | 7504.465  | 1030      | 6150       | wels               | summer   | -1.166162     | 17.88084        | 49390.7947   | 48.81964      | 14.48151    | 0.8017406  | tributary | 3              |
+| T449271_1 | 12/08/2017 | 536.58324 | 1704.9477 | 915       | 6000       | pike               | summer   | -0.4725495    | 421.376664      | 30422.85     | 48.83096      | 14.47816    | 1.8903981  | upper     | 2              |
+| T449271_1 | 13/08/2017 | 215.65067 | 1666.3076 | 915       | 6000       | pike               | summer   | -0.4725495    | 38.640087       | 30461.49     | 48.83096      | 14.47816    | 1.7303804  | upper     | 2              |
+| T449271_1 | 17/08/2017 | 12:17:24  | 2402.5503 | 915       | 6000       | pike               | summer   | -0.4725495    | 11.49795        | 31197.73     | 48.83096      | 14.47816    | 5.6171613  | upper     | 2              |
+| T449271_1 | 18/08/2017 | 22:07:05  | 2371.9243 | 915       | 6000       | pike               | summer   | -0.4725495    | 30.626023       | 31228.36     | 48.83096      | 14.47816    | 5.7136752  | tributary | 3              |
+| T449271_1 | 23/12/2017 | 17:04:54  | 6905.8552 | 915       | 6000       | pike               | winter   | -0.4725495    | 656.35587       | 102362.07    | 48.83096      | 14.47816    | 3.0325587  | upper     | 2              |
+
+
+
 Convert variables for analysis
 ```
 data_poglm$season <- as.factor(data_poglm$season)
@@ -35,7 +55,7 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-### Fit Proportional Odds Model to the use of reservoir parts
+### Fit Proportional Odds Model (POGLMM) to the use of reservoir parts
 
 Our logic for the ordered response in use of reservoir parts is as follows:
 
@@ -52,4 +72,7 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 :books:`library(lme4)`  
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
+
+Select random-effects by fitting two POGLMMs and comparing with LRT
+
 
