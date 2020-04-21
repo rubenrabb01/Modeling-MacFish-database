@@ -231,7 +231,22 @@ main="Selection of reservoir parts according to body size and water depth",xlab=
 ```
 ![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
 
+- Fitting two additional models of the interactions Species x Depth and Species X Size, and accounting for variation in the slope of mean_depth beetween species
+```
+m71<-clmm(res_part_order ~ 1 + fi_species*mean_depth+(1| fi_species:fi_fishid) + (1 + mean_depth | fi_species),data = data_poglm, link="logit",Hess=T)
+```
+```
+plot(allEffects(m71,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
+```
+![Res_part_use](/Plots/Res_part_use_4.png "Res_part_use")
 
+```
+m72<-clmm(res_part_order ~ 1 + fi_species*body_size+(1| fi_species:fi_fishid) + (1 + mean_depth | fi_species),data = data_poglm, link="logit",Hess=T)
+```
+```
+plot(allEffects(m72,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
+```
+![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
 
 
 
