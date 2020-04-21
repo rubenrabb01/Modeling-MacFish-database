@@ -220,9 +220,9 @@ plot(allEffects(m6,xlevels=list(res_part=seq(0,3,length=2))),rug = FALSE)
 ```
 ![Res_part_use](/Plots/Res_part_use_1.png "Res_part_use")
 
-
-
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
+
+![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
 
 
 - Taking 
