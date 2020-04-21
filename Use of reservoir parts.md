@@ -260,6 +260,7 @@ plot(allEffects(para_plot,xlevels=list( seq(405,1660,length=2),fi_species=c("pik
 ![Res_part_use](/Plots/Res_part_use_6.png "Res_part_use")
 
 ## Fit models split by season
+
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
 colnames(Cand.mod)<-c("BIC")
@@ -284,6 +285,7 @@ both<-data.frame(1:11,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
 ```
+```
   model      BIC
 5      5 2259.284
 7      7 2262.461
@@ -303,7 +305,7 @@ m7<-clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 + mean_depth | 
 m6<-clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 | fi_species:fi_fishid),data = spring_I, link="logit",Hess=T)
 m1<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
 m2<-clmm(res_part_order ~ 1  + (1| fi_species/fi_fishid),data = spring_I, link="logit",Hess=T)
-
+```
 **m5** is the best model
 
 ```
@@ -330,7 +332,7 @@ both<-data.frame(1:11,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
 ```
-
+```
   model      BIC
 4      4 2258.554
 1      1 2259.284
