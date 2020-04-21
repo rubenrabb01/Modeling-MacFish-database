@@ -1,5 +1,5 @@
 
-# Is there selection on the use of different reservoir parts?
+# Is there selection on the use of reservoir parts?
 
 ### Create a dataframe including reservoir parts 
 
