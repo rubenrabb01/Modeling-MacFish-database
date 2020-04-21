@@ -65,7 +65,7 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
 
-Select random-effects by fitting two POGLMMs and comparing with LRT
+Select random-effects by fitting two _POGLMMs_ and comparing them with LRT
 
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
