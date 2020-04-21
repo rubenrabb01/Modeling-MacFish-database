@@ -65,7 +65,7 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
 
-Select random-effects by fitting a series of _POGLMMs_ 
+Select random-effects by fitting a series of (null) _POGLMMs_ including slope models allowing variation of mean_depth and body_size across species and individuals 
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
 colnames(Cand.mod)<-c("BIC")
@@ -103,6 +103,13 @@ both[do.call(order, both[c("BIC")]), ]
 4      4 12445.84
 1      1 26286.37
 ```
+:part_alternation_mark: _Alternatively, compare the two most common RF models
+```
+m_id<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm, link="logit",Hess=T)
+m_id_sp<-clmm(res_part_order ~ 1  + (1| fi_fishid) + (1 | fi_species),data = data_poglm, link="logit",Hess=T)
+```
+**m_id_sp** is preferred over **m_id 
+
 Fit models including predictors using the random-effects structure of the best-fit model (5)
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
