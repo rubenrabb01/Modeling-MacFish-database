@@ -462,6 +462,8 @@ plot(allEffects(m41,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("
 ![Res_part_use](/Plots/Res_part_use_104.png "Res_part_use")
 ```
 m_range_slope<-clmm(res_part_order ~ 1 + body_size*fi_species+(1 + ranged2d | fi_fishid),data = spring_I, link="logit",Hess=T)
+```
+```
 plot(allEffects(m42,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", ylab="Response probability",colors = c("white", "grey", "red","green"))
 ```
 ![Res_part_use](/Plots/Res_part_use_105.png "Res_part_use")
