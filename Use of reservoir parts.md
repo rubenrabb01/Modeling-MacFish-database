@@ -280,13 +280,11 @@ A model to allow daily variation of horizontal activity
 m_int_sp<-clmm(res_part_order ~ 1 + body_size+fi_species*mean_depth+(1| fi_fishid) + (1 + ranged2d | date),data = data_poglm, link="logit",Hess=T)
 ```
 ```
-plot(allEffects(m_int_sp,xlevels=list(mean_depth=seq(0.35,11,length=30),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",
-xlab=c("Body size","Mean depth"),ylab="Response probability",colors = c("white", "grey", "red","green"))
+plot(allEffects(m_int_sp,xlevels=list(mean_depth=seq(0.35,11,length=30),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", xlab=c("Body size","Mean depth"),ylab="Response probability",colors = c("white", "grey", "red","green"))
 ```
 ![Res_part_use](/Plots/Res_part_use_101.png "Res_part_use")
 ```
-plot(allEffects(m_int_sp,xlevels=list(mean_depth=seq(1,20,length=3),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",
- xlab="Mean depth",ylab="Response probability",colors = c("white", "grey", "red","green"))
+plot(allEffects(m_int_sp,xlevels=list(mean_depth=seq(1,20,length=3),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", xlab="Mean depth",ylab="Response probability",colors = c("white", "grey", "red","green"))
 ```
 ![Res_part_use](/Plots/Res_part_use_102.png "Res_part_use")
 
