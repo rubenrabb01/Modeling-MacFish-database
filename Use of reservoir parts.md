@@ -446,5 +446,7 @@ Model 2: res_part_order ~ 1 + mean_depth + fi_species + (1 | fi_species) +
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
 - m4 is the absolute best model
-
-
+```
+plot(allEffects(m4,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", ylab="Response probability",colors = c("white", "grey", "red","green"))
+```
+![Res_part_use](/Plots/Res_part_use_103.png "Res_part_use")
