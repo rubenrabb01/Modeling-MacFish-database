@@ -450,3 +450,20 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 plot(allEffects(m4,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", ylab="Response probability",colors = c("white", "grey", "red","green"))
 ```
 ![Res_part_use](/Plots/Res_part_use_103.png "Res_part_use")
+
+How the probability of use certain reservoir parts change according to changes in daily horizontal movement?
+Fit two additional models with different random-effects structure
+```
+m_id_sp_inter<-clmm(res_part_order ~ 1 + body_size*fi_species+(1| fi_species) + (1 | fi_fishid),data = spring_I, link="logit",Hess=T)
+```
+```
+plot(allEffects(m41,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", ylab="Response probability",colors = c("white", "grey", "red","green"))
+```
+![Res_part_use](/Plots/Res_part_use_104.png "Res_part_use")
+```
+m_range_slope<-clmm(res_part_order ~ 1 + body_size*fi_species+(1 + ranged2d | fi_fishid),data = spring_I, link="logit",Hess=T)
+plot(allEffects(m42,xlevels=list(body_size=seq(405,1660,length=1),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked", ylab="Response probability",colors = c("white", "grey", "red","green"))
+```
+![Res_part_use](/Plots/Res_part_use_105.png "Res_part_use")
+
+_pikeperch_ show increased use of dam with larger body size. However, including the slope of _ranged2d_, the probability of using the tributary part increases with body size. This means that the variability in horizontal movement allows for larger travels independently of body size 
