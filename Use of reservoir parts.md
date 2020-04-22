@@ -259,7 +259,7 @@ plot(allEffects(para_plot,xlevels=list( seq(405,1660,length=2),fi_species=c("pik
 ```
 ![Res_part_use](/Plots/Res_part_use_6.png "Res_part_use")
 
-Finally, let's fit two interaction models
+Finally, let's fit some interaction models
 ```
 m_int_species<-clmm(res_part_order ~ body_size*mean_depth*fi_species+(1| fi_fishid),data = data_poglm, link="logit",Hess=T)
 ```
@@ -274,6 +274,15 @@ m_int_season<-clmm(res_part_order ~ body_size*mean_depth*season+(1| fi_fishid),d
 plot(allEffects(m_int_season,xlevels=list( seq(405,1660,length=2),season=c("spring_I","spring_II","autumn","summer","winter"))), rug = FALSE, style = "stacked", main="Selection of reservoir parts for different body size",xlab="mean depth",ylab="Response probability",colors = c("white", "grey", "red","green"))
 ```
 ![Res_part_use](/Plots/Res_part_use_8.png "Res_part_use")
+
+A model to allow daily variation of horizontal activity 
+```
+m_int_sp<-clmm(res_part_order ~ 1 + body_size+fi_species*mean_depth+(1| fi_fishid) + (1 + ranged2d | date),data = data_poglm, link="logit",Hess=T)
+```
+![Res_part_use](/Plots/Res_part_use_101.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_102.png "Res_part_use")
+
+
 
 ## Model fit by season: SPRING_I
 
