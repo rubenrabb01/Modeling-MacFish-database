@@ -65,7 +65,7 @@ Our logic for the ordered response in use of reservoir parts is as follows:
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
 
-## Fit models usinf the full dataset
+## Fit models using the full dataset
 
 Select random-effects by fitting a series of (null) _POGLMMs_ including slope models allowing variation of mean_depth and body_size across species and individuals 
 ```
