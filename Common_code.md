@@ -481,6 +481,9 @@ dist.range.month <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
 Convert to factor for plotting month in correct chronological order
 ```
 dist.range.month$mon_yr <- factor(dist.range.month$mon_yr, levels=c("4_2017","5_2017","6_2017","7_2017","8_2017","9_2017","10_2017","11_2017", "12_2017","1_2018","2_2018","3_2018","4_2018"))
+```
+Plot monthly range
+```
 ggplot(dist.range.month, aes(x = mon_yr, y=dist.range, col = fi_species))+
      geom_violin()+
      geom_point(size = 3)+
@@ -507,6 +510,9 @@ dist.range.season <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
 ```
 ```
 dist.range.season$season <- factor(dist.range.month$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
+```
+Plot seasonal range
+```
 ggplot(dist.range.month, aes(x = season, y=dist.range, col = fi_species))+
      geom_violin()+
      geom_point(size = 3)+
