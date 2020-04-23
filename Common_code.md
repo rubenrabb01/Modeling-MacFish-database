@@ -509,11 +509,11 @@ dist.range.season <-  mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d), 
 dist.range.season <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
 ```
 ```
-dist.range.season$season <- factor(dist.range.month$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
+dist.range.season$season <- factor(dist.range.season$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
 ```
 Plot seasonal range
 ```
-ggplot(dist.range.month, aes(x = season, y=dist.range, col = fi_species))+
+ggplot(dist.range.season, aes(x = season, y=dist.range, col = fi_species))+
      geom_violin()+
      geom_point(size = 3)+
      #geom_line()+
