@@ -463,6 +463,8 @@ dev.off()
 
 ### Calculate monthly range
 
+:books:`library(lubridate)` 
+
 Adding column for identification of each month (month + year)
 
 ```
