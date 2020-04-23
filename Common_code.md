@@ -461,6 +461,67 @@ dev.off()
 ```
 ![NSD_wels](/Plots/wels_NSD.png "NSD_wels")
 
+### Calculate monthly range
+
+Adding column for identification of each month (month + year)
+
+```
+mean.ranged2d[, mon_yr := paste(month(date),"_",year(date), sep = "")]
+```
+Calculate monthly range
+```
+dist.range.month <-  mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d), day_count = length(date)), by = .(fi_fishid, mon_yr, month)]
+```
+Merge with info about fish
+```
+dist.range.month <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
+```
+Convert to factor for plotting month in correct chronological order
+```
+dist.range.month$mon_yr <- factor(dist.range.month$mon_yr, levels=c("4_2017","5_2017","6_2017","7_2017","8_2017","9_2017","10_2017","11_2017", "12_2017","1_2018","2_2018","3_2018","4_2018"))
+ggplot(dist.range.month, aes(x = mon_yr, y=dist.range, col = fi_species))+
+     geom_violin()+
+     geom_point(size = 3)+
+     #geom_line()+
+     facet_wrap(~fi_species)+
+     ylab("range of longitudional movement (m)")+ xlab("")+
+     ylim(0,8000)+
+     theme_bw()+ theme(
+         legend.position = "none",
+         text = element_text(size=15),
+         axis.title.x = element_blank(),
+         axis.text.x = element_text(angle=45, hjust=1),
+         panel.grid = element_blank(),
+         strip.background = element_blank(),
+         legend.title=element_blank())
+```
+![Monthly_range](/Plots/Monthly_range.png "Monthly_range")
+
+### Calculate seasonal range
+
+```
+dist.range.season <-  mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d), day_count = length(date)), by = .(fi_fishid, season)]
+dist.range.season <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
+```
+```
+dist.range.season$season <- factor(dist.range.month$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
+ggplot(dist.range.month, aes(x = season, y=dist.range, col = fi_species))+
+     geom_violin()+
+     geom_point(size = 3)+
+     #geom_line()+
+     facet_wrap(~fi_species)+
+     ylab("range of longitudional movement (m)")+ xlab("")+
+     ylim(0,8000)+
+     theme_bw()+ theme(
+         legend.position = "none",
+         text = element_text(size=15),
+         axis.title.x = element_blank(),
+         axis.text.x = element_text(angle=45, hjust=1),
+         panel.grid = element_blank(),
+         strip.background = element_blank(),
+         legend.title=element_blank())
+```
+![Seasonal_range](/Plots/Seasonal_range.png "Seasonal_range")
 
 ### Define preference of reservoir parts 
 
