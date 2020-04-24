@@ -1,6 +1,6 @@
 # Is there selection on the use of reservoir parts?
 
-### Create a dataframe including reservoir parts
+## Create a dataframe including reservoir parts
 
 :books:`library(plyr)`
 
@@ -46,9 +46,9 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-## Fit Proportional Odds Model (POGLMM) to  the data of daily use of reservoir parts (FULL DATASET)
+## Fit Proportional Odds Model (_POGLMM_) to  the data of daily use of reservoir parts (FULL DATASET)
 
-The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences
+_The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences_
 
 - We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
 - Our logic is as follows:
