@@ -49,7 +49,7 @@ winter <- subset(data_poglm,season=="winter")
 ```
 ### Fit Proportional Odds Model (POGLMM) to  the data of use of reservoir parts
 
-We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
+We will consider a logit model with four factors for the ordered response in "reservoir parts use" fitted using the _clmm_ function for mixed-effects models in library **ordinal**
 
 Our logic is as follows:
   - Dam: "0" (Fish show closeness to source and low displacement from it)
