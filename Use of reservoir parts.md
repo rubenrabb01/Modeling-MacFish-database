@@ -39,7 +39,7 @@ data_poglm$res_part_order <- as.factor(data_poglm$res_part_order)
 data_poglm$fi_fishid <- as.factor(data_poglm$fi_fishid)
 data_poglm$fi_species <- as.factor(data_poglm$fi_species)
 ```
-Create five datasets for each of the five time periods
+Split the full dataset into five subsets for each of the seasons
 ```
 spring_I <- subset(data_poglm,season=="spring_I")
 spring_II <- subset(data_poglm,season=="spring_II")
