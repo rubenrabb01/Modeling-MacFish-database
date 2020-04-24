@@ -1,11 +1,11 @@
 
 # Is there selection on the use of reservoir parts?
 
-### Create a dataframe including reservoir parts 
+### Create a dataframe including reservoir parts
 
 :books:`library(plyr)`
 
-Subset preference of reservoir parts and merge with the full 'data' dataset 
+Subset preference of reservoir parts and merge with the full 'data' dataset
 ```
 data.parts.pref.info <- subset(parts.pref.full,  select=c(fi_fishid, date, res_part))
 data_poglm <- full_join(data, data.parts.pref.info, by = c("fi_fishid", "date"))
@@ -14,7 +14,7 @@ Count use of reservoir parts by season
 ```
 data_poglm <- data_poglm %>% add_count(season, fi_fishid, res_part)
 ```
-Create a new ordered response variable for res_part with 4 categories (0-3) and rename variable body size
+Create a new ordered response variable for res_part with a four-point scale (0-3) and rename the variable "ca_tl_mm" into "body_size"
 ```
 data_poglm$res_part_order <- revalue(data_poglm$res_part,c("dam"="0", "middle"="1", "upper"="2", "tributary"="3"))
 colnames(data_poglm)[5] <- "body_size"
@@ -39,7 +39,7 @@ data_poglm$res_part_order <- as.factor(data_poglm$res_part_order)
 data_poglm$fi_fishid <- as.factor(data_poglm$fi_fishid)
 data_poglm$fi_species <- as.factor(data_poglm$fi_species)
 ```
-Create five datasets for each of the five time periods 
+Create five datasets for each of the five time periods
 ```
 spring_I <- subset(data_poglm,season=="spring_I")
 spring_II <- subset(data_poglm,season=="spring_II")
@@ -47,25 +47,25 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-### Fit Proportional Odds Model (POGLMM) to use of reservoir parts
+### Fit Proportional Odds Model (POGLMM) to  the data of use of reservoir parts
 
-Our logic for the ordered response in use of reservoir parts is as follows:
+- We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
+- Our logic is as follows:
+  - Dam: "0" (Fish show closeness to source and low displacement from it)
+  - Middle: "1" (Fish move from dam)
+  - Upper: "2" (Fish cover long distance from dam)
+  - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
 
-- Dam: "0" (Fish show closeness to source and low displacement from it)
-- Middle: "1" (Fish move from dam)
-- Upper: "2" (Fish cover long distance from dam)
-- Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
-:books:`library(ART)`     
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
-
-## Fit models using the full dataset
+## Fit POGLMMS using the full dataset
 
 Select random-effects by fitting a series of (null) _POGLMMs_ including slope models allowing variation of mean_depth and body_size across species and individuals 
 ```
