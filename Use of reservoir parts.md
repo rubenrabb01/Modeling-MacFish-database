@@ -1,4 +1,3 @@
-
 # Is there selection on the use of reservoir parts?
 
 ### Create a dataframe including reservoir parts
@@ -39,7 +38,7 @@ data_poglm$res_part_order <- as.factor(data_poglm$res_part_order)
 data_poglm$fi_fishid <- as.factor(data_poglm$fi_fishid)
 data_poglm$fi_species <- as.factor(data_poglm$fi_species)
 ```
-Split the full dataset into five subsets for each of the seasons
+Create five datasets for each of the five time periods
 ```
 spring_I <- subset(data_poglm,season=="spring_I")
 spring_II <- subset(data_poglm,season=="spring_II")
@@ -47,11 +46,12 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-### Fit Proportional Odds Model (POGLMM) to  the data of use of reservoir parts
+### Fit Proportional Odds Model (POGLMM) to  the data of daily use of reservoir parts (FULL DATASET)
 
-We will consider a logit model with four factors for the ordered response in "reservoir parts use" fitted using the _clmm_ function for mixed-effects models in library **ordinal**
+The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences
 
-Our logic is as follows:
+- We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
+- Our logic is as follows:
   - Dam: "0" (Fish show closeness to source and low displacement from it)
   - Middle: "1" (Fish move from dam)
   - Upper: "2" (Fish cover long distance from dam)
