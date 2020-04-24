@@ -51,7 +51,9 @@ winter <- subset(data_poglm,season=="winter")
 _The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences_
 
 - We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
+
 - Our logic is as follows:
+
   - Dam: "0" (Fish show closeness to source and low displacement from it)
   - Middle: "1" (Fish move from dam)
   - Upper: "2" (Fish cover long distance from dam)
