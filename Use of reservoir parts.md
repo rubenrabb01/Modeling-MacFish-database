@@ -56,14 +56,14 @@ winter <- subset(data_poglm,season=="winter")
   - Upper: "2" (Fish cover long distance from dam)
   - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
 
-:books:`library(ART)`
-:books:`library(mlogit)`
-:books:`library(AICcmodavg)`
-:books:`library(MASS)`
-:books:`library(effects)`
-:books:`library(lme4)`
-:books:`library(languageR)`
-:books:`library(ordinal)`
+:books:`library(ART)` 
+:books:`library(mlogit)` 
+:books:`library(AICcmodavg)` 
+:books:`library(MASS)` 
+:books:`library(effects)` 
+:books:`library(lme4)` 
+:books:`library(languageR)` 
+:books:`library(ordinal)` 
 
 ## Fit POGLMMS using the full dataset
 
