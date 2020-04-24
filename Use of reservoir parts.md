@@ -289,7 +289,7 @@ plot(allEffects(m_int_depth_sp,xlevels=list(mean_depth=seq(1,20,length=3),fi_spe
 ```
 ![Res_part_use](/Plots/Res_part_use_102.png "Res_part_use")
 
-## Model fit by season: SPRING_I
+## Model fit by season: SPRING I
 
 ```
 Cand.mod<-matrix(ncol=1,nrow=11)
