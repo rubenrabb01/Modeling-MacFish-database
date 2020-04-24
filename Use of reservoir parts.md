@@ -59,6 +59,8 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
   - Upper: "2" (Fish cover long distance from dam)
   - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
 
+### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
+
 :books:`library(ART)`  
 :books:`library(mlogit)`  
 :books:`library(AICcmodavg)`  
@@ -67,8 +69,6 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 :books:`library(lme4)`  
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
-
-### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
