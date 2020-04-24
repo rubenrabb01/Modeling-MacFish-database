@@ -100,7 +100,7 @@ m6  6 11211.67
 m1  4 12451.16
 m2  5 12459.75
 ```
-Perform LRT comparison between the first (**m3**) and subsequent two best-fit models (**m4** and **m5**). We drop models **m1**, **m2** and **m6** as their difference with the first best model (i.e., DeltaBIC) are above two higher units
+Perform LRT comparisons between the first best-fit Model (**m3**) and subsequent Models (**m4** and **m5**). We drop Models **m1**, **m2** and **m6** as their difference with the first best model (i.e., DeltaBIC) are above two higher units
 ```
 lrtest(m3,m4)
 ```
