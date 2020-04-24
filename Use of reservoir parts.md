@@ -46,7 +46,7 @@ summer <- subset(data_poglm,season=="summer")
 autumn <- subset(data_poglm,season=="autumn")
 winter <- subset(data_poglm,season=="winter")
 ```
-### Fit Proportional Odds Model (POGLMM) to  the data of daily use of reservoir parts (FULL DATASET)
+## Fit Proportional Odds Model (POGLMM) to  the data of daily use of reservoir parts (FULL DATASET)
 
 The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences
 
@@ -66,90 +66,101 @@ The fitted models will serve to test the hypothesis that pike, pikeperch and wel
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
 
-## Fit POGLMMS using the full dataset
+### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-Select random-effects by fitting a series of (null) _POGLMMs_ including slope models allowing variation of mean_depth and body_size across species and individuals 
+To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
-Cand.mod<-matrix(ncol=1,nrow=11)
-colnames(Cand.mod)<-c("BIC")
-rownames(Cand.mod)<-c(1:11)
+data_poglm_sub <- data_poglm[which(complete.cases(data_poglm[,c('fi_fishid', 'fi_species')])),]
+```
+Fit models using the subseted dataset
+```
+m1<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1  + (1| fi_species/fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1  + (1| season) + (date| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1  + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm_sub, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1  + (1| fi_species) + (date| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1  + (date| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+```
+Order models from best to worst fitting in terms of Akaike values (i.e., BIC)
 
-Cand.mod[1]<-AIC(clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[2]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species/fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[3]<-AIC(clmm(res_part_order ~ 1  + (1 + fi_species| fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[4]<-AIC(clmm(res_part_order ~ 1  + (1 + fi_species| fi_fishid) + (0 + fi_species| fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[5]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[6]<-AIC(clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[7]<-AIC(clmm(res_part_order ~ 1  + (1 + mean_depth| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[8]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + body_size | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[9]<-AIC(clmm(res_part_order ~ 1  + (1 + body_size| fi_species) + (1 | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[10]<-AIC(clmm(res_part_order ~ 1  + (1 + body_size| fi_species) + (1 + body_size | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[11]<-AIC(clmm(res_part_order ~ 1  + (1| fi_species) + (1 + date | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
+:books:`library(dLagM)`
+
+```
+bic = BIC(m1,m2,m3,m4,m5,m6)
+sortScore(bic , score = "bic")
+```
+```
+   df      BIC
+m3  7 11022.12
+m4  8 11025.93
+m5  8 11062.32
+m6  6 11211.67
+m1  4 12451.16
+m2  5 12459.75
+```
+Perform LRT comparison between the first (**m3**) and subsequent two best-fit models (**m4** and **m5**). We drop models **m1**, **m2** and **m6** as their difference with the first best model (i.e., DeltaBIC) are above two higher units
+```
+lrtest(m3,m4)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + (1 | season) + (date | fi_fishid)
+Model 2: res_part_order ~ 1 + (1 | season) + (date | fi_fishid) + (1 |
+    date)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   7 -5481.0
+2   8 -5478.6  1 4.7789    0.02881 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m3,m5)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + (1 | season) + (date | fi_fishid)
+Model 2: res_part_order ~ 1 + (1 | fi_species) + (date | fi_fishid) +
+    (1 | season)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   7 -5481.0
+2   8 -5496.8  1 31.614  1.881e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+The two models with larger RFs are significantly better than the reduced first model. Thus, we keep Model **m4** (better BIC than **m5**)
+
+### 2. Fit a series of conditional _POGLMMs_ (incl. covariates) with the RFs structure of selected model (m4)
+
+Build a candidate models set and perform model selection based on BIC
+```
+Cand.mod<-matrix(ncol=1,nrow=14)
+colnames(Cand.mod)<-c("BIC")
+rownames(Cand.mod)<-c(1:14)
+
+Cand.mod[[1]]<-AIC(clmm(res_part_order ~ 1 + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[2]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[3]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[4]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[5]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species * season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[6]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[7]]<-AIC(clmm(res_part_order ~ 1 + body_size + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[8]]<-AIC(clmm(res_part_order ~ 1 + fi_species + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[9]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[10]]<-AIC(clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[11]]<-AIC(clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[12]]<-AIC(clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[13]]<-AIC(clmm(res_part_order ~ 1 + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[14]]<-AIC(clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
 
 Cand.mod
 sort(Cand.mod)
-both<-data.frame(1:11,Cand.mod)
+both<-data.frame(1:14,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
-
-
-   model      BIC
-5      5 10849.23
-7      7 10851.23
-6      6 11500.64
-11    11 12426.27
-2      2 12426.80
-8      8 12429.32
-9      9 12430.80
-10    10 12433.32
-3      3 12433.84
-4      4 12445.84
-1      1 26286.37
 ```
-:part_alternation_mark: _Alternatively_, compare the two most common RF models
-```
-m_id<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm, link="logit",Hess=T)
-m_id_sp<-clmm(res_part_order ~ 1  + (1| fi_fishid) + (1 | fi_species),data = data_poglm, link="logit",Hess=T)
-```
-**m_id_sp** is preferred over **m_id 
 
-Fit models including predictors using the random-effects structure of the best-fit model (5)
-```
-Cand.mod<-matrix(ncol=1,nrow=11)
-colnames(Cand.mod)<-c("BIC")
-rownames(Cand.mod)<-c(1:11)
-
-Cand.mod[[1]]<-AIC(clmm(res_part_order ~ 1 + (1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[2]]<-AIC(clmm(res_part_order ~ 1 + body_size+mean_depth+fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[3]]<-AIC(clmm(res_part_order ~ 1 + body_size*mean_depth+fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[4]]<-AIC(clmm(res_part_order ~ 1 + body_size*fi_species+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[5]]<-AIC(clmm(res_part_order ~ 1 + body_size+fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[6]]<-AIC(clmm(res_part_order ~ 1 + body_size+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[7]]<-AIC(clmm(res_part_order ~ 1 + body_size*mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[8]]<-AIC(clmm(res_part_order ~ 1 + body_size+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[9]]<-AIC(clmm(res_part_order ~ 1 + mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[10]]<-AIC(clmm(res_part_order ~ 1 + mean_depth*fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[11]]<-AIC(clmm(res_part_order ~ 1 + mean_depth+fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T))
-
-Cand.mod
-sort(Cand.mod)
-both<-data.frame(1:11,Cand.mod)
-names(both)<-c("model","BIC")
-both[do.call(order, both[c("BIC")]), ]
-
-   model      BIC
-9      9 10845.35
-6      6 10846.90
-11    11 10847.46
-4      4 10848.34
-7      7 10848.60
-2      2 10848.79
-1      1 10849.23
-10    10 10849.92
-3      3 10850.47
-8      8 10850.79
-5      5 10852.72
-```
 Rename five best models
 ```
 m9<-clmm(res_part_order ~ 1 + mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
