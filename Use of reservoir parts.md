@@ -61,14 +61,14 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`  
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
@@ -77,173 +77,262 @@ data_poglm_sub <- data_poglm[which(complete.cases(data_poglm[,c('fi_fishid', 'fi
 Fit models using the subseted dataset
 ```
 m1<-clmm(res_part_order ~ 1  + (1| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
-m2<-clmm(res_part_order ~ 1  + (1| fi_species/fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
-m3<-clmm(res_part_order ~ 1  + (1| season) + (date| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
-m4<-clmm(res_part_order ~ 1  + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm_sub, link="logit",Hess=T)
-m5<-clmm(res_part_order ~ 1  + (1| fi_species) + (date| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
-m6<-clmm(res_part_order ~ 1  + (date| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1  + (1| fi_species) + (1| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1  + (1| season) + (1| fi_fishid),data = data_poglm_sub, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1  + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 ```
 Order models from best to worst fitting in terms of Akaike values (i.e., BIC)
 
 :books:`library(dLagM)`
 
 ```
-bic = BIC(m1,m2,m3,m4,m5,m6)
+bic = BIC(m1,m2,m3,m4)
 sortScore(bic , score = "bic")
 ```
 ```
-   df      BIC
-m3  7 11022.12
-m4  8 11025.93
-m5  8 11062.32
-m6  6 11211.67
-m1  4 12451.16
-m2  5 12459.75
+  df      BIC
+m3  5 12153.67
+m4  6 12162.26
+m1  4 12226.89
+m2  5 12235.47
 ```
-Perform LRT comparisons between the first best-fit Model (**m3**) and subsequent Models (**m4** and **m5**). We drop Models **m1**, **m2** and **m6** as their difference with the first best model (i.e., DeltaBIC) are above two higher units
-```
-lrtest(m3,m4)
-```
-```
-Likelihood ratio test
+The four models arevery close in term of BIC values but we keep Model **m3** for further analysis
 
-Model 1: res_part_order ~ 1 + (1 | season) + (date | fi_fishid)
-Model 2: res_part_order ~ 1 + (1 | season) + (date | fi_fishid) + (1 |
-    date)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1   7 -5481.0
-2   8 -5478.6  1 4.7789    0.02881 *
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
-```
-lrtest(m3,m5)
-```
-```
-Likelihood ratio test
+The two models with larger RFs are significantly better than the reduced first model. Thus, we keep Model **m4** (better BIC than **m5**)
 
-Model 1: res_part_order ~ 1 + (1 | season) + (date | fi_fishid)
-Model 2: res_part_order ~ 1 + (1 | fi_species) + (date | fi_fishid) +
-    (1 | season)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1   7 -5481.0
-2   8 -5496.8  1 31.614  1.881e-08 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 The two models with larger RFs are significantly better than the reduced first model. Thus, we keep Model **m4** (better BIC than **m5**)
 
 ### 2. Fit a series of conditional _POGLMMs_ (incl. covariates) with the RFs structure of selected model (m4)
 
 Build a candidate models set and perform model selection based on BIC
 ```
-Cand.mod<-matrix(ncol=1,nrow=14)
+Cand.mod<-matrix(ncol=1,nrow=13)
 colnames(Cand.mod)<-c("BIC")
-rownames(Cand.mod)<-c(1:14)
+rownames(Cand.mod)<-c(1:13)
 
-Cand.mod[[1]]<-AIC(clmm(res_part_order ~ 1 + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[2]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[3]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[4]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[5]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species * season + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[6]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[7]]<-AIC(clmm(res_part_order ~ 1 + body_size + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[8]]<-AIC(clmm(res_part_order ~ 1 + fi_species + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[9]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[10]]<-AIC(clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[11]]<-AIC(clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[12]]<-AIC(clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[13]]<-AIC(clmm(res_part_order ~ 1 + season + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
-Cand.mod[[14]]<-AIC(clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| season) + (date| fi_fishid) + (1 | date),data = data_poglm, link="logit",Hess=T))
+Cand.mod[[1]]<-AIC(clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[2]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[3]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[4]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[5]]<-AIC(clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[6]]<-AIC(clmm(res_part_order ~ 1 + body_size + season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[7]]<-AIC(clmm(res_part_order ~ 1 + fi_species + season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[8]]<-AIC(clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[9]]<-AIC(clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[10]]<-AIC(clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[11]]<-AIC(clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[12]]<-AIC(clmm(res_part_order ~ 1 + season + (1| fi_species) + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
+Cand.mod[[13]]<-AIC(clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T))
 
 Cand.mod
 sort(Cand.mod)
-both<-data.frame(1:14,Cand.mod)
+both<-data.frame(1:13,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
 ```
-
-Rename five best models
+ model      BIC
+10    10 11983.18
+3      3 11984.15
+9      9 12099.24
+6      6 12115.47
+12    12 12115.77
+7      7 12117.45
+2      2 12118.31
+4      4 12120.86
+1      1 12122.72
+13    13 12126.40
+11    11 12126.43
+5      5 12127.27
+8      8 12129.83
 ```
-m9<-clmm(res_part_order ~ 1 + mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
-m6<-clmm(res_part_order ~ 1 + body_size+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
-m11<-clmm(res_part_order ~ 1 + mean_depth+fi_species+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
-m4<-clmm(res_part_order ~ 1 + body_size*fi_species+mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
-m7<-clmm(res_part_order ~ 1 + body_size*mean_depth+(1| fi_species) + (1 + mean_depth | fi_species:fi_fishid),data = data_poglm, link="logit",Hess=T)
+Rename and order models from best to worst fitting in terms of Akaike values
 ```
-Compare the first best model with the others 
+m10<-clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
+m9<-clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 ```
-lrtest(m9,m6)
+Perform a LRT comparison between the first best-fit Model (**m10**) and subsequent best-fit Models **m3** and **m9**. We drop Models **m6** and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
 ```
-```
-Likelihood ratio test
-
-Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
-    fi_species:fi_fishid)
-Model 2: res_part_order ~ 1 + body_size + mean_depth + (1 | fi_species) + 
-    (1 + mean_depth | fi_species:fi_fishid)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1   8 -5414.7                     
-2   9 -5414.5  1 0.4488     0.5029
-```
-```
-lrtest(m9,m11)
+lrtest(m10,m3)
 ```
 ```
 Likelihood ratio test
 
-Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
-    fi_species:fi_fishid)
-Model 2: res_part_order ~ 1 + mean_depth + fi_species + (1 | fi_species) + 
-    (1 + mean_depth | fi_species:fi_fishid)
+Model 1: res_part_order ~ 1 + fi_species * season + (1 | fi_species) +
+    (1 | fi_fishid) + (1 | season)
+Model 2: res_part_order ~ 1 + body_size + fi_species * season + (1 | fi_species) +
+    (1 | fi_fishid) + (1 | season)
   #Df  LogLik Df  Chisq Pr(>Chisq)
-1   8 -5414.7                     
-2  10 -5413.7  2 1.8917     0.3883
+1  20 -5971.6
+2  21 -5971.1  1 1.0368     0.3086
+```
+The LRT is not significant indicating that the reduced Model **m10** is preferred to the expanded Model **m3**, i.e., the addition of body_size does not significantly to explaining the variability in the use of reservoir parts
+On the other hand, **m10** and **m9** can not be compared using LRT as they do not have nested fixed-effects. We pick the one with higher lohLikelihood and lower BIC
+```
+anova(m10,m9)
 ```
 ```
-lrtest(m9,m4)
-```
-```
-Likelihood ratio test
+Likelihood ratio tests of cumulative link models:
 
-Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
-    fi_species:fi_fishid)
-Model 2: res_part_order ~ 1 + body_size * fi_species + mean_depth + (1 | 
-    fi_species) + (1 + mean_depth | fi_species:fi_fishid)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1   8 -5414.7                     
-2  13 -5411.2  5 7.0085       0.22
-```
-```
-lrtest(m9,m7)             
-```
-```
-Likelihood ratio test
+    formula:                                                                                     link: threshold:
+m9  res_part_order ~ 1 + body_size * season + (1 | fi_species) + (1 | fi_fishid) + (1 | season)  logit flexible
+m10 res_part_order ~ 1 + fi_species * season + (1 | fi_species) + (1 | fi_fishid) + (1 | season) logit flexible
 
-Model 1: res_part_order ~ 1 + mean_depth + (1 | fi_species) + (1 + mean_depth | 
-    fi_species:fi_fishid)
-Model 2: res_part_order ~ 1 + body_size * mean_depth + (1 | fi_species) + 
-    (1 + mean_depth | fi_species:fi_fishid)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1   8 -5414.7                     
-2  10 -5414.3  2 0.7465     0.6885
+    no.par   AIC  logLik LR.stat df Pr(>Chisq)
+m9      15 12099 -6034.6
+m10     20 11983 -5971.6  126.05  5  < 2.2e-16 ***
 ```
-Model m9 is the absolute best model. However, we want test the hypothesis that body size differences ebtween species relate to selection on reservoir parts. 
+We retain **m10** but will use **m9** for further hypothesis testing of body size variation across seasons
+```
+summary(m10)
+```
+```
+ Cumulative Link Mixed Model fitted with the Laplace approximation
 
-- Taking m4, are body size and depth related to reservoir use?
+formula: res_part_order ~ 1 + fi_species * season + (1 | fi_species) +      (1 | fi_fishid) + (1 | season)
+data:    data_poglm_sub
+
+ link  threshold nobs logLik   AIC      niter       max.grad cond.H
+ logit flexible  5375 -5971.59 11983.18 2471(12430) 1.96e-03 1.0e+04
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 2.499    1.581
+ season     (Intercept) 0.000    0.000
+ fi_species (Intercept) 0.000    0.000
+Number of groups:  fi_fishid 13,  season 5,  fi_species 3
+
+Coefficients:
+                                    Estimate Std. Error z value Pr(>|z|)
+fi_speciespikeperch                  0.32682    1.30010   0.251 0.801522
+fi_specieswels                       0.15392    1.33047   0.116 0.907902
+seasonspring_I                      -0.22010    0.17550  -1.254 0.209798
+seasonspring_II                     -1.85036    0.31830  -5.813 6.12e-09 ***
+seasonsummer                        -0.61568    0.16130  -3.817 0.000135 ***
+seasonwinter                        -0.03944    0.17559  -0.225 0.822272
+fi_speciespikeperch:seasonspring_I   0.51969    0.22108   2.351 0.018737 *
+fi_specieswels:seasonspring_I        1.09825    0.21666   5.069 4.00e-07 ***
+fi_speciespikeperch:seasonspring_II  2.46086    0.42576   5.780 7.47e-09 ***
+fi_specieswels:seasonspring_II       1.64848    0.37642   4.379 1.19e-05 ***
+fi_speciespikeperch:seasonsummer     0.50378    0.20008   2.518 0.011804 *
+fi_specieswels:seasonsummer          1.47234    0.19680   7.481 7.36e-14 ***
+fi_speciespikeperch:seasonwinter    -0.30180    0.21932  -1.376 0.168792
+fi_specieswels:seasonwinter         -0.37172    0.20741  -1.792 0.073106 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1 -2.22428    1.12494  -1.977
+1|3  0.02067    1.12429   0.018
+3|2  1.63703    1.12449   1.456
 ```
-plot(allEffects(m6,xlevels=list(res_part=seq(0,3,length=2))),rug = FALSE)
+Plot body size x season
+```
+plot(allEffects(m10,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_1.png "Res_part_use")
 
+Taking Model **m9**, is there a body-size dependent seasonal effect on the use of reservoir parts?
+```
+summary(m9)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + body_size * season + (1 | fi_species) +      (1 | fi_fishid) + (1 | season)
+data:    data_poglm_sub
+
+ link  threshold nobs logLik   AIC      niter       max.grad cond.H
+ logit flexible  5375 -6034.62 12099.24 2321(12731) 7.88e+02 1.5e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 2.558249 1.59945
+ season     (Intercept) 0.000263 0.01622
+ fi_species (Intercept) 0.191663 0.43779
+Number of groups:  fi_fishid 13,  season 5,  fi_species 3
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)
+body_size                  0.0006956  0.0012675   0.549  0.58313
+seasonspring_I             1.3408623  0.2112536   6.347 2.19e-10 ***
+seasonspring_II            1.7203238  0.4187490   4.108 3.99e-05 ***
+seasonsummer               0.4805728  0.1861680   2.581  0.00984 **
+seasonwinter               0.0482188  0.2054357   0.235  0.81443
+body_size:seasonspring_I  -0.0009762  0.0002112  -4.621 3.82e-06 ***
+body_size:seasonspring_II -0.0019996  0.0003917  -5.104 3.32e-07 ***
+body_size:seasonsummer    -0.0002949  0.0001888  -1.562  0.11829
+body_size:seasonwinter    -0.0003959  0.0002045  -1.935  0.05294 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1  -1.5337     1.2469  -1.230
+1|3   0.6195     1.2469   0.497
+3|2   2.2290     1.2472   1.787
+```
+```
+plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
-
-- Taking m7 we can see the relationship between body size and water depth
+The worst fit-model, **m8** may help us to see the relationship between the use of reservoir parts by each species
 
 ```
-plot(allEffects(m7,xlevels=list( seq(405,1660,length=2),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",
-main="Selection of reservoir parts according to body size and water depth",xlab="Body size",ylab="Response probability",colors = c("white", "grey", "red","green"))
+m8<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
+```
+```
+summary(m8)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +
+    (1 | fi_fishid) + (1 | season)
+data:    data_poglm_sub
+
+ link  threshold nobs logLik   AIC      niter      max.grad cond.H
+ logit flexible  5375 -6053.92 12129.83 1193(7050) 9.83e-03 3.2e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 2.04462  1.4299
+ season     (Intercept) 0.09973  0.3158
+ fi_species (Intercept) 0.00000  0.0000
+Number of groups:  fi_fishid 13,  season 5,  fi_species 3
+
+Coefficients:
+                               Estimate Std. Error z value Pr(>|z|)
+body_size                      0.008725   0.008283   1.053    0.292
+fi_speciespikeperch           13.162174   9.945927   1.323    0.186
+fi_specieswels                 6.477671   9.201870   0.704    0.481
+body_size:fi_speciespikeperch -0.016380   0.013328  -1.229    0.219
+body_size:fi_specieswels      -0.006073   0.008635  -0.703    0.482
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1    7.238      8.655   0.836
+1|3    9.405      8.656   1.087
+3|2   11.000      8.656   1.271
+```
+```
+plot(allEffects(m8,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
 
