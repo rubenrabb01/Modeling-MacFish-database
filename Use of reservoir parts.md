@@ -53,14 +53,14 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`  
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
@@ -140,7 +140,7 @@ m10<-clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| fi_fi
 m3<-clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 m9<-clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 ```
-Perform a LRT comparison between the first best-fit Model (**m10**) and subsequent best-fit Models **m3** and **m9**. We drop Models **m6** and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
+Perform a LRT comparison between the first best-fit Model (**m10**) and subsequent best-fit models **Model 3** and **Model 9**. We drop **Model 6**  and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
 ```
 lrtest(m10,m3)
 ```
@@ -155,8 +155,8 @@ Model 2: res_part_order ~ 1 + body_size + fi_species * season + (1 | fi_species)
 1  20 -5971.6
 2  21 -5971.1  1 1.0368     0.3086
 ```
-The LRT is not significant indicating that the reduced Model **m10** is preferred to the expanded Model **m3**, i.e., the addition of body_size does not significantly to explaining the variability in the use of reservoir parts
-On the other hand, **m10** and **m9** can not be compared using LRT as they do not have nested fixed-effects. We pick the one with higher log-Likelihood and lower BIC
+The LRT is not significant indicating that the reduced **Model 10** is preferred to the expanded **Model 3**, i.e., the addition of body_size does not significantly to explaining the variability in the use of reservoir parts
+On the other hand, **Model 10** and **Model 9** can not be compared using LRT as they do not have nested fixed-effects. We pick the one with higher log-Likelihood and lower BIC
 ```
 anova(m10,m9)
 ```
@@ -267,7 +267,7 @@ plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug =
 ```
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
-The worst fit-model, **m8** may help us to see the relationship between the use of reservoir parts by each species
+The worst fit-model, **m8** may help us to see the relationship of the use of reservoir parts by each species
 
 ```
 m8<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
@@ -409,10 +409,43 @@ Model 2: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +
 1   7 -1179.7
 2  10 -1176.9  3 5.4812     0.1398
 ```
-These results show that a high proportion of the variability in the use of reserovir is random as denoted by Model **m1**.
+These results show that a high proportion of the variability in the use of reserovir is random as denoted by Model 1.
 However, we see that the comparisons between Model 3 and Models 2 and 4 are marginally significant indicating that the inclusion of the interaction tends to improve the model fit over models without it.
-Since we are interested in the interaction term, we finally keep Model 3 **m3**
+Since we are interested in the interaction term, we finally keep Model 3.
+```
+summary(m3)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
 
+formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) + (1 | fi_fishid)
+data:    spring_I
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1033 -1176.92 2373.83 970(2912) 8.10e-03 3.4e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 0.587    0.7662
+ fi_species (Intercept) 0.000    0.0000
+Number of groups:  fi_fishid 13,  fi_species 3
+
+Coefficients:
+                               Estimate Std. Error z value Pr(>|z|)
+body_size                      0.011224   0.004587   2.447  0.01440 *
+fi_speciespikeperch           14.475429   5.525490   2.620  0.00880 **
+fi_specieswels                14.172077   5.108375   2.774  0.00553 **
+body_size:fi_speciespikeperch -0.014970   0.007392  -2.025  0.04285 *
+body_size:fi_specieswels      -0.012109   0.004783  -2.532  0.01136 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1    9.337      4.789   1.950
+1|3   11.988      4.803   2.496
+3|2   13.814      4.807   2.874
+```
 ```
 plot(allEffects(m3,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 ```
@@ -421,3 +454,187 @@ plot(allEffects(m3,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 plot(allEffects(m3,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_42.png "Res_part_use")
+
+Now, we account for the distance range to explore any relationship between this variable and the likelihood of using specific parts of the reservoir
+```
+m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_I, link="logit",Hess=T)
+```
+```
+bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10)
+sortScore(bic , score = "bic")
+```
+```
+ df       BIC
+m1   5  2396.650
+m6   6  2403.437
+m4   6  2403.566
+m5   7  2407.895
+m7   7  2410.355
+m9  10  2414.460
+m10  8  2414.661
+m2   8  2414.831
+m3  10  2423.235
+m8  11 12202.318
+```
+Again, the null itercept model is the first best model. The variable **ranged2d* is only significant in the presence of an interaction so we focus on Model 9, which is the only relevant for our hypothesis testing
+If we want to be certain as to wether **Model 9** explains well the variability in the use of reservoir, check the resulta of the two-by-two LRT comparisons
+```
+lrtest(m1,m9)
+```
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + (1 | fi_species) + (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   5 -1181.0
+2  10 -1172.5  5 16.892   0.004709 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m2,m9)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + body_size + fi_species + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   8 -1179.7
+2  10 -1172.5  2 14.252  0.0008039 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m3,m9)
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  10 -1176.9
+2  10 -1172.5  0 8.7754  < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m4,m9)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + body_size + (1 | fi_species) + (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   6 -1181.0
+2  10 -1172.5  4 16.867   0.002051 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m5,m9)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + fi_species + (1 | fi_species) + (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   7 -1179.7
+2  10 -1172.5  3 14.257   0.002576 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m6,m9)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   6 -1180.9
+2  10 -1172.5  4 16.738   0.002173 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m7,m9)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + body_size + ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   7 -1180.9
+2  10 -1172.5  3 16.716  0.0008086 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+We see that the interaction **Model 9** is preferred over any of the reduced forms
+```
+summary(m9)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +      (1 | fi_fishid)
+data:    spring_I
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1033 -1172.53 2365.06 840(2518) 7.24e+01 1.7e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 0.9834   0.9917
+ fi_species (Intercept) 0.0000   0.0000
+Number of groups:  fi_fishid 13,  fi_species 3
+
+Coefficients:
+                               Estimate Std. Error z value Pr(>|z|)
+fi_speciespikeperch           4.767e-01  8.485e-01   0.562 0.574268
+fi_specieswels                1.287e+00  8.674e-01   1.484 0.137878
+ranged2d                     -1.522e-04  9.947e-05  -1.531 0.125882
+fi_speciespikeperch:ranged2d  4.508e-04  1.351e-04   3.337 0.000847 ***
+fi_specieswels:ranged2d       8.666e-05  1.207e-04   0.718 0.472822
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1  -2.5798     0.7415  -3.479
+1|3   0.1111     0.7339   0.151
+3|2   1.9550     0.7354   2.659
+```
+The distance range is significant in pikeperch as we can see in the following plot
+```
+plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
+
+
+
