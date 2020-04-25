@@ -747,7 +747,7 @@ Threshold coefficients:
 1|2   -1.026      2.142  -0.479
 2|3    1.257      2.142   0.587
 ```
-As before, distance range is significantly related to reservoir use in pikeperch
+As before, distance range is significantly related to reservoir use in pikeperch; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below). However, horizontal movement does not relate to the probability of visiting higher river area. 
 ```
 plot(allEffects(m9,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 ```
