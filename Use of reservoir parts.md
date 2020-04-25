@@ -757,6 +757,45 @@ plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug =
 ```
 ![Res_part_use](/Plots/Res_part_use_72.png "Res_part_use")
 
+With **Model 3** (less "true" model) we may see the relationship between body size and selection of reservoir parts
+```
+summary(m3)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +      (1 | fi_fishid)
+data:    summer
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1566 -1345.67 2711.34 984(7555) 1.23e-03 3.4e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 4.478    2.116
+ fi_species (Intercept) 0.000    0.000
+Number of groups:  fi_fishid 13,  fi_species 3
+
+Coefficients:
+                              Estimate Std. Error z value Pr(>|z|)
+body_size                      0.02441    0.01231   1.983  0.04740 *
+fi_speciespikeperch           40.29699   14.79056   2.725  0.00644 **
+fi_specieswels                30.43286   13.66569   2.227  0.02595 *
+body_size:fi_speciespikeperch -0.05494    0.01983  -2.771  0.00559 **
+body_size:fi_specieswels      -0.02726    0.01283  -2.125  0.03362 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1    22.27      12.85   1.733
+1|2    24.82      12.86   1.930
+2|3    26.97      12.86   2.098
+```
+```
+plot(allEffects(m3,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
 
 
 
