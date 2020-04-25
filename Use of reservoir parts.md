@@ -684,37 +684,79 @@ Subset data for season Summer
 summer <- subset(data_poglm_sub,season=="summer")
 ```
 ```
-m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
-m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = summer , link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
+m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = summer, link="logit",Hess=T)
 ```
 ```
 bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10)
 sortScore(bic , score = "bic")
 ```
 ```
-  df        BIC
-m1   5   491.2184
-m6   6   495.2109
-m4   6   495.4215
-m5   7   498.3553
-m7   7   499.3444
-m2   8   502.7498
-m3   9   508.0184
-m10  8   515.7857
-m9  10   518.8255
-m8  11 12202.3182
+   df       BIC
+m9  10  2673.328
+m1   5  2735.146
+m4   6  2742.487
+m7   7  2745.863
+m5   7  2749.356
+m2   8  2756.475
+m3  10  2764.902
+m10  8  3070.236
+m6   6  3101.189
+m8  11 12202.318
 ```
-In this case, the LRTs between **Model 9** and other models are non-significant except respect to **Model 10**. There is much randomness at the individual level and there is not significant effects of either **ranged2d**,
-**body_size** in Models 4 and 6 but a marginally significant effect of **fi_species** in **Model 5**. The addition of **body_size** to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
-However, in the latter model differences between species in response are significant for pikeperch. We can see this by focvusing only on the **fi_species** variable in **Model 2** and plotting it in addition to **Model 5**
+In this case, the best-fit model includes the **fi_species x ranged2d** interaction while the second best is the only-intercept model. We choose **Model 9** but will look at the effects of body size by species in **Model 3**
+```
+summary(m9)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +      (1 | fi_fishid)
+data:    summer
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1566 -1299.88 2619.76 937(6943) 5.56e+01 1.1e+10
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 9.029    3.005
+ fi_species (Intercept) 0.000    0.000
+Number of groups:  fi_fishid 13,  fi_species 3
+
+Coefficients:
+                               Estimate Std. Error z value Pr(>|z|)
+fi_speciespikeperch          -5.808e-01  2.473e+00  -0.235  0.81434
+fi_specieswels                1.797e+00  2.532e+00   0.710  0.47779
+ranged2d                     -5.676e-04  2.113e-04  -2.686  0.00724 **
+fi_speciespikeperch:ranged2d  1.204e-03  2.324e-04   5.179 2.23e-07 ***
+fi_specieswels:ranged2d       3.731e-05  2.247e-04   0.166  0.86810
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1   -3.700      2.143  -1.727
+1|2   -1.026      2.142  -0.479
+2|3    1.257      2.142   0.587
+```
+As before, distance range is significantly related to reservoir use in pikeperch
+```
+plot(allEffects(m9,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
+```
+![Res_part_use](/Plots/Res_part_use_71.png "Res_part_use")
+```
+plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_72.png "Res_part_use")
+
 
 
 
