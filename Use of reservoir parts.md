@@ -491,7 +491,6 @@ If we want to be certain as to wether **Model 9** explains well the variability 
 lrtest(m1,m9)
 ```
 ```
-```
 Likelihood ratio test
 
 Model 1: res_part_order ~ 1 + (1 | fi_species) + (1 | fi_fishid)
@@ -521,6 +520,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 ```
 ```
 lrtest(m3,m9)
+```
 ```
 Likelihood ratio test
 
