@@ -675,7 +675,47 @@ In this case, the LRTs between **Model 9** and other models are non-significant 
 **body_size** in Models 4 and 6 but a marginally significant effect of **fi_species** in **Model 5**. The addition of **body_size** to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
 However, in the latter model differences between species in response are significant for pikeperch. We can see this by focvusing only on the **fi_species** variable in **Model 2** and plotting it in addition to **Model 5**
 
-![Res_part_use](/Plots/Res_part_use_61.png "Res_part_use")![Res_part_use](/Plots/Res_part_use_62.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_6.jpg "Res_part_use")
+
+## Model fit by season: SUMMER
+
+Subset data for season Summer
+```
+summer <- subset(data_poglm_sub,season=="summer")
+```
+```
+m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = spring_II, link="logit",Hess=T)
+```
+```
+bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10)
+sortScore(bic , score = "bic")
+```
+```
+  df        BIC
+m1   5   491.2184
+m6   6   495.2109
+m4   6   495.4215
+m5   7   498.3553
+m7   7   499.3444
+m2   8   502.7498
+m3   9   508.0184
+m10  8   515.7857
+m9  10   518.8255
+m8  11 12202.3182
+```
+In this case, the LRTs between **Model 9** and other models are non-significant except respect to **Model 10**. There is much randomness at the individual level and there is not significant effects of either **ranged2d**,
+**body_size** in Models 4 and 6 but a marginally significant effect of **fi_species** in **Model 5**. The addition of **body_size** to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
+However, in the latter model differences between species in response are significant for pikeperch. We can see this by focvusing only on the **fi_species** variable in **Model 2** and plotting it in addition to **Model 5**
+
 
 
 
