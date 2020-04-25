@@ -96,25 +96,7 @@ m4  6 12162.26
 m1  4 12226.89
 m2  5 12235.47
 ```
-The four models arevery close in term of BIC values but we keep Model **m3** for further analysis
-
-The two models with larger RFs are significantly better than the reduced first model. Thus, we keep Model **m4** (better BIC than **m5**)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-The two models with larger RFs are significantly better than the reduced first model. Thus, we keep Model **m4** (better BIC than **m5**)
+The four models are very close in term of BIC values but we keep Model **m3** for further analysis of full models
 
 ### 2. Fit a series of conditional _POGLMMs_ (incl. covariates) with the RFs structure of selected model (m4)
 
@@ -143,6 +125,7 @@ sort(Cand.mod)
 both<-data.frame(1:13,Cand.mod)
 names(both)<-c("model","BIC")
 both[do.call(order, both[c("BIC")]), ]
+```
 ```
  model      BIC
 10    10 11983.18
