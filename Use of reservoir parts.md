@@ -673,7 +673,7 @@ m8  11 12202.3182
 ```
 In this case, the LRTs between **Model 9** and other models are non-significant except respect to **Model 10**. There is much randomness at the individual level and there is not significant effects of either **ranged2d**,
 **body_size** in Models 4 and 6 but a marginally significant effect of **fi_species** in **Model 5**. The addition of **body_size** to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
-However, in the latter model differences between species in response are significant for pikeperch. We can see this by focvusing only on the **fi_species** variable in **Model 2** and plotting it in addition to **Model 5**
+However, in the latter model the response probability is significant for pikeperch. We can see this by focusing only on the **fi_species** variable in **Model 2** versus **Model 5**
 
 ![Res_part_use](/Plots/Res_part_use_6.jpg "Res_part_use")
 
