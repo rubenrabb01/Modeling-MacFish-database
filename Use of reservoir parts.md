@@ -53,14 +53,14 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`  
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
@@ -263,7 +263,7 @@ Threshold coefficients:
 3|2   2.2290     1.2472   1.787
 ```
 ```
-plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
@@ -307,7 +307,7 @@ Threshold coefficients:
 3|2   11.000      8.656   1.271
 ```
 ```
-plot(allEffects(m8,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m8,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
 
@@ -451,7 +451,7 @@ plot(allEffects(m3,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 ```
 ![Res_part_use](/Plots/Res_part_use_41.png "Res_part_use")
 ```
-plot(allEffects(m3,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_42.png "Res_part_use")
 
@@ -632,7 +632,7 @@ Threshold coefficients:
 ```
 The distance range is significant in pikeperch as we can see in the following plot
 ```
-plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m9,xlevels=list(ranged2d=seq(0,6500,length=10),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
 
@@ -794,7 +794,7 @@ Threshold coefficients:
 2|3    26.97      12.86   2.098
 ```
 ```
-plot(allEffects(m3,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
 
