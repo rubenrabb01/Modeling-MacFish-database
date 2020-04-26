@@ -747,7 +747,8 @@ Threshold coefficients:
 1|2   -1.026      2.142  -0.479
 2|3    1.257      2.142   0.587
 ```
-As before, distance range is significantly related to reservoir use in pikeperch; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below). However, horizontal movement does not relate to the probability of visiting higher river area. 
+As before, distance range is significantly related to reservoir use in pikeperch relative to perk; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below). However, horizontal movement does not relate to the probability of visiting higher river area in pike
+whereas it does relative to lower river areas in wels
 ```
 plot(allEffects(m9,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
 ```
@@ -796,6 +797,12 @@ Threshold coefficients:
 plot(allEffects(m3,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
+
+From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
+For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against_wels_ or _pikeperch_), re-fit and run the model changing the reference level before
+```
+summer$fi_species <- relevel(summer$fi_species,"pikeperch")
+```
 
 
 
