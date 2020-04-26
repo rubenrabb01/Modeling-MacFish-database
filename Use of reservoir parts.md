@@ -273,7 +273,6 @@ plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("
 ```
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
-```
 Explore the relationship of the use of reservoir parts by each species using the worst fit **Model 8**
 
 ```
@@ -996,7 +995,6 @@ plot(allEffects(m9,xlevels=list(ranged2d=seq(0,7000,length=10),fi_species=c("pik
 plot(predictorEffects(m9, ~ fi_species), lines=list(multiline=TRUE),axes=list(grid=FALSE))      # plot(predictorEffects(m9, ~ fi_species), axes=list(grid=TRUE))
 ```
 ![Res_part_use](/Plots/Res_part_use_83.png "Res_part_use")
-
 
 
 
