@@ -1007,4 +1007,104 @@ plot(predictorEffects(m9, ~ fi_species), lines=list(multiline=TRUE),axes=list(gr
 ```
 ![Res_part_use](/Plots/Res_part_use_83.png "Res_part_use")
 
+## Model fit by season: WINTER
+
+Subset data for season Winter
+```
+winter <- subset(data_poglm_sub,season=="winter")
+```
+```
+m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)  # model failed to converge
+m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = winter , link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)    # model failed to converge
+m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = winter, link="logit",Hess=T)
+```
+```
+bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10)
+sortScore(bic , score = "bic")
+```
+```
+   df       BIC
+m1   5  2197.026
+m6   6  2198.047
+m4   6  2204.015
+m7   7  2205.005
+m5   7  2210.732
+m10  8  2211.719
+m2   8  2217.188
+m9  10  2288.183
+m3  10  2764.902
+m8  11 12004.435
+```
+The best-fit model is the only-intercept model followed by a model including the distance range (**Model 6**)
+```
+lrtest(m1,m6)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + (1 | fi_species) + (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   5 -1080.8
+2   6 -1077.8  1 6.0654    0.01379 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m7,m6)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + body_size + ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   7 -1077.7
+2   6 -1077.8 -1 0.1276     0.7209
+```
+**Model 6** is a better option than the null model and the inclusion of body size does not significantly contribute to explain the variability in reservoir use
+
+```
+summary(m6)
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
+data:    winter
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1195 -1077.77 2167.53 255(1965) 3.39e+01 4.3e+08
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 10.25    3.202
+ fi_species (Intercept)  0.00    0.000
+Number of groups:  fi_fishid 10,  fi_species 3
+
+Coefficients:
+           Estimate Std. Error z value Pr(>|z|)
+ranged2d -2.090e-04  8.534e-05  -2.449   0.0143 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1  -3.4316     1.0386  -3.304
+1|2   0.9188     1.0246   0.897
+2|3   2.9501     1.0261   2.875
+```
+We see that larger distance ranges related to decreased probability of using tributary
+```
+plot(Effect(c("ranged2d"), m6),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Res_part_use](/Plots/Res_part_use_9.png "Res_part_use")
+
 
