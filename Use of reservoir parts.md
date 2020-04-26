@@ -763,6 +763,7 @@ We can use the _predictorEffects_ function to predict the response probability o
 m9_pred_eff <- predictorEffects(m9)
 print(m9_pred_eff[["fi_species"]], type="probability")            #  print(m9_pred_eff)
 ```
+```
 fi_species predictor effect
 
 fi_species*ranged2d effect (probability) for 0
@@ -848,6 +849,7 @@ For pike, there is  strong tendency for excursion in tributary while dam is redu
 ```
 summer$fi_species <- relevel(summer$fi_species,"pikeperch")
 ```
+
 
 
 
