@@ -1,4 +1,4 @@
-# How does the distance monthly range change?
+# How does distance monthly range change?
 
 ## Create a dataframe including monthly range and reservoir parts
 
