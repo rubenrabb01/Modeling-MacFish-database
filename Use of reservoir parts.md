@@ -53,14 +53,14 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`  
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
 ```
@@ -447,7 +447,7 @@ Threshold coefficients:
 3|2   13.814      4.807   2.874
 ```
 ```
-plot(allEffects(m3,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
+plot(Effect(c("fi_species", "body_size"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Res_part_use](/Plots/Res_part_use_41.png "Res_part_use")
 ```
@@ -750,13 +750,58 @@ Threshold coefficients:
 As before, distance range is significantly related to reservoir use in pikeperch relative to perk; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below). However, horizontal movement does not relate to the probability of visiting higher river area in pike
 whereas it does relative to lower river areas in wels
 ```
-plot(allEffects(m9,xlevels=list(res_part_order=seq(0,3,length=2))),rug = FALSE)
+plot(Effect(c("fi_species", "ranged2d"), m9),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Res_part_use](/Plots/Res_part_use_71.png "Res_part_use")
 ```
-plot(allEffects(m9,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m9,xlevels=list(ranged2d=seq(0,7000,length=10),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
 ![Res_part_use](/Plots/Res_part_use_72.png "Res_part_use")
+
+We can use the _predictorEffects_ function to predict the response probability of using a reservoir part at varying distance range (similarly may be done in previous analysis)
+```
+m9_pred_eff <- predictorEffects(m9)
+print(m9_pred_eff[["fi_species"]], type="probability")            #  print(m9_pred_eff)
+```
+fi_species predictor effect
+
+fi_species*ranged2d effect (probability) for 0
+           ranged2d
+fi_species            0       2000        3000        5000         7000
+  pike      0.024133431 0.07146084 0.119536092 0.297012318 0.5680007946
+  pikeperch 0.042332672 0.01223610 0.006515016 0.001834364 0.0005147403
+  wels      0.004083251 0.01170315 0.019727769 0.054932129 0.1437466916
+
+fi_species*ranged2d effect (probability) for 1
+           ranged2d
+fi_species           0      2000      3000       5000       7000
+  pike      0.23972872 0.4558306 0.5435118 0.56261179 0.38214139
+  pikeperch 0.34816898 0.1399811 0.0802831 0.02411076 0.00689446
+  wels      0.05200888 0.1347883 0.2060923 0.40231723 0.56498324
+
+fi_species*ranged2d effect (probability) for 2
+           ranged2d
+fi_species          0      2000      3000      5000       7000
+  pike      0.5147283 0.3889803 0.2877033 0.1240032 0.04453756
+  pikeperch 0.4722409 0.4856562 0.3957314 0.1812326 0.06082509
+  wels      0.3121952 0.4809073 0.5152228 0.4348186 0.25106341
+
+fi_species*ranged2d effect (probability) for 3
+           ranged2d
+fi_species          0       2000       3000       5000        7000
+  pike      0.2214095 0.08372829 0.04924875 0.01637268 0.005320263
+  pikeperch 0.1372575 0.36212665 0.51747044 0.79282230 0.931765713
+  wels      0.6317127 0.37260123 0.25895713 0.10793203 0.040206656
+```
+Estimate upper and lower 95% CI
+```
+summary(m9_pred_eff[["fi_species"]], type="probability")
+```
+Plot predictions
+```
+plot(predictorEffects(m9, ~ fi_species), lines=list(multiline=TRUE),axes=list(grid=FALSE))      # plot(predictorEffects(m9, ~ fi_species), axes=list(grid=TRUE))
+```
+![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
 
 With **Model 3** (less "true" model) we may see the relationship between body size and selection of reservoir parts
 ```
@@ -765,7 +810,7 @@ summary(m3)
 ```
 Cumulative Link Mixed Model fitted with the Laplace approximation
 
-formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +      (1 | fi_fishid)
+formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) + (1 | fi_fishid)
 data:    summer
 
  link  threshold nobs logLik   AIC     niter     max.grad cond.H
@@ -794,17 +839,15 @@ Threshold coefficients:
 2|3    26.97      12.86   2.098
 ```
 ```
-plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
-![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_74.png "Res_part_use")
 
 From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
 For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
 ```
 summer$fi_species <- relevel(summer$fi_species,"pikeperch")
 ```
-
-
 
 
 
