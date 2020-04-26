@@ -40,7 +40,7 @@ data_poglm$fi_species <- as.factor(data_poglm$fi_species)
 ```
 ## Fit Proportional Odds Model (_POGLMM_) to  the data of daily use of reservoir parts (FULL DATASET)
 
-_The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and that there are seasonal preferences_
+_The fitted models will serve to test the hypothesis that pike, pikeperch and wels make different use of the different reservoir parts and wether there are seasonal preferences_
 
 - We will consider a logit model with four factors for the ordered response in reservoir parts use fitted using the _clmm_ function for mixed-effects models in library **ordinal**
 
