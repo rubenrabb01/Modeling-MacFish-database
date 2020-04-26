@@ -799,7 +799,7 @@ plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("
 ![Res_part_use](/Plots/Res_part_use_73.png "Res_part_use")
 
 From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
-For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against_wels_ or _pikeperch_), re-fit and run the model changing the reference level before
+For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
 ```
 summer$fi_species <- relevel(summer$fi_species,"pikeperch")
 ```
