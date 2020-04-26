@@ -623,35 +623,41 @@ formula: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +      (1
 data:    spring_I
 
  link  threshold nobs logLik   AIC     niter     max.grad cond.H
- logit flexible  1033 -1172.53 2365.06 840(2518) 7.24e+01 1.7e+09
+ logit flexible  1033 -1109.39 2238.78 867(2630) 9.39e+01 2.3e+09
 
 Random effects:
  Groups     Name        Variance Std.Dev.
- fi_fishid  (Intercept) 0.9834   0.9917
- fi_species (Intercept) 0.0000   0.0000
+ fi_fishid  (Intercept) 1.393    1.18
+ fi_species (Intercept) 0.000    0.00
 Number of groups:  fi_fishid 13,  fi_species 3
 
 Coefficients:
                                Estimate Std. Error z value Pr(>|z|)
-fi_speciespikeperch           4.767e-01  8.485e-01   0.562 0.574268
-fi_specieswels                1.287e+00  8.674e-01   1.484 0.137878
-ranged2d                     -1.522e-04  9.947e-05  -1.531 0.125882
-fi_speciespikeperch:ranged2d  4.508e-04  1.351e-04   3.337 0.000847 ***
-fi_specieswels:ranged2d       8.666e-05  1.207e-04   0.718 0.472822
+fi_speciespikeperch           0.3044786  0.9978994   0.305  0.76028
+fi_specieswels                2.0127851  1.0240552   1.966  0.04936 *
+ranged2d                     -0.0003255  0.0001015  -3.206  0.00134 **
+fi_speciespikeperch:ranged2d  0.0006111  0.0001347   4.535 5.76e-06 ***
+fi_specieswels:ranged2d      -0.0001491  0.0001239  -1.203  0.22880
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Threshold coefficients:
     Estimate Std. Error z value
-0|1  -2.5798     0.7415  -3.479
-1|3   0.1111     0.7339   0.151
-3|2   1.9550     0.7354   2.659
+0|1  -2.9384     0.8715  -3.372
+1|2  -0.1469     0.8643  -0.170
+2|3   1.5186     0.8649   1.756
 ```
-The distance range is significant in pikeperch as we can see in the following plot
+The distance range is significant in pikeperch as we can see in the following plots
+
+```
+plot(Effect(c("fi_species", "ranged2d"), m9),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
+```
+![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
+
 ```
 plot(allEffects(m9,xlevels=list(ranged2d=seq(0,6500,length=10),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
-![Res_part_use](/Plots/Res_part_use_5.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_51.png "Res_part_use")
 
 ## Model fit by season: SPRING_II
 
@@ -857,9 +863,14 @@ Threshold coefficients:
 2|3    26.97      12.86   2.098
 ```
 ```
-plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(Effect(c("fi_species", "body_size"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Res_part_use](/Plots/Res_part_use_74.png "Res_part_use")
+
+```
+plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_75.png "Res_part_use")
 
 From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
 For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
@@ -995,6 +1006,5 @@ plot(allEffects(m9,xlevels=list(ranged2d=seq(0,7000,length=10),fi_species=c("pik
 plot(predictorEffects(m9, ~ fi_species), lines=list(multiline=TRUE),axes=list(grid=FALSE))      # plot(predictorEffects(m9, ~ fi_species), axes=list(grid=TRUE))
 ```
 ![Res_part_use](/Plots/Res_part_use_83.png "Res_part_use")
-
 
 
