@@ -217,19 +217,25 @@ Threshold coefficients:
 3|2  1.63703    1.12449   1.456
 ```
 Plot body size x season
+
 ```
-plot(allEffects(m10,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+plot(Effect(c("fi_species", "season"), m10),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Res_part_use](/Plots/Res_part_use_1.png "Res_part_use")
 
-Taking Model **m9**, is there a body-size dependent seasonal effect on the use of reservoir parts?
+```
+plot(allEffects(m10,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_11.png "Res_part_use")
+
+Taking Model **m9**, ask the question as to wether there are seasonal effects dependent on body size on the use of reservoir parts?
 ```
 summary(m9)
 ```
 ```
 Cumulative Link Mixed Model fitted with the Laplace approximation
 
-formula: res_part_order ~ 1 + body_size * season + (1 | fi_species) +      (1 | fi_fishid) + (1 | season)
+formula: res_part_order ~ 1 + body_size * season + (1 | fi_species) +  (1 | fi_fishid) + (1 | season)
 data:    data_poglm_sub
 
  link  threshold nobs logLik   AIC      niter       max.grad cond.H
@@ -267,7 +273,8 @@ plot(allEffects(m9,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("
 ```
 ![Res_part_use](/Plots/Res_part_use_2.png "Res_part_use")
 
-The worst fit-model, **m8** may help us to see the relationship of the use of reservoir parts by each species
+```
+Explore the relationship of the use of reservoir parts by each species using the worst fit **Model 8**
 
 ```
 m8<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
@@ -283,33 +290,44 @@ formula: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +
 data:    data_poglm_sub
 
  link  threshold nobs logLik   AIC      niter      max.grad cond.H
- logit flexible  5375 -6053.92 12129.83 1193(7050) 9.83e-03 3.2e+09
+ logit flexible  5375 -5954.98 11931.95 1248(6580) 1.78e-02 2.4e+09
 
 Random effects:
  Groups     Name        Variance Std.Dev.
- fi_fishid  (Intercept) 2.04462  1.4299
- season     (Intercept) 0.09973  0.3158
- fi_species (Intercept) 0.00000  0.0000
+ fi_fishid  (Intercept) 2.0110   1.4181
+ season     (Intercept) 0.4973   0.7052
+ fi_species (Intercept) 0.0000   0.0000
 Number of groups:  fi_fishid 13,  season 5,  fi_species 3
 
 Coefficients:
                                Estimate Std. Error z value Pr(>|z|)
-body_size                      0.008725   0.008283   1.053    0.292
-fi_speciespikeperch           13.162174   9.945927   1.323    0.186
-fi_specieswels                 6.477671   9.201870   0.704    0.481
-body_size:fi_speciespikeperch -0.016380   0.013328  -1.229    0.219
-body_size:fi_specieswels      -0.006073   0.008635  -0.703    0.482
+body_size                      0.011824   0.007983   1.481   0.1386
+fi_speciespikeperch           16.489809   9.627378   1.713   0.0867 .
+fi_specieswels                11.722650   8.883948   1.320   0.1870
+body_size:fi_speciespikeperch -0.020973   0.013030  -1.610   0.1075
+body_size:fi_specieswels      -0.011049   0.008333  -1.326   0.1848
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Threshold coefficients:
     Estimate Std. Error z value
-0|1    7.238      8.655   0.836
-1|3    9.405      8.656   1.087
-3|2   11.000      8.656   1.271
+0|1   10.190      8.342   1.221
+1|2   12.394      8.343   1.486
+2|3   14.097      8.343   1.690
 ```
+There is a marginally significant effect in _pikeperch_. If we change the reference level from _pike_ to _pikeperch_ we can see that the same occurs for _pike_
+```
+data_poglm_sub$fi_species <- relevel(data_poglm_sub$fi_species,"pikeperch")
+```
+```
+plot(Effect(c("fi_species", "body_size"), m8),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
+```
+![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
+
 ```
 plot(allEffects(m8,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
 ```
-![Res_part_use](/Plots/Res_part_use_3.png "Res_part_use")
+![Res_part_use](/Plots/Res_part_use_31.png "Res_part_use")
 
 
 ## Model fit by season: SPRING_I
@@ -846,9 +864,138 @@ plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("
 
 From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
 For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
+
+## Model fit by season: AUTUMN
+
+Subset data for season Autumn
 ```
-summer$fi_species <- relevel(summer$fi_species,"pikeperch")
+autumn <- subset(data_poglm_sub,season=="autumn")
 ```
+```
+m1<-clmm(res_part_order ~ 1 + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m2<-clmm(res_part_order ~ 1 + body_size + fi_species + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m3<-clmm(res_part_order ~ 1 + body_size * fi_species + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m4<-clmm(res_part_order ~ 1 + body_size + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m5<-clmm(res_part_order ~ 1 + fi_species + (1| fi_species) + (1| fi_fishid),data = autumn , link="logit",Hess=T)
+m6<-clmm(res_part_order ~ 1 + ranged2d + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m7<-clmm(res_part_order ~ 1 + body_size + ranged2d + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m8<-clmm(res_part_order ~ 1 + body_size * ranged2d + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m9<-clmm(res_part_order ~ 1 + fi_species * ranged2d + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+m10<-clmm(res_part_order ~ 1 + fi_species + ranged2d + (1| fi_species) + (1| fi_fishid),data = autumn, link="logit",Hess=T)
+```
+```
+bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10)
+sortScore(bic , score = "bic")
+```
+```
+ df       BIC
+m9  10  2739.082
+m7   7  2755.793
+m10  8  2762.776
+m1   5  2763.182
+m4   6  2769.653
+m5   7  2776.924
+m2   8  2782.888
+m3  10  2796.253
+m6   6  2999.868
+m8  10 10914.497
+```
+In this case, the best-fit model is the same as for previous season and it is allways preferred to subsequent best-fit models
+```
+lrtest(m9,m7)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + body_size + ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df Chisq Pr(>Chisq)
+1  10 -1333.4
+2   7 -1352.6 -3 38.38  2.348e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m9,m10)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + fi_species + ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+  #Df  LogLik Df Chisq Pr(>Chisq)
+1  10 -1333.4
+2   8 -1352.5 -2 38.14  5.223e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+lrtest(m9,m1)
+```
+```
+Likelihood ratio test
+
+Model 1: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+Model 2: res_part_order ~ 1 + (1 | fi_species) + (1 | fi_fishid)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  10 -1333.4
+2   5 -1363.5 -5 60.216  1.097e-11 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+```
+summary(m9)
+```
+```
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: res_part_order ~ 1 + fi_species * ranged2d + (1 | fi_species) +
+    (1 | fi_fishid)
+data:    autumn
+
+ link  threshold nobs logLik   AIC     niter     max.grad cond.H
+ logit flexible  1371 -1333.42 2686.85 887(4645) 1.92e+02 5.0e+09
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ fi_fishid  (Intercept) 5.421    2.328
+ fi_species (Intercept) 0.000    0.000
+Number of groups:  fi_fishid 13,  fi_species 3
+
+Coefficients:
+                               Estimate Std. Error z value Pr(>|z|)
+fi_speciespikeperch          -2.862e+00  1.922e+00  -1.489    0.137
+fi_specieswels               -2.546e+00  1.964e+00  -1.296    0.195
+ranged2d                     -5.337e-04  7.423e-05  -7.189 6.52e-13 ***
+fi_speciespikeperch:ranged2d  6.683e-04  1.585e-04   4.216 2.49e-05 ***
+fi_specieswels:ranged2d       7.318e-04  1.342e-04   5.455 4.89e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Threshold coefficients:
+    Estimate Std. Error z value
+0|1  -4.7424     1.6659  -2.847
+1|2  -1.8994     1.6612  -1.143
+2|3   0.6267     1.6602   0.377
+```
+```
+plot(Effect(c("fi_species", "ranged2d"), m9),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
+```
+![Res_part_use](/Plots/Res_part_use_81.png "Res_part_use")
+```
+plot(allEffects(m9,xlevels=list(ranged2d=seq(0,7000,length=10),fi_species=c("pike","pikeperch","wels"))), rug = FALSE, style = "stacked",col=cm.colors(5))
+```
+![Res_part_use](/Plots/Res_part_use_82.png "Res_part_use")
+
+```
+plot(predictorEffects(m9, ~ fi_species), lines=list(multiline=TRUE),axes=list(grid=FALSE))      # plot(predictorEffects(m9, ~ fi_species), axes=list(grid=TRUE))
+```
+![Res_part_use](/Plots/Res_part_use_83.png "Res_part_use")
 
 
 
