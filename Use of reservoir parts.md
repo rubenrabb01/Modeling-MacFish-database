@@ -1075,6 +1075,7 @@ Model 2: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
 ```
 summary(m6)
 ```
+```
 Cumulative Link Mixed Model fitted with the Laplace approximation
 
 formula: res_part_order ~ 1 + ranged2d + (1 | fi_species) + (1 | fi_fishid)
@@ -1106,5 +1107,3 @@ We see that larger distance ranges related to decreased probability of using tri
 plot(Effect(c("ranged2d"), m6),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Res_part_use](/Plots/Res_part_use_9.png "Res_part_use")
-
-
