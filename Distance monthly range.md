@@ -58,9 +58,18 @@ hist(data_distr$dist.range, breaks = 20)
 ```
 ![Dist_range](/Plots/Dist_range_hist.png "Dist_range")
 
+Check for correlations between "distance_range" and the different reservoir parts use
+```
+corr<-cor(data_distr[,c(4,10,11,12,13)], use="pairwise", method="spearman")
+corrplot(corr,method="number")
+```
+![Dist_range](/Plots/Dist_range_corr.png "Dist_range")
+
+
+
 ## Fit Linear Mixed-Effects Models (LMM) to data of monthly distance range and use of reservoir parts
 
-Fit models using the subseted data to explore which RF fits the data better
+Fit models using the subseted data to explore which RF fits best
 ```
 m_id<-lmer(dist.range ~ 1  + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_id_sp<-lmer(dist.range ~ 1  + (1| fi_species) + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -95,4 +104,3 @@ Model 2: dist.range ~ 1 + (1 | mon_yr) + (1 | fi_fishid) + (1 | fi_species)
 ```
 **Model m_id_sp_mon** is not significantly better than **Model m_id_mon** so we retain the later RF structure
 
-### 2. Fit a series of conditional _POGLMMs_ (incl. covariates) with the RFs structure of selected model (m4)
