@@ -19,6 +19,7 @@ arrange(data_distr,desc(mon_yr),fi_fishid)
 ```
 ```
 data_distr
+```
 
 | fi_fishid | fi_species | mon_yr  | month | dist.range | dam | middle | tributary | upper | day_count | ca_tl_mm | ca_weight_g | fi_sex |
 |-----------|------------|---------|-------|------------|-----|--------|-----------|-------|-----------|----------|-------------|--------|
@@ -38,11 +39,18 @@ data_distr
 Convert and rename variables for analysis
 ```
 data_distr$mon_yr <- as.factor(data_distr$mon_yr)
+data_distr$month <- as.factor(data_distr$month)
 data_distr$res_part <- as.factor(data_distr$res_part)
 data_distr$fi_fishid <- as.factor(data_distr$fi_fishid)
 data_distr$fi_species <- as.factor(data_distr$fi_species)
 colnames(data_distr)[6] <- "body_size"
 ```
+Convert the "mon_yr" variable into a time vector of repeated-measures
+```
+data_distr$mon_yr<-revalue(data_distr$mon_yr, c("4_2017"="0","5_2017"="1","6_2017"="2","7_2017"="3","8_2017"="4","9_2017"="5","10_2017"="6","11_2017"="7", "12_2017"="8","1_2018"="9","2_2018"="10","3_2018"="11","4_2018"="12"))
+data2<-unique(setDT(data_distr)[order(mon_yr, fi_fishid)], by = "date")
+```
+
 Summary of the variable  "dist_range"
 ```
 ddply(data_distr,.(fi_species),summarize,mean=mean(dist.range),sd=sd(dist.range),nobs=length(unique(fi_fishid)))
@@ -58,18 +66,16 @@ hist(data_distr$dist.range, breaks = 20)
 ```
 ![Dist_range](/Plots/Dist_range_hist.png "Dist_range")
 
-Check for correlations between "distance_range" and the different reservoir parts use
+Check for correlations between "distance_range" and reservoir parts
 ```
 corr<-cor(data_distr[,c(4,10,11,12,13)], use="pairwise", method="spearman")
 corrplot(corr,method="number")
 ```
 ![Dist_range](/Plots/Dist_range_corr.png "Dist_range")
 
-
-
 ## Fit Linear Mixed-Effects Models (LMM) to data of monthly distance range and use of reservoir parts
 
-Fit models using the subseted data to explore which RF fits best
+Fit models using the subseted data to explore which RF fits better
 ```
 m_id<-lmer(dist.range ~ 1  + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_id_sp<-lmer(dist.range ~ 1  + (1| fi_species) + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -103,4 +109,3 @@ Model 2: dist.range ~ 1 + (1 | mon_yr) + (1 | fi_fishid) + (1 | fi_species)
 2   5 -3020.7  1     0     0.9974
 ```
 **Model m_id_sp_mon** is not significantly better than **Model m_id_mon** so we retain the later RF structure
-
