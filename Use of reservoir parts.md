@@ -13,10 +13,11 @@ Count use of reservoir parts by season
 ```
 data_poglm <- data_poglm %>% add_count(season, fi_fishid, res_part)
 ```
-Create a new ordered response variable for res_part with a four-point scale (0-3) and rename the variable "ca_tl_mm" into "body_size"
+Create a new ordered response variable for _res_part_ with a four-point scale (0-3) and rename the variable _ca_tl_mm_ into _body_size_
 ```
 data_poglm$res_part_order <- revalue(data_poglm$res_part,c("dam"="0", "middle"="1", "upper"="2", "tributary"="3"))
 colnames(data_poglm)[5] <- "body_size"
+data_poglm
 ```
 | fi_fishid | date       | season | species   | res_part  | res_part_order | ranged2d  | meand2d   | mean_depth | body_size | ca_lat_catch c | ca_lon_catch |
 |-----------|------------|--------|--------------------|-----------|----------------|-----------|-----------|------------|-----------|----------------|--------------|
@@ -53,16 +54,16 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`  
-:books:`library(mlogit)`  
-:books:`library(AICcmodavg)`  
-:books:`library(MASS)`  
-:books:`library(effects)`  
-:books:`library(lme4)`  
-:books:`library(languageR)`  
-:books:`library(ordinal)`  
+:books:`library(ART)`
+:books:`library(mlogit)`
+:books:`library(AICcmodavg)`
+:books:`library(MASS)`
+:books:`library(effects)`
+:books:`library(lme4)`
+:books:`library(languageR)`
+:books:`library(ordinal)`
 
-To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the "fi_species" variable
+To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the _fi_species_ variable
 ```
 data_poglm_sub <- data_poglm[which(complete.cases(data_poglm[,c('fi_fishid', 'fi_species')])),]
 ```
@@ -140,7 +141,7 @@ m10<-clmm(res_part_order ~ 1 + fi_species * season + (1| fi_species) + (1| fi_fi
 m3<-clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 m9<-clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 ```
-Perform a LRT comparison between the first best-fit Model (**m10**) and subsequent best-fit models **Model 3** and **Model 9**. We drop **Model 6**  and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
+Perform a LRT comparison between the first best-fit Model and subsequent best-fit models **Model 3** and **Model 9**. We drop **Model 6**  and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
 ```
 lrtest(m10,m3)
 ```
@@ -228,7 +229,7 @@ plot(allEffects(m10,xlevels=list(fi_species=c("pike","pikeperch","wels"))), rug 
 ```
 ![Res_part_use](/Plots/Res_part_use_11.png "Res_part_use")
 
-Taking Model **m9**, ask the question as to wether there are seasonal effects dependent on body size on the use of reservoir parts?
+Taking **Model 9**, ask the question as to wether there are seasonal effects dependent on body size on the use of reservoir parts?
 ```
 summary(m9)
 ```
@@ -695,8 +696,8 @@ m9  10   518.8255
 m8  11 12202.3182
 ```
 In this case, the LRTs between **Model 9** and other models are non-significant except respect to **Model 10**. There is much randomness at the individual level and there is not significant effects of either **ranged2d**,
-**body_size** in Models 4 and 6 but a marginally significant effect of **fi_species** in **Model 5**. The addition of **body_size** to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
-However, in the latter model the response probability is significant for pikeperch. We can see this by focusing only on the **fi_species** variable in **Model 2** versus **Model 5**
+_body_size_ in Models 4 and 6 but a marginally significant effect of _fi_species_ in **Model 5**. The addition of _body_size_ to this model (**Model 2**) does not imrpove the overall fit (LRT: P > 0.1).
+However, in the latter model the response probability is significant for pikeperch. We can see this by focusing only on the _fi_species_ variable in **Model 2** versus **Model 5**
 
 ![Res_part_use](/Plots/Res_part_use_6.jpg "Res_part_use")
 
