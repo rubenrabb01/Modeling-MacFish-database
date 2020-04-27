@@ -18,7 +18,7 @@ Rename some variables
 colnames(data_distr)[6] <- "body_size"
 colnames(data_distr)[2] <- "time"
 ```
-```
+
 Convert the variable _mon_yr_ variable into a time vector of repeated-measures
 ```
 data_distr$time<-revalue(data_distr$time, c("4_2017"="0","5_2017"="1","6_2017"="2","7_2017"="3","8_2017"="4","9_2017"="5","10_2017"="6","11_2017"="7", "12_2017"="8","1_2018"="9","2_2018"="10","3_2018"="11","4_2018"="12"))
@@ -112,4 +112,3 @@ Model 2: dist.range ~ 1 + (1 | time) + (1 | fi_fishid) + (1 | fi_species)
 2   5 -3020.7  1     0     0.9974
 ```
 **Model m_id_sp_mon** is not significantly better than **Model m_id_mon** so we retain the later RF structure
-
