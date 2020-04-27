@@ -503,8 +503,8 @@ m2   8  2414.831
 m3  10  2423.235
 m8  11 12202.318
 ```
-Again, the null itercept model is the first best model. The variable _ranged2d_ is only significant in the presence of an interaction so we focus on Model 9, which is the only relevant for our hypothesis testing
-If we want to be certain as to wether **Model 9** explains well the variability in the use of reservoir, check the resulta of the two-by-two LRT comparisons
+Again, the null itercept model is the first best model. The variable _ranged2d_ is only significant in the presence of an interaction so we focus on **Model 9**, which is the only relevant for our hypothesis testing
+If we want to be certain as to wether **Model 9** explains well the variability in the use of reservoir, check the resulta of the two-by-two LRT comparisons.
 ```
 lrtest(m1,m9)
 ```
