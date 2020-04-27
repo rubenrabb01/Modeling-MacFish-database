@@ -13,8 +13,7 @@ data_total_res<- merge(mean.ranged2d, data.res.parts, by = c("fi_fishid", "date"
 data_total_res<- dcast(setDT(data_total_res), fi_fishid+mon_yr~res_part, length)
 data_distr<- merge(dist.range.month, data_total_res, by = c("fi_fishid","mon_yr"))
 ```
-
-
+```
 arrange(data_distr,desc(mon_yr),fi_fishid)
 ```
 ```
