@@ -19,7 +19,7 @@ arrange(data_distr,desc(mon_yr),fi_fishid)
 ```
 ```
 data_distr
-```
+
 | fi_fishid | fi_species | mon_yr  | month | dist.range | dam | middle | tributary | upper | day_count | ca_tl_mm | ca_weight_g | fi_sex |
 |-----------|------------|---------|-------|------------|-----|--------|-----------|-------|-----------|----------|-------------|--------|
 | T449202_1 | pikeperch  | 10_2017 | 10    | 3609.092   | 0   | 3      | 9         | 27    | 31        | 430      | 605         | M      |
@@ -34,7 +34,7 @@ data_distr
 | T449209_1 | pike       | 12_2017 | 12    | 587.6172   | 1   | 31     | 0         | 21    | 31        | 640      | 1750        | X      |
 | T449209_1 | pike       | 2_2018  | 2     | 4383.3361  | 5   | 27     | 0         | 22    | 28        | 640      | 1750        | X      |
 | T449209_1 | pike       | 3_2018  | 3     | 5059.2163  | 17  | 22     | 2         | 12    | 31        | 640      | 1750        | X      |
-```
+
 Convert and rename variables for analysis
 ```
 data_distr$mon_yr <- as.factor(data_distr$mon_yr)
