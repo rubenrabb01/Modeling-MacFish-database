@@ -3,7 +3,6 @@
 ## Create a dataframe including monthly range and reservoir parts
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
-
 ```
 mean.ranged2d[, mon_yr := paste(month(date),"_",year(date), sep = "")]
 dist.range.month <- mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d), day_count = length(date)), by = .(fi_fishid, mon_yr, month)]
@@ -18,14 +17,13 @@ Rename some variables
 colnames(data_distr)[6] <- "body_size"
 colnames(data_distr)[2] <- "time"
 ```
-
 Convert the variable _mon_yr_ variable into a time vector of repeated-measures
 ```
 data_distr$time<-revalue(data_distr$time, c("4_2017"="0","5_2017"="1","6_2017"="2","7_2017"="3","8_2017"="4","9_2017"="5","10_2017"="6","11_2017"="7", "12_2017"="8","1_2018"="9","2_2018"="10","3_2018"="11","4_2018"="12"))
 ```
-Convert variable including _time_ to numeric
+Convert variables including _time_ to integer to allow correct ordering (from months 10-12 2018)
 ```
-data_distr$time <- as.numeric(data_distr$time)
+data_distr$time <- as.integer(data_distr$time)
 data_distr$month <- as.factor(data_distr$month)
 data_distr$res_part <- as.factor(data_distr$res_part)
 data_distr$fi_fishid <- as.factor(data_distr$fi_fishid)
@@ -34,6 +32,7 @@ data_distr$fi_species <- as.factor(data_distr$fi_species)
 Order by _fi_fishid_ and _time_
 ```
 data_distr<-data_distr[with(data_distr, order(fi_fishid, time)),]
+data_distr$time <- as.factor(data_distr$time)
 ```
 ```
 data_distr
@@ -52,7 +51,6 @@ data_distr
 | T449268_1 | wels       | 1    | 2348.48336 | 0   | 22     | 0         | 27    | 1620      | 25100       | 30        |
 | T449268_1 | wels       | 2    | 1980.08735 | 0   | 29     | 0         | 13    | 1620      | 25100       | 29        |
 | T449268_1 | wels       | 3    | 3025.401   | 0   | 23     | 0         | 17    | 1620      | 25100       | 31        |
-
 
 Summary of the variable  _dist_range_
 ```
