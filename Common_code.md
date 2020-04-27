@@ -506,7 +506,7 @@ ggplot(dist.range.month, aes(x = mon_yr, y=dist.range, col = fi_species))+
 
 ```
 dist.range.season <-  mean.ranged2d[, .(dist.range = max(meand2d)-min(meand2d), day_count = length(date)), by = .(fi_fishid, season)]
-dist.range.season <- merge(dist.range.month, fish.info, by = c("fi_fishid"))
+dist.range.season <- merge(dist.range.season, fish.info, by = c("fi_fishid"))
 ```
 ```
 dist.range.season$season <- factor(dist.range.season$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
