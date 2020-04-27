@@ -54,14 +54,14 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
-:books:`library(ART)`
-:books:`library(mlogit)`
-:books:`library(AICcmodavg)`
-:books:`library(MASS)`
-:books:`library(effects)`
-:books:`library(lme4)`
-:books:`library(languageR)`
-:books:`library(ordinal)`
+:books:`library(ART)`  
+:books:`library(mlogit)`  
+:books:`library(AICcmodavg)`  
+:books:`library(MASS)`  
+:books:`library(effects)`  
+:books:`library(lme4)`  
+:books:`library(languageR)`  
+:books:`library(ordinal)`  
 
 To prevent the error "models were not all fitted to the same size of dataset" upon performing a Log-likelihood Ratio test (LRT) we need to fit the first model to a dataset without missing data including the _fi_species_ variable
 ```
