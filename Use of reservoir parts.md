@@ -427,9 +427,9 @@ Model 2: res_part_order ~ 1 + body_size * fi_species + (1 | fi_species) +
 1   7 -1179.7
 2  10 -1176.9  3 5.4812     0.1398
 ```
-These results show that a high proportion of the variability in the use of reserovir is random as denoted by Model 1.
-However, we see that the comparisons between Model 3 and Models 2 and 4 are marginally significant indicating that the inclusion of the interaction tends to improve the model fit over models without it.
-Since we are interested in the interaction term, we finally keep Model 3.
+These results show that a high proportion of the variability in the use of reserovir is random as denoted by **Model 1**.
+However, we see that the comparisons between **Model 3** and **Models 2 and 4** are marginally significant indicating that the inclusion of the interaction tends to improve the model fit over models without it.
+Since we are interested in the interaction term, we finally keep **Model 3**.
 ```
 summary(m3)
 ```
