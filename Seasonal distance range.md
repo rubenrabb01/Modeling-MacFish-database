@@ -58,13 +58,14 @@ corrplot(corr,method="number")
 
 ### 1. Find the best unconditional model fitted via REML
 
-#### 1.1. Fit nested intercept models including all potentially relevant random-effects and compare them with LRT. Since models **m_int_1** and **m_int_2** are not nested they are compared using is the difference in LogLik between both models
+#### 1.1. Fit nested intercept-only models including all potentially relevant random-effects and compare them with LRT
 
 ```
 m_int_1<-lmer(dist.range ~ 1  + (1| Species) + (1| fi_fishid),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_int_2<-lmer(dist.range ~ 1  + (1| Species) + (1| season),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_int_3<-lmer(dist.range ~ 1  + (1| fi_fishid) + (1| Species) + (1| season),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 ```
+Since models **m_int_1** and **m_int_2** are not nested they are compared using their difference in LogLik as follows:
 ```
 0.5*(1 - pchisq(3.5, 1)) + 0.5*(1 - pchisq(3.5, 2))
 ```
@@ -133,6 +134,8 @@ Model **m_sl_1** is chosen
 
 ### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
+Fit the models with setting **REML=FALSE**
+
 ```
 m1<-lmer(dist.range ~ 1 + body_size + Species + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m2<-lmer(dist.range ~ 1 + body_size * Species + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -164,6 +167,23 @@ m8  47 2526.404
 m6  46 2527.218
 m10 61 2572.438
 ```
+Export table of the six best models
+
+:books:`library(sjPlot)`
+```
+tab_model(m1,m2,m3,m9,m7,m5, transform = NULL, collapse.ci = F,  show.adj.icc = TRUE, auto.label = FALSE,  show.se = TRUE,collapse.se = T,
+              dv.labels = c("Model 1", "Model 2","Model 3","Model 4","Model 5", "Model 6"),
+               string.pred = "Variable",
+               string.p = "P" ,file = "Season_dist.range.doc", use.viewer = TRUE)
+
+```
+:warning: I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument"
+This is probably related to incorrect loading of the _sjPlot_ library since there is also failure to running the following code:
+```
+sjp.lmer(m2)
+```
+Compare best-fit models
+
 ```
 lrtest(m1,m2)
 ```
@@ -226,9 +246,9 @@ Model 2: dist.range ~ 1 + body_size * Species + season + (season |
 ```
 **Model 2** is always selected. Note that **Model 2** and **Model 3** have the same _df_ and in this case the lower log-likelihood of **Model 3** indicates a poorer fit than **Model 2**
 
-### Analysis of the effects of body size on seasonal distance range travelled by each species
+### 3. Analysis of the effects of body size on seasonal distance range travelled by each species
 
-Look at the results summary for the best-fit model
+Looking at the summary results for the best-fit model we see the _Species_ x _body_size_ interaction is significant
 ```
 summ(m2)
 ```
@@ -280,11 +300,95 @@ Grouping variables:
       Species           3       0.00
 -------------------------------------
 ```
+
+#### Calculate Level-2 and Level-3 ICC indices
+
+:books:`library(sjstats)`
+```
+iccm.1st <- icc(m2)
+print(iccm.1st)
+print(iccm.1st, comp = "var")
+icc(m2, adjusted = TRUE)
+```
+Between levels 1 and 2
+```
+sum(get_re_var(m2)) / (sum(get_re_var(m2)) + get_re_var(m2, "sigma_2"))
+```
+Between levels 2 and 3
+```
+get_re_var(m2)[2] / sum(get_re_var(m2))
+```
+:warning:  Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero). Re-fit the model
+Also there is some issue with the _sjstats_ package. Try the following for next session:
+```
+:books:`library(devtools)`
+install_local("~/Teri_longit_move/scripts/sjstats_0.17.8.tar.gz")
+```
+
+#### Pairwise comparisons
+
+:books:`library(emmeans)`
+```
+emtrends(m2, pairwise ~ Species, var = "body_size",pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+```
+$emtrends
+ Species   body_size.trend   SE   df lower.CL upper.CL
+ pike                7.016 1.92 29.0     3.08    10.95
+ pikeperch          -6.592 6.89 33.0   -20.61     7.43
+ wels                0.943 1.20 31.2    -1.50     3.38
+
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+ contrast         estimate   SE   df t.ratio p.value
+ pike - pikeperch    13.61 7.15 32.7  1.902  0.1542
+ pike - wels          6.07 2.26 29.6  2.681  0.0310
+ pikeperch - wels    -7.54 6.99 32.9 -1.077  0.5346
+
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 3 estimates
+```
+```
+emmeans(m2, pairwise ~ Species, pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+```
+$emmeans
+body_size = 890:
+ Species   emmean   SE    df lower.CL upper.CL
+ pike        3589 1185 282.6     1257     5921
+ pikeperch   1933 3044  36.2    -4239     8105
+ wels        3595 1346 179.8      938     6252
+
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+body_size = 890:
+ contrast         estimate   SE    df t.ratio p.value
+ pike - pikeperch  1655.82 3266  38.7  0.507  0.8684
+ pike - wels         -6.29 1793 230.4 -0.004  1.0000
+ pikeperch - wels -1662.11 3328  37.9 -0.499  0.8720
+
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 3 estimates
+```
+- Trends are significant between _pike_ and _wels_
+- However, contrasts render non-significant as they assess least-square means but not trends/slopes (besides not accounting for random-effects and the involvement of the interaction)
+- This is the meaning of further performing simple slope analysis
+
 #### Plot main-effects
+
 ```
 plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Dist_range_season](/Plots/Dist_range_season_1.png "Dist_range_season")
+
+**Note** that similar linear predictions can be obtained with the _emmip()_ function of the _emmeans_ library as follows:
+```
+emmip(m2, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
+```
 
 #### Simple slope analysis
 
@@ -418,7 +522,7 @@ Grouping variables:
 probe_interaction(m10, pred = body_size, modx = Species, mod2 = season, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Effects of dam use on travel distance as subject to body size")
 ```
 ```
-███████████████████████████████████████████ While Species (2nd moderator) = pike ███████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pike ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -457,7 +561,7 @@ When season = 4:
 Slope of body_size               5.04     2.69     1.88   0.07
 Conditional intercept         4825.21   684.55     7.05   0.00
 
-█████████████████████████████████████████ While Species (2nd moderator) = pikeperch ████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pikeperch ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -496,7 +600,7 @@ When season = 4:
 Slope of body_size               -7.46     10.21    -0.73   0.47
 Conditional intercept         -1054.76   4134.08    -0.26   0.80
 
-███████████████████████████████████████████ While Species (2nd moderator) = wels ███████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = wels ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -643,7 +747,7 @@ Now account for the moderator effects of dam on the slopes of body size
 probe_interaction(m2_dam, pred = body_size, modx = Species, mod2 = dam, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance as subject to dam use")
 ```
 ```
-████████████████████████████████████████ While dam (2nd moderator) = -8.12 (- 1 SD) ████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = -8.12 (- 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -668,7 +772,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     1.44   0.15
 Conditional intercept         7.91   0.25    31.22   0.00
 
-█████████████████████████████████████████ While dam (2nd moderator) = 21.31 (Mean) █████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = 21.31 (Mean) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -693,7 +797,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     0.56   0.58
 Conditional intercept         8.09   0.22    37.51   0.00
 
-████████████████████████████████████████ While dam (2nd moderator) = 50.75 (+ 1 SD) ████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = 50.75 (+ 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -917,7 +1021,7 @@ Grouping variables:
 probe_interaction(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Seasonal effects of dam use on travel distance")
 ```
 ```
-█████████████████████████████████████████████████ While Species (2nd moderator) = pike ██████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pike ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -956,7 +1060,7 @@ When season = 4:
 Slope of dam                  0.01   0.01     0.64   0.52
 Conditional intercept         8.04   0.26    31.39   0.00
 
-████████████████████████████████████████████████ While Species (2nd moderator) = pikeperch ███████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pikeperch ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -995,7 +1099,7 @@ When season = 4:
 Slope of dam                  -0.02   0.01    -1.86   0.06
 Conditional intercept          7.37   0.31    24.09   0.00
 
-██████████████████████████████████████████████████ While Species (2nd moderator) = wels ██████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = wels ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -1042,3 +1146,238 @@ Conditional intercept          7.34   0.19    37.89   0.00
 interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of dam use on travel distance in three fish species")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_7.png "Dist_range_season")
+
+### 4. Are there differences in excursion rates to tributary between species and across seasons?
+
+#### Fit a model using _tributary_ as DV and the _Species x Sesion_ interaction as a IV covariate for testing our main hypothesis
+
+For selecting the best random-effects terms, compare three unconditional models
+```
+m_trib_in1<-lmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_trib_in2<-lmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species)+(1| season),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_trib_sl<-lmer(tributary ~ 1 + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+```
+lrtest(m_trib_in1, m_trib_in2)
+lrtest(m_trib_in1, m_trib_sl)
+lrtest(m_trib_in2, m_trib_sl)
+```
+The slope model **m_trib_sl** is preferred
+
+#### Include the __Species x Season__ interaction and the _dam_ covariate if necessary
+
+```
+m_trib_sl<-lmer(tributary ~ 1 + season * Species + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_trib_sl_dam<-update(m_trib_sl,.~.+ dam)
+```
+```
+anova(m_trib_sl,m_trib_sl_dam)
+```
+```
+Data: data_distr_season
+Models:
+m_trib_sl: tributary ~ 1 + season * Species + (season | Species:fi_fishid) +
+m_trib_sl:     (season | Species)
+m_trib_sl_dam: tributary ~ season + Species + (season | Species:fi_fishid) +
+m_trib_sl_dam:     (season | Species) + dam + season:Species
+              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_sl     46 1081.8 1214.0 -494.88   989.76
+m_trib_sl_dam 47 1074.3 1209.4 -490.13   980.27 9.4942      1   0.002061 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+The addition of _dam_ improves the model fit. In fact, _dam_ is significantly related to _tributary_ but they are weakly correleated (r=-0.32, see multicolinearity tests above)
+
+```
+summary(m_trib_sl_dam)
+```
+```
+     AIC      BIC   logLik deviance df.resid
+  1074.3   1209.4   -490.1    980.3       84
+
+Scaled residuals:
+     Min       1Q   Median       3Q      Max
+-1.20736 -0.11954 -0.00655  0.11381  1.87933
+
+Random effects:
+ Groups            Name        Variance  Std.Dev. Corr
+ Species:fi_fishid (Intercept) 2.835e+02 16.83600
+                   season1     2.477e+02 15.73989 -0.97
+                   season2     2.664e+02 16.32192 -0.44  0.59
+                   season3     2.960e+02 17.20337  0.71 -0.68 -0.15
+                   season4     4.598e+02 21.44198 -0.43  0.59  0.78  0.10
+ Species           (Intercept) 2.613e-04  0.01616
+                   season1     3.521e-04  0.01877 -0.98
+                   season2     1.169e-03  0.03418 -0.83  0.89
+                   season3     2.277e-03  0.04772  0.20 -0.12  0.28
+                   season4     3.893e-03  0.06240 -0.46  0.55  0.83  0.75
+ Residual                      9.738e-01  0.98682
+Number of obs: 131, groups:  Species:fi_fishid, 31; Species, 3
+
+Fixed effects:
+                          Estimate Std. Error        df t value Pr(>|t|)
+(Intercept)                4.88384    5.36563  30.82524   0.910  0.36978
+season1                   -2.78834    5.04609  28.53476  -0.553  0.58486
+season2                    8.62427    5.43870  32.26003   1.586  0.12256
+season3                    4.31772    5.50512  31.13894   0.784  0.43878
+season4                    1.27849    7.08703  26.41304   0.180  0.85822
+Speciespikeperch          20.04900    8.32824  30.36135   2.407  0.02235 *
+Specieswels               13.31639    7.00551  30.49365   1.901  0.06681 .
+dam                       -0.08507    0.03753  26.43848  -2.267  0.03181 *
+season1:Speciespikeperch -19.35755    7.85088  28.28250  -2.466  0.02000 *
+season2:Speciespikeperch -23.08372    8.22884  30.91261  -2.805  0.00862 **
+season3:Speciespikeperch  12.98548    8.53188  30.50710   1.522  0.13831
+season4:Speciespikeperch -13.46096   11.04331  26.70534  -1.219  0.23353
+season1:Specieswels      -14.25948    6.59059  28.32734  -2.164  0.03908 *
+season2:Specieswels      -19.00174    6.97024  31.24823  -2.726  0.01041 *
+season3:Specieswels        7.94179    7.16601  30.44682   1.108  0.27643
+season4:Specieswels      -10.46457    9.17739  25.80841  -1.140  0.26465
+```
+
+#### Analysis of seasonal differences in tributary use between species (Species x Sesion interaction)
+
+```
+cat_plot(m_trib_sl_dam, pred = season, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,x.label = "Season", y.label = "Rate of tributary excursions", pred.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),modx.labels=c("pike","pikeperch","wels"), main.title = "Mean tributary use by specie and season")
+```
+![Dist_range_season](/Plots/Dist_range_season_8.png "Dist_range_season")
+
+#### Relationship between tributary excursions and dam use
+
+To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _Season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
+:warning: The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function. Thus, if we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
+```
+data_distr_season<-data_distr_season %>% mutate(tributary = replace(tributary, tributary == 0, 0.0001))
+```
+```
+m_trib_3int<-glmer(tributary ~ 1 + season * Species * dam + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+probe_interaction(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
+```
+```
+███████████████████████████████████████████ While Species (2nd moderator) = pike ███████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.14   0.02    -5.80   0.00
+Conditional intercept         -2.96   0.69    -4.31   0.00
+
+When season = 1:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.21   0.61    -0.35   0.73
+Conditional intercept         -2.20   8.86    -0.25   0.80
+
+When season = 2:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                   0.05   0.06     0.87   0.38
+Conditional intercept         -4.01   1.53    -2.62   0.01
+
+When season = 3:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                   0.01   0.02     0.51   0.61
+Conditional intercept         -4.14   1.39    -2.97   0.00
+
+When season = 4:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                   0.02   0.05     0.51   0.61
+Conditional intercept         -3.67   1.52    -2.42   0.02
+
+█████████████████████████████████████████ While Species (2nd moderator) = pikeperch ████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.07   0.06    -1.25   0.21
+Conditional intercept          2.10   1.11     1.89   0.06
+
+When season = 1:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.45   0.13    -3.35   0.00
+Conditional intercept         -7.98   2.25    -3.55   0.00
+
+When season = 2:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.11   0.05    -2.36   0.02
+Conditional intercept         -1.03   1.67    -0.62   0.53
+
+When season = 3:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.11   0.05    -2.08   0.04
+Conditional intercept          1.94   1.62     1.20   0.23
+
+When season = 4:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.07   0.07    -1.06   0.29
+Conditional intercept          1.08   1.72     0.63   0.53
+
+███████████████████████████████████████████ While Species (2nd moderator) = wels ███████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.05   0.03    -1.44   0.15
+Conditional intercept          1.46   0.66     2.20   0.03
+
+When season = 1:
+
+                                Est.   S.E.   t val.      p
+--------------------------- -------- ------ -------- ------
+Slope of dam                   -0.45   0.12    -3.68   0.00
+Conditional intercept         -10.65   1.75    -6.07   0.00
+
+When season = 2:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.03   0.03    -1.16   0.24
+Conditional intercept         -2.59   1.46    -1.77   0.08
+
+When season = 3:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.11   0.04    -2.75   0.01
+Conditional intercept          0.33   1.31     0.25   0.80
+
+When season = 4:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.04   0.02    -1.76   0.08
+Conditional intercept         -2.25   1.39    -1.62   0.11
+```
+```
+interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
+```
+![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+
+
+
+
+
