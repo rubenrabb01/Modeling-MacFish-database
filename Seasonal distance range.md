@@ -48,6 +48,8 @@ data_distr_season
 | T449268_1 | wels      | 3      | 3025.401   | 0   | 23     | 0         | 17    | 1620      | 25100       | 31        |
 
 Check for correlations between _distance_range_ and reservoir parts
+
+:books:`library(corrplot)`
 ```
 corr<-cor(data_distr_season[,c(3,9,10,11,12)], use="pairwise", method="spearman")
 corrplot(corr,method="number")
@@ -1382,7 +1384,6 @@ Conditional intercept         -2.25   1.39    -1.62   0.11
 interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
-
 
 
 
