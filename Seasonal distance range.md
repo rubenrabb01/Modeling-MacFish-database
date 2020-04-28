@@ -333,6 +333,214 @@ interact_plot(m2_gamma, pred = body_size, modx = Species, plot.points = TRUE,rob
 ```
 ![Dist_range_season](/Plots/Dist_range_season_3.png "Dist_range_season")
 
+### Does body size determine seasonal changes in distance range between species?
+
+For this analysis we can take **Model 10** including a three-way interaction between body size, season an species
+
+```
+summ(m10)
+```
+```
+MODEL INFO:
+Observations: 131
+Dependent Variable: dist.range
+Type: Mixed effects linear regression
+
+MODEL FIT:
+AIC = 2397.05, BIC = 2572.44
+Pseudo-R² (fixed effects) = 0.37
+Pseudo-R² (total) = 0.83
+
+FIXED EFFECTS:
+-------------------------------------------------------------------------------------
+                                               Est.      S.E.   t val.    d.f.      p
+---------------------------------------- ---------- --------- -------- ------- ------
+(Intercept)                                -3185.33   1799.71    -1.77   30.30   0.09
+body_size                                      7.66      2.44     3.14   30.21   0.00
+Speciespikeperch                           11031.82   4500.32     2.45   30.21   0.02
+Specieswels                                 5752.93   2551.46     2.25   30.25   0.03
+season1                                     1847.55   2180.42     0.85    4.22   0.44
+season2                                      569.71   2589.13     0.22   30.36   0.83
+season3                                     3153.20   2449.12     1.29   30.15   0.21
+season4                                     3531.27   2758.30     1.28   25.63   0.21
+body_size:Speciespikeperch                   -14.12      8.87    -1.59   30.20   0.12
+body_size:Specieswels                         -6.48      2.86    -2.27   30.21   0.03
+body_size:season1                             -0.34      2.89    -0.12    3.93   0.91
+body_size:season2                              0.74      3.50     0.21   29.72   0.83
+body_size:season3                             -4.30      3.33    -1.29   29.94   0.21
+body_size:season4                             -2.63      3.70    -0.71   24.58   0.48
+Speciespikeperch:season1                   -3914.98   6284.50    -0.62    6.60   0.55
+Specieswels:season1                        -6254.17   3144.25    -1.99    4.50   0.11
+Speciespikeperch:season2                   -3570.42   6435.99    -0.55   29.58   0.58
+Specieswels:season2                         1241.66   3657.64     0.34   29.90   0.74
+Speciespikeperch:season3                   -9054.48   6141.16    -1.47   29.94   0.15
+Specieswels:season3                          156.01   3477.88     0.04   30.03   0.96
+Speciespikeperch:season4                   -5798.35   7170.59    -0.81   27.12   0.43
+Specieswels:season4                        -5899.22   3925.43    -1.50   25.54   0.15
+body_size:Speciespikeperch:season1            -1.57     12.00    -0.13    6.06   0.90
+body_size:Specieswels:season1                  2.35      3.42     0.69    4.11   0.53
+body_size:Speciespikeperch:season2             1.59     12.67     0.13   29.46   0.90
+body_size:Specieswels:season2                 -3.60      4.09    -0.88   29.64   0.39
+body_size:Speciespikeperch:season3            12.14     12.10     1.00   29.91   0.32
+body_size:Specieswels:season3                  1.06      3.90     0.27   29.93   0.79
+body_size:Speciespikeperch:season4             1.63     14.01     0.12   26.61   0.91
+body_size:Specieswels:season4                  3.06      4.37     0.70   24.99   0.49
+-------------------------------------------------------------------------------------
+
+p values calculated using Satterthwaite d.f.
+
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)    1133.24
+ Species:fi_fishid     season1      1084.56
+ Species:fi_fishid     season2      1626.66
+ Species:fi_fishid     season3      1519.46
+ Species:fi_fishid     season4      1751.68
+      Species        (Intercept)     0.20
+      Species          season1       0.14
+      Species          season2       0.82
+      Species          season3       0.46
+      Species          season4       1.35
+     Residual                       791.66
+---------------------------------------------
+
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.67
+      Species           3       0.00
+-------------------------------------
+```
+```
+probe_interaction(m10, pred = body_size, modx = Species, mod2 = season, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Effects of dam use on travel distance as subject to body size")
+```
+```
+███████████████████████████████████████████ While Species (2nd moderator) = pike ███████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               7.66     2.44     3.14   0.00
+Conditional intercept         3633.23   628.51     5.78   0.00
+
+When season = 1:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               7.28     2.22     3.27   0.01
+Conditional intercept         5143.45   634.71     8.10   0.00
+
+When season = 2:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               8.40     2.71     3.10   0.00
+Conditional intercept         4860.07   689.52     7.05   0.00
+
+When season = 3:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               3.36     3.26     1.03   0.31
+Conditional intercept         2962.54   825.94     3.59   0.00
+
+When season = 4:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               5.04     2.69     1.88   0.07
+Conditional intercept         4825.21   684.55     7.05   0.00
+
+█████████████████████████████████████████ While Species (2nd moderator) = pikeperch ████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                                 Est.      S.E.   t val.      p
+--------------------------- --------- --------- -------- ------
+Slope of body_size              -6.46      8.53    -0.76   0.45
+Conditional intercept         2101.41   3534.79     0.59   0.56
+
+When season = 1:
+
+                                  Est.      S.E.   t val.      p
+--------------------------- ---------- --------- -------- ------
+Slope of body_size               -8.36      9.76    -0.86   0.41
+Conditional intercept         -1662.74   3746.30    -0.44   0.67
+
+When season = 2:
+
+                                 Est.      S.E.   t val.      p
+--------------------------- --------- --------- -------- ------
+Slope of body_size              -4.13      9.42    -0.44   0.66
+Conditional intercept         1173.24   3905.74     0.30   0.77
+
+When season = 3:
+
+                                 Est.      S.E.   t val.      p
+--------------------------- --------- --------- -------- ------
+Slope of body_size               1.38     11.41     0.12   0.90
+Conditional intercept         3176.78   4728.82     0.67   0.51
+
+When season = 4:
+
+                                  Est.      S.E.   t val.      p
+--------------------------- ---------- --------- -------- ------
+Slope of body_size               -7.46     10.21    -0.73   0.47
+Conditional intercept         -1054.76   4134.08    -0.26   0.80
+
+███████████████████████████████████████████ While Species (2nd moderator) = wels ███████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When season = 0:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               1.18     1.49     0.79   0.43
+Conditional intercept         3619.54   581.61     6.22   0.00
+
+When season = 1:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               3.17     1.46     2.17   0.05
+Conditional intercept         1000.11   619.23     1.62   0.13
+
+When season = 2:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size              -1.68     1.64    -1.02   0.32
+Conditional intercept         2886.99   642.89     4.49   0.00
+
+When season = 3:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size              -2.05     1.99    -1.03   0.31
+Conditional intercept         4049.57   777.06     5.21   0.00
+
+When season = 4:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size               1.62     1.73     0.93   0.36
+Conditional intercept         1633.88   635.36     2.57   0.02
+```
+- The slopes are only significant for _pikeperch_ in Spring I, II, and Autumn and for _wels_ in Spring I _pike_
+```
+interact_plot(m10, pred = body_size, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of body size on travel distance")
+```
+![Dist_range_season](/Plots/Dist_range_season_31.png "Dist_range_season")
+
 ### How does stationarity affect mean distance range?
 
 There is no easy way to approach such an answer but here let consider the proportion of dam "excursions" as a site-fidelity measure. For that, let re-fit the previous model (with gamma distribution) including the variable _dam_ in the _body_size x _Species_ interaction (Three-way interaction)
@@ -396,46 +604,46 @@ Grouping variables:
       Species           3       0.00
 -------------------------------------
 ```
-Perform a simple slope analysis without the moderator effects of _body_size_
+Perform a simple slope analysis of the effects of dam use on mean distance range
 ```
-probe_interaction(m2_dam, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of dam use on travel distance as subject to body size")
+probe_interaction(m2_dam, pred = dam, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of dam use on travel distance as subject to body size")
 ```
 ```
 SIMPLE SLOPES ANALYSIS
 
 When Species = wels:
 
-                              Est.   S.E.   t val.      p
---------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     0.56   0.58
-Conditional intercept         8.09   0.22    37.51   0.00
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of dam                  -0.00   0.01    -0.15   0.88
+Conditional intercept          8.09   0.22    37.51   0.00
 
 When Species = pikeperch:
 
                                Est.   S.E.   t val.      p
 --------------------------- ------- ------ -------- ------
-Slope of body_size            -0.01   0.00    -2.50   0.01
+Slope of dam                  -0.14   0.05    -2.67   0.01
 Conditional intercept          5.08   1.35     3.77   0.00
 
 When Species = pike:
 
                               Est.   S.E.   t val.      p
 --------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     3.08   0.00
+Slope of dam                  0.00   0.01     0.13   0.90
 Conditional intercept         8.03   0.25    32.51   0.00
 ```
-- The slopes for _pikeperch_ and _pike_ are signficant but in opposite directions
+- The slope for _pikeperch_ is the only signficant and negative
 ```
-interact_plot(m2_dam, pred = dam, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("wels","pikeperch","pike"),main.title = "Effects of dam use on travel distance")
+interact_plot(m2_dam, pred = dam, modx = Species,plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("wels","pikeperch","pike"),main.title = "Effects of dam use on travel distance")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_4.png "Dist_range_season")
 
-Now we account for the conditional effects of body size
+Now account for the moderator effects of dam on the slopes of body size
 ```
-probe_interaction(m2_dam, pred = body_size, modx = Species, mod2=body_size, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of dam use on travel distance as subject to body size")
+probe_interaction(m2_dam, pred = body_size, modx = Species, mod2 = dam, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance as subject to dam use")
 ```
 ```
-██████████████████████████████████████████ While body_size (2nd moderator) =  528.21 (- 1 SD) █████████████████████████████████████████
+████████████████████████████████████████ While dam (2nd moderator) = -8.12 (- 1 SD) ████████████████████████████████████████
 
 SIMPLE SLOPES ANALYSIS
 
@@ -443,24 +651,24 @@ When Species = pike:
 
                               Est.   S.E.   t val.      p
 --------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     2.37   0.02
-Conditional intercept         7.21   0.25    29.02   0.00
+Slope of body_size            0.00   0.00     2.67   0.01
+Conditional intercept         7.94   0.29    27.73   0.00
 
 When Species = pikeperch:
 
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of body_size            -0.01   0.00    -2.71   0.01
-Conditional intercept          8.22   0.23    35.44   0.00
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of body_size            0.00   0.00     0.42   0.67
+Conditional intercept         9.15   1.48     6.20   0.00
 
 When Species = wels:
 
                               Est.   S.E.   t val.      p
 --------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     0.93   0.35
-Conditional intercept         7.45   0.31    24.06   0.00
+Slope of body_size            0.00   0.00     1.44   0.15
+Conditional intercept         7.91   0.25    31.22   0.00
 
-███████████████████████████████████████████ While body_size (2nd moderator) =  890.00 (Mean) ██████████████████████████████████████████
+█████████████████████████████████████████ While dam (2nd moderator) = 21.31 (Mean) █████████████████████████████████████████
 
 SIMPLE SLOPES ANALYSIS
 
@@ -485,7 +693,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     0.56   0.58
 Conditional intercept         8.09   0.22    37.51   0.00
 
-██████████████████████████████████████████ While body_size (2nd moderator) = 1251.79 (+ 1 SD) █████████████████████████████████████████
+████████████████████████████████████████ While dam (2nd moderator) = 50.75 (+ 1 SD) ████████████████████████████████████████
 
 SIMPLE SLOPES ANALYSIS
 
@@ -493,25 +701,26 @@ When Species = pike:
 
                               Est.   S.E.   t val.      p
 --------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     2.32   0.02
-Conditional intercept         8.83   0.58    15.31   0.00
+Slope of body_size            0.00   0.00     1.04   0.30
+Conditional intercept         8.05   0.54    14.80   0.00
 
 When Species = pikeperch:
 
                                Est.   S.E.   t val.      p
 --------------------------- ------- ------ -------- ------
-Slope of body_size            -0.01   0.00    -2.02   0.04
-Conditional intercept          2.52   2.93     0.86   0.39
+Slope of body_size            -0.02   0.01    -3.22   0.00
+Conditional intercept         -0.48   2.40    -0.20   0.84
 
 When Species = wels:
 
                               Est.   S.E.   t val.      p
 --------------------------- ------ ------ -------- ------
-Slope of body_size            0.00   0.00     0.40   0.69
-Conditional intercept         8.14   0.14    57.96   0.00
+Slope of body_size            0.00   0.00     0.10   0.92
+Conditional intercept         8.17   0.27    29.98   0.00
 ```
+At mean proportion of dam use the slopes of body size for _pike_ and _pikeperch_ are significant and in opposite directions
 ```
-interact_plot(m2_dam, pred = dam, modx = Species, mod2=body_size, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("wels","pikeperch","pike"),main.title = "Effects of dam use on travel distance as subject to body size")
+interact_plot(m2_dam, pred = body_size, modx = Species, mod2 = dam, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("wels","pikeperch","pike"),main.title = "Effects of body size on travel distance as subject to dam use")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_5.png "Dist_range_season")
 
@@ -833,5 +1042,3 @@ Conditional intercept          7.34   0.19    37.89   0.00
 interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of dam use on travel distance in three fish species")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_7.png "Dist_range_season")
-
-
