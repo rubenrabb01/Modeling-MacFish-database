@@ -1,12 +1,10 @@
 
 ## Build Decision trees on the use of reservoir parts
 
-:books:`library(rpart)`  
-:books:`library(rpart.plot)`  
+:books:`library(rpart)`
+:books:`library(rpart.plot)`
 
-#### WITH DATA_POGLM (mean_depth)
-
-Growth a decision tree using _res_part_ as DV
+### Growth a decision tree using _res_part_ as DV
 ```
 tree_dist<- rpart(res_part ~ 1 + mean_depth + fi_species + season, data = data_poglm, control = rpart.control(cp = 0.005))
 ```
@@ -23,4 +21,8 @@ rpart.plot(tree_dist, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYl
 ```
 ![Res_part_tree](/Plots/Res_part_tree_3.png "Res_part_tree")
 
-#### Define stationarity by re-value categories middle, upper and tributary to 1 (0 for dam - stationary)
+### Grow a decision tree including individual fish as a covariate
+```
+tree_dist<- rpart(res_part ~ 1 + fi_fishid + fi_species + season, data = data_poglm, control = rpart.control(cp = 0.005))
+```
+![Res_part_tree](/Plots/Res_part_tree_4.png "Res_part_tree")
