@@ -142,6 +142,9 @@ m3<-clmm(res_part_order ~ 1 + body_size + fi_species * season + (1| fi_species) 
 m9<-clmm(res_part_order ~ 1 + body_size * season + (1| fi_species) + (1| fi_fishid) + (1 | season),data = data_poglm_sub, link="logit",Hess=T)
 ```
 Perform a LRT comparison between the first best-fit Model and subsequent best-fit models **Model 3** and **Model 9**. We drop **Model 6**  and forward as their difference with the first best model (i.e., DeltaBIC) are above two higher units
+
+:books:`library(lmtest)`
+
 ```
 lrtest(m10,m3)
 ```
