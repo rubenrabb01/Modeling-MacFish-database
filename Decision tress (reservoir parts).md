@@ -4,7 +4,7 @@
 :books:`library(rpart)`  
 :books:`library(rpart.plot)`  
 
-### Growth a decision tree using _res_part_ as DV
+### Growth a decision tree based on the variable _res_part_ (DV)
 ```
 tree_dist<- rpart(res_part ~ 1 + mean_depth + fi_species + season, data = data_poglm, control = rpart.control(cp = 0.005))
 ```
