@@ -1,8 +1,8 @@
 # How does distance travel range seasonally change?
 
-## Create a dataframe including monthly range and reservoir parts
+## Create a dataframe including seasonal range and reservoir parts
 
-To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
+To do this, create a new seasonal range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
 dist.range.season$season <- factor(dist.range.season$season, levels=c("spring_I","spring_II","autumn","summer","winter"))
 data_total_res<- merge(mean.ranged2d, data.res.parts, by = c("fi_fishid", "date"))
@@ -126,9 +126,9 @@ Model **m_sl_1** is chosen
 ```
 0.5*(1 - pchisq(13.3, 1)) + 0.5*(1 - pchisq(13.3, 2))
 ```
+```
 [1] 0.0007797141
 ```
-
 The Chi-square test p < 0.05 indicating there is significant evidence in support of the larger model **m_sl_1**
 
 ### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
