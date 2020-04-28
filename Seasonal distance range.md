@@ -424,7 +424,7 @@ Conditional intercept         3587.44   501.18     7.16   0.00
 ```
 - The slope of _body_size_ is positive and significant (p < 0.05) in _pike_ but not _wels_ and _pikeperch_ indicating that body size affected the mean travel distance only in the first species
 
-#### Plot the interaction _body_size_ x _Species_
+#### Plot the Species x body_size interaction
 ```
 interact_plot(m2, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
@@ -649,7 +649,7 @@ interact_plot(m10, pred = body_size, modx = season, mod2 = Species, plot.points 
 
 ### How does stationarity affect mean distance range?
 
-There is no easy way to approach such an answer but here let consider the proportion of dam "excursions" as a site-fidelity measure. For that, let re-fit the previous model (with gamma distribution) including the variable _dam_ in the _body_size x _Species_ interaction (Three-way interaction)
+There is no easy way to approach such an answer but here let consider the proportion of dam "excursions" as a site-fidelity measure. For that, let re-fit the previous model (with gamma distribution) including the variable _dam_ in the _Species_ x _body_size_ interaction (Three-way interaction)
 ```
 m2_dam<-glmer(dist.range ~ 1 + body_size * Species * dam + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
@@ -893,7 +893,7 @@ Grouping variables:
       Species           3       0.22
 -------------------------------------
 ```
-- The interaction is significant but how the slopes change?
+- The interaction is significant but how do the slopes change?
 ```
 probe_interaction(m_dam_season, pred = dam, modx = season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Seasonal effects of dam use on travel distance")
 ```
@@ -1151,7 +1151,7 @@ interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.p
 
 ### 4. Are there differences in excursion rates to tributary between species and across seasons?
 
-#### Fit a model using _tributary_ as DV and the _Species x Sesion_ interaction as a covariate for testing our main hypothesis
+#### Fit a model using _tributary_ as DV and the Species x Sesion interaction as a covariate for testing our main hypothesis
 
 For selecting the best random-effects terms, compare three unconditional models
 ```
@@ -1166,7 +1166,7 @@ lrtest(m_trib_in2, m_trib_sl)
 ```
 The slope model **m_trib_sl** is preferred
 
-#### Include the __Species x Season__ interaction and the _dam_ covariate if necessary
+#### Include the Species x Season interaction and the _dam_ covariate if necessary
 
 ```
 m_trib_sl<-lmer(tributary ~ 1 + season * Species + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -1245,7 +1245,7 @@ cat_plot(m_trib_sl_dam, pred = season, modx = Species, plot.points = TRUE,robust
 
 #### Relationship between tributary excursions and dam use
 
-To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _Season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
+To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
 
 :warning:
 - The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function
@@ -1382,6 +1382,7 @@ Conditional intercept         -2.25   1.39    -1.62   0.11
 interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+
 
 
 
