@@ -177,11 +177,10 @@ tab_model(m1,m2,m3,m9,m7,m5, transform = NULL, collapse.ci = F,  show.adj.icc = 
                string.p = "P" ,file = "Season_dist.range.doc", use.viewer = TRUE)
 
 ```
-:warning: I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument"
-This is probably related to incorrect loading of the _sjPlot_ library since there is also failure to running the following code:
-```
-sjp.lmer(m2)
-```
+:warning:
+- I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument"
+ - This is probably related to incorrect loading of the _sjPlot_ library as there is also failure running the _sjp.lmer(m2)_ function
+
 Compare best-fit models
 
 ```
@@ -318,8 +317,11 @@ Between levels 2 and 3
 ```
 get_re_var(m2)[2] / sum(get_re_var(m2))
 ```
-:warning:  Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero). Re-fit the model
-Also there is some issue with the _sjstats_ package. Try the following for next session:
+:warning:
+- Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero)
+- Re-fit the model
+- There is also some issue with the _sjstats_ package. Try the following for next session:
+
 ```
 :books:`library(devtools)`
 install_local("~/Teri_longit_move/scripts/sjstats_0.17.8.tar.gz")
@@ -1244,7 +1246,11 @@ cat_plot(m_trib_sl_dam, pred = season, modx = Species, plot.points = TRUE,robust
 #### Relationship between tributary excursions and dam use
 
 To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _Season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
-:warning: The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function. Thus, if we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
+
+:warning:
+- The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function
+- If we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
+
 ```
 data_distr_season<-data_distr_season %>% mutate(tributary = replace(tributary, tributary == 0, 0.0001))
 ```
@@ -1376,6 +1382,9 @@ Conditional intercept         -2.25   1.39    -1.62   0.11
 interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+
+
+
 
 
 
