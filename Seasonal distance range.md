@@ -387,7 +387,7 @@ plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FAL
 ```
 ![Dist_range_season](/Plots/Dist_range_season_1.png "Dist_range_season")
 
-**Note** that similar linear predictions can be obtained with the _emmip()_ function of the _emmeans_ library as follows:
+**Note** that similar linear predictions can be obtained with the _emmip()_ function in _emmeans_ library as follows:
 ```
 emmip(m2, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
 ```
