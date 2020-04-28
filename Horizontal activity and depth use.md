@@ -23,7 +23,6 @@ Let's fit different null/intercept 2-level mixed-effects models:
 
 :books: `library(lmerTest)`
 
-
 - _Conditional non-growth model / Random intercept model_
 
 ```
@@ -74,8 +73,6 @@ sim_formula("ranged2d ~ time * fi_species + (1 + time | fi_fishid)")
 - Allow dayly variation between species and individuals
 ```
 m6 <- sim_formula("ranged2d ~ time * fi_species + (1 + time | fi_fishid) + (1 + time | fi_species:fi_fishid)")
-```
-
 ```
 #### A more realistic model would be:
 
@@ -668,7 +665,11 @@ $includeobjects
 
 ## COMPARE MODELS
 
-Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models. There are different ways of performing a LRT:
+Perform Log-Likelihood Ratio Tests (LRT) to compare the first and the remaining three best models.
+
+LRT=-2〖log〗e ((Lr (θ))/(Ll (θ) )) = -2〖log〗e (Lr )+〖2log〗e (Ll )
+
+There are different ways of performing a LRT:
 
 #### 1. Using the _bootMer_ function from the _lme4_ package to compute 100 bootstrapped log-likelihood:
 
