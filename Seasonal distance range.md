@@ -129,7 +129,7 @@ Model **m_sl_1** is chosen
 ```
 [1] 0.0007797141
 ```
-The Chi-square test p < 0.05 indicating there is significant evidence in support of the larger model **m_sl_1**
+- The Chi-square test p < 0.05 indicating there is significant evidence in support of the larger model **m_sl_1**
 
 ### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
@@ -316,7 +316,7 @@ When Species = pike:
 Slope of body_size               7.02     1.45     4.84   0.00
 Conditional intercept         3587.44   501.18     7.16   0.00
 ```
-The the slope of _body_size_ is positive and significant (p < 0.05) in _pike_ but not _wels_ and _pikeperch_ indicating that body size affected the mean travel distance only in the first species
+- The slope of _body_size_ is positive and significant (p < 0.05) in _pike_ but not _wels_ and _pikeperch_ indicating that body size affected the mean travel distance only in the first species
 
 #### Plot the interaction _body_size_ x _Species_
 ```
@@ -336,7 +336,6 @@ interact_plot(m2_gamma, pred = body_size, modx = Species, plot.points = TRUE,rob
 ### How does stationarity affect mean distance range?
 
 There is no easy way to approach such an answer but here let consider the proportion of dam "excursions" as a site-fidelity measure. For that, let re-fit the previous model (with gamma distribution) including the variable _dam_ in the _body_size x _Species_ interaction (Three-way interaction)
-
 ```
 m2_dam<-glmer(dist.range ~ 1 + body_size * Species * dam + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
@@ -397,8 +396,7 @@ Grouping variables:
       Species           3       0.00
 -------------------------------------
 ```
-Perform a simple slope analysis without moderator effects of _body_size_
-
+Perform a simple slope analysis without the moderator effects of _body_size_
 ```
 probe_interaction(m2_dam, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of dam use on travel distance as subject to body size")
 ```
@@ -426,7 +424,7 @@ When Species = pike:
 Slope of body_size            0.00   0.00     3.08   0.00
 Conditional intercept         8.03   0.25    32.51   0.00
 ```
-The slopes for _pikeperch_ and _pike_ are signficant but in opposite directions
+- The slopes for _pikeperch_ and _pike_ are signficant but in opposite directions
 ```
 interact_plot(m2_dam, pred = dam, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("wels","pikeperch","pike"),main.title = "Effects of dam use on travel distance")
 ```
@@ -580,7 +578,7 @@ Grouping variables:
       Species           3       0.22
 -------------------------------------
 ```
-The interaction is significant but how the slopes change?
+- The interaction is significant but how the slopes change?
 ```
 probe_interaction(m_dam_season, pred = dam, modx = season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Seasonal effects of dam use on travel distance")
 ```
@@ -827,14 +825,13 @@ When season = 4:
 Slope of dam                  -0.01   0.00    -1.98   0.05
 Conditional intercept          7.34   0.19    37.89   0.00
 ```
-For _pike_ the the slope of dam use is positive and significant in Autumn in indicating that permanency at dam related to mean travel distance only during this season
-For _pikeperch_ this occurred in Spring I and in the opposite direction, i.e., staying at dam during this season was negatively related to distance range
-For _wels_ the relationship was positive in Spring I and negative in Winter
+- For _pike_ the the slope of dam use is positive and significant in Autumn indicating that permanency at dam related to mean travel distance only during this season
+- For _pikeperch_ this occurred in Spring I and in the opposite direction, i.e., staying at dam during this season was negatively related to distance range
+- For _wels_ the relationship was positive in Spring I and negative in Winter
 
 ```
 interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of dam use on travel distance in three fish species")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_7.png "Dist_range_season")
-
 
 
