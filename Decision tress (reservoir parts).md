@@ -3,7 +3,7 @@
 :books:`library(rpart)`  
 :books:`library(rpart.plot)`  
 
-### Growth a decision tree based on the variable use of reservoir parts
+### Grow a decision tree based on the variable use of reservoir parts
 
 We build a model with a multi-class ordinal response (_res_part_) as DV. In this model each node shows:
 
@@ -21,6 +21,7 @@ tree_res_part<- rpart(res_part ~ 1 + mean_depth + fi_species + season, data = da
 ```
 rpart.rules(tree_depth)
 ```
+:chart:
 ```
 rpart.plot(tree_res_part,  type = 4, extra = 100, clip.right.labs = FALSE, branch = .3, under = TRUE)
 ```
