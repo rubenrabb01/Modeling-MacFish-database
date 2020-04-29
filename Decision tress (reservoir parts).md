@@ -34,7 +34,7 @@ rpart.plot(tree_res_part, type = 4, extra = 101, branch.lty = 3, box.palette = "
 ```
 ![Res_part_tree](/Plots/Res_part_tree_3.png "Res_part_tree")
 
-These plots shw us that the class _dam_ is  is marked **unused** as it is never predicted by the model
+These plots show us that the class _dam_ is  is marked **unused** as it is never predicted by the model
 
 #### 1.2. Reservoir use by each species across sesions (mean depth + body size)
 
