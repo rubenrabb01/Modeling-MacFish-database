@@ -1,4 +1,4 @@
-# How does distance monthly range change?
+# How does distance range change monthly?
 
 :books:`library(jtools)`  
 :books:`library(interactions)`   
