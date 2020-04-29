@@ -1,4 +1,3 @@
-
 ## How does depth use vary between species and across seasons?
 
 ### 1. Fit Mixed-Effects Models (LMM) to the data of depth use
@@ -26,7 +25,7 @@ lrtest(m_id,m_id_sp)
 ```
 anova(m_sl_1,m_id_mon)
 ```
-```
+
 #### 1. 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
 Fit the models with setting **REML=FALSE**
@@ -87,3 +86,4 @@ These plots shw us that the class _dam_ is  is marked **unused** as it is never 
 tree_depth<- rpart(mean_depth ~ 1 + fi_fishid + fi_species + season, data = data_poglm, control = rpart.control(cp = 0.005))
 ```
 ![Depth_use_tree](/Plots/Depth_use_tree_4.png "Depth_use_tree")
+
