@@ -179,9 +179,7 @@ tab_model(m1,m2,m3,m9,m7,m5, transform = NULL, collapse.ci = F,  show.adj.icc = 
                string.p = "P" ,file = "Season_dist.range.doc", use.viewer = TRUE)
 
 ```
-:warning:
-- I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument"
- - This is probably related to incorrect loading of the _sjPlot_ library as there is also failure running the _sjp.lmer(m2)_ function
+:warning:I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument". This is probably related to incorrect loading of the _sjPlot_ library as there is also failure running the _sjp.lmer(m2)_ function
 
 Compare best-fit models
 
@@ -319,10 +317,9 @@ Between levels 2 and 3
 ```
 get_re_var(m2)[2] / sum(get_re_var(m2))
 ```
-:warning:
-- Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero)
-- Re-fit the model
-- There is also some issue with the _sjstats_ package. Try the following for next session:
+:warning:Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero)
+Re-fit the model
+There is also some issue with the _sjstats_ package. Try the following for next session:
 
 ```
 :books:`library(devtools)`
@@ -384,6 +381,7 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 
 #### Plot main-effects
 
+:books:`library(effects)
 ```
 plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
@@ -1249,9 +1247,7 @@ cat_plot(m_trib_sl_dam, pred = season, modx = Species, plot.points = TRUE,robust
 
 To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
 
-:warning:
-- The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function
-- If we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
+:warning:The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function. If we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
 
 ```
 data_distr_season<-data_distr_season %>% mutate(tributary = replace(tributary, tributary == 0, 0.0001))
@@ -1263,7 +1259,7 @@ m_trib_3int<-glmer(tributary ~ 1 + season * Species * dam + (season| Species:fi_
 probe_interaction(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ```
-███████████████████████████████████████████ While Species (2nd moderator) = pike ███████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pike ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -1302,7 +1298,7 @@ When season = 4:
 Slope of dam                   0.02   0.05     0.51   0.61
 Conditional intercept         -3.67   1.52    -2.42   0.02
 
-█████████████████████████████████████████ While Species (2nd moderator) = pikeperch ████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pikeperch ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -1341,7 +1337,7 @@ When season = 4:
 Slope of dam                  -0.07   0.07    -1.06   0.29
 Conditional intercept          1.08   1.72     0.63   0.53
 
-███████████████████████████████████████████ While Species (2nd moderator) = wels ███████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = wels ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -1384,6 +1380,8 @@ Conditional intercept         -2.25   1.39    -1.62   0.11
 interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+
+
 
 
 
