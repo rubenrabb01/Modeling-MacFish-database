@@ -21,9 +21,8 @@ tree_res_part<- rpart(res_part ~ 1 + mean_depth + fi_species + season, data = da
 ```
 rpart.rules(tree_depth)
 ```
-:chart:
 ```
-rpart.plot(tree_res_part,  type = 4, extra = 100, clip.right.labs = FALSE, branch = .3, under = TRUE)
+:chart:rpart.plot(tree_res_part,  type = 4, extra = 100, clip.right.labs = FALSE, branch = .3, under = TRUE)
 ```
 ![Res_part_tree](/Plots/Res_part_tree_1.png "Res_part_tree")
 ```
