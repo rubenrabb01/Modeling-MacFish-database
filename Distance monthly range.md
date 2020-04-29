@@ -42,8 +42,6 @@ data_distr$Species <- as.factor(data_distr$Species)
 Order by _fi_fishid_ and _month_
 ```
 data_distr<-data_distr[with(data_distr, order(fi_fishid, month)),]
-```
-```
 data_distr
 ```
 | fi_fishid | Species | month | dist.range | dam | middle | tributary | upper | body_size | ca_weight_g | day_count |
