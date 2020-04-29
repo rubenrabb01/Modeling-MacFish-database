@@ -1,12 +1,11 @@
 
-# How does depth use vary between species and across seasons?
+## How does depth use vary between species and across seasons?
 
-## Fit Mixed-Effects Models (LMM) to the data of depth use
+### 1. Fit Mixed-Effects Models (LMM) to the data of depth use
 
-### 1. Find the best unconditional model fitted via REML
+#### 1.1. Find the best unconditional model fitted via REML
 
-#### 1.1. Fit nested intercept-only models including all potentially relevant random-effects and compare them with LRT
-
+Fit nested intercept-only models including all potentially relevant random-effects and compare them with LRT
 ```
 m_id<-lmer(mean_depth ~ 1  + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_id_sp<-lmer(mean_depth ~ 1  + (1| Species) + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -30,7 +29,7 @@ To analyse the depth use made by the three species we fit a series of LMMs using
 anova(m_sl_1,m_id_mon)
 ```
 ```
-### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
+#### 1. 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
 Fit the models with setting **REML=FALSE**
 
