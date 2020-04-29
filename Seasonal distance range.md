@@ -444,7 +444,7 @@ interact_plot(m2_gamma, pred = body_size, modx = Species, plot.points = TRUE,rob
 
 ### Does body size determine seasonal changes in distance range between species?
 
-For this analysis we can take **Model 10** including a three-way interaction between body size, season an species
+For this analysis we can take **Model 10** including a three-way interaction between body size, season and species
 
 ```
 summ(m10)
