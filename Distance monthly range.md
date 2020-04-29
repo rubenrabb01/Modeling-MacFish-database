@@ -381,6 +381,7 @@ Between levels 2 and 3
 get_re_var(m2)[2] / sum(get_re_var(m2))
 ```
 :warning: There is an issue with the _sjstats_ package
+
 :new: It seems that the _get_re_var_ function is no longer in library _sjstats_ but in library _insight_ (insight::get_variance())
 
 #### Pairwise comparisons
