@@ -384,7 +384,7 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 
 #### Plot main-effects
 
-:books:`library(effects)
+:books:library(effects)
 ```
 plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
