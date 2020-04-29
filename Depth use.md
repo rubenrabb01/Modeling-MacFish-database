@@ -1,9 +1,9 @@
 
 ## How does depth use vary between species and across seasons?
 
-To analyse the depth use made by the three species we fit a series of LMMs using _mean_depth_ as DV and _Species_, _season_, _body_size_ and _res_part_ as predictors
-
 ### 1. Fit Mixed-Effects Models (LMM) to the data of depth use
+
+To analyse the depth use made by the three species we fit a series of LMMs using _mean_depth_ as DV and _Species_, _season_, _body_size_ and _res_part_ as predictors
 
 #### 1.1. Find the best unconditional model fitted via REML
 
