@@ -406,4 +406,102 @@ plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FAL
 emmip(m2, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
 ```
 
+#### Simple slope analysis
+
+In this analysis we estimate the slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
+```
+probe_interaction(m2, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+When Species = wels:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of body_size              -0.70     0.32    -2.18   0.04
+Conditional intercept         1104.05   127.40     8.67   0.00
+
+When Species = pikeperch:
+
+                                  Est.     S.E.   t val.      p
+--------------------------- ---------- -------- -------- ------
+Slope of body_size               -5.20     1.82    -2.85   0.01
+Conditional intercept         -1128.01   755.16    -1.49   0.15
+
+When Species = pike:
+
+                                 Est.    S.E.   t val.      p
+--------------------------- --------- ------- -------- ------
+Slope of body_size               5.41    0.06    86.17   0.00
+Conditional intercept         2271.82   21.93   103.58   0.00
+```
+- The slopes of _body_size_ are significant for the three species (p < 0.05) , negative for _pikeperch_and _wels_, and positive for _pike_
+
+#### Plot the Species x body_size interaction
+
+First, we will re-fit **Model 2* with a gamma distribution. We need to re-value 0s to values > 0 (e.g., 0.0001) before re-fitting the model
+```
+data_distr<-data_distr %>% mutate(dist.range = replace(dist.range, dist.range == 0, 0.0001))
+```
+```
+m2_gamma<-glmer(dist.range ~ 1 + body_size * Species + (month| Species:fi_fishid)+(month| Species),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+summ(m2_gamma)
+```
+```
+MODEL INFO:
+Observations: 131
+Dependent Variable: dist.range
+Type: Mixed effects generalized linear regression
+Error Distribution: Gamma
+Link function: log
+
+MODEL FIT:
+AIC = -116.06, BIC = -9.68
+
+FIXED EFFECTS:
+---------------------------------------------------------------
+                                    Est.   S.E.   t val.      p
+-------------------------------- ------- ------ -------- ------
+(Intercept)                         5.97   0.64     9.35   0.00
+body_size                           0.00   0.00     2.75   0.01
+Speciespikeperch                    3.27   1.62     2.02   0.04
+Specieswels                         1.53   0.91     1.68   0.09
+body_size:Speciespikeperch         -0.01   0.00    -1.66   0.10
+body_size:Specieswels              -0.00   0.00    -2.11   0.03
+---------------------------------------------------------------
+
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)     0.56
+ Species:fi_fishid     season1       0.77
+ Species:fi_fishid     season2       0.96
+ Species:fi_fishid     season3       0.75
+ Species:fi_fishid     season4       0.83
+      Species        (Intercept)     0.16
+      Species          season1       0.53
+      Species          season2       0.29
+      Species          season3       0.40
+      Species          season4       0.53
+     Residual                        0.00
+---------------------------------------------
+
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.92
+      Species           3       0.08
+-------------------------------------
+```
+```
+interact_plot(m2_gamma, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+![Dist_range_month](/Plots/Dist_range_month_3.png "Dist_range_month")
+
+
 
