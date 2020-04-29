@@ -26,14 +26,15 @@ colnames(data_distr)[3] <- "mon"
 colnames(data_distr)[2] <- "month"
 colnames(data_distr)[9] <- "Species"
 ```
-Convert the variable _month_ into a time vector of repeated-measures
+### Convert variables
+
+Convert _month_ into a time vector of repeated-measures and code it as integer to allow correct ordering (from months 10-12 2018)
+In addition, we will include this time variable both as random-effects and fixed-effects and given its number of time points vector it should be coded as integer
 ```
 data_distr$month<-revalue(data_distr$month, c("5_2017"="0","6_2017"="1","7_2017"="2","8_2017"="3","9_2017"="4","10_2017"="5","11_2017"="6","12_2017"="7","1_2018"="8","2_2018"="9","3_2018"="10"))
-```
-
-Convert variables including _month_ to integer to allow correct ordering (from months 10-12 2018). In addition, we will include this time variable both as random-effects and fixed-effects and as due to its number of time points vector this should be coded as integer
-```
 data_distr$month <- as.integer(data_distr$month)
+```
+```
 data_distr$res_part <- as.factor(data_distr$res_part)
 data_distr$fi_fishid <- as.factor(data_distr$fi_fishid)
 data_distr$Species <- as.factor(data_distr$Species)
