@@ -644,7 +644,7 @@ When season = 4:
 Slope of body_size               1.62     1.73     0.93   0.36
 Conditional intercept         1633.88   635.36     2.57   0.02
 ```
-- The slopes are only significant for _pikeperch_ in Spring I, II, and Autumn and for _wels_ in Spring I _pike_
+- The slopes are significant for _pike_ in Spring I, II, and Autumn and for _wels_ in Spring I whereas for _pikeperch_ slopes are not significant in either season
 ```
 interact_plot(m10, pred = body_size, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of body size on travel distance")
 ```
