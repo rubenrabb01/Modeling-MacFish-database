@@ -440,7 +440,7 @@ Conditional intercept         2271.82   21.93   103.58   0.00
 
 #### Plot the Species x body_size interaction
 
-First, we will re-fit **Model 2* with a gamma distribution. We need to re-value 0s to values > 0 (e.g., 0.0001) before re-fitting the model
+First, we will re-fit **Model 2** with a gamma distribution. We need to re-value 0s to values > 0 (e.g., 0.0001) before re-fitting the model
 ```
 data_distr<-data_distr %>% mutate(dist.range = replace(dist.range, dist.range == 0, 0.0001))
 ```
