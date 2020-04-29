@@ -1,4 +1,4 @@
-## Decision trees for predicting the use of reservoir parts by each species
+## Decision trees for predicting the use of reservoir parts 
 
 :books:`library(rpart)`  
 :books:`library(rpart.plot)`  
