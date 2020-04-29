@@ -392,7 +392,6 @@ emtrends(m2, pairwise ~ Species, var = "body_size",pbkrtest.limit = 10000, lmerT
 emmeans(m2, pairwise ~ Species, pbkrtest.limit = 10000, lmerTest.limit = 10000)
 ```
 :warning: cannot compute due to cov matrix
-```
 
 #### Plot main-effects
 
@@ -407,10 +406,4 @@ plot(Effect(c("Species", "body_size"), m2),lines=list(multiline=TRUE), rug = FAL
 emmip(m2, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
 ```
 
-#### Simple slope analysis
-
-In this analysis we estimate the slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
-```
-probe_interaction(m2, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
-```
 
