@@ -297,6 +297,8 @@ Model-averaged estimate: 173.86
 Unconditional SE: 56.84
 95% Unconditional confidence interval: 62.45, 285.27
 ```
+From these results we can see that _day_count_ is an important variable controlling for the varying sampling days per month. In addition, it is significant in best-fit models (see model summary below)
+
 Export table from confidence set models
 
 :books:`library(sjPlot)`
@@ -505,74 +507,14 @@ plot(Effect(c("Species", "month"), m18),lines=list(multiline=TRUE), rug = FALSE,
 emmip(m18, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
 ```
 
-#### Simple slope analysis
+#### Simple slope analysis of the interactions in the model
 
 In this analysis we estimate the two interaction terms in the model and thus:
 
 - The slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
 - The slopes of _month_ (i.e., the rate of change in _dist.range_ throughout time) for each Species
 
-```
-probe_interaction(m18, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
-```
-```
-SIMPLE SLOPES ANALYSIS
-
-When Species = wels:
-
-                                 Est.     S.E.   t val.      p
---------------------------- --------- -------- -------- ------
-Slope of body_size               0.05     0.65     0.07   0.94
-Conditional intercept         1943.50   301.12     6.45   0.00
-
-When Species = pikeperch:
-
-                                 Est.      S.E.   t val.      p
---------------------------- --------- --------- -------- ------
-Slope of body_size              -5.13      3.84    -1.33   0.19
-Conditional intercept         -167.17   1609.54    -0.10   0.92
-
-When Species = pike:
-
-                                 Est.     S.E.   t val.      p
---------------------------- --------- -------- -------- ------
-Slope of body_size               5.70     1.06     5.38   0.00
-Conditional intercept         3286.40   328.00    10.02   0.00
-```
-- The slopes of _body_size_ is significant (p < 0.05) and positive only for _pike_
-
-```
-probe_interaction(m18, pred = month, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
-```
-```
-SIMPLE SLOPES ANALYSIS
-
-When Species = wels:
-
-                                 Est.     S.E.   t val.      p
---------------------------- --------- -------- -------- ------
-Slope of month                -139.03    69.18    -2.01   0.06
-Conditional intercept         1943.50   301.12     6.45   0.00
-
-When Species = pikeperch:
-
-                                 Est.      S.E.   t val.      p
---------------------------- --------- --------- -------- ------
-Slope of month                -132.32     87.42    -1.51   0.14
-Conditional intercept         -167.17   1609.54    -0.10   0.92
-
-When Species = pike:
-
-                                 Est.     S.E.   t val.      p
---------------------------- --------- -------- -------- ------
-Slope of month                 182.72    79.64     2.29   0.03
-Conditional intercept         3286.40   328.00    10.02   0.00
-```
-- The slope for _month_ (i.e, the rate of change in time) is only significant and positive for _pike_ suggesting that there is a tendency of increased distance range towards the end month
-
-#### Plot the Species x body_size interaction
-
-First, we might want to consider re-fitting **Model 18** with a gamma distribution. Is it feasible?
+We might want to consider re-fitting **Model 18** with a gamma distribution. Is it feasible?
 
 - The distribution of _dist.range_ is right-skew and always positive (see histogram above)
 - DV must have values > 0 but _dis.range_ contain 0s, thus we need to assign thoses cases values > 0 (e.g., 0.0001) before re-fitting the model
@@ -584,7 +526,176 @@ data_distr_sub<-data_distr %>% mutate(dist.range = replace(dist.range, dist.rang
 ```
 m18_gamma<-glmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr_sub, REML=T, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
+
+**Slope of the Species x body_size interaction**
+
+```
+probe_interaction(m18_gamma, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+When Species = wels:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of body_size            -0.00   0.00    -0.22   0.82
+Conditional intercept          7.41   0.21    34.49   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of body_size            -0.00   0.00    -1.33   0.18
+Conditional intercept          6.13   0.97     6.33   0.00
+
+When Species = pike:
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of body_size            0.00   0.00     3.22   0.00
+Conditional intercept         7.99   0.24    33.78   0.00
+```
+
+- The slopes of _body_size_ is significant (p < 0.05) and positive only for _pike_
+
 ```
 interact_plot(m18_gamma, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
 ![Dist_range_month](/Plots/Dist_range_month_3.png "Dist_range_month")
+
+**Slope of the Species x month interaction**
+
+```
+probe_interaction(m18_gamma, pred = month, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+```
+When Species = wels:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.08   0.04    -2.18   0.03
+Conditional intercept          7.41   0.21    34.49   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.08   0.04    -1.95   0.05
+Conditional intercept          6.13   0.97     6.33   0.00
+
+When Species = pike:
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of month                0.10   0.04     2.38   0.02
+Conditional intercept         7.99   0.24    33.78   0.00
+```
+
+- The slope for _month_ (i.e, the rate of change in time) is only significant and positive for _pike_ suggesting that there is a tendency of increased distance range towards the end month
+**Plot the Species x month interaction**
+```
+interact_plot(m18_gamma, pred = month, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Time (months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Rate of change in travel distance across time")
+```
+![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
+
+### Does body size determine monthly changes in distance range between species?
+
+- For this analysis we may take **Model 17** including a three-way interaction between body size, month and species
+- However, to test separate effects by month we need to convert the variable _month_ to factor and re-fit the model
+- Computing a model with so many levels in both RF and FE terms requires pretty much computation power and fitting time considerably extends
+- This is not the object of these LMM analyses (i.e., assessing the RF covariance) but it is ok here for further exploring purposes
+
+```
+data_distr_sub$month <- as.factor(data_distr_sub$month)
+```
+```
+m17_gamma<-glmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr_sub, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+probe_interaction(m17_gamma, pred = month, modx = Species, mod2= body_size, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+```
+██████████████████████████████████████████ While body_size (2nd moderator) =  536.80 (- 1 SD) █████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When Species = pike:
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of month                0.14   0.05     2.80   0.01
+Conditional intercept         6.99   0.24    29.34   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.10   0.05    -2.18   0.03
+Conditional intercept          7.23   0.34    21.44   0.00
+
+When Species = wels:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.09   0.07    -1.17   0.24
+Conditional intercept          7.44   0.38    19.81   0.00
+
+███████████████████████████████████████████ While body_size (2nd moderator) =  897.18 (Mean) ██████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When Species = pike:
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of month                0.07   0.05     1.51   0.13
+Conditional intercept         7.99   0.23    34.25   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.34   0.14    -2.53   0.01
+Conditional intercept          5.94   0.96     6.18   0.00
+
+When Species = wels:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.08   0.05    -1.76   0.08
+Conditional intercept          7.41   0.21    34.57   0.00
+
+██████████████████████████████████████████ While body_size (2nd moderator) = 1257.55 (+ 1 SD) █████████████████████████████████████████
+
+SIMPLE SLOPES ANALYSIS
+
+When Species = pike:
+
+                              Est.   S.E.   t val.      p
+--------------------------- ------ ------ -------- ------
+Slope of month                0.01   0.09     0.12   0.90
+Conditional intercept         9.00   0.50    17.87   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.58   0.21    -2.72   0.01
+Conditional intercept          4.65   2.30     2.02   0.04
+
+When Species = wels:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of month                -0.07   0.04    -2.09   0.04
+Conditional intercept          7.39   0.16    47.24   0.00
+```
+- For _pikeperch_, the slope of month is always signficant and negative thereby suggesting a negative rate of change in time independently of body size
+- For _pike_, the slope of month is only significant and positive when body size is about 536.80 (Mean-SD) suggesting a positive rate of change in time associated with smaller sizes
+- For _wels_, the slope of month is only significant and negative when body size is about 1257.55 (Mean+SD) suggesting a negative rate of change in time associated with larger sizes
+
+```
+interact_plot(m17_gamma, pred = month, modx = Species, mod2= body_size, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Time (months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Time-effects of body size on travel distance")
+```
+![Dist_range_month](/Plots/Dist_range_month_5.png "Dist_range_month")
