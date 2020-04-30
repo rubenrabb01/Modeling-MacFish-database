@@ -179,6 +179,8 @@ m_sl_2    9 5028.5 5061.4 -2505.2   5010.5 25.975      5  9.023e-05 ***
 
 ### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
+:books:`library(AICcmodavg)`
+
 Build a set of candidate models fitted with setting **REML=FALSE**
 
 ```
@@ -203,8 +205,6 @@ Cand.mod[[16]] <- lmer(dist.range ~ 1 + body_size * Species + month + day_count 
 Cand.mod[[17]] <- lmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 Cand.mod[[18]] <- lmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 ```
-:books:`library(AICcmodavg)`
-
 Name models
 ```
 Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5",
