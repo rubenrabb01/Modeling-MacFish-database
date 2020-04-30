@@ -159,8 +159,8 @@ Model 2: res_part_order ~ 1 + body_size + fi_species * season + (1 | fi_species)
 1  20 -5971.6
 2  21 -5971.1  1 1.0368     0.3086
 ```
-The LRT is not significant indicating that the reduced **Model 10** is preferred to the expanded **Model 3**, i.e., the addition of body_size does not significantly to explaining the variability in the use of reservoir parts
-On the other hand, **Model 10** and **Model 9** can not be compared using LRT as they do not have nested fixed-effects. We pick the one with higher log-Likelihood and lower BIC
+- The LRT is not significant indicating that the reduced **Model 10** is preferred to the expanded **Model 3**, i.e., the addition of _body_size_ does not significantly to explaining the variability in the use of reservoir parts
+- On the other hand, **Model 10** and **Model 9** can not be compared using LRT as they do not have nested fixed-effects. We pick the one with higher log-Likelihood and lower BIC
 ```
 anova(m10,m9)
 ```
