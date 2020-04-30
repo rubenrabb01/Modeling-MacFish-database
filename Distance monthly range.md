@@ -30,17 +30,17 @@ colnames(data_distr)[9] <- "Species"
 
 Convert _month_ into a time vector of repeated-measures and code it as integer to allow correct ordering (from months 10-12 2018). In addition, we will include this time variable both as random-effects and fixed-effects and given its number of time points vector it should be coded as integer
 ```
-data_distr$month<-revalue(data_distr$month, c("5_2017"="0","6_2017"="1","7_2017"="2","8_2017"="3","9_2017"="4","10_2017"="5","11_2017"="6","12_2017"="7","1_2018"="8","2_2018"="9","3_2018"="10"))
+data_distr$month<- revalue(data_distr$month, c("5_2017"="0","6_2017"="1","7_2017"="2","8_2017"="3","9_2017"="4","10_2017"="5","11_2017"="6","12_2017"="7","1_2018"="8","2_2018"="9","3_2018"="10"))
 data_distr$month <- as.integer(data_distr$month)
 ```
 ```
-data_distr$res_part <- as.factor(data_distr$res_part)
 data_distr$fi_fishid <- as.factor(data_distr$fi_fishid)
 data_distr$Species <- as.factor(data_distr$Species)
+data_distr$month <- as.numeric(data_distr$month)
 ```
-Order by _fi_fishid_ and _month_
+Order by _fi_fishid_ and _month_ and drop missing variables
 ```
-data_distr<-data_distr[with(data_distr, order(fi_fishid, month)),]
+data_distr<- data_distr[with(data_distr, order(fi_fishid, month)),]
 data_distr
 ```
 | fi_fishid | Species | month | dist.range | dam | middle | tributary | upper | body_size | ca_weight_g | day_count |
@@ -71,7 +71,7 @@ ddply(data_distr,.(Species),summarize,mean=mean(dist.range),sd=sd(dist.range),no
 ```
 hist(data_distr$dist.range, breaks = 20)
 ```
-![Dist_range](/Plots/Dist_range_hist.png "Dist_range")
+![Dist_range](/Plots/Dist_range_month_hist.png "Dist_range")
 
 Check for correlations between _distance_range_ and reservoir parts
 
@@ -179,54 +179,125 @@ m_sl_2    9 5028.5 5061.4 -2505.2   5010.5 25.975      5  9.023e-05 ***
 
 ### 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
 
-Fit models with setting **REML=FALSE**
+Build a set of candidate models fitted with setting **REML=FALSE**
 
 ```
-m1<-lmer(dist.range ~ 1 + body_size + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m2<-lmer(dist.range ~ 1 + body_size * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m3<-lmer(dist.range ~ 1 + Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m4<-lmer(dist.range ~ 1 + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m5<-lmer(dist.range ~ 1 + body_size + Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m6<-lmer(dist.range ~ 1 + body_size + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m7<-lmer(dist.range ~ 1 + body_size * Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m8<-lmer(dist.range ~ 1 + body_size * Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m9<-lmer(dist.range ~ 1 + body_size * Species + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m10<-lmer(dist.range ~ 1 + body_size + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m11<-lmer(dist.range ~ 1 + body_size * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m12<-lmer(dist.range ~ 1 + Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m13<-lmer(dist.range ~ 1 + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m14<-lmer(dist.range ~ 1 + body_size + Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m15<-lmer(dist.range ~ 1 + body_size + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m16<-lmer(dist.range ~ 1 + body_size * Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m17<-lmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m18<-lmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod <- list()
+
+Cand.mod[[1]] <- lmer(dist.range ~ 1 + body_size + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[2]] <- lmer(dist.range ~ 1 + body_size * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[3]] <- lmer(dist.range ~ 1 + Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[4]] <- lmer(dist.range ~ 1 + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[5]] <- lmer(dist.range ~ 1 + body_size + Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[6]] <- lmer(dist.range ~ 1 + body_size + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[7]] <- lmer(dist.range ~ 1 + body_size * Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[8]] <- lmer(dist.range ~ 1 + body_size * Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[9]] <- lmer(dist.range ~ 1 + body_size * Species + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[10]] <- lmer(dist.range ~ 1 + body_size + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[11]] <- lmer(dist.range ~ 1 + body_size * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[12]] <- lmer(dist.range ~ 1 + Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[13]] <- lmer(dist.range ~ 1 + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[14]] <- lmer(dist.range ~ 1 + body_size + Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[15]] <- lmer(dist.range ~ 1 + body_size + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[16]] <- lmer(dist.range ~ 1 + body_size * Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[17]] <- lmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[18]] <- lmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+:books:`library(AICcmodavg)`
+
+Name models
+```
+Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5",
+              "Model 6", "Model 7", "Model 8","Model 9", "Model 10",
+              "Model 11", "Model 12", "Model 13","Model 14",
+              "Model 15", "Model 16", "Model 17", "Model 18")
+```
+Create a model selection table based on AICc, better than AIC/BIC with small samples
+```
+aictab(cand.set = Cand.mod, modnames = Modnames)
 ```
 ```
-bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18)
-sortScore(bic , score = "bic")
+Model selection based on AICc:
+
+          K    AICc Delta_AICc AICcWt Cum.Wt       LL
+Model 18 18 5015.86       0.00   0.76   0.76 -2488.65
+Model 16 16 5018.83       2.97   0.17   0.93 -2492.41
+Model 17 21 5022.19       6.33   0.03   0.96 -2488.35
+Model 9  17 5022.46       6.61   0.03   0.99 -2493.09
+Model 15 16 5027.94      12.09   0.00   0.99 -2496.96
+Model 8  20 5028.79      12.93   0.00   1.00 -2492.82
+Model 7  15 5028.81      12.95   0.00   1.00 -2498.52
+Model 13 15 5028.98      13.12   0.00   1.00 -2498.60
+Model 10 12 5029.35      13.49   0.00   1.00 -2502.10
+Model 14 14 5031.27      15.41   0.00   1.00 -2500.86
+Model 11 13 5031.40      15.54   0.00   1.00 -2502.03
+Model 6  15 5031.63      15.77   0.00   1.00 -2499.93
+Model 4  14 5031.92      16.06   0.00   1.00 -2501.19
+Model 12 13 5032.28      16.42   0.00   1.00 -2502.47
+Model 1  11 5032.68      16.82   0.00   1.00 -2504.86
+Model 2  12 5034.72      18.87   0.00   1.00 -2504.79
+Model 5  13 5035.14      19.28   0.00   1.00 -2503.90
+Model 3  12 5035.39      19.53   0.00   1.00 -2505.12
+```
+Compute the evidence ratio
+```
+evidence(aictab(cand.set = Cand.mod, modnames = Modnames))
 ```
 ```
-  df      BIC
-m1  11 5071.975
-m10 12 5072.122
-m16 16 5075.369
-m2  12 5077.499
-m11 13 5077.640
-m12 13 5078.521
-m7  15 5078.874
-m18 18 5079.177
-m3  12 5080.816
-m14 14 5080.956
-m5  13 5081.379
-m4  14 5081.611
-m13 15 5082.100
-m9  17 5082.400
-m15 16 5084.480
-m6  15 5084.752
-m17 21 5095.551
-m8  20 5098.824
+Evidence ratio between models 'Model 18' and 'Model 16': 4.42
 ```
-Export table of the six best models
+Compute confidence set based on 'raw' method
+```
+confset(cand.set = Cand.mod, modnames = Modnames, second.ord = TRUE, method = "raw")
+```
+```
+Confidence set for the best model
+
+Method:	 raw sum of model probabilities
+
+95% confidence set:
+          K    AICc Delta_AICc AICcWt
+Model 18 18 5015.86       0.00   0.76
+Model 16 16 5018.83       2.97   0.17
+Model 17 21 5022.19       6.33   0.03
+
+Model probabilities sum to 0.96
+```
+Compute importance value for _day_count_ (same number of models), i.e., models with and models without the variable
+```
+importance(cand.set = Cand.mod, modnames = Modnames, parm = "day_count")
+```
+```
+Importance values of 'day_count':
+
+w+ (models including parameter): 0.96
+w- (models excluding parameter): 0.04
+```
+Compute model-averaged estimate of _day_count_ using the natural average
+```
+modavg(cand.set = Cand.mod, modnames = Modnames, parm = "day_count")
+```
+```
+Multimodel inference on "day_count" based on AICc
+
+AICc table used to obtain model-averaged estimate:
+
+          K    AICc Delta_AICc AICcWt Estimate    SE
+Model 10 12 5029.35      13.49   0.00   137.41 57.57
+Model 11 13 5031.40      15.54   0.00   137.49 57.56
+Model 12 13 5032.28      16.42   0.00   134.97 57.77
+Model 13 15 5028.98      13.12   0.00   132.22 57.34
+Model 14 14 5031.27      15.41   0.00   144.20 57.80
+Model 15 16 5027.94      12.09   0.00   141.29 57.36
+Model 16 16 5018.83       2.97   0.18   177.39 57.09
+Model 17 21 5022.19       6.33   0.03   174.33 56.88
+Model 18 18 5015.86       0.00   0.78   173.26 56.68
+
+Model-averaged estimate: 173.86
+Unconditional SE: 56.84
+95% Unconditional confidence interval: 62.45, 285.27
+```
+Export table from confidence set models
 
 :books:`library(sjPlot)`
 ```
@@ -234,96 +305,57 @@ tab_model(m1,m10,m16,m2,m11,m12, transform = NULL, collapse.ci = F,  show.adj.ic
               dv.labels = c("Model 1", "Model 2","Model 3","Model 4","Model 5", "Model 6"),
                string.pred = "Variable",
                string.p = "P" ,file = "Season_dist.range.doc", use.viewer = TRUE)
-
 ```
 :warning:
 - I get the following error: "Error in gsub("Statistic", gsub("-statistic", , attr(statistic, "statistic",  :invalid replacement argument"
  - This is probably related to incorrect loading of the _sjPlot_ library as there is also failure running the _sjp.lmer(m2)_ function
 
-Compare best-fit models
+Compare best-fit models of the confidence set
 
 ```
-lrtest(m1,m10)
+m18<-lmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m16<-lmer(dist.range ~ 1 + body_size * Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m17<-lmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+```
+lrtest(m18,m16)
 ```
 ```
 Likelihood ratio test
 
-Model 1: dist.range ~ 1 + body_size + month + (1 + month | Species:fi_fishid) +
-    (1 + month | Species) + (1 | month)
-Model 2: dist.range ~ 1 + body_size + month + day_count + (1 + month |
-    Species:fi_fishid) + (1 + month | Species) + (1 | month)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1  11 -2504.9
-2  12 -2502.1  1 5.5131    0.01887 *
-```
-```
-lrtest(m1,m16)
-```
-```
-Likelihood ratio test
-
-Model 1: dist.range ~ 1 + body_size + month + (1 + month | Species:fi_fishid) +
-    (1 + month | Species) + (1 | month)
+Model 1: dist.range ~ 1 + body_size * Species + Species * month + day_count +
+    (1 + month | Species:fi_fishid) + (1 + month | Species) +
+    (1 | month)
 Model 2: dist.range ~ 1 + body_size * Species + month + day_count + (1 +
     month | Species:fi_fishid) + (1 + month | Species) + (1 |
     month)
   #Df  LogLik Df  Chisq Pr(>Chisq)
-1  11 -2504.9
-2  16 -2492.4  5 24.904  0.0001454 ***
+1  18 -2488.7
+2  16 -2492.4 -2 7.5108    0.02339 *
 ```
 ```
-lrtest(m2,m10)
-```
-```
-Likelihood ratio test
-
-Model 1: dist.range ~ 1 + body_size * month + (1 + month | Species:fi_fishid) +
-    (1 + month | Species) + (1 | month)
-Model 2: dist.range ~ 1 + body_size + month + day_count + (1 + month |
-    Species:fi_fishid) + (1 + month | Species) + (1 | month)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1  12 -2504.8
-2  12 -2502.1  0 5.3777  < 2.2e-16 ***
-```
-```
-lrtest(m2,m16)
+lrtest(m18,m17)
 ```
 ```
 Likelihood ratio test
 
-Model 1: dist.range ~ 1 + body_size * month + (1 + month | Species:fi_fishid) +
-    (1 + month | Species) + (1 | month)
-Model 2: dist.range ~ 1 + body_size * Species + month + day_count + (1 +
+Model 1: dist.range ~ 1 + body_size * Species + Species * month + day_count +
+    (1 + month | Species:fi_fishid) + (1 + month | Species) +
+    (1 | month)
+Model 2: dist.range ~ 1 + body_size * Species * month + day_count + (1 +
     month | Species:fi_fishid) + (1 + month | Species) + (1 |
     month)
   #Df  LogLik Df  Chisq Pr(>Chisq)
-1  12 -2504.8
-2  16 -2492.4  4 24.768    5.6e-05 ***
+1  18 -2488.7
+2  21 -2488.3  3 0.6038     0.8956
 ```
-```
-lrtest(m16,m10)
-```
-```
-Likelihood ratio test
-
-Model 1: dist.range ~ 1 + body_size * Species + month + day_count + (1 +
-    month | Species:fi_fishid) + (1 + month | Species) + (1 |
-    month)
-Model 2: dist.range ~ 1 + body_size + month + day_count + (1 + month |
-    Species:fi_fishid) + (1 + month | Species) + (1 | month)
-  #Df  LogLik Df  Chisq Pr(>Chisq)
-1  16 -2492.4
-2  12 -2502.1 -4 19.391  0.0006585 ***
-```
-
-- **Model 10** and **Model 16** are preferred to the first model and to **Model 2** including the _body_size_ x month_ interaction
-- **Model 16** is better than **Model 10**, thus the addition of the _Species x body_size_ interaction improves the model fit
+- **Model 18** is preferred to both reduced **Model 16** and larger **Model 17**. All models included _day_count_ as a covariate to control for possible effects of the varying number of days per month
 
 ### 3. Analysis of the effects of body size on monthly distance range travelled by each species
 
 Looking at the summary results for the best-fit model we see the _Species_ x _body_size_ interaction is significant
 ```
-summ(m16)
+summ(m18)
 ```
 ```
 MODEL INFO:
@@ -332,22 +364,24 @@ Dependent Variable: dist.range
 Type: Mixed effects linear regression
 
 MODEL FIT:
-AIC = 5016.82, BIC = 5075.37
-Pseudo-R² (fixed effects) = 0.17
-Pseudo-R² (total) = 0.47
+AIC = 5013.31, BIC = 5079.18
+Pseudo-R² (fixed effects) = 0.23
+Pseudo-R² (total) = 0.45
 
 FIXED EFFECTS:
 ------------------------------------------------------------------------------
                                        Est.      S.E.   t val.     d.f.      p
 -------------------------------- ---------- --------- -------- -------- ------
-(Intercept)                        -6696.69   2067.53    -3.24   106.79   0.00
-body_size                              5.75      1.06     5.43    23.92   0.00
-Speciespikeperch                    6041.09   2041.44     2.96    26.11   0.01
-Specieswels                         3448.35   1112.36     3.10    24.49   0.00
-month                                -30.45    103.69    -0.29     4.69   0.78
-day_count                            177.40     57.08     3.11   161.11   0.00
-body_size:Speciespikeperch           -11.01      3.98    -2.77    25.26   0.01
-body_size:Specieswels                 -5.71      1.24    -4.61    24.04   0.00
+(Intercept)                        -7750.94   1978.23    -3.92   153.90   0.00
+body_size                              5.70      1.06     5.38    24.17   0.00
+Speciespikeperch                    7683.79   2069.83     3.71    28.78   0.00
+Specieswels                         5181.77   1193.44     4.34    32.66   0.00
+month                                182.71     79.62     2.29    27.93   0.03
+day_count                            173.24     56.68     3.06   158.13   0.00
+body_size:Speciespikeperch           -10.83      3.98    -2.72    25.61   0.01
+body_size:Specieswels                 -5.65      1.24    -4.56    24.30   0.00
+Speciespikeperch:month              -315.04     96.06    -3.28    26.34   0.00
+Specieswels:month                   -321.74     80.08    -4.02    26.59   0.00
 ------------------------------------------------------------------------------
 
 p values calculated using Satterthwaite d.f.
@@ -356,21 +390,21 @@ RANDOM EFFECTS:
 ---------------------------------------------
        Group          Parameter    Std. Dev.
 ------------------- ------------- -----------
- Species:fi_fishid   (Intercept)    1142.27
- Species:fi_fishid      month       131.98
-       month         (Intercept)    525.33
-      Species        (Intercept)    930.33
-      Species           month       143.16
-     Residual                       1276.80
+ Species:fi_fishid   (Intercept)    971.14
+ Species:fi_fishid      month       121.13
+       month         (Intercept)    506.34
+      Species        (Intercept)     0.40
+      Species           month        0.04
+     Residual                       1276.45
 ---------------------------------------------
 
 Grouping variables:
 -------------------------------------
        Group         # groups   ICC
 ------------------- ---------- ------
- Species:fi_fishid      31      0.32
-       month            11      0.07
-      Species           3       0.21
+ Species:fi_fishid      31      0.33
+       month            11      0.09
+      Species           3       0.00
 -------------------------------------
 ```
 
@@ -378,29 +412,28 @@ Grouping variables:
 
 :books:`library(sjstats)`
 ```
-iccm.1st <- icc(m16)
+iccm.1st <- icc(m18)
 print(iccm.1st)
 print(iccm.1st, comp = "var")
 ```
 ```
 # Intraclass Correlation Coefficient
 
-     Adjusted ICC: 0.355
-  Conditional ICC: 0.293
+     Adjusted ICC: 0.285
+  Conditional ICC: 0.219
 > print(iccm.1st, comp = "var")
 # Intraclass Correlation Coefficient
 
-     Adjusted ICC: 0.355
-  Conditional ICC: 0.293
+     Adjusted ICC: 0.285
+  Conditional ICC: 0.219
 ```
-
 Between levels 1 and 2
 ```
-sum(get_re_var(m16)) / (sum(get_re_var(m16)) + get_re_var(m16, "sigma_2"))
+sum(get_re_var(m18)) / (sum(get_re_var(m18)) + get_re_var(m18, "sigma_2"))
 ```
 Between levels 2 and 3
 ```
-get_re_var(m16)[2] / sum(get_re_var(m16))
+get_re_var(m18)[2] / sum(get_re_var(m18))
 ```
 :warning: There is an issue with the _sjstats_ package
 
@@ -410,23 +443,23 @@ get_re_var(m16)[2] / sum(get_re_var(m16))
 
 :books:`library(emmeans)`
 ```
-emtrends(m16, pairwise ~ Species, var = "body_size",pbkrtest.limit = 10000, lmerTest.limit = 10000)
+emtrends(m18, pairwise ~ Species, var = "body_size",pbkrtest.limit = 10000, lmerTest.limit = 10000)
 ```
 ```
 $emtrends
  Species   body_size.trend    SE   df lower.CL upper.CL
- pike               5.7477 1.258 33.4     3.19     8.31
- pikeperch         -5.2673 4.556 34.2   -14.53     3.99
- wels               0.0367 0.771 32.9    -1.53     1.61
+ pike               5.7027 1.263 33.7     3.14     8.27
+ pikeperch         -5.1263 4.569 34.6   -14.41     4.15
+ wels               0.0484 0.774 33.3    -1.53     1.62
 
 Degrees-of-freedom method: kenward-roger
 Confidence level used: 0.95
 
 $contrasts
  contrast         estimate   SE   df t.ratio p.value
- pike - pikeperch    11.01 4.73 34.1  2.331  0.0649
- pike - wels          5.71 1.47 33.2  3.878  0.0013
- pikeperch - wels    -5.30 4.62 34.1 -1.148  0.4919
+ pike - pikeperch    10.83 4.74 34.6  2.285  0.0714
+ pike - wels          5.65 1.48 33.6  3.827  0.0015
+ pikeperch - wels    -5.17 4.63 34.6 -1.117  0.5104
 
 Degrees-of-freedom method: kenward-roger
 P value adjustment: tukey method for comparing a family of 3 estimates
@@ -436,19 +469,19 @@ emmeans(m16, pairwise ~ Species, pbkrtest.limit = 10000, lmerTest.limit = 10000)
 ```
 ```
 $emmeans
- Species   emmean   SE  df lower.CL upper.CL
- pike        3511 1485 299      588     6434
- pikeperch   -330 2419  37    -5232     4572
- wels        1836 1466 212    -1055     4726
+ Species   emmean   SE   df lower.CL upper.CL
+ pike        3510 2310 30.9    -1202     8222
+ pikeperch   -329 2946 36.7    -6301     5643
+ wels        1836 2343 20.2    -3048     6721
 
 Degrees-of-freedom method: kenward-roger
 Confidence level used: 0.95
 
 $contrasts
  contrast         estimate   SE    df t.ratio p.value
- pike - pikeperch     3841 2782  37.1  1.381  0.3610
- pike - wels          1675 1971 129.5  0.850  0.6727
- pikeperch - wels    -2166 2763  36.6 -0.784  0.7151
+ pike - pikeperch     3839 3589  37.0  1.069  0.5387
+ pike - wels          1673 3211 127.3  0.521  0.8611
+ pikeperch - wels    -2165 3653  36.5 -0.593  0.8249
 
 Degrees-of-freedom method: kenward-roger
 P value adjustment: tukey method for comparing a family of 3 estimates
@@ -458,20 +491,29 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 
 :books:`library(effects)`
 ```
-plot(Effect(c("Species", "body_size"), m16),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+plot(Effect(c("Species", "body_size"), m18),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Dist_range_month](/Plots/Dist_range_month_1.png "Dist_range_month")
 
-**Note** that similar linear predictions can be obtained with the _emmip()_ function in _emmeans_ library as follows:
 ```
-emmip(m16, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
+plot(Effect(c("Species", "month"), m18),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Dist_range_month](/Plots/Dist_range_month_2.png "Dist_range_month")
+
+**Note:** similar linear predictions can be obtained with the _emmip()_ function in _emmeans_ library as follows:
+```
+emmip(m18, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
 ```
 
 #### Simple slope analysis
 
-In this analysis we estimate the slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
+In this analysis we estimate the two interaction terms in the model and thus:
+
+- The slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
+- The slopes of _month_ (i.e., the rate of change in _dist.range_ throughout time) for each Species
+
 ```
-probe_interaction(m16, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+probe_interaction(m18, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
 ```
 SIMPLE SLOPES ANALYSIS
@@ -480,103 +522,69 @@ When Species = wels:
 
                                  Est.     S.E.   t val.      p
 --------------------------- --------- -------- -------- ------
-Slope of body_size               0.03     0.65     0.04   0.96
-Conditional intercept         1932.82   304.39     6.35   0.00
+Slope of body_size               0.05     0.65     0.07   0.94
+Conditional intercept         1943.50   301.12     6.45   0.00
 
 When Species = pikeperch:
 
                                  Est.      S.E.   t val.      p
 --------------------------- --------- --------- -------- ------
-Slope of body_size              -5.17      3.86    -1.34   0.19
-Conditional intercept         -210.89   1614.71    -0.13   0.90
+Slope of body_size              -5.13      3.84    -1.33   0.19
+Conditional intercept         -167.17   1609.54    -0.10   0.92
 
 When Species = pike:
 
                                  Est.     S.E.   t val.      p
 --------------------------- --------- -------- -------- ------
-Slope of body_size               5.75     1.07     5.39   0.00
-Conditional intercept         3335.42   331.31    10.07   0.00
+Slope of body_size               5.70     1.06     5.38   0.00
+Conditional intercept         3286.40   328.00    10.02   0.00
 ```
-- The slopes of _body_size_ are significant for the three species (p < 0.05) , negative for _pikeperch_and _wels_, and positive for _pike_
+- The slopes of _body_size_ is significant (p < 0.05) and positive only for _pike_
+
+```
+probe_interaction(m18, pred = month, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+When Species = wels:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of month                -139.03    69.18    -2.01   0.06
+Conditional intercept         1943.50   301.12     6.45   0.00
+
+When Species = pikeperch:
+
+                                 Est.      S.E.   t val.      p
+--------------------------- --------- --------- -------- ------
+Slope of month                -132.32     87.42    -1.51   0.14
+Conditional intercept         -167.17   1609.54    -0.10   0.92
+
+When Species = pike:
+
+                                 Est.     S.E.   t val.      p
+--------------------------- --------- -------- -------- ------
+Slope of month                 182.72    79.64     2.29   0.03
+Conditional intercept         3286.40   328.00    10.02   0.00
+```
+- The slope for _month_ (i.e, the rate of change in time) is only significant and positive for _pike_ suggesting that there is a tendency of increased distance range towards the end month
 
 #### Plot the Species x body_size interaction
 
-First, we will re-fit **Model 16** with a gamma distribution. We need to re-value 0s to values > 0 (e.g., 0.0001) before re-fitting the model
-```
-data_distr<-data_distr %>% mutate(dist.range = replace(dist.range, dist.range == 0, 0.0001))
-```
-```
-m16_gamma<-glmer(dist.range ~ 1 + body_size * Species + month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
-```
-```
-summ(m16_gamma)
-```
-```
-MODEL INFO:
-Observations: 287
-Dependent Variable: dist.range
-Type: Mixed effects generalized linear regression
-Error Distribution: Gamma
-Link function: log
+First, we might want to consider re-fitting **Model 18** with a gamma distribution. Is it feasible?
 
-MODEL FIT:
-AIC = 4905.17, BIC = 4963.72
-Pseudo-R² (fixed effects) =  NA
-Pseudo-R² (total) =  NA
+- The distribution of _dist.range_ is right-skew and always positive (see histogram above)
+- DV must have values > 0 but _dis.range_ contain 0s, thus we need to assign thoses cases values > 0 (e.g., 0.0001) before re-fitting the model
+- Thus, we re-fit the model with gamma and log-link to be consistent with original model fit
 
-FIXED EFFECTS:
----------------------------------------------------------------
-                                    Est.   S.E.   t val.      p
--------------------------------- ------- ------ -------- ------
-(Intercept)                         3.48   1.02     3.42   0.00
-body_size                           0.00   0.00     4.24   0.00
-Speciespikeperch                    3.53   1.23     2.87   0.00
-Specieswels                         2.12   0.68     3.09   0.00
-month                              -0.02   0.04    -0.48   0.63
-day_count                           0.07   0.03     2.55   0.01
-body_size:Speciespikeperch         -0.01   0.00    -2.48   0.01
-body_size:Specieswels              -0.00   0.00    -3.80   0.00
----------------------------------------------------------------
-
-RANDOM EFFECTS:
----------------------------------------------
-       Group          Parameter    Std. Dev.
-------------------- ------------- -----------
- Species:fi_fishid   (Intercept)     0.38
- Species:fi_fishid      month        0.05
-       month         (Intercept)     0.16
-      Species        (Intercept)     0.30
-      Species           month        0.06
-     Residual                        0.68
----------------------------------------------
-
-Grouping variables:
--------------------------------------
-       Group         # groups   ICC
-------------------- ---------- ------
- Species:fi_fishid      31      0.20
-       month            11      0.04
-      Species           3       0.12
--------------------------------------
+```
+data_distr_sub<-data_distr %>% mutate(dist.range = replace(dist.range, dist.range == 0, 0.0001))
 ```
 ```
-interact_plot(m16_gamma, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+m18_gamma<-glmer(dist.range ~ 1 + body_size * Species + Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr_sub, REML=T, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+interact_plot(m18_gamma, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
 ![Dist_range_month](/Plots/Dist_range_month_3.png "Dist_range_month")
-
-### Does body size determine monthly changes in distance range between species?
-
-- For this analysis we can take **Model 17** including a three-way interaction between body size, month and species (and controlling for _day_count_, incl. as covariate)
-- However, to test separate effects by month we need to convert the variable _month_ to factor and re-fit the model (let run a "Gamma" distr)
-- Computing a model with so many levels in both RF and FE terms requires pretty much computation power and fitting time considerably extends
-- This is not the object of these LMM analyses (i.e., assessing the RF covariance) but it is fine here for further exploring purposes
-
-```
-data_distr$month <- as.factor(data_distr$month)
-```
-```
-m17_gamma<-glmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 + month| Species:fi_fishid)+(1 + month| Species) + (1|month),data = data_distr, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
-```
-```
-summ(m17_gamma)
-```
