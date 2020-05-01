@@ -155,6 +155,7 @@ Model **m_sl_1** is chosen
 
 Build a set of candidate models fitted with setting **REML=FALSE**
 
+```
 Cand.mod <- list()
 
 Cand.mod[[1]]<-lmer(dist.range ~ 1 + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
@@ -1491,6 +1492,7 @@ Conditional intercept         -2.25   1.39    -1.62   0.11
 interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+
 
 
 
