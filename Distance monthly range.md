@@ -36,7 +36,7 @@ data_distr$month <- as.integer(data_distr$month)
 ```
 data_distr$fi_fishid <- as.factor(data_distr$fi_fishid)
 data_distr$Species <- as.factor(data_distr$Species)
-data_distr$month <- as.numeric(data_distr$month)
+data_distr$month <- as.integer(data_distr$month)
 ```
 Order by _fi_fishid_ and _month_ and drop missing variables
 ```
@@ -504,7 +504,7 @@ plot(Effect(c("Species", "month"), m18),lines=list(multiline=TRUE), rug = FALSE,
 
 **Note:** similar linear predictions can be obtained with the _emmip()_ function in _emmeans_ library as follows:
 ```
-emmip(m18, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000))
+emmip(m18, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmerTest.limit = 10000)
 ```
 
 #### Simple slope analysis of the interactions in the model
@@ -512,7 +512,7 @@ emmip(m18, Species ~ body_size, cov.reduce = range, pbkrtest.limit = 10000, lmer
 In this analysis we estimate the two interaction terms in the model and thus:
 
 - The slopes of body size trends for each Species, i.e., the moderator effects on distance range indicating the values at which the slopes are significant
-- The slopes of _month_ (i.e., the rate of change in _dist.range_ throughout time) for each Species
+- The slopes of _month_ (i.e., the rate of change in _dist.range_ throughout monthly time) for each species
 
 We might want to consider re-fitting **Model 18** with a gamma distribution. Is it feasible?
 
@@ -567,7 +567,7 @@ interact_plot(m18_gamma, pred = body_size, modx = Species, plot.points = TRUE,ro
 **Slope of the Species x month interaction**
 
 ```
-probe_interaction(m18_gamma, pred = month, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
+probe_interaction(m18_gamma, pred = month, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Monthly  changes in travel distance")
 ```
 ```
 When Species = wels:
@@ -592,10 +592,11 @@ Slope of month                0.10   0.04     2.38   0.02
 Conditional intercept         7.99   0.24    33.78   0.00
 ```
 
-- The slope for _month_ (i.e, the rate of change in time) is only significant and positive for _pike_ suggesting that there is a tendency of increased distance range towards the end month
+- The slope for _month_ (i.e, the monthly rate of change) is only significant and positive for _pike_ suggesting that there is a tendency of increased distance range towards the end month
 **Plot the Species x month interaction**
+
 ```
-interact_plot(m18_gamma, pred = month, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Time (months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Rate of change in travel distance across time")
+interact_plot(m18_gamma, pred = month, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Time (months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Monthly rate of change in travel distance")
 ```
 ![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
 
@@ -616,7 +617,7 @@ m17_gamma<-glmer(dist.range ~ 1 + body_size * Species * month + day_count + (1 +
 probe_interaction(m17_gamma, pred = month, modx = Species, mod2= body_size, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Time (11 months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
 ```
-██████████████████████████████████████████ While body_size (2nd moderator) =  536.80 (- 1 SD) █████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While body_size (2nd moderator) =  536.80 (- 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -641,7 +642,7 @@ When Species = wels:
 Slope of month                -0.09   0.07    -1.17   0.24
 Conditional intercept          7.44   0.38    19.81   0.00
 
-███████████████████████████████████████████ While body_size (2nd moderator) =  897.18 (Mean) ██████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While body_size (2nd moderator) =  897.18 (Mean) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -666,7 +667,7 @@ When Species = wels:
 Slope of month                -0.08   0.05    -1.76   0.08
 Conditional intercept          7.41   0.21    34.57   0.00
 
-██████████████████████████████████████████ While body_size (2nd moderator) = 1257.55 (+ 1 SD) █████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While body_size (2nd moderator) = 1257.55 (+ 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -699,3 +700,444 @@ Conditional intercept          7.39   0.16    47.24   0.00
 interact_plot(m17_gamma, pred = month, modx = Species, mod2= body_size, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Time (months)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Time-effects of body size on travel distance")
 ```
 ![Dist_range_month](/Plots/Dist_range_month_5.png "Dist_range_month")
+
+# Is the rate of excursions to tributary related to the rate of dam use?
+
+## 1. Fit a model using _tributary_ as DV and the Species x month interaction and other covariates if necessary
+
+For the count variable _tributary_ we will fit models using a Poisson distribution. Alternatively, we might want to use a negative binomial regression instead (see below).
+**Note** that even if fitting a gamma model is not totally correct for discrete data, otherwise a good fit would mean a likely good fit of the negative binomial (here we ommit the gamma adjustment though).
+
+### 1.1. Find the best unconditional nested intercept-only models fitted via REML
+
+We fit a model using the same random-effects structure selected above, which is valid for the analysis of the rate of change in time.
+
+```
+m_trib_in1<-glmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species),data = data_distr, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+m_trib_in2<-glmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species)+(1| month),data = data_distr, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+m_trib_sl<-glmer(tributary ~ 1 + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+```
+- **m_trib_sl** is preferred
+- **Note** that if we peform the same selection procedure as before, the result is the same as the preferred model is the most complex
+
+### 1.2. Find the best fixed-effects and fit a model including all relevant random-effects
+
+We conduct a hypothesis testing using a top-down approach about the effects of dam use on the rate of tributary excursions.
+**Alternatively**, conduct model-selection (see point 1.2a below)
+
+#### 1.2.1. Fit a model of monthal differences in tributary use between species (Species x month interaction)
+
+```
+m_trib_int<- glmer(tributary ~ 1 + month * Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+```
+Is the model over-dispersed?
+
+```
+overdisp_fun <- function(m_trib_int) {
+    rdf <- df.residual(m_trib_int)
+    rp <- residuals(m_trib_int,type="pearson")
+    Pearson.chisq <- sum(rp^2)
+    prat <- Pearson.chisq/rdf
+    pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
+    c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
+}
+```
+```
+overdisp_fun(m_trib_int)
+```
+```
+       chisq        ratio          rdf            p
+7.062185e+02 2.568067e+00 2.750000e+02 1.037162e-39
+```
+The test is significant indicating the model is over-dispersed
+
+#### 1.2.2. Would a negative binomial be more appropiate given our dataset?
+
+```
+ddply(data_distr,.(Species),summarize,mean=mean(tributary),sd=sd(tributary),nobs=length(unique(fi_fishid)))
+```
+```
+    Species     mean        sd nobs
+1      pike 3.302326  7.686611   10
+2 pikeperch 9.870968 11.498373    7
+3      wels 5.776978 10.817353   14
+```
+- We see that conditional variances of the variable _tributary_ appear to vary more within each species than the mean (SD > mean) suggesting that over-dispersion of the variable is present
+- In this case fitting models with Negative Binomial would be recommended as there is more variability between units than Poisson suggests
+- Another option would be fitting zero-inflated models as it seems that the distribution of 0s is high and skewed (however, we ommit this analysis if nb fitting goes well)
+
+Fit the model adjusting for a negative binomial distribution
+```
+m_trib_int_nb<-glmer.nb(tributary ~ 1 + month * Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+
+How is Poisson compared to Negative Binomial?
+
+```
+anova(m_trib_int_nb, m_trib_int)
+```
+```
+Models:
+m_trib_int: tributary ~ 1 + month * Species + (1 + month | Species:fi_fishid) +
+m_trib_int:     (1 + month | Species)
+m_trib_int_nb: tributary ~ 1 + month * Species + (1 + month | Species:fi_fishid) +
+m_trib_int_nb:     (1 + month | Species)
+              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_int    12 1384.6 1428.5 -680.29   1360.6
+m_trib_int_nb 13 1047.6 1095.1 -510.78   1021.6 339.01      1  < 2.2e-16 ***
+```
+
+- Model **m_trib_int_nb** is preferred since the log-likelihood of the Poisson model is lower indicating a poorer fit
+**Note:** If both models had the same d.f., comparing their IC would be equivalent to comparing their LL value which is lower in the Poisson model
+
+#### 1.2.3. Compare the best-fit model with a nested model including also the rate of dam use
+
+```
+m_trib_int_nb_dam<-update(m_trib_int_nb,.~.+ dam)
+```
+```
+anova(m_trib_int_nb, m_trib_int_nb_dam)
+```
+```
+Models:
+m_trib_int_nb: tributary ~ 1 + month * Species + (1 + month | Species:fi_fishid) +
+m_trib_int_nb:     (1 + month | Species)
+m_trib_int_nb_dam: tributary ~ month + Species + (1 + month | Species:fi_fishid) +
+m_trib_int_nb_dam:     (1 + month | Species) + dam + month:Species
+                  Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_int_nb     13 1047.6 1095.1 -510.78  1021.56
+m_trib_int_nb_dam 14 1025.4 1076.6 -498.69   997.39 24.169      1  8.822e-07 ***
+```
+
+- The addition of _dam_ improves the model fit and we can say **m_trib_int_nb_dam** is a better model
+```
+summ(m_trib_int_nb_dam,  center = TRUE, scale = TRUE, n.sd = 2)
+```
+```
+MODEL INFO:
+Observations: 287
+Dependent Variable: tributary
+Type: Mixed effects generalized linear regression
+Error Distribution: Negative Binomial(1.0475)
+Link function: log
+
+MODEL FIT:
+AIC = 1025.39, BIC = 1076.62
+Pseudo-R² (fixed effects) = 0.32
+Pseudo-R² (total) = 0.91
+
+FIXED EFFECTS:
+-----------------------------------------------------------
+                                Est.   S.E.   z val.      p
+---------------------------- ------- ------ -------- ------
+(Intercept)                    -2.20   0.82    -2.70   0.01
+month                           0.91   1.10     0.82   0.41
+Speciespikeperch                2.42   1.17     2.06   0.04
+Specieswels                     1.05   1.00     1.05   0.29
+dam                            -2.45   0.51    -4.79   0.00
+month:Speciespikeperch         -2.84   1.43    -1.99   0.05
+month:Specieswels              -2.72   1.25    -2.17   0.03
+-----------------------------------------------------------
+
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)     2.10
+ Species:fi_fishid      month        2.10
+      Species        (Intercept)     0.00
+      Species           month        0.00
+---------------------------------------------
+
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.51
+      Species           3       0.00
+-------------------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
+
+- The rate of dam use is highly significant and likely highest in relative importance
+- In fact, _dam_ is significantly related to _tributary_ whilst weakly correlated (r=-0.32, see multicolinearity tests above)
+- The interaction Species x month is significant
+
+Plot the Species x month interaction from negative binomial model
+
+```
+plot(Effect(c("month","Species"),m_trib_int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Dist_range_month](/Plots/Dist_range_month_6.png "Dist_range_month")
+
+
+#### 1.2.4. Are there conditional effects of the dam use on tributary excursions
+
+Fit a model including the 3-way interaction _Species * month * dam_
+```
+m_trib_3int_nb_dam<-glmer.nb(tributary ~ 1 + month * Species * dam + (month| Species:fi_fishid)+(month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+Summary of nested models comparisons between this and previous fitted models
+```
+lrtest(m_trib_int_nb, m_trib_int_nb_dam,m_trib_3int_nb_dam)
+```
+```
+Likelihood ratio test
+
+Model 1: tributary ~ 1 + month * Species + (1 + month | Species:fi_fishid) +
+    (1 + month | Species)
+Model 2: tributary ~ month + Species + (1 + month | Species:fi_fishid) +
+    (1 + month | Species) + dam + month:Species
+Model 3: tributary ~ 1 + month * Species * dam + (month | Species:fi_fishid) +
+    (month | Species)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  13 -510.78
+2  14 -498.69  1 24.169  8.822e-07 ***
+3  19 -493.31  5 10.777    0.05599 .
+```
+**m_trib_3int_nb_dam** is preferred to model **m_trib_int_nb** but only marginally significant with respect to the 3-way interaction model
+```
+summ(m_trib_3int_nb_dam,  center = TRUE, scale = TRUE, n.sd = 2)
+```
+```
+MODEL INFO:
+Observations: 287
+Dependent Variable: tributary
+Type: Mixed effects generalized linear regression
+Error Distribution: Negative Binomial(1.3929)
+Link function: log
+
+MODEL FIT:
+AIC = 1024.61, BIC = 1094.14
+Pseudo-R² (fixed effects) = 0.41
+Pseudo-R² (total) = 0.93
+
+FIXED EFFECTS:
+---------------------------------------------------------------
+                                    Est.   S.E.   z val.      p
+-------------------------------- ------- ------ -------- ------
+(Intercept)                        -2.16   0.88    -2.45   0.01
+month                               0.70   1.12     0.63   0.53
+Speciespikeperch                    2.21   1.25     1.76   0.08
+Specieswels                         0.85   1.08     0.79   0.43
+dam                                -1.07   1.12    -0.95   0.34
+month:Speciespikeperch             -2.32   1.49    -1.56   0.12
+month:Specieswels                  -2.88   1.27    -2.26   0.02
+month:dam                           2.07   1.83     1.14   0.26
+Speciespikeperch:dam               -2.10   1.73    -1.21   0.23
+Specieswels:dam                    -2.28   1.44    -1.58   0.11
+month:Speciespikeperch:dam         -0.39   2.80    -0.14   0.89
+month:Specieswels:dam              -4.46   2.31    -1.93   0.05
+---------------------------------------------------------------
+
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)     2.21
+ Species:fi_fishid      month        2.08
+      Species        (Intercept)     0.00
+      Species           month        0.00
+---------------------------------------------
+
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.58
+      Species           3       0.00
+-------------------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
+
+- There is significant effects of the Species x month x dam interaction
+
+Plot the Species x month x dam interaction
+
+```
+plot(Effect(c("month","Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(3, 2))
+```
+![Dist_range_month](/Plots/Dist_range_month_7.png "Dist_range_month")
+
+```
+plot(Effect(c("Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Dist_range_month](/Plots/Dist_range_month_8.png "Dist_range_month")
+
+```
+plot(Effect(c("Species", "month"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Dist_range_month](/Plots/Dist_range_month_9.png "Dist_range_month")
+
+```
+probe_interaction(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, jnplot = FALSE)
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+Slope of dam when Species = wels:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.13   0.03    -4.02   0.00
+
+Slope of dam when Species = pikeperch:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.13   0.01   -22.40   0.00
+
+Slope of dam when Species = pike:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.04   0.05    -0.93   0.35
+```
+```
+interact_plot(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
+```
+![Dist_range_month](/Plots/Dist_range_month_10.png "Dist_range_month")
+
+### 1.2a. Model-selection on the rate of tributary excursions
+
+```
+Cand.mod <- list()
+
+Cand.mod[[1]]<-glmer.nb(tributary ~ 1 + dam + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[2]]<-glmer.nb(tributary ~ 1 + dam + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[3]]<-glmer.nb(tributary ~ 1 + dam + month + Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[4]]<-glmer.nb(tributary ~ 1 + dam * month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[5]]<-glmer.nb(tributary ~ 1 + dam * month + Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[6]]<-glmer.nb(tributary ~ 1 + dam * month * Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[7]]<-glmer.nb(tributary ~ 1 + dam * Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[8]]<-glmer.nb(tributary ~ 1 + dam * Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[9]]<-glmer.nb(tributary ~ 1 + Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[10]]<-glmer.nb(tributary ~ 1 + Species * month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[11]]<-glmer.nb(tributary ~ 1 + Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[12]]<-glmer.nb(tributary ~ 1 + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+Name models
+```
+Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5",
+              "Model 6", "Model 7", "Model 8","Model 9", "Model 10", "Model 11", "Model 12")
+```
+Create a model selection table based on AICc, better than AIC/BIC with small samples
+```
+aictab(cand.set = Cand.mod, modnames = Modnames)
+```
+```
+Model selection based on AICc:
+
+          K    AICc Delta_AICc AICcWt Cum.Wt      LL
+Model 1   9 1024.62       0.00   0.24   0.24 -502.99
+Model 8  13 1025.02       0.40   0.20   0.44 -498.84
+Model 7  14 1025.06       0.44   0.19   0.64 -497.76
+Model 2  10 1025.61       0.99   0.15   0.78 -502.41
+Model 3  12 1027.00       2.37   0.07   0.86 -500.93
+Model 6  19 1027.46       2.84   0.06   0.92 -493.31
+Model 4  11 1027.56       2.94   0.06   0.97 -502.30
+Model 5  13 1028.92       4.30   0.03   1.00 -500.79
+Model 12  9 1047.37      22.74   0.00   1.00 -514.36
+Model 10 13 1048.89      24.27   0.00   1.00 -510.78
+Model 9  11 1049.41      24.78   0.00   1.00 -513.22
+Model 11 10 1049.65      25.03   0.00   1.00 -514.43
+```
+Compute the evidence ratio
+```
+evidence(aictab(cand.set = Cand.mod, modnames = Modnames))
+```
+```
+Evidence ratio between models 'Model 1' and 'Model 8': 1.22
+```
+Compute confidence set based on 'raw' method
+```
+confset(cand.set = Cand.mod, modnames = Modnames, second.ord = TRUE, method = "raw")
+```
+```
+Confidence set for the best model
+
+Method:	 raw sum of model probabilities
+
+95% confidence set:
+         K    AICc Delta_AICc AICcWt
+Model 1  9 1024.62       0.00   0.24
+Model 8 13 1025.02       0.40   0.20
+Model 7 14 1025.06       0.44   0.19
+Model 2 10 1025.61       0.99   0.15
+Model 3 12 1027.00       2.37   0.07
+Model 6 19 1027.46       2.84   0.06
+Model 4 11 1027.56       2.94   0.06
+
+Model probabilities sum to 0.97
+```
+
+Compare the best-fit models (within 2.5 Delta_AICc) of the confidence
+
+```
+m1<-glmer.nb(tributary ~ 1 + dam + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m8<-glmer.nb(tributary ~ 1 + dam * Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m7<-glmer.nb(tributary ~ 1 + dam * Species + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m2<-glmer.nb(tributary ~ 1 + dam + month + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m3<-glmer.nb(tributary ~ 1 + dam + month + Species + (1 + month| Species:fi_fishid)+(1 + month| Species),data = data_distr, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+```
+lrtest(m1,m8,m7,m2,m3 )
+```
+```
+Likelihood ratio test
+
+Model 1: tributary ~ 1 + dam + (1 + month | Species:fi_fishid) + (1 +
+    month | Species)
+Model 2: tributary ~ 1 + dam * Species + (1 + month | Species:fi_fishid) +
+    (1 + month | Species)
+Model 3: tributary ~ 1 + dam * Species + month + (1 + month | Species:fi_fishid) +
+    (1 + month | Species)
+Model 4: tributary ~ 1 + dam + month + (1 + month | Species:fi_fishid) +
+    (1 + month | Species)
+Model 5: tributary ~ 1 + dam + month + Species + (1 + month | Species:fi_fishid) +
+    (1 + month | Species)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   9 -502.99
+2  13 -498.84  4 8.2875    0.08160 .
+3  14 -497.76  1 2.1712    0.14061
+4  10 -502.41 -4 9.2982    0.05406 .
+5  12 -500.93  2 2.9547    0.22825
+```
+
+Model **m1** is marginally better, however, for the simple slope analysis we keep **m8** which has lower LogLik, deviance and AIC
+
+Simple slope analysis
+```
+probe_interaction(m8, pred = dam, modx = Species, plot.points = TRUE, jnplot = FALSE)
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+Slope of dam when Species = wels:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.12   0.01   -12.57   0.00
+
+Slope of dam when Species = pikeperch:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.15   0.05    -3.12   0.00
+
+Slope of dam when Species = pike:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.02   0.01    -1.90   0.06
+```
+The results are nearly the same as those of the 3-way model **m_trib_3int_nb_dam** excluding _month_; however, we can say this the current model is the correct fit to our data
+
+```
+interact_plot(m8, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
+```
+![Dist_range_month](/Plots/Dist_range_month_11.png "Dist_range_month")
+
+
