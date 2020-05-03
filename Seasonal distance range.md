@@ -2,8 +2,8 @@
 
 ## Create a dataframe including seasonal range and reservoir parts
 
-:books:`library(plyr)`  
-:books:`library(data.table)`  
+:books:`library(plyr)`
+:books:`library(data.table)`
 
 To do this, create a new seasonal range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -297,9 +297,9 @@ Model 2: dist.range ~ 1 + Species * season + (1 + season | Species:fi_fishid) +
 
 Export table from confidence set models
 
-:books:`library(sjPlot)`  
-:books:`library(sjstats)`  
-:books:`library(sjmisc)`  
+:books:`library(sjPlot)`
+:books:`library(sjstats)`
+:books:`library(sjmisc)`
 
 ```
 tab_model(m10,m8,m1,m2,m5,m7,m3, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
@@ -430,7 +430,8 @@ Continuous predictors are mean-centered and scaled by 2 s.d.
 
 #### Calculate Level-2 and Level-3 ICC indices
 
-:books:`library(sjstats)`
+:books:`library(easystats)`
+
 ```
 iccm.1st <- icc(m8)
 print(iccm.1st)
@@ -454,15 +455,6 @@ sum(get_re_var(m2)) / (sum(get_re_var(m2)) + get_re_var(m2, "sigma_2"))
 Between levels 2 and 3
 ```
 get_re_var(m2)[2] / sum(get_re_var(m2))
-```
-:warning:
-- Cant compute random effect variances (probably because random slopes not present as fixed effects, hence, some variance components equal zero)
-- Re-fit the model
-- There is also some issue with the _sjstats_ package. Try the following for next session:
-
-```
-:books:`library(devtools)`
-install_local("~/Teri_longit_move/scripts/sjstats_0.17.8.tar.gz")
 ```
 
 #### Pairwise comparisons
@@ -1784,3 +1776,8 @@ interact_plot(m8, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRU
 ```
 
 ![Dist_range_season](/Plots/Dist_range_season_15.png "Dist_range_season")
+
+
+
+
+
