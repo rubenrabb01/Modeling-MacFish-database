@@ -1546,7 +1546,7 @@ Continuous predictors are mean-centered and scaled by 2 s.d.
 
 - There is significant effects of the Species x dam interaction in _pikeperch_ and _wels_
 - This is shown in the plot below where the line for _wels_ start to diverge and interact with that of _pikeperch_ at higher dam use
-- Since the Sepcies x Season interaction is irrelevant in the second plot we show only the Species x dam interaction
+- Since the Species x Season interaction is irrelevant in the second plot we show only the Species x dam interaction
 
 Plot the Species x Season x dam interaction
 
