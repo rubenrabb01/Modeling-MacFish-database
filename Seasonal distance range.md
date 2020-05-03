@@ -1588,7 +1588,7 @@ Slope of dam when Species = pike:
 ```
 interact_plot(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
 ```
-![Dist_range_month](/Plots/Dist_range_month_14.png "Dist_range_month")
+![Dist_range_season](/Plots/Dist_range_season_14.png "Dist_range_season")
 
 ### 1.2a. Model-selection on the rate of tributary excursions
 
@@ -1730,7 +1730,7 @@ The results are nearly the same as those of the 3-way model **m_trib_3int_nb_dam
 interact_plot(m8, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
 ```
 
-![Dist_range_month](/Plots/Dist_range_month_15.png "Dist_range_month")
+![Dist_range_season](/Plots/Dist_range_season_15.png "Dist_range_season")
 
 
 
