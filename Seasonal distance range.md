@@ -1277,7 +1277,7 @@ interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.p
 
 # Is the rate of excursions to tributary related to the rate of dam use?
 
-## 1. Fit a model using _tributary_ as DV and the Species x month interaction and other covariates if necessary
+## 1. Fit a model using _tributary_ as DV and the Species x season interaction and other covariates if necessary
 
 For the count variable _tributary_ we will fit models using a Poisson distribution. Alternatively, we might want to use a negative binomial regression instead (see below).
 **Note** that even if fitting a gamma model is not totally correct for discrete data, otherwise a good fit would mean a likely good fit of the negative binomial (here we ommit the gamma adjustment though).
