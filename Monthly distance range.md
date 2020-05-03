@@ -87,6 +87,8 @@ corrplot(corr,method="number")
 
 #### 1.1. Fit nested intercept-only models including all potentially relevant random-effects and compare them with LRT
 
+:books:`library(lmtest)`
+
 ```
 m_id<-lmer(dist.range ~ 1  + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 m_id_sp<-lmer(dist.range ~ 1  + (1| Species) + (1| fi_fishid),data = data_distr, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
