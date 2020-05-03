@@ -21,7 +21,6 @@ data_distr_season$season<-revalue(data_distr_season$season, c("spring_I"="0","sp
 Convert variables including _season_ to integer to allow correct ordering (from months 10-12 2018)
 ```
 data_distr_season$season <- as.integer(data_distr_season$season)
-data_distr_season$month <- as.factor(data_distr_season$month)
 data_distr_season$res_part <- as.factor(data_distr_season$res_part)
 data_distr_season$fi_fishid <- as.factor(data_distr_season$fi_fishid)
 data_distr_season$Species <- as.factor(data_distr_season$Species)
@@ -529,6 +528,7 @@ We might want to consider re-fitting **Model 10** with a gamma distribution. Is 
 
 ```
 data_distr_season_sub<-data_distr_season %>% mutate(dist.range = replace(dist.range, dist.range == 0, 0.0001))
+data_distr_season_sub$season <- as.factor(data_distr_season_sub$season)
 ```
 ```
 m10_gamma<-glmer(dist.range ~ 1 + body_size * Species + Species * season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season_sub, REML=T, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
@@ -564,7 +564,6 @@ Slope of body_size            0.00   0.00     2.76   0.01
 Conditional intercept         8.26   0.23    35.48   0.00
 ```
 - The slopes of _body_size_ is significant (p < 0.05) and positive only for _pike_
-
 
 ```
 interact_plot(m10_gamma, pred = body_size, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
@@ -1065,7 +1064,7 @@ Conditional intercept         4105.78   610.18     6.73   0.00
 
 Now we test wether there are seasonal differences between species excluding the moderator effects of body size
 ```
-m_dam_season_sp<-glmer(dist.range ~ 1 + season * Species * dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+m_dam_season_sp<-glmer(dist.range ~ 1 + season * Species * dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season_sub, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
 ```
 summ(m_dam_season_sp,  center = TRUE, scale = TRUE, n.sd = 2)
@@ -1274,7 +1273,7 @@ Conditional intercept          7.34   0.19    37.89   0.00
 ```
 interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,pred.labels = NULL,x.label = "Proportion of dam use", y.label = "Mean distance range (m)", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"), main.title = "Seasonal effects of dam use on travel distance in three fish species")
 ```
-![Dist_range_season](/Plots/Dist_range_season_7.png "Dist_range_season")
+![Dist_range_season](/Plots/Dist_range_season_10.png "Dist_range_season")
 
 # Is the rate of excursions to tributary related to the rate of dam use?
 
@@ -1462,7 +1461,7 @@ Plot the Species x Season interaction from negative binomial model
 ```
 plot(Effect(c("season","Species"),m_trib_int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
-![Dist_range_season](/Plots/Dist_range_season_8.png "Dist_range_season")
+![Dist_range_season](/Plots/Dist_range_season_11.png "Dist_range_season")
 
 
 #### 1.2.4. Are there conditional effects of the dam use on tributary excursions
@@ -1554,17 +1553,16 @@ Plot the Species x Season x dam interaction
 ```
 plot(Effect(c("season","Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(3, 2))
 ```
-![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
+![Dist_range_season](/Plots/Dist_range_season_12.png "Dist_range_season")
 
 ```
 plot(Effect(c("Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
-![Dist_range_season](/Plots/Dist_range_season_10.png "Dist_range_season")
+![Dist_range_season](/Plots/Dist_range_season_13.png "Dist_range_season")
 
 
 ```
 probe_interaction(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, jnplot = FALSE)
-probe_interaction(m_trib_3int_nb_dam, pred = season, modx = Species,mod2=dam, plot.points = TRUE, jnplot = FALSE)
 ```
 ```
 SIMPLE SLOPES ANALYSIS
@@ -1590,7 +1588,7 @@ Slope of dam when Species = pike:
 ```
 interact_plot(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
 ```
-![Dist_range_month](/Plots/Dist_range_month_11.png "Dist_range_month")
+![Dist_range_month](/Plots/Dist_range_month_14.png "Dist_range_month")
 
 ### 1.2a. Model-selection on the rate of tributary excursions
 
@@ -1732,9 +1730,7 @@ The results are nearly the same as those of the 3-way model **m_trib_3int_nb_dam
 interact_plot(m8, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
 ```
 
-![Dist_range_month](/Plots/Dist_range_month_12.png "Dist_range_month")
-
-
+![Dist_range_month](/Plots/Dist_range_month_15.png "Dist_range_month")
 
 
 
