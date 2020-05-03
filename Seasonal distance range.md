@@ -2,8 +2,8 @@
 
 ## Create a dataframe including seasonal range and reservoir parts
 
-:books:`library(plyr)`
-:books:`library(data.table)`
+:books:`library(plyr)`  
+:books:`library(data.table)`  
 
 To do this, create a new seasonal range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -297,9 +297,9 @@ Model 2: dist.range ~ 1 + Species * season + (1 + season | Species:fi_fishid) +
 
 Export table from confidence set models
 
-:books:`library(sjPlot)`
-:books:`library(sjstats)`
-:books:`library(sjmisc)`
+:books:`library(sjPlot)`  
+:books:`library(sjstats)`  
+:books:`library(sjmisc)`  
 
 ```
 tab_model(m10,m8,m1,m2,m5,m7,m3, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
