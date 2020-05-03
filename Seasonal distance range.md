@@ -223,6 +223,22 @@ Model probabilities sum to 0.95
 ```
 Export table of the six best models
 
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(stargazer)
+```
+
+Here is the latex table in a PDF document:
+
+```{r mylatextable, results = "asis"}
+stargazer(m1, type = 'latex')
+
+```
+
 :books:`library(sjPlot)`
 ```
 tab_model(m10,m8,m1,m2,m5,m7,m3, transform = NULL, collapse.ci = F,  show.adj.icc = TRUE, auto.label = FALSE,  show.se = TRUE,collapse.se = T,
@@ -610,7 +626,7 @@ m9_gamma<-glmer(dist.range ~ 1 + body_size * Species * season + (1 + season| Spe
 probe_interaction(m9_gamma, pred = body_size, modx = Species, mod2= season, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Season", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance")
 ```
 ```
-████████████████████████████████████████████████████ While season (2nd moderator) = 1 ███████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While season (2nd moderator) = 1 ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -635,7 +651,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     0.45   0.65
 Conditional intercept         8.08   0.24    33.90   0.00
 
-████████████████████████████████████████████████████ While season (2nd moderator) = 2 ███████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While season (2nd moderator) = 2 ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -660,7 +676,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     1.93   0.05
 Conditional intercept         6.73   0.30    22.25   0.00
 
-████████████████████████████████████████████████████ While season (2nd moderator) = 3 ███████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While season (2nd moderator) = 3 ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -685,7 +701,7 @@ When Species = wels:
 Slope of body_size            -0.00   0.00    -2.05   0.04
 Conditional intercept          7.89   0.30    26.60   0.00
 
-████████████████████████████████████████████████████ While season (2nd moderator) = 4 ███████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While season (2nd moderator) = 4 ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -710,7 +726,7 @@ When Species = wels:
 Slope of body_size            -0.00   0.00    -0.58   0.56
 Conditional intercept          8.05   0.25    31.62   0.00
 
-████████████████████████████████████████████████████ While season (2nd moderator) = 5 ███████████████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While season (2nd moderator) = 5 ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -856,7 +872,7 @@ Now let account for the moderator effects of body_size on the slopes of dam
 probe_interaction(m10_gamma_dam, pred = body_size, modx = Species, mod2 = dam, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean distance range (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on travel distance as subject to dam use")
 ```
 ```
-██████████████████████████████████████████ While dam (2nd moderator) = -8.12 (- 1 SD) █████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = -8.12 (- 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -881,7 +897,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     1.44   0.15
 Conditional intercept         7.91   0.25    31.22   0.00
 
-███████████████████████████████████████████ While dam (2nd moderator) = 21.31 (Mean) ██████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = 21.31 (Mean) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -906,7 +922,7 @@ When Species = wels:
 Slope of body_size            0.00   0.00     0.56   0.58
 Conditional intercept         8.09   0.22    37.51   0.00
 
-██████████████████████████████████████████ While dam (2nd moderator) = 50.75 (+ 1 SD) █████████████████████████████████████████
+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While dam (2nd moderator) = 50.75 (+ 1 SD) ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
 
 SIMPLE SLOPES ANALYSIS
 
@@ -1052,7 +1068,7 @@ Now we test wether there are seasonal differences between species excluding the 
 m_dam_season_sp<-glmer(dist.range ~ 1 + season * Species * dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
 ```
-summ(m_dam_season_sp)
+summ(m_dam_season_sp,  center = TRUE, scale = TRUE, n.sd = 2)
 ```
 ```
 MODEL INFO:
@@ -1063,7 +1079,7 @@ Error Distribution: Gamma
 Link function: log
 
 MODEL FIT:
-AIC = 94.70, BIC = 270.09
+AIC = 202.71, BIC = 378.09
 Pseudo-R² (fixed effects) =  NA
 Pseudo-R² (total) =  NA
 
@@ -1071,52 +1087,52 @@ FIXED EFFECTS:
 -----------------------------------------------------------------
                                       Est.   S.E.   t val.      p
 ---------------------------------- ------- ------ -------- ------
-(Intercept)                           7.48   0.25    29.77   0.00
-season1                               0.65   0.65     1.00   0.32
-season2                              -0.23   0.42    -0.54   0.59
-season3                               0.07   0.45     0.16   0.87
-season4                               0.20   0.42     0.48   0.63
-Speciespikeperch                      0.83   0.39     2.13   0.03
-Specieswels                           0.64   0.34     1.90   0.06
-dam                                   0.00   0.01     0.35   0.73
-season1:Speciespikeperch             -1.25   0.82    -1.52   0.13
-season2:Speciespikeperch             -0.48   0.63    -0.77   0.44
-season3:Speciespikeperch             -0.71   0.68    -1.05   0.29
-season4:Speciespikeperch             -1.26   0.64    -1.96   0.05
-season1:Specieswels                  -1.25   0.74    -1.67   0.09
-season2:Specieswels                  -0.63   0.57    -1.09   0.27
-season3:Specieswels                  -0.36   0.63    -0.57   0.57
-season4:Specieswels                  -0.89   0.56    -1.58   0.11
-season1:dam                          -0.01   0.08    -0.17   0.87
-season2:dam                           0.02   0.01     1.28   0.20
-season3:dam                          -0.01   0.01    -1.00   0.32
-season4:dam                           0.01   0.02     0.52   0.60
-Speciespikeperch:dam                  0.01   0.02     0.39   0.70
-Specieswels:dam                      -0.00   0.01    -0.09   0.93
-season1:Speciespikeperch:dam         -0.06   0.09    -0.70   0.48
-season2:Speciespikeperch:dam         -0.02   0.02    -1.06   0.29
-season3:Speciespikeperch:dam         -0.00   0.02    -0.12   0.90
-season4:Speciespikeperch:dam         -0.03   0.02    -1.27   0.20
-season1:Specieswels:dam               0.00   0.09     0.04   0.97
-season2:Specieswels:dam              -0.02   0.02    -0.91   0.37
-season3:Specieswels:dam               0.01   0.01     0.75   0.45
-season4:Specieswels:dam              -0.02   0.02    -0.90   0.37
+(Intercept)                           7.62   0.23    33.70   0.00
+season1                              -0.63   1.65    -0.38   0.70
+season2                               0.22   0.43     0.52   0.61
+season3                              -0.73   0.74    -0.99   0.32
+season4                               0.51   0.68     0.75   0.45
+Speciespikeperch                      1.09   0.35     3.12   0.00
+Specieswels                           0.62   0.28     2.23   0.03
+dam                                   0.53   0.63     0.83   0.41
+season1:Speciespikeperch             -1.01   1.96    -0.51   0.61
+season2:Speciespikeperch             -1.44   0.64    -2.25   0.02
+season3:Speciespikeperch             -0.31   1.07    -0.29   0.77
+season4:Speciespikeperch             -2.24   0.99    -2.25   0.02
+season1:Specieswels                   0.23   1.91     0.12   0.90
+season2:Specieswels                  -0.90   0.57    -1.56   0.12
+season3:Specieswels                   0.04   1.03     0.04   0.97
+season4:Specieswels                  -1.15   0.94    -1.22   0.22
+season1:dam                          -4.76   5.64    -0.84   0.40
+season2:dam                           1.41   0.76     1.85   0.06
+season3:dam                          -0.64   0.69    -0.92   0.36
+season4:dam                           1.16   1.05     1.10   0.27
+Speciespikeperch:dam                  0.81   1.05     0.77   0.44
+Specieswels:dam                      -0.10   0.78    -0.13   0.89
+season1:Speciespikeperch:dam          3.71   6.20     0.60   0.55
+season2:Speciespikeperch:dam         -1.68   1.12    -1.49   0.14
+season3:Speciespikeperch:dam         -0.61   1.09    -0.56   0.58
+season4:Speciespikeperch:dam         -2.29   1.37    -1.67   0.09
+season1:Specieswels:dam               4.63   6.00     0.77   0.44
+season2:Specieswels:dam              -1.58   0.94    -1.68   0.09
+season3:Specieswels:dam               0.40   0.87     0.46   0.65
+season4:Specieswels:dam              -1.97   1.18    -1.67   0.10
 -----------------------------------------------------------------
 
 RANDOM EFFECTS:
 ---------------------------------------------
        Group          Parameter    Std. Dev.
 ------------------- ------------- -----------
- Species:fi_fishid   (Intercept)     0.61
- Species:fi_fishid     season1       0.68
- Species:fi_fishid     season2       0.88
- Species:fi_fishid     season3       0.73
- Species:fi_fishid     season4       0.84
-      Species        (Intercept)     0.11
-      Species          season1       0.18
-      Species          season2       0.22
-      Species          season3       0.36
-      Species          season4       0.17
+ Species:fi_fishid   (Intercept)     0.54
+ Species:fi_fishid     season1       0.80
+ Species:fi_fishid     season2       0.86
+ Species:fi_fishid     season3       0.78
+ Species:fi_fishid     season4       0.86
+      Species        (Intercept)     0.00
+      Species          season1       0.74
+      Species          season2       0.29
+      Species          season3       0.69
+      Species          season4       0.59
      Residual                        0.00
 ---------------------------------------------
 
@@ -1124,8 +1140,11 @@ Grouping variables:
 -------------------------------------
        Group         # groups   ICC
 ------------------- ---------- ------
- Species:fi_fishid      31      0.97
-      Species           3       0.03
+ Species:fi_fishid      31      1.00
+      Species           3       0.00
+-------------------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
 ```
 ```
 probe_interaction(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.points = TRUE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Proportion of dam use", y.label = "Mean distance range (m)",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Seasonal effects of dam use on travel distance")
@@ -1257,251 +1276,463 @@ interact_plot(m_dam_season_sp, pred = dam, modx = season, mod2 = Species, plot.p
 ```
 ![Dist_range_season](/Plots/Dist_range_season_7.png "Dist_range_season")
 
-### 4. Are there differences in excursion rates to tributary between species and across seasons?
+# Is the rate of excursions to tributary related to the rate of dam use?
 
-#### Fit a model using _tributary_ as DV and the Species x Sesion interaction as a covariate for testing our main hypothesis
+## 1. Fit a model using _tributary_ as DV and the Species x month interaction and other covariates if necessary
 
-The variable _tributary_ is associated with count data and thus models will be fitted using Poisson regression or negative binomial if dispersion is high (previous overdispersion test)
+For the count variable _tributary_ we will fit models using a Poisson distribution. Alternatively, we might want to use a negative binomial regression instead (see below).
+**Note** that even if fitting a gamma model is not totally correct for discrete data, otherwise a good fit would mean a likely good fit of the negative binomial (here we ommit the gamma adjustment though).
 
-For selecting the best random-effects terms, compare three unconditional models
-```
-m_trib_in1<-lmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_trib_in2<-lmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species)+(1| season),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_trib_sl<-lmer(tributary ~ 1 + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-```
-```
-lrtest(m_trib_in1, m_trib_in2)
-lrtest(m_trib_in1, m_trib_sl)
-lrtest(m_trib_in2, m_trib_sl)
-```
-The slope model **m_trib_sl** is preferred
+### 1.1. Find the best unconditional nested intercept-only models fitted via REML
 
-#### Include the Species x Season interaction and the _dam_ covariate if necessary
+We fit a model using the same random-effects structure selected above, which is valid for the analysis of the rate of change in time.
 
 ```
-m_trib_sl<-lmer(tributary ~ 1 + season * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_trib_sl_dam<-update(m_trib_sl,.~.+ dam)
+m_trib_in1<-glmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species),data = data_distr_season, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+m_trib_in2<-glmer(tributary ~ 1 + (1| Species:fi_fishid)+(1| Species)+(1| season),data = data_distr_season, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+m_trib_sl<-glmer(tributary ~ 1 + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=T, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+```
+- **m_trib_sl** is preferred
+- **Note** that if we peform the same selection procedure as before, the result is the same as the preferred model is the most complex
+
+### 1.2. Find the best fixed-effects and fit a model including all relevant random-effects
+
+We conduct a hypothesis testing using a top-down approach about the effects of dam use on the rate of tributary excursions.
+**Alternatively**, conduct model-selection (see point 1.2a below)
+
+#### 1.2.1. Fit a model of seasonal differences in tributary use between species (Species x Season interaction)
+
+```
+m_trib_int<- glmer(tributary ~ 1 + season * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit, family="poisson")
+```
+Is the model over-dispersed?
+
+```
+overdisp_fun <- function(m_trib_int) {
+    rdf <- df.residual(m_trib_int)
+    rp <- residuals(m_trib_int,type="pearson")
+    Pearson.chisq <- sum(rp^2)
+    prat <- Pearson.chisq/rdf
+    pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
+    c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
+}
 ```
 ```
-anova(m_trib_sl,m_trib_sl_dam)
+overdisp_fun(m_trib_int)
 ```
 ```
-Data: data_distr_season
+        chisq         ratio           rdf             p
+ 1.063486e+03  8.936859e+00  1.190000e+02 2.066785e-151
+```
+The test is significant indicating the model is over-dispersed
+
+#### 1.2.2. Would a negative binomial be more appropiate given our dataset?
+
+```
+ddply(data_distr_season,.(Species),summarize,mean=mean(tributary),sd=sd(tributary),nobs=length(unique(fi_fishid)))
+```
+```
+    Species     mean        sd nobs
+1      pike 3.302326  7.686611   10
+2 pikeperch 9.870968 11.498373    7
+3      wels 5.776978 10.817353   14
+```
+- We see that conditional variances of the variable _tributary_ appear to vary more within each species than the mean (SD > mean) suggesting that over-dispersion of the variable is present
+- In this case fitting models with Negative Binomial would be recommended as there is more variability between units than Poisson suggests
+- Another option would be fitting zero-inflated models as it seems that the distribution of 0s is high and skewed (however, we ommit this analysis if nb fitting goes well)
+
+Fit the model adjusting for a negative binomial distribution
+```
+m_trib_int_nb<-glmer.nb(tributary ~ 1 + season * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+
+How is Poisson compared to Negative Binomial?
+
+```
+anova(m_trib_int_nb, m_trib_int)
+```
+```
 Models:
-m_trib_sl: tributary ~ 1 + season * Species + (season | Species:fi_fishid) +
-m_trib_sl:     (season | Species)
-m_trib_sl_dam: tributary ~ season + Species + (season | Species:fi_fishid) +
-m_trib_sl_dam:     (season | Species) + dam + season:Species
-              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
-m_trib_sl     46 1081.8 1214.0 -494.88   989.76
-m_trib_sl_dam 47 1074.3 1209.4 -490.13   980.27 9.4942      1   0.002061 **
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
-The addition of _dam_ improves the model fit. In fact, _dam_ is significantly related to _tributary_ but they are weakly correleated (r=-0.32, see multicolinearity tests above)
-
-```
-summary(m_trib_sl_dam)
-```
-```
-     AIC      BIC   logLik deviance df.resid
-  1074.3   1209.4   -490.1    980.3       84
-
-Scaled residuals:
-     Min       1Q   Median       3Q      Max
--1.20736 -0.11954 -0.00655  0.11381  1.87933
-
-Random effects:
- Groups            Name        Variance  Std.Dev. Corr
- Species:fi_fishid (Intercept) 2.835e+02 16.83600
-                   season1     2.477e+02 15.73989 -0.97
-                   season2     2.664e+02 16.32192 -0.44  0.59
-                   season3     2.960e+02 17.20337  0.71 -0.68 -0.15
-                   season4     4.598e+02 21.44198 -0.43  0.59  0.78  0.10
- Species           (Intercept) 2.613e-04  0.01616
-                   season1     3.521e-04  0.01877 -0.98
-                   season2     1.169e-03  0.03418 -0.83  0.89
-                   season3     2.277e-03  0.04772  0.20 -0.12  0.28
-                   season4     3.893e-03  0.06240 -0.46  0.55  0.83  0.75
- Residual                      9.738e-01  0.98682
-Number of obs: 131, groups:  Species:fi_fishid, 31; Species, 3
-
-Fixed effects:
-                          Estimate Std. Error        df t value Pr(>|t|)
-(Intercept)                4.88384    5.36563  30.82524   0.910  0.36978
-season1                   -2.78834    5.04609  28.53476  -0.553  0.58486
-season2                    8.62427    5.43870  32.26003   1.586  0.12256
-season3                    4.31772    5.50512  31.13894   0.784  0.43878
-season4                    1.27849    7.08703  26.41304   0.180  0.85822
-Speciespikeperch          20.04900    8.32824  30.36135   2.407  0.02235 *
-Specieswels               13.31639    7.00551  30.49365   1.901  0.06681 .
-dam                       -0.08507    0.03753  26.43848  -2.267  0.03181 *
-season1:Speciespikeperch -19.35755    7.85088  28.28250  -2.466  0.02000 *
-season2:Speciespikeperch -23.08372    8.22884  30.91261  -2.805  0.00862 **
-season3:Speciespikeperch  12.98548    8.53188  30.50710   1.522  0.13831
-season4:Speciespikeperch -13.46096   11.04331  26.70534  -1.219  0.23353
-season1:Specieswels      -14.25948    6.59059  28.32734  -2.164  0.03908 *
-season2:Specieswels      -19.00174    6.97024  31.24823  -2.726  0.01041 *
-season3:Specieswels        7.94179    7.16601  30.44682   1.108  0.27643
-season4:Specieswels      -10.46457    9.17739  25.80841  -1.140  0.26465
+m_trib_int: tributary ~ 1 + season * Species + (1 + season | Species:fi_fishid) +
+m_trib_int:     (1 + season | Species)
+m_trib_int_nb: tributary ~ 1 + season * Species + (1 + season | Species:fi_fishid) +
+m_trib_int_nb:     (1 + season | Species)
+              Df     AIC     BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_int    12 1687.97 1722.47 -831.98  1663.97
+m_trib_int_nb 13  686.05  723.43 -330.03   660.05 1003.9      1  < 2.2e-16 ***
 ```
 
-#### Analysis of seasonal differences in tributary use between species (Species x Sesion interaction)
+- Model **m_trib_int_nb** is preferred since the log-likelihood of the Poisson model is lower indicating a poorer fit
+**Note:** If both models had the same d.f., comparing their IC would be equivalent to comparing their LL value which is lower in the Poisson model
+
+#### 1.2.3. Compare the best-fit model with a nested model including also the rate of dam use
 
 ```
-cat_plot(m_trib_sl_dam, pred = season, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE,x.label = "Season", y.label = "Rate of tributary excursions", pred.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),modx.labels=c("pike","pikeperch","wels"), main.title = "Mean tributary use by specie and season")
+m_trib_int_nb_dam<-update(m_trib_int_nb,.~.+ dam)
+```
+```
+anova(m_trib_int_nb, m_trib_int_nb_dam)
+```
+```
+Models:
+m_trib_int_nb: tributary ~ 1 + season * Species + (1 + season | Species:fi_fishid) +
+m_trib_int_nb:     (1 + season | Species)
+m_trib_int_nb_dam: tributary ~ season + Species + (1 + season | Species:fi_fishid) +
+m_trib_int_nb_dam:     (1 + season | Species) + dam + season:Species
+                  Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_int_nb     13 686.05 723.43 -330.03   660.05
+m_trib_int_nb_dam 14 675.91 716.16 -323.95   647.91 12.144      1  0.0004924 ***
+```
+
+- The addition of _dam_ improves the model fit and we can say **m_trib_int_nb_dam** is a better model
+```
+summ(m_trib_int_nb_dam,  center = TRUE, scale = TRUE, n.sd = 2)
+```
+```
+MODEL INFO:
+Observations: 131
+Dependent Variable: tributary
+Type: Mixed effects generalized linear regression
+Error Distribution: Negative Binomial(0.4038)
+Link function: log
+
+MODEL FIT:
+AIC = 675.91, BIC = 716.16
+Pseudo-R² (fixed effects) = 0.36
+Pseudo-R² (total) = 0.93
+
+FIXED EFFECTS:
+------------------------------------------------------------
+                                 Est.   S.E.   z val.      p
+----------------------------- ------- ------ -------- ------
+(Intercept)                     -0.81   0.81    -1.00   0.32
+season                          -0.39   0.97    -0.40   0.69
+Speciespikeperch                 2.67   1.14     2.34   0.02
+Specieswels                      1.39   0.98     1.42   0.15
+dam                             -2.62   0.69    -3.77   0.00
+season:Speciespikeperch          0.43   1.11     0.39   0.70
+season:Specieswels               0.33   0.97     0.35   0.73
+------------------------------------------------------------
+
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)     1.97
+ Species:fi_fishid     season        0.49
+      Species        (Intercept)     0.00
+      Species          season        0.00
+---------------------------------------------
+
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.28
+      Species           3       0.00
+-------------------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
+
+- The rate of dam use is highly significant and likely highest in relative importance
+- In fact, _dam_ is significantly related to _tributary_ whilst weakly correlated (r=-0.32, see multicolinearity tests above)
+- The interaction Species x Season is not significant. We might want to remove the interaction term and re-fit the model
+
+```
+m_trib_nb_dam<-update(m_trib_int_nb_dam,.~.- season * Species)
+```
+```
+anova(m_trib_nb_dam, m_trib_int_nb_dam)
+```
+```
+Models:
+m_trib_nb_dam: tributary ~ (1 + season | Species:fi_fishid) + (1 + season |
+m_trib_nb_dam:     Species) + dam
+m_trib_int_nb_dam: tributary ~ season + Species + (1 + season | Species:fi_fishid) +
+m_trib_int_nb_dam:     (1 + season | Species) + dam + season:Species
+                  Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)
+m_trib_nb_dam      9 671.32 697.20 -326.66   653.32
+m_trib_int_nb_dam 14 675.91 716.16 -323.95   647.91 5.4146      5     0.3674
+```
+The model without the interaction is preferred
+
+Plot the Species x Season interaction from negative binomial model
+
+```
+plot(Effect(c("season","Species"),m_trib_int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Dist_range_season](/Plots/Dist_range_season_8.png "Dist_range_season")
 
-#### Relationship between tributary excursions and dam use
 
-To analyse wether ther are conditional effects of the dam use on tributary excursions we fit a model including a three-way interaction _Species_ x _season_ x _dam_. Actually, this was a candidate model in a former (not included here) model selection subset
+#### 1.2.4. Are there conditional effects of the dam use on tributary excursions
 
-:warning:
-- The data for _tributary_ contains 0s that are recognized as negative values by the _lme4_ fitting function
-- If we want to fit a model to this data adjusting for a "Gamma" distribution we need to re-value 0s to values > 0 (e.g., 0.0001)
-
+Fit a model including the 3-way interaction _Species * season * dam_
 ```
-data_distr_season<-data_distr_season %>% mutate(tributary = replace(tributary, tributary == 0, 0.0001))
+m_trib_3int_nb_dam<-glmer.nb(tributary ~ 1 + season * Species * dam + (season| Species:fi_fishid)+(season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 ```
+Summary of nested models comparisons between this and previous fitted models
 ```
-m_trib_3int<-glmer(tributary ~ 1 + season * Species * dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+lrtest(m_trib_int_nb, m_trib_int_nb_dam,m_trib_3int_nb_dam)
 ```
 ```
-probe_interaction(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
+Likelihood ratio test
+
+Model 1: tributary ~ 1 + season * Species + (1 + season | Species:fi_fishid) +
+    (1 + season | Species)
+Model 2: tributary ~ season + Species + (1 + season | Species:fi_fishid) +
+    (1 + season | Species) + dam + season:Species
+Model 3: tributary ~ 1 + season * Species * dam + (1 + season | Species:fi_fishid) +
+    (1 + season | Species)
+  #Df  LogLik Df   Chisq Pr(>Chisq)
+1  13 -330.03
+2  14 -323.95  1 12.1443  0.0004924 ***
+3  19 -320.01  5  7.8786  0.1630533
+```
+**m_trib_3int_nb_dam** is preferred over any of the reduced nested forms
+```
+summ(m_trib_3int_nb_dam,  center = TRUE, scale = TRUE, n.sd = 2)
 ```
 ```
-¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pike ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+MODEL INFO:
+Observations: 131
+Dependent Variable: tributary
+Type: Mixed effects generalized linear regression
+Error Distribution: Negative Binomial(0.4656)
+Link function: log
 
-SIMPLE SLOPES ANALYSIS
+MODEL FIT:
+AIC = 678.03, BIC = 732.66
+Pseudo-R² (fixed effects) = 0.43
+Pseudo-R² (total) = 0.94
 
-When season = 0:
+FIXED EFFECTS:
+----------------------------------------------------------------
+                                     Est.   S.E.   z val.      p
+--------------------------------- ------- ------ -------- ------
+(Intercept)                         -0.69   0.84    -0.81   0.42
+season                              -0.67   1.04    -0.64   0.52
+Speciespikeperch                     2.47   1.19     2.08   0.04
+Specieswels                          1.20   1.01     1.18   0.24
+dam                                  0.88   1.47     0.60   0.55
+season:Speciespikeperch              0.76   1.30     0.58   0.56
+season:Specieswels                   0.32   1.13     0.28   0.78
+season:dam                           1.07   3.03     0.35   0.73
+Speciespikeperch:dam                -4.35   2.24    -1.94   0.05
+Specieswels:dam                     -4.10   1.72    -2.39   0.02
+season:Speciespikeperch:dam         -1.29   3.68    -0.35   0.73
+season:Specieswels:dam              -2.44   3.41    -0.72   0.47
+----------------------------------------------------------------
 
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.14   0.02    -5.80   0.00
-Conditional intercept         -2.96   0.69    -4.31   0.00
+RANDOM EFFECTS:
+---------------------------------------------
+       Group          Parameter    Std. Dev.
+------------------- ------------- -----------
+ Species:fi_fishid   (Intercept)     2.01
+ Species:fi_fishid     season        0.66
+      Species        (Intercept)     0.00
+      Species          season        0.00
+---------------------------------------------
 
-When season = 1:
+Grouping variables:
+-------------------------------------
+       Group         # groups   ICC
+------------------- ---------- ------
+ Species:fi_fishid      31      0.31
+      Species           3       0.00
+-------------------------------------
 
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.21   0.61    -0.35   0.73
-Conditional intercept         -2.20   8.86    -0.25   0.80
-
-When season = 2:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                   0.05   0.06     0.87   0.38
-Conditional intercept         -4.01   1.53    -2.62   0.01
-
-When season = 3:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                   0.01   0.02     0.51   0.61
-Conditional intercept         -4.14   1.39    -2.97   0.00
-
-When season = 4:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                   0.02   0.05     0.51   0.61
-Conditional intercept         -3.67   1.52    -2.42   0.02
-
-¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = pikeperch ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
-
-SIMPLE SLOPES ANALYSIS
-
-When season = 0:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.07   0.06    -1.25   0.21
-Conditional intercept          2.10   1.11     1.89   0.06
-
-When season = 1:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.45   0.13    -3.35   0.00
-Conditional intercept         -7.98   2.25    -3.55   0.00
-
-When season = 2:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.11   0.05    -2.36   0.02
-Conditional intercept         -1.03   1.67    -0.62   0.53
-
-When season = 3:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.11   0.05    -2.08   0.04
-Conditional intercept          1.94   1.62     1.20   0.23
-
-When season = 4:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.07   0.07    -1.06   0.29
-Conditional intercept          1.08   1.72     0.63   0.53
-
-¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ While Species (2nd moderator) = wels ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
-
-SIMPLE SLOPES ANALYSIS
-
-When season = 0:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.05   0.03    -1.44   0.15
-Conditional intercept          1.46   0.66     2.20   0.03
-
-When season = 1:
-
-                                Est.   S.E.   t val.      p
---------------------------- -------- ------ -------- ------
-Slope of dam                   -0.45   0.12    -3.68   0.00
-Conditional intercept         -10.65   1.75    -6.07   0.00
-
-When season = 2:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.03   0.03    -1.16   0.24
-Conditional intercept         -2.59   1.46    -1.77   0.08
-
-When season = 3:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.11   0.04    -2.75   0.01
-Conditional intercept          0.33   1.31     0.25   0.80
-
-When season = 4:
-
-                               Est.   S.E.   t val.      p
---------------------------- ------- ------ -------- ------
-Slope of dam                  -0.04   0.02    -1.76   0.08
-Conditional intercept         -2.25   1.39    -1.62   0.11
+Continuous predictors are mean-centered and scaled by 2 s.d.
 ```
+
+- There is significant effects of the Species x dam interaction in _pikeperch_ and _wels_
+- This is shown in the plot below where the line for _wels_ start to diverge and interact with that of _pikeperch_ at higher dam use
+- Since the Sepcies x Season interaction is irrelevant in the second plot we show only the Species x dam interaction
+
+Plot the Species x Season x dam interaction
+
 ```
-interact_plot(m_trib_3int, pred = dam, mod2 = Species, modx= season, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions",legend.main="Season", modx.labels=c("Spring I","Spring II","Autumn","Summer","Winter"),main.title = "Conditional effects of dam use on tributary excursions")
+plot(Effect(c("season","Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(3, 2))
 ```
 ![Dist_range_season](/Plots/Dist_range_season_9.png "Dist_range_season")
 
+```
+plot(Effect(c("Species", "dam"),m_trib_3int_nb_dam),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Dist_range_season](/Plots/Dist_range_season_10.png "Dist_range_season")
 
 
+```
+probe_interaction(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, jnplot = FALSE)
+probe_interaction(m_trib_3int_nb_dam, pred = season, modx = Species,mod2=dam, plot.points = TRUE, jnplot = FALSE)
+```
+```
+SIMPLE SLOPES ANALYSIS
 
+Slope of dam when Species = wels:
 
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.05   0.01    -3.68   0.00
 
+Slope of dam when Species = pikeperch:
 
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.06   0.01    -9.37   0.00
 
+Slope of dam when Species = pike:
 
+  Est.   S.E.   z val.      p
+------ ------ -------- ------
+  0.02   0.02     0.62   0.54
+```
+```
+interact_plot(m_trib_3int_nb_dam, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
+```
+![Dist_range_month](/Plots/Dist_range_month_11.png "Dist_range_month")
 
+### 1.2a. Model-selection on the rate of tributary excursions
+
+```
+Cand.mod <- list()
+
+Cand.mod[[1]]<-glmer.nb(tributary ~ 1 + dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[2]]<-glmer.nb(tributary ~ 1 + dam + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[3]]<-glmer.nb(tributary ~ 1 + dam + season + Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[4]]<-glmer.nb(tributary ~ 1 + dam * season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[5]]<-glmer.nb(tributary ~ 1 + dam * season + Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[6]]<-glmer.nb(tributary ~ 1 + dam * season * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[7]]<-glmer.nb(tributary ~ 1 + dam * Species + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[8]]<-glmer.nb(tributary ~ 1 + dam * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[9]]<-glmer.nb(tributary ~ 1 + Species + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[10]]<-glmer.nb(tributary ~ 1 + Species * season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[11]]<-glmer.nb(tributary ~ 1 + Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[12]]<-glmer.nb(tributary ~ 1 + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+Name models
+```
+Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5",
+              "Model 6", "Model 7", "Model 8","Model 9", "Model 10", "Model 11", "Model 12")
+```
+Create a model selection table based on AICc, better than AIC/BIC with small samples
+```
+aictab(cand.set = Cand.mod, modnames = Modnames)
+```
+```
+Model selection based on AICc:
+
+          K   AICc Delta_AICc AICcWt Cum.Wt      LL
+Model 8  13 671.14       0.00   0.45   0.45 -321.01
+Model 1   9 672.72       1.57   0.21   0.66 -326.61
+Model 7  14 673.63       2.49   0.13   0.79 -321.01
+Model 3  12 674.62       3.48   0.08   0.87 -323.99
+Model 2  10 674.93       3.79   0.07   0.94 -326.55
+Model 5  13 676.62       5.48   0.03   0.97 -323.76
+Model 4  11 676.78       5.64   0.03   1.00 -326.28
+Model 12  9 684.23      13.09   0.00   1.00 -332.37
+Model 9  11 684.46      13.32   0.00   1.00 -330.12
+Model 11 10 684.47      13.33   0.00   1.00 -331.32
+Model 6  19 684.84      13.70   0.00   1.00 -320.00
+Model 10 13 689.16      18.02   0.00   1.00 -330.03
+```
+Compute the evidence ratio
+```
+evidence(aictab(cand.set = Cand.mod, modnames = Modnames))
+```
+```
+Evidence ratio between models 'Model 8' and 'Model 1': 2.2
+```
+Compute confidence set based on 'raw' method
+```
+confset(cand.set = Cand.mod, modnames = Modnames, second.ord = TRUE, method = "raw")
+```
+```
+Confidence set for the best model
+
+Method:	 raw sum of model probabilities
+
+95% confidence set:
+         K   AICc Delta_AICc AICcWt
+Model 8 13 671.14       0.00   0.45
+Model 1  9 672.72       1.57   0.21
+Model 7 14 673.63       2.49   0.13
+Model 3 12 674.62       3.48   0.08
+Model 2 10 674.93       3.79   0.07
+Model 5 13 676.62       5.48   0.03
+
+Model probabilities sum to 0.97
+```
+
+Compare the three best-fit models (within 2.5 Delta_AICc) of the confidence
+
+```
+m8<-glmer.nb(tributary ~ 1 + dam * Species + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m1<-glmer.nb(tributary ~ 1 + dam + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m7<-glmer.nb(tributary ~ 1 + dam * Species + season + (1 + season| Species:fi_fishid)+(1 + season| Species),data = data_distr_season, REML=F, control=glmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+```
+lrtest(m8,m1)
+```
+```
+Likelihood ratio test
+
+Model 1: tributary ~ 1 + dam * Species + (1 + season | Species:fi_fishid) +
+    (1 + season | Species)
+Model 2: tributary ~ 1 + dam + (1 + season | Species:fi_fishid) + (1 +
+    season | Species)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  13 -321.01
+2   9 -326.61 -4 11.198    0.02443 *
+```
+```
+lrtest(m8,m7)
+```
+```
+Likelihood ratio test
+
+Model 1: tributary ~ 1 + dam * Species + (1 + season | Species:fi_fishid) +
+    (1 + season | Species)
+Model 2: tributary ~ 1 + dam * Species + season + (1 + season | Species:fi_fishid) +
+    (1 + season | Species)
+  #Df  LogLik Df Chisq Pr(>Chisq)
+1  13 -321.01
+2  14 -321.01  1 0.019     0.8903
+```
+Model **m8** is preferred to either a model without the interaction and to a model with the variable _season_
+
+Simple slope analysis
+```
+probe_interaction(m8, pred = dam, modx = Species, plot.points = TRUE, jnplot = FALSE)
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+Slope of dam when Species = wels:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.06   0.01    -4.04   0.00
+
+Slope of dam when Species = pikeperch:
+
+   Est.   S.E.   z val.      p
+------- ------ -------- ------
+  -0.06   0.02    -2.30   0.02
+
+Slope of dam when Species = pike:
+
+  Est.   S.E.   z val.      p
+------ ------ -------- ------
+  0.01   0.02     0.65   0.52
+```
+The results are nearly the same as those of the 3-way model **m_trib_3int_nb_dam** excluding _season_; however, we can say this the current model is the correct fit to our data
+
+```
+interact_plot(m8, pred = dam, modx = Species, plot.points = TRUE, cond.int = TRUE, interval = FALSE,jnplot = FALSE ,x.label = "Rate of dam use", y.label = "Rate of tributary excursions", main.title = "Conditional effects of dam use on tributary excursions")
+```
+
+![Dist_range_month](/Plots/Dist_range_month_12.png "Dist_range_month")
 
 
 
