@@ -647,8 +647,8 @@ Slope of season               0.08   0.08     1.03   0.30
 Conditional intercept         8.26   0.23    35.48   0.00
 ```
 
-- The slope for _season_ (i.e, the seasonal rate of change) is significant and negative in both _wels_ and _pikeperch_ _pike_ suggesting that there is a tendency of decreased distance range from Spring I towards Winter.
-- For _pike_ there the slope of season was not significant
+- The slope of _season_ (i.e, the seasonal rate of change) is significant and negative in both _wels_ and _pikeperch_ suggesting that there is a tendency of a decreased distance range from Spring I to Winter
+- For _pike_ the slope of season was not significant
 
 **Plot the Species x month interaction**
 
