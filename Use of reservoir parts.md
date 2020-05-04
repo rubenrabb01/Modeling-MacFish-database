@@ -222,6 +222,8 @@ Threshold coefficients:
 ```
 Plot body size x season
 
+:books:`library(effects)`
+
 ```
 plot(Effect(c("fi_species", "season"), m10),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
