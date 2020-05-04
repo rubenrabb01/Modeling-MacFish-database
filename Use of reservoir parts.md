@@ -58,7 +58,6 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
 :books:`library(mlogit)`  
 :books:`library(AICcmodavg)`  
 :books:`library(MASS)`  
-:books:`library(effects)`  
 :books:`library(lme4)`  
 :books:`library(languageR)`  
 :books:`library(ordinal)`  
