@@ -26,6 +26,8 @@ data_depth<- data_depth[with(data_depth, order(fi_fishid, date)),]
 data_depth<-data_depth[!duplicated(data_depth[c("fi_fishid","date")]),]
 data_depth
 ```
+
+
 | fi_fishid 	| date      	| body_size  	| ca_weight_g 	| ca_weight_g  	| Species   	| season   	| ca_lat_catch 	| ca_lon_catch 	| mean_depth 	| res_part 	| month 	| ranged2d   	|
 |-----------	|-----------	|------------	|-------------	|--------------	|-----------	|----------	|--------------	|--------------	|------------	|----------	|-------	|------------	|
 | 1         	| T449202_1 	| 27/04/2017 	| 430         	| 605          	| pikeperch 	| spring_I 	| 48.82551     	| 14.4848      	| 1.9347592  	| middle   	| 4     	| 682.8973   	|
@@ -41,7 +43,10 @@ data_depth
 | 2306      	| T449271_1 	| 28/04/2017 	| 915         	| 6000         	| pike      	| spring_I 	| 48.83096     	| 14.47816     	| 3.9012472  	| dam      	| 4     	| 1888.7892  	|
 | 2307      	| T449271_1 	| 28/04/2017 	| 915         	| 6000         	| pike      	| spring_I 	| 48.83096     	| 14.47816     	| 3.9012472  	| middle   	| 4     	| 1888.7892  	|
 
-Describe the variable _mean_depth
+
+## Data exploration
+
+Describe the variable _mean_depth _
 
 :books:`library(psych)`
 ```
@@ -65,6 +70,24 @@ X1    1 2344 5.89 4.09   6.44     5.7 6.13 0.36 16.07 15.71 0.17     -1.3 0.08``
 hist(data_depth$mean_depth, breaks = 20)
 ```
 ![Mean_depth](/Plots/Mean_depth_hist.png "Mean_depth")
+
+Plot mean depth as subject to distance range against daily date
+
+```
+ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=bayesglm, se=FALSE, fullrange=TRUE)+ theme_classic() +
+labs(title = "Mean depth use and horizontal movement in three species ",
+     subtitle = "Plot of mean depth at varying horizontal travel distance",
+     x = "Date",
+     y = "Mean depth (m)",
+     size="Horizontal range (m) ",
+     color="Species") +
+      theme(plot.title = element_text(hjust = 0.5, size = 12,face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5,size = 11),
+      text=element_text(size=12)) + scale_color_brewer(palette="Dark2") +
+      theme(legend.background = element_rect(fill = "white"),legend.key = element_rect(fill = "white", color = NA),legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"))
+```
+![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
+
 
 
 ## 1. Fit Mixed-Effects Models (LMM) to the data of depth use
@@ -134,6 +157,8 @@ plot(Effect(c("season", "Species"), p1),lines=list(multiline=TRUE), rug = FALSE,
   - The predicted value if mean depth
   - The percentage of observations in the node
 
+### 3.1. Grow a decision tree with body size, species and season as predictors
+
 Grow the tree
 ```
 tree_depth<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part, data = data_depth, control = rpart.control(cp = 0.005))
@@ -161,7 +186,7 @@ rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdY
 ```
 ![Depth_use_tree](/Plots/Depth_use_tree_1.png "Depth_use_tree")
 
-### 3.1. Grow a decision tree including month and horizontal range
+### 3.2. Grow a decision tree including month and horizontal range
 
 ```
 tree_depth_1<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part + month + ranged2d , data = data_depth, control = rpart.control(cp = 0.005))
@@ -192,4 +217,6 @@ rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "R
 ![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
 
 - Time is a high-order classifying variable (**season** along with **month**)
+
+
 
