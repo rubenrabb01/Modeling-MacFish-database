@@ -387,7 +387,7 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 ```
 plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
-![Mean_depth_date](/Plots/Mean_depth_date_2.png "Mean_depth_date")
+![Mean_depth_date](/Plots/Mean_depth_date_00.png "Mean_depth_date")
 
 #### Plot marginal effects
 
@@ -401,7 +401,7 @@ plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "sea
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_01.png "Mean_depth_date")
 
-- While these results are not totally incorrect the close-to-zero p-values might suggest there might be an issue of perfect separation
+- While these results are not totally wrong the close-to-zero p-values might suggest there might be an issue of perfect separation
 - Fitting a gamma model in this case would not solve the problem as convergence still occurs
 - We need to look at the residuals but an instant plot of the linear relationship between mean depth and date can be enough to find the source
 
