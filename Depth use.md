@@ -27,7 +27,6 @@ data_depth<-data_depth[!duplicated(data_depth[c("fi_fishid","date")]),]
 data_depth
 ```
 
-
 | fi_fishid 	| date      	| body_size  	| ca_weight_g 	| ca_weight_g  	| Species   	| season   	| ca_lat_catch 	| ca_lon_catch 	| mean_depth 	| res_part 	| month 	| ranged2d   	|
 |-----------	|-----------	|------------	|-------------	|--------------	|-----------	|----------	|--------------	|--------------	|------------	|----------	|-------	|------------	|
 | 1         	| T449202_1 	| 27/04/2017 	| 430         	| 605          	| pikeperch 	| spring_I 	| 48.82551     	| 14.4848      	| 1.9347592  	| middle   	| 4     	| 682.8973   	|
@@ -230,7 +229,6 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
                string.pred = "Variable",
                string.p = "P" , use.viewer = TRUE)
 ```
-```
 |                                  	| Model 1        	|               	|        	| Model 2        	|               	|        	| Model 3        	|               	|        	| Model 4        	|               	|        	|
 |----------------------------------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|
 | Variable                         	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	|
@@ -262,7 +260,6 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 |                                  	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	|
 | Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
 | Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
-```
 
 ## 2. Analysis of the Species x season interaction
 
