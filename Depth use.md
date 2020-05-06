@@ -100,6 +100,7 @@ mean_depth
 ```
 rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
 ```
+
 ![Depth_use_tree](/Plots/Depth_use_tree_1.png "Depth_use_tree")
 
 ### 1.2. Grow further the decision tree by including body size and reservoir parts
@@ -127,9 +128,10 @@ mean_depth
         9.6 when season is              autumn & body_size >=         1025 & res_part is       dam or middle or upper & Species is              wels
        12.2 when season is    autumn or winter & body_size <  1025                                                    & Species is              wels
 ```
-
+```
 rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
 ```
+
 ![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
 
 - Time is a high-order classifying variable (**season** along with **month**; we will include _month_ in random effects along with season in further analysis)
@@ -738,3 +740,4 @@ plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("body_size", "Sp
 plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("body_size", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_08.png "Mean_depth_date")
+
