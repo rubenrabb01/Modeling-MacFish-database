@@ -70,7 +70,7 @@ hist(data_depth$mean_depth, breaks = 20)
 ```
 ![Mean_depth](/Plots/Mean_depth_hist.png "Mean_depth")
 
-## 1. Classify predictors mean depth predictors using decision trees
+## 1. Classify mean depth predictors through building of decision trees
 
 Grow a decision tree to the data of depth use
 
@@ -79,60 +79,55 @@ Grow a decision tree to the data of depth use
   - The predicted value of mean depth
   - The percentage of observations in the node
 
-### 1.1. Grow a decision tree with body size, species and season as predictors
+### 1.1. Grow a decision tree with species and season as predictors
 
 ```
-tree_depth<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part, data = data_depth, control = rpart.control(cp = 0.005))
+tree_depth<- rpart(mean_depth ~ 1 + Species + season, data = data_depth, control = rpart.control(cp = 0.005))
 ```
 ```
 rpart.rules(tree_depth)
 ```
 ```
- mean_depth
-        1.9 when season is            spring_I
-        2.9 when season is spring_II or summer
-        3.7 when season is    autumn or winter & fi_species is pike or pikeperch                                      & body_size >=          460
-        4.0 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is              tributary & body_size <   460
-        6.9 when season is              winter & fi_species is              wels & res_part is     tributary or upper
-        7.8 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is dam or middle or upper & body_size <   460
-        8.0 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size <   915
-        9.3 when season is              autumn & fi_species is              wels & res_part is     tributary or upper
-        9.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is 1025 to 1640
-       10.2 when season is              winter & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
-       13.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is  915 to 1025
-       14.2 when season is              autumn & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
+mean_depth
+        1.7 when season is            spring_I
+        2.7 when season is spring_II or summer
+        3.0 when season is    autumn or winter & Species is      pike
+        4.2 when season is              winter & Species is pikeperch
+        5.9 when season is              autumn & Species is pikeperch
+        7.6 when season is              winter & Species is      wels
+       10.0 when season is              autumn & Species is      wels
 ```
 ```
 rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
 ```
 ![Depth_use_tree](/Plots/Depth_use_tree_1.png "Depth_use_tree")
 
-### 1.2. Grow a decision tree including month and horizontal range
+### 1.2. Grow further the decision tree by including body size and reservoir parts
 
 ```
-tree_depth_1<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part + month + ranged2d , data = data_depth, control = rpart.control(cp = 0.005))
+tree_depth_1<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part , data = data_depth, control = rpart.control(cp = 0.005))
 ```
 ```
-rpart.rules(tree_depth)
+rpart.rules(tree_depth_1)
 ```
 ```
- mean_depth
-        1.7 when season is                        spring_I & month <   9
-        2.6 when season is             spring_II or summer & month <   9
-        2.7 when season is                autumn or winter & month is  2 to 10 & Species is              wels & body_size >=         1575
-        3.1 when season is                autumn or winter                     & Species is pike or pikeperch & body_size >=          460
-        3.3 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is dam or middle or tributary
-        4.0 when season is                autumn or winter                     & Species is pike or pikeperch & body_size <   460         & res_part is                  tributary
-        5.0 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d >= 119
-        6.2 when season is                autumn or winter & month <  10       & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
-        6.4 when season is                autumn or winter & month <   2       & Species is              wels & body_size >=         1575
-        7.7 when season is                autumn or winter & month <  10       & Species is              wels & body_size is 1025 to 1575
-        8.9 when season is                autumn or winter & month >=       10 & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
-        9.5 when season is                autumn or winter & month >=       10 & Species is              wels & body_size >=         1025
-       10.8 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d <  119
-       12.1 when season is                autumn or winter                     & Species is              wels & body_size <  1025
+mean_depth
+        1.7 when season is            spring_I
+        1.9 when season is spring_II or summer & body_size >=         1575 & res_part is              middle or upper
+        2.2 when season is spring_II or summer                             & res_part is             dam or tributary
+        2.8 when season is    autumn or winter & body_size >=          460 & res_part is middle or tributary or upper & Species is pike or pikeperch
+        3.4 when season is spring_II or summer & body_size <  1345         & res_part is              middle or upper
+        3.7 when season is    autumn or winter & body_size <   460         & res_part is                    tributary & Species is pike or pikeperch
+        4.3 when season is    autumn or winter & body_size >=          460 & res_part is                          dam & Species is pike or pikeperch
+        4.4 when season is              winter & body_size >=         1348                                            & Species is              wels
+        6.2 when season is              autumn & body_size >=         1025 & res_part is                    tributary & Species is              wels
+        8.0 when season is    autumn or winter & body_size <   460         & res_part is       dam or middle or upper & Species is pike or pikeperch
+        8.1 when season is              winter & body_size is 1025 to 1348                                            & Species is              wels
+        9.5 when season is spring_II or summer & body_size is 1345 to 1575 & res_part is              middle or upper
+        9.6 when season is              autumn & body_size >=         1025 & res_part is       dam or middle or upper & Species is              wels
+       12.2 when season is    autumn or winter & body_size <  1025                                                    & Species is              wels
 ```
-```
+
 rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
 ```
 ![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
@@ -496,15 +491,15 @@ labs(title = "Mean depth use and horizontal movement in three species ",
 
 - We see that between August and November 2017 _wels_ show many data points with equal values
 - Wether this is indicating complete lack of vertical movement or stationarity is unlikely so it must be related to some error during the sampling process/dataset creation
-- We could partilly correct this by removing those data points or running stan_glmer, brglmer or MCMC models (**pending**)
+- We could partilly correct this by removing those data points or computing _stan_glmer_, _brglm_ or _MCMC_ models (**pending**)
 
 ## 2) Approach 2
 
 ### 2.1. Find the best conditional model for the Species x season interaction
 
-We fit s series of nested random-effects model following the formula (1|date/fi_fishid) (i.e., fi_fishid nested within date: (1|date:fi_fishid) + (1|date))
-With this model we expect that _mean_depth_ daily varies (across dates) and across _fi_fishid_ within _date_ by including the random effects of date and of a date-by-fi_fishid interaction
-Since multiple fish are measured on each date, but there is only one observation per date-fi_fishid combination, we rle out the inclusion of the (1|fi_fishid) term to the model
+- We fit a series of nested random-effects models following the formula (1|date/fi_fishid) (i.e., fi_fishid nested within date: (1|date:fi_fishid) + (1|date))
+- With this model we expect that _mean_depth_ daily varies (across dates) and across _fi_fishid_ within _date_ by including the random effects of date and of a date-by-fi_fishid interaction
+- Since multiple fish are measured on each date, but there is only one observation per date-fi_fishid combination, we rule out the inclusion of the (1|fi_fishid) term to the model
 
 ```
 Cand.mod <- list()
@@ -699,8 +694,8 @@ Degrees-of-freedom method: kenward-roger
 P value adjustment: tukey method for comparing a family of 3 estimates
 ```
 - In contrast to the previous results (Approach 1) differences between _pike_ and _pikeperch_ are now significant
-- This result suggests that the inclusion of _body_size_ with respect to the former best-fit model contributes to explain marginal mean depth differencesand shouldnt be dropped form the model
-- Next, we will analyse those differences accounting for _body_size_ and _res_part_
+- This result suggests that the inclusion of _body_size_ (along with _res_part_) with respect to the former best-fit model contributes to explain marginal mean depth differences and shouldnt be dropped form the model
+- Next, we will analyse those differences accounting for both variables, _body_size_ and _res_part_
 
 ### 3.4. Plot main-effects
 
@@ -722,7 +717,7 @@ plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("Species", "sea
 ![Mean_depth_date](/Plots/Mean_depth_date_04.png "Mean_depth_date")
 
 - We see that the minimum and maximum values intervals are narrowed with respect to previous model plots
-- Though not there is no interaction in this model between _body_size_ or _res_part_ we may see how these variables are affecting the Cohen estimates (i.e., marginal means)
+- Though no interaction is present in this model affecting _body_size_ or _res_part_ we may see how these variables are affecting the Cohen estimates (i.e., marginal means) in the following plots
 
 ```
 plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("res_part", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
@@ -743,4 +738,3 @@ plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("body_size", "Sp
 plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("body_size", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_08.png "Mean_depth_date")
-
