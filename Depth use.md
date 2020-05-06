@@ -74,7 +74,7 @@ hist(data_depth$mean_depth, breaks = 20)
 Plot mean depth as subject to distance range against daily date
 
 ```
-ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=bayesglm, se=FALSE, fullrange=TRUE)+ theme_classic() +
+ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic() +
 labs(title = "Mean depth use and horizontal movement in three species ",
      subtitle = "Plot of mean depth at varying horizontal travel distance",
      x = "Date",
@@ -88,135 +88,206 @@ labs(title = "Mean depth use and horizontal movement in three species ",
 ```
 ![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
 
-
-
 ## 1. Fit Mixed-Effects Models (LMM) to the data of depth use
 
-To analyse the depth use made by the three species we fit a series of LMMs using _mean_depth_ as DV and _Species_, _season_, _body_size_ and _res_part_ as predictors
+- To analyse the depth use made by the three species we fit a series of LMMs using _mean_depth_ as DV and _Species_, _season_, _body_size_ and _res_part_ as predictors
+- We use two approaches, one consisting of model selection based on AICc for selection of mixed models and other specifically testing our hypothesis based on the nested structure of the random effects
+- The aim of this is just evidencing some sort of model fitting singularities, either due to perfect separation probems, too low sample size or overdispersion. Actually, in our case most singulatiry issues appear to be due to
+the existence of duplicated measures of the variable _mean_depth_ between single days. The aggregating nature of these measures might indicate an incorrect sampling
 
-### 1.1. Find the best unconditional model fitted via REML
+### 1.1. Find the best onditional model for the Species x season interaction
+
+:books:`library(lmtest)`
 
 Fit nested intercept-only models including all potentially relevant random-effects and compare them with LRT
 ```
-m_id<-lmer(mean_depth ~ 1  + (1| fi_fishid),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_id_sp<-lmer(mean_depth ~ 1  + (1| Species) + (1| fi_fishid),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_id_mon<-lmer(mean_depth ~ 1  + (1| month) + (1| fi_fishid),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_sp_mon<-lmer(mean_depth ~ 1  + (1| Species) + (1| month),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m_id_sp_mon<-lmer(mean_depth ~ 1  + (1| month) + (1| fi_fishid) + (1| Species),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_id<-lmer(mean_depth ~ 1  + Species * season +(1| fi_fishid),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_id_sp<-lmer(mean_depth ~ 1  + Species * season + (1| fi_fishid) + (1| Species),data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_id_date<-lmer(mean_depth ~ 1  + Species * season + (1| fi_fishid) + (1| date) ,data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m_id_sp_date<-lmer(mean_depth ~ 1  + Species * season + (1| fi_fishid) + (1| Species) + (1| date) ,data = data_depth, REML=T, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 ```
 ```
 lrtest(m_id,m_id_sp)
 ```
+```
+Likelihood ratio test
 
-### 1.2. Fit nested slope models including all potentially relevant random-effects and compare them with LRT.
+Model 1: mean_depth ~ 1 + Species * season + (1 | fi_fishid)
+Model 2: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | Species)
+  #Df  LogLik Df Chisq Pr(>Chisq)
+1  17 -7748.1
+2  18 -7748.1  1     0     0.9999
+```
+```
+lrtest(m_id,m_id_date)
+```
+```
+Likelihood ratio test
 
-### 1.3. Compare the best intercept and slope models
+Model 1: mean_depth ~ 1 + Species * season + (1 | fi_fishid)
+Model 2: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | date)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  17 -7748.1
+2  18 -7715.0  1 66.246  3.981e-16 ***
+```
+```
+lrtest(m_id_sp,m_id_date)
+```
+```
+Likelihood ratio test
 
+Model 1: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | Species)
+Model 2: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | date)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  18 -7748.1
+2  18 -7715.0  0 66.246  < 2.2e-16 ***
 ```
-anova(m_sl_1,m_id_mon)
 ```
+lrtest(m_id_date,m_id_sp_date)
+```
+```
+Likelihood ratio test
 
-#### 1. 2. Find the best conditional LMMs fitted via ML including the RF structure of the previously selected unconditional model
+Model 1: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | date)
+Model 2: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | Species) +
+    (1 | date)
+  #Df LogLik Df Chisq Pr(>Chisq)
+1  18  -7715
+2  19  -7715  1     0     0.9999
+```
+Model **m_id_date** is preferred
 
-Fit the models with setting **REML=FALSE**
+### 1.2. Find the best conditional model of Species x season controlling for body size and reservoir parts
 
-```
-m1<-lmer(mean_depth ~ 1 + body_size + Species + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m2<-lmer(mean_depth ~ 1 + body_size * Species + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m3<-lmer(mean_depth ~ 1 + body_size + month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m4<-lmer(mean_depth ~ 1 + body_size * month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m5<-lmer(mean_depth ~ 1 + Species + month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m6<-lmer(mean_depth ~ 1 + Species * month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m7<-lmer(mean_depth ~ 1 + body_size + Species + month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m8<-lmer(mean_depth ~ 1 + body_size + Species * month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m9<-lmer(mean_depth ~ 1 + body_size * Species + month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m10<-lmer(mean_depth ~ 1 + body_size * Species * month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-m11<-lmer(mean_depth ~ 1 + body_size * Species + Species * month + (month| Species:fi_fishid)+(month| Species),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-```
-```
-bic = BIC(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11)
-sortScore(bic , score = "bic")
-```
-```
+:books:`library(AICcmodavg)`
 
-p11<-lmer(mean_depth ~ 1  +  season*Species + (1 | date:fi_fishid)+ (1|fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(optimizer = "bobyqa", check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
-summ(p11)
-interact_plot(p11, pred = season, modx = Species, plot.points = TRUE,robust = "HC3", geom = "line", point.shape = TRUE)
-plot_model(p11, type = "pred", terms = c("season", "Species"))
-plot_model(p11,  mdrt.values = "meansd", type = "pred", terms = c("season", "Species"))
-plot(Effect(c("season", "Species"), p1),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
-
-
-```
-
-## 3. Grow a decision tree to the data of depth use
-
-- We build a **rpart** model using _mean_depth_ as a continous response
-- This model will predict depth use in each species across seasons and accounting for body size
-- In this model each node shows:
-  - The predicted value if mean depth
-  - The percentage of observations in the node
-
-### 3.1. Grow a decision tree with body size, species and season as predictors
-
-Grow the tree
-```
-tree_depth<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part, data = data_depth, control = rpart.control(cp = 0.005))
-```
-```
-rpart.rules(tree_depth)
-```
-```
- mean_depth
-        1.9 when season is            spring_I
-        2.9 when season is spring_II or summer
-        3.7 when season is    autumn or winter & fi_species is pike or pikeperch                                      & body_size >=          460
-        4.0 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is              tributary & body_size <   460
-        6.9 when season is              winter & fi_species is              wels & res_part is     tributary or upper
-        7.8 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is dam or middle or upper & body_size <   460
-        8.0 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size <   915
-        9.3 when season is              autumn & fi_species is              wels & res_part is     tributary or upper
-        9.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is 1025 to 1640
-       10.2 when season is              winter & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
-       13.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is  915 to 1025
-       14.2 when season is              autumn & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
-```
-```
-rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
-```
-![Depth_use_tree](/Plots/Depth_use_tree_1.png "Depth_use_tree")
-
-### 3.2. Grow a decision tree including month and horizontal range
+Build a set of candidate models based on previous model selection including _body_size_ and _res_part as covariates
 
 ```
-tree_depth_1<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part + month + ranged2d , data = data_depth, control = rpart.control(cp = 0.005))
-```
-```
-rpart.rules(tree_depth)
-```
-```
- mean_depth
-        1.7 when season is                        spring_I & month <   9
-        2.6 when season is             spring_II or summer & month <   9
-        2.7 when season is                autumn or winter & month is  2 to 10 & Species is              wels & body_size >=         1575
-        3.1 when season is                autumn or winter                     & Species is pike or pikeperch & body_size >=          460
-        3.3 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is dam or middle or tributary
-        4.0 when season is                autumn or winter                     & Species is pike or pikeperch & body_size <   460         & res_part is                  tributary
-        5.0 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d >= 119
-        6.2 when season is                autumn or winter & month <  10       & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
-        6.4 when season is                autumn or winter & month <   2       & Species is              wels & body_size >=         1575
-        7.7 when season is                autumn or winter & month <  10       & Species is              wels & body_size is 1025 to 1575
-        8.9 when season is                autumn or winter & month >=       10 & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
-        9.5 when season is                autumn or winter & month >=       10 & Species is              wels & body_size >=         1025
-       10.8 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d <  119
-       12.1 when season is                autumn or winter                     & Species is              wels & body_size <  1025
-```
-```
-rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
-```
-![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
+Cand.mod <- list()
 
-- Time is a high-order classifying variable (**season** along with **month**)
+Cand.mod[[1]]<-lmer(mean_depth ~ 1 + Species * season + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[2]]<-lmer(mean_depth ~ 1 + Species * season + body_size + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[3]]<-lmer(mean_depth ~ 1 + Species * season + res_part + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[4]]<-lmer(mean_depth ~ 1 + Species * season + body_size + res_part + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
 
+Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4")
+```
+Create a model selection table based on AICc, better than AIC/BIC with small samples
+```
+aictab(cand.set = Cand.mod, modnames = Modnames)
+```
+```
+Model selection based on AICc:
 
+         K     AICc Delta_AICc AICcWt Cum.Wt       LL
+Model 4 22 14953.32       0.00   0.51   0.51 -7454.52
+Model 3 21 14953.37       0.05   0.49   1.00 -7455.56
+Model 1 18 15451.20     497.88   0.00   1.00 -7707.51
+Model 2 19 15451.55     498.22   0.00   1.00 -7706.67
+```
+Compute the evidence ratio
+```
+evidence(aictab(cand.set = Cand.mod, modnames = Modnames))
+```
+```
+Evidence ratio between models 'Model 4' and 'Model 3': 1.02
+```
+Compute confidence set based on 'raw' method
+```
+confset(cand.set = Cand.mod, modnames = Modnames, second.ord = TRUE, method = "raw")
+```
+```
+Confidence set for the best model
 
+Method:	 raw sum of model probabilities
+
+95% confidence set:
+         K     AICc Delta_AICc AICcWt
+Model 4 22 14953.32       0.00   0.51
+Model 3 21 14953.37       0.05   0.49
+
+Model probabilities sum to 1
+```
+
+### 1.3. Compare best-fit models
+
+We compare the first two nested models (within 2 Delta_AICc) to test wether _body_size_ is important or not
+
+```
+m4<-lmer(mean_depth ~ 1 + Species * season + body_size + res_part + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m3<-lmer(mean_depth ~ 1 + Species * season + res_part + (1| fi_fishid) + (1| date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+```
+lrtest(m4,m3)
+```
+```
+Likelihood ratio test
+
+Model 1: mean_depth ~ 1 + Species * season + body_size + res_part + (1 |
+    fi_fishid) + (1 | date)
+Model 2: mean_depth ~ 1 + Species * season + res_part + (1 | fi_fishid) +
+    (1 | date)
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1  22 -7454.5
+2  21 -7455.6 -1 2.0703     0.1502
+```
+
+- **Model 3** is preferred so we can drop body size as a covariate
+
+Export table from candidate models set
+
+:books:`library(sjPlot)`
+:books:`library(sjstats)`
+:books:`library(sjmisc)`
+```
+tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
+              dv.labels = c("Model 1", "Model 2","Model 3","Model 4"),
+               string.pred = "Variable",
+               string.p = "P" , use.viewer = TRUE)
+```
+```
+|                                  	| Model 1        	|               	|        	| Model 2        	|               	|        	| Model 3        	|               	|        	| Model 4        	|               	|        	|
+|----------------------------------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|
+| Variable                         	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	|
+| (Intercept)                      	| 6.32 (1.84)    	| 2.72 – 9.93   	| 0.001  	| 3.80 (0.80)    	| 2.23 – 5.37   	| <0.001 	| 3.18 (0.69)    	| 1.82 – 4.54   	| <0.001 	| 5.18 (1.62)    	| 1.99 – 8.36   	| 0.001  	|
+| Speciespikeperch                 	| 0.70 (1.26)    	| -1.77 – 3.16  	| 0.579  	| 2.09 (0.92)    	| 0.29 – 3.88   	| 0.023  	| 2.84 (0.80)    	| 1.27 – 4.41   	| <0.001 	| 1.74 (1.11)    	| -0.44 – 3.92  	| 0.117  	|
+| Specieswels                      	| 6.77 (0.94)    	| 4.93 – 8.60   	| <0.001 	| 6.24 (0.94)    	| 4.40 – 8.08   	| <0.001 	| 6.90 (0.82)    	| 5.29 – 8.50   	| <0.001 	| 7.31 (0.83)    	| 5.69 – 8.94   	| <0.001 	|
+| seasonspring_I                   	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001 	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001 	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001 	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001 	|
+| seasonspring_II                  	| -2.55 (0.44)   	| -3.40 – -1.70 	| <0.001 	| -2.56 (0.44)   	| -3.41 – -1.70 	| <0.001 	| -1.85 (0.47)   	| -2.76 – -0.93 	| <0.001 	| -1.84 (0.47)   	| -2.76 – -0.93 	| <0.001 	|
+| seasonsummer                     	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175  	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175  	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.365  	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.363  	|
+| seasonwinter                     	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001 	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001 	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.095  	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.097  	|
+| body_size                        	| -0.00 (0.00)   	| -0.01 – 0.00  	| 0.134  	|                	|               	|        	|                	|               	|        	| -0.00 (0.00)   	| -0.00 – 0.00  	| 0.180  	|
+| res_partmiddle                   	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001  	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001  	|                	|               	|        	|                	|               	|        	|
+| res_parttributary                	| -1.61 (0.13)   	| -1.87 – -1.35 	| <0.001 	| -1.62 (0.13)   	| -1.88 – -1.35 	| <0.001 	|                	|               	|        	|                	|               	|        	|
+| res_partupper                    	| 0.14 (0.14)    	| -0.13 – 0.41  	| 0.299  	| 0.13 (0.14)    	| -0.13 – 0.40  	| 0.325  	|                	|               	|        	|                	|               	|        	|
+| Speciespikeperch:seasonspring_I  	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001 	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001 	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001 	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001 	|
+| Specieswels:seasonspring_I       	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001 	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001 	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001 	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001 	|
+| Speciespikeperch:seasonspring_II 	| -2.03 (0.52)   	| -3.04 – -1.02 	| <0.001 	| -2.02 (0.52)   	| -3.04 – -1.01 	| <0.001 	| -2.77 (0.55)   	| -3.85 – -1.69 	| <0.001 	| -2.78 (0.55)   	| -3.85 – -1.70 	| <0.001 	|
+| Specieswels:seasonspring_II      	| -1.90 (0.49)   	| -2.86 – -0.93 	| <0.001 	| -1.89 (0.49)   	| -2.86 – -0.93 	| <0.001 	| -2.89 (0.52)   	| -3.91 – -1.86 	| <0.001 	| -2.89 (0.52)   	| -3.92 – -1.86 	| <0.001 	|
+| Speciespikeperch:seasonsummer    	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001 	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001 	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001 	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001 	|
+| Specieswels:seasonsummer         	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001 	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001 	| -7.03 (0.25)   	| -7.52 – -6.54 	| <0.001 	| -7.03 (0.25)   	| -7.51 – -6.54 	| <0.001 	|
+| Speciespikeperch:seasonwinter    	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002  	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002  	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001 	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001 	|
+| Specieswels:seasonwinter         	| -0.89 (0.25)   	| -1.38 – -0.39 	| <0.001 	| -0.88 (0.25)   	| -1.38 – -0.39 	| <0.001 	| -1.59 (0.27)   	| -2.12 – -1.07 	| <0.001 	| -1.60 (0.27)   	| -2.12 – -1.07 	| <0.001 	|
+| Random Effects                   	|                	|               	|        	|                	|               	|        	|                	|               	|        	|                	|               	|        	|
+| σ2                               	| 3.18           	|               	|        	| 3.18           	|               	|        	| 3.64           	|               	|        	| 3.64           	|               	|        	|
+| τ00                              	| 0.22 date      	|               	|        	| 0.22 date      	|               	|        	| 0.27 date      	|               	|        	| 0.27 date      	|               	|        	|
+|                                  	| 1.03 fi_fishid 	|               	|        	| 1.22 fi_fishid 	|               	|        	| 0.92 fi_fishid 	|               	|        	| 0.80 fi_fishid 	|               	|        	|
+| ICC                              	| 0.28           	|               	|        	| 0.31           	|               	|        	| 0.25           	|               	|        	| 0.23           	|               	|        	|
+| N                                	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	|
+|                                  	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	|
+| Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
+| Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
+```
+
+Plot marginal effects
+
+```
+plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_0.png "Mean_depth_date")
+
+```
+plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_01.png "Mean_depth_date")
