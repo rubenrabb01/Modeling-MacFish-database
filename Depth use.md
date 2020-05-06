@@ -246,7 +246,7 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
                string.pred = "Variable",
                string.p = "P" , use.viewer = TRUE)
 ```
-```
+
 |                                  	| Model 1        	|               	|        	| Model 2        	|               	|        	| Model 3        	|               	|        	| Model 4        	|               	|        	|
 |----------------------------------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|
 | Variable                         	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	|
@@ -278,7 +278,7 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 |                                  	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	|
 | Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
 | Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
-```
+
 
 Plot marginal effects
 
