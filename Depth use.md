@@ -70,15 +70,83 @@ hist(data_depth$mean_depth, breaks = 20)
 ```
 ![Mean_depth](/Plots/Mean_depth_hist.png "Mean_depth")
 
+## 1. Classify predictors mean depth predictors using decision trees
 
-## 1. Fit Mixed-Effects Models (LMM) to the data of depth use
+Grow a decision tree to the data of depth use
+
+- We build a **rpart** model using _mean_depth_ as a continous response
+- In this model each node shows:
+  - The predicted value of mean depth
+  - The percentage of observations in the node
+
+### 1.1. Grow a decision tree with body size, species and season as predictors
+
+```
+tree_depth<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part, data = data_depth, control = rpart.control(cp = 0.005))
+```
+```
+rpart.rules(tree_depth)
+```
+```
+ mean_depth
+        1.9 when season is            spring_I
+        2.9 when season is spring_II or summer
+        3.7 when season is    autumn or winter & fi_species is pike or pikeperch                                      & body_size >=          460
+        4.0 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is              tributary & body_size <   460
+        6.9 when season is              winter & fi_species is              wels & res_part is     tributary or upper
+        7.8 when season is    autumn or winter & fi_species is pike or pikeperch & res_part is dam or middle or upper & body_size <   460
+        8.0 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size <   915
+        9.3 when season is              autumn & fi_species is              wels & res_part is     tributary or upper
+        9.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is 1025 to 1640
+       10.2 when season is              winter & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
+       13.5 when season is    autumn or winter & fi_species is              wels & res_part is          dam or middle & body_size is  915 to 1025
+       14.2 when season is              autumn & fi_species is              wels & res_part is          dam or middle & body_size >=         1640
+```
+```
+rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
+```
+![Depth_use_tree](/Plots/Depth_use_tree_1.png "Depth_use_tree")
+
+### 1.2. Grow a decision tree including month and horizontal range
+
+```
+tree_depth_1<- rpart(mean_depth ~ 1 + body_size + Species + season + res_part + month + ranged2d , data = data_depth, control = rpart.control(cp = 0.005))
+```
+```
+rpart.rules(tree_depth)
+```
+```
+ mean_depth
+        1.7 when season is                        spring_I & month <   9
+        2.6 when season is             spring_II or summer & month <   9
+        2.7 when season is                autumn or winter & month is  2 to 10 & Species is              wels & body_size >=         1575
+        3.1 when season is                autumn or winter                     & Species is pike or pikeperch & body_size >=          460
+        3.3 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is dam or middle or tributary
+        4.0 when season is                autumn or winter                     & Species is pike or pikeperch & body_size <   460         & res_part is                  tributary
+        5.0 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d >= 119
+        6.2 when season is                autumn or winter & month <  10       & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
+        6.4 when season is                autumn or winter & month <   2       & Species is              wels & body_size >=         1575
+        7.7 when season is                autumn or winter & month <  10       & Species is              wels & body_size is 1025 to 1575
+        8.9 when season is                autumn or winter & month >=       10 & Species is pike or pikeperch & body_size <   460         & res_part is     dam or middle or upper
+        9.5 when season is                autumn or winter & month >=       10 & Species is              wels & body_size >=         1025
+       10.8 when season is spring_I or spring_II or summer & month >=        9                                                            & res_part is                      upper & ranged2d <  119
+       12.1 when season is                autumn or winter                     & Species is              wels & body_size <  1025
+```
+```
+rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
+```
+![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
+
+- Time is a high-order classifying variable (**season** along with **month**)
+
+## 2. Fit Mixed-Effects Models (LMM) to the data of depth use
 
 - To analyse the depth use made by the three species we fit a series of LMMs using _mean_depth_ as DV and _Species_, _season_, _body_size_ and _res_part_ as predictors
 - We use two approaches, one consisting of model selection based on AICc for selection of mixed models and other specifically testing our hypothesis based on the nested structure of the random effects
 - The aim of this is just evidencing some sort of model fitting singularities, either due to perfect separation probems, too low sample size or overdispersion. Actually, in our case most singulatiry issues appear to be due to
 the existence of duplicated measures of the variable _mean_depth_ between single days. The aggregating nature of these measures might indicate an incorrect sampling
 
-### 1.1. Find the best onditional model for the Species x season interaction
+### 2.1. Find the best onditional model for the Species x season interaction
 
 :books:`library(lmtest)`
 
@@ -140,7 +208,7 @@ Model 2: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | Species) +
 ```
 Model **m_id_date** is preferred
 
-### 1.2. Find the best conditional model of Species x season controlling for body size and reservoir parts
+### 2.2. Find the best conditional model of Species x season controlling for body size and reservoir parts
 
 :books:`library(AICcmodavg)`
 
@@ -193,7 +261,7 @@ Model 3 21 14953.37       0.05   0.49
 Model probabilities sum to 1
 ```
 
-### 1.3. Compare best-fit models
+### 2.3. Compare best-fit models
 
 We compare the first two nested models (within 2 Delta_AICc) to test wether _body_size_ is important or not
 
@@ -261,9 +329,9 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 | Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
 | Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
 
-## 2. Analysis of the Species x season interaction
+## 3. Analysis of the Species x season interaction
 
-#### Summarise of best-fit model
+### 3.1. Summarise of best-fit model
 
 ```
 summ(m3,  center = TRUE, scale = TRUE, n.sd = 2)
@@ -325,7 +393,7 @@ Grouping variables:
 Continuous predictors are mean-centered and scaled by 2 s.d.
 ```
 
-#### Calculate Level-2 and Level-3 ICC indices
+### 3.2. Calculate Level-2 and Level-3 ICC indices
 
 :books:`library(easystats)`
 ```
@@ -353,7 +421,7 @@ Between levels 2 and 3
 get_re_var(m3)[2] / sum(get_re_var(m3))
 ```
 
-#### Pairwise comparisons
+### 3.3. Pairwise comparisons
 
 :books:`library(emmeans)`
 ```
@@ -381,7 +449,7 @@ Degrees-of-freedom method: kenward-roger
 P value adjustment: tukey method for comparing a family of 3 estimates
 ```
 
-#### Plot main-effects
+### 3.4. Plot main-effects
 
 :books:`library(effects)`
 ```
@@ -389,7 +457,7 @@ plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE,
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_00.png "Mean_depth_date")
 
-#### Plot marginal effects
+### 3.5. Plot marginal effects
 
 ```
 plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
@@ -405,7 +473,7 @@ plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "sea
 - Fitting a gamma model in this case would not solve the problem as convergence still occurs
 - We need to look at the residuals but an instant plot of the linear relationship between mean depth and date can be enough to find the source
 
-#### Plot mean depth as subject to distance range against daily date
+### 3.6. Plot mean depth as subject to distance range against daily date
 
 ```
 ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic() +
@@ -423,6 +491,8 @@ labs(title = "Mean depth use and horizontal movement in three species ",
 ![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
 
 - We see that between August and November 2017 _wels_ show many data points with equal values
-- Wether this is indicating complete lack of vertical movement or stationarity is unlikely so it must related to some error during the sampling process/dataset creation
+- Wether this is indicating complete lack of vertical movement or stationarity is unlikely so it must be related to some error during the sampling process/dataset creation
+- We could partilly correct this by removing those data points or running stan_glmer, brglmer or MCMC models (**pending**)
+
 
 
