@@ -71,22 +71,6 @@ hist(data_depth$mean_depth, breaks = 20)
 ```
 ![Mean_depth](/Plots/Mean_depth_hist.png "Mean_depth")
 
-Plot mean depth as subject to distance range against daily date
-
-```
-ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic() +
-labs(title = "Mean depth use and horizontal movement in three species ",
-     subtitle = "Plot of mean depth at varying horizontal travel distance",
-     x = "Date",
-     y = "Mean depth (m)",
-     size="Horizontal range (m) ",
-     color="Species") +
-      theme(plot.title = element_text(hjust = 0.5, size = 12,face = "bold"),
-      plot.subtitle = element_text(hjust = 0.5,size = 11),
-      text=element_text(size=12)) + scale_color_brewer(palette="Dark2") +
-      theme(legend.background = element_rect(fill = "white"),legend.key = element_rect(fill = "white", color = NA),legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"))
-```
-![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
 
 ## 1. Fit Mixed-Effects Models (LMM) to the data of depth use
 
@@ -246,7 +230,7 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
                string.pred = "Variable",
                string.p = "P" , use.viewer = TRUE)
 ```
-
+```
 |                                  	| Model 1        	|               	|        	| Model 2        	|               	|        	| Model 3        	|               	|        	| Model 4        	|               	|        	|
 |----------------------------------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|
 | Variable                         	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	|
@@ -278,9 +262,139 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 |                                  	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	|
 | Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
 | Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
+```
 
+## 2. Analysis of the Species x season interaction
 
-Plot marginal effects
+#### Summarise of best-fit model
+
+```
+summ(m3,  center = TRUE, scale = TRUE, n.sd = 2)
+```
+```
+MODEL INFO:
+Observations: 3671
+Dependent Variable: mean_depth
+Type: Mixed effects linear regression
+
+MODEL FIT:
+AIC = 14953.12, BIC = 15083.49
+Pseudo-R² (fixed effects) = 0.64
+Pseudo-R² (total) = 0.75
+
+FIXED EFFECTS:
+-------------------------------------------------------------------------------
+                                          Est.   S.E.   t val.      d.f.      p
+-------------------------------------- ------- ------ -------- --------- ------
+(Intercept)                               3.80   0.80     4.75     14.08   0.00
+Speciespikeperch                          2.09   0.92     2.28     13.66   0.04
+Specieswels                               6.24   0.94     6.65     13.56   0.00
+seasonspring_I                           -2.32   0.24    -9.87   2583.64   0.00
+seasonspring_II                          -2.56   0.44    -5.86   3473.51   0.00
+seasonsummer                             -0.28   0.21    -1.36   2693.79   0.18
+seasonwinter                             -0.91   0.22    -4.07   2886.55   0.00
+res_partmiddle                            0.41   0.12     3.34   3620.70   0.00
+res_parttributary                        -1.62   0.13   -12.08   3560.08   0.00
+res_partupper                             0.13   0.14     0.98   3554.37   0.33
+Speciespikeperch:seasonspring_I          -1.06   0.27    -4.00   3363.59   0.00
+Specieswels:seasonspring_I               -5.47   0.27   -20.51   3354.84   0.00
+Speciespikeperch:seasonspring_II         -2.02   0.52    -3.92   3337.94   0.00
+Specieswels:seasonspring_II              -1.89   0.49    -3.85   3347.80   0.00
+Speciespikeperch:seasonsummer            -2.44   0.24   -10.38   3368.30   0.00
+Specieswels:seasonsummer                 -6.08   0.24   -25.65   3360.31   0.00
+Speciespikeperch:seasonwinter            -0.77   0.25    -3.03   3380.61   0.00
+Specieswels:seasonwinter                 -0.88   0.25    -3.49   3374.63   0.00
+-------------------------------------------------------------------------------
+
+p values calculated using Satterthwaite d.f.
+
+RANDOM EFFECTS:
+-------------------------------------
+   Group      Parameter    Std. Dev.
+----------- ------------- -----------
+   date      (Intercept)     0.47
+ fi_fishid   (Intercept)     1.10
+ Residual                    1.78
+-------------------------------------
+
+Grouping variables:
+-----------------------------
+   Group     # groups   ICC
+----------- ---------- ------
+   date        344      0.05
+ fi_fishid      13      0.26
+-----------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
+
+#### Calculate Level-2 and Level-3 ICC indices
+
+:books:`library(easystats)`
+```
+iccm.1st <- icc(m3)
+print(iccm.1st)
+print(iccm.1st, comp = "var")
+```
+```
+# Intraclass Correlation Coefficient
+
+     Adjusted ICC: 0.311
+  Conditional ICC: 0.111
+
+# Intraclass Correlation Coefficient
+
+     Adjusted ICC: 0.311
+  Conditional ICC: 0.111
+```
+Between levels 1 and 2
+```
+sum(get_re_var(m3)) / (sum(get_re_var(m3)) + get_re_var(m3, "sigma_2"))
+```
+Between levels 2 and 3
+```
+get_re_var(m3)[2] / sum(get_re_var(m3))
+```
+
+#### Pairwise comparisons
+
+:books:`library(emmeans)`
+```
+emmeans(m3, pairwise ~ Species, pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+```
+$emmeans
+ Species   emmean    SE   df lower.CL upper.CL
+ pike        2.31 0.897 17.2    0.423     4.21
+ pikeperch   3.14 0.520 17.5    2.049     4.24
+ wels        5.69 0.568 17.2    4.489     6.88
+
+Results are averaged over the levels of: season, res_part
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+ contrast         estimate    SE   df t.ratio p.value
+ pike - pikeperch    -0.83 1.036 17.2 -0.800  0.7078
+ pike - wels         -3.37 1.061 17.1 -3.178  0.0143
+ pikeperch - wels    -2.54 0.769 17.2 -3.306  0.0109
+
+Results are averaged over the levels of: season, res_part
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 3 estimates
+```
+
+#### Plot main-effects
+
+:books:`library(effects)`
+```
+
+```
+plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Mean_depth_date](/Plots/Mean_depth_date_2.png "Mean_depth_date")
+
+#### Plot marginal effects
 
 ```
 plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
@@ -291,3 +405,29 @@ plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(meth
 plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_01.png "Mean_depth_date")
+
+- While these results are not totally incorrect the close-to-zero p-values might suggest there might be an issue of perfect separation
+- Fitting a gamma model in this case would not solve the problem as convergence still occurs
+- We need to look at the residuals but an instant plot of the linear relationship between mean depth and date can be enough to find the source
+
+#### Plot mean depth as subject to distance range against daily date
+
+```
+ggplot(data_depth, aes(x=date, y=mean_depth ,  size = ranged2d, color=Species)) + geom_point() + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic() +
+labs(title = "Mean depth use and horizontal movement in three species ",
+     subtitle = "Plot of mean depth at varying horizontal travel distance",
+     x = "Date",
+     y = "Mean depth (m)",
+     size="Horizontal range (m) ",
+     color="Species") +
+      theme(plot.title = element_text(hjust = 0.5, size = 12,face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5,size = 11),
+      text=element_text(size=12)) + scale_color_brewer(palette="Dark2") +
+      theme(legend.background = element_rect(fill = "white"),legend.key = element_rect(fill = "white", color = NA),legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"))
+```
+![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
+
+- We see that between August and November 2017 _wels_ show many data points with equal values
+- Wether this is indicating complete lack of vertical movement or stationarity is unlikely so it must related to some error during the sampling process/dataset creation
+
+
