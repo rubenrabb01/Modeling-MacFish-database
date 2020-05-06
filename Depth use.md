@@ -137,7 +137,7 @@ rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "R
 ```
 ![Depth_use_tree](/Plots/Depth_use_tree_2.png "Depth_use_tree")
 
-- Time is a high-order classifying variable (**season** along with **month**)
+- Time is a high-order classifying variable (**season** along with **month**; we will include _month_ in random effects along with season in further analysis)
 
 ## 2. Fit Mixed-Effects Models (LMM) to the data of depth use
 
@@ -146,7 +146,9 @@ rpart.plot(tree_depth_1, type = 4, extra = 101, branch.lty = 3, box.palette = "R
 - The aim of this is just evidencing some sort of model fitting singularities, either due to perfect separation probems, too low sample size or overdispersion. Actually, in our case most singulatiry issues appear to be due to
 the existence of duplicated measures of the variable _mean_depth_ between single days. The aggregating nature of these measures might indicate an incorrect sampling
 
-### 2.1. Find the best onditional model for the Species x season interaction
+## 2) Approach 1
+
+### 2.1. Find the best conditional model for the Species x season interaction
 
 :books:`library(lmtest)`
 
@@ -292,42 +294,42 @@ Export table from candidate models set
 :books:`library(sjstats)`
 :books:`library(sjmisc)`
 ```
-tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
+tab_model(m3,m4,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
               dv.labels = c("Model 1", "Model 2","Model 3","Model 4"),
                string.pred = "Variable",
                string.p = "P" , use.viewer = TRUE)
 ```
-|                                  	| Model 1        	|               	|        	| Model 2        	|               	|        	| Model 3        	|               	|        	| Model 4        	|               	|        	|
-|----------------------------------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|----------------	|---------------	|--------	|
-| Variable                         	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	| Estimates      	| CI            	| P      	|
-| (Intercept)                      	| 6.32 (1.84)    	| 2.72 – 9.93   	| 0.001  	| 3.80 (0.80)    	| 2.23 – 5.37   	| <0.001 	| 3.18 (0.69)    	| 1.82 – 4.54   	| <0.001 	| 5.18 (1.62)    	| 1.99 – 8.36   	| 0.001  	|
-| Speciespikeperch                 	| 0.70 (1.26)    	| -1.77 – 3.16  	| 0.579  	| 2.09 (0.92)    	| 0.29 – 3.88   	| 0.023  	| 2.84 (0.80)    	| 1.27 – 4.41   	| <0.001 	| 1.74 (1.11)    	| -0.44 – 3.92  	| 0.117  	|
-| Specieswels                      	| 6.77 (0.94)    	| 4.93 – 8.60   	| <0.001 	| 6.24 (0.94)    	| 4.40 – 8.08   	| <0.001 	| 6.90 (0.82)    	| 5.29 – 8.50   	| <0.001 	| 7.31 (0.83)    	| 5.69 – 8.94   	| <0.001 	|
-| seasonspring_I                   	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001 	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001 	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001 	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001 	|
-| seasonspring_II                  	| -2.55 (0.44)   	| -3.40 – -1.70 	| <0.001 	| -2.56 (0.44)   	| -3.41 – -1.70 	| <0.001 	| -1.85 (0.47)   	| -2.76 – -0.93 	| <0.001 	| -1.84 (0.47)   	| -2.76 – -0.93 	| <0.001 	|
-| seasonsummer                     	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175  	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175  	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.365  	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.363  	|
-| seasonwinter                     	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001 	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001 	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.095  	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.097  	|
-| body_size                        	| -0.00 (0.00)   	| -0.01 – 0.00  	| 0.134  	|                	|               	|        	|                	|               	|        	| -0.00 (0.00)   	| -0.00 – 0.00  	| 0.180  	|
-| res_partmiddle                   	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001  	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001  	|                	|               	|        	|                	|               	|        	|
-| res_parttributary                	| -1.61 (0.13)   	| -1.87 – -1.35 	| <0.001 	| -1.62 (0.13)   	| -1.88 – -1.35 	| <0.001 	|                	|               	|        	|                	|               	|        	|
-| res_partupper                    	| 0.14 (0.14)    	| -0.13 – 0.41  	| 0.299  	| 0.13 (0.14)    	| -0.13 – 0.40  	| 0.325  	|                	|               	|        	|                	|               	|        	|
-| Speciespikeperch:seasonspring_I  	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001 	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001 	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001 	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001 	|
-| Specieswels:seasonspring_I       	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001 	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001 	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001 	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001 	|
-| Speciespikeperch:seasonspring_II 	| -2.03 (0.52)   	| -3.04 – -1.02 	| <0.001 	| -2.02 (0.52)   	| -3.04 – -1.01 	| <0.001 	| -2.77 (0.55)   	| -3.85 – -1.69 	| <0.001 	| -2.78 (0.55)   	| -3.85 – -1.70 	| <0.001 	|
-| Specieswels:seasonspring_II      	| -1.90 (0.49)   	| -2.86 – -0.93 	| <0.001 	| -1.89 (0.49)   	| -2.86 – -0.93 	| <0.001 	| -2.89 (0.52)   	| -3.91 – -1.86 	| <0.001 	| -2.89 (0.52)   	| -3.92 – -1.86 	| <0.001 	|
-| Speciespikeperch:seasonsummer    	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001 	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001 	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001 	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001 	|
-| Specieswels:seasonsummer         	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001 	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001 	| -7.03 (0.25)   	| -7.52 – -6.54 	| <0.001 	| -7.03 (0.25)   	| -7.51 – -6.54 	| <0.001 	|
-| Speciespikeperch:seasonwinter    	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002  	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002  	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001 	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001 	|
-| Specieswels:seasonwinter         	| -0.89 (0.25)   	| -1.38 – -0.39 	| <0.001 	| -0.88 (0.25)   	| -1.38 – -0.39 	| <0.001 	| -1.59 (0.27)   	| -2.12 – -1.07 	| <0.001 	| -1.60 (0.27)   	| -2.12 – -1.07 	| <0.001 	|
-| Random Effects                   	|                	|               	|        	|                	|               	|        	|                	|               	|        	|                	|               	|        	|
-| σ2                               	| 3.18           	|               	|        	| 3.18           	|               	|        	| 3.64           	|               	|        	| 3.64           	|               	|        	|
-| τ00                              	| 0.22 date      	|               	|        	| 0.22 date      	|               	|        	| 0.27 date      	|               	|        	| 0.27 date      	|               	|        	|
-|                                  	| 1.03 fi_fishid 	|               	|        	| 1.22 fi_fishid 	|               	|        	| 0.92 fi_fishid 	|               	|        	| 0.80 fi_fishid 	|               	|        	|
-| ICC                              	| 0.28           	|               	|        	| 0.31           	|               	|        	| 0.25           	|               	|        	| 0.23           	|               	|        	|
-| N                                	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	| 13 fi_fishid   	|               	|        	|
-|                                  	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	| 344 date       	|               	|        	|
-| Observations                     	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	| 3671           	|               	|        	|
-| Marginal R2 / Conditional R2     	| 0.659 / 0.756  	|               	|        	| 0.644 / 0.755  	|               	|        	| 0.613 / 0.708  	|               	|        	| 0.626 / 0.711  	|               	|        	|
+|  Model 1                         	|                	|               	| Model 2 	|                	|               	| Model 3 	|                	|               	| Model 4 	|                	|               	|        	|
+|----------------------------------	|----------------	|---------------	|---------	|----------------	|---------------	|---------	|----------------	|---------------	|---------	|----------------	|---------------	|--------	|
+| Variable                         	| Estimates      	| CI            	| P       	| Estimates      	| CI            	| P       	| Estimates      	| CI            	| P       	| Estimates      	| CI            	| P      	|
+| (Intercept)                      	| 3.80 (0.80)    	| 2.23 – 5.37   	| <0.001  	| 6.32 (1.84)    	| 2.72 – 9.93   	| 0.001   	| 3.18 (0.69)    	| 1.82 – 4.54   	| <0.001  	| 5.18 (1.62)    	| 1.99 – 8.36   	| 0.001  	|
+| Speciespikeperch                 	| 2.09 (0.92)    	| 0.29 – 3.88   	| 0.023   	| 0.70 (1.26)    	| -1.77 – 3.16  	| 0.579   	| 2.84 (0.80)    	| 1.27 – 4.41   	| <0.001  	| 1.74 (1.11)    	| -0.44 – 3.92  	| 0.117  	|
+| Specieswels                      	| 6.24 (0.94)    	| 4.40 – 8.08   	| <0.001  	| 6.77 (0.94)    	| 4.93 – 8.60   	| <0.001  	| 6.90 (0.82)    	| 5.29 – 8.50   	| <0.001  	| 7.31 (0.83)    	| 5.69 – 8.94   	| <0.001 	|
+| seasonspring_I                   	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001  	| -2.32 (0.24)   	| -2.78 – -1.86 	| <0.001  	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001  	| -1.82 (0.25)   	| -2.31 – -1.33 	| <0.001 	|
+| seasonspring_II                  	| -2.56 (0.44)   	| -3.41 – -1.70 	| <0.001  	| -2.55 (0.44)   	| -3.40 – -1.70 	| <0.001  	| -1.85 (0.47)   	| -2.76 – -0.93 	| <0.001  	| -1.84 (0.47)   	| -2.76 – -0.93 	| <0.001 	|
+| seasonsummer                     	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175   	| -0.28 (0.21)   	| -0.69 – 0.13  	| 0.175   	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.365   	| -0.20 (0.22)   	| -0.64 – 0.24  	| 0.363  	|
+| seasonwinter                     	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001  	| -0.91 (0.22)   	| -1.35 – -0.47 	| <0.001  	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.095   	| -0.40 (0.24)   	| -0.87 – 0.07  	| 0.097  	|
+| res_partmiddle                   	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001   	| 0.41 (0.12)    	| 0.17 – 0.65   	| 0.001   	|                	|               	|         	|                	|               	|        	|
+| res_parttributary                	| -1.62 (0.13)   	| -1.88 – -1.35 	| <0.001  	| -1.61 (0.13)   	| -1.87 – -1.35 	| <0.001  	|                	|               	|         	|                	|               	|        	|
+| res_partupper                    	| 0.13 (0.14)    	| -0.13 – 0.40  	| 0.325   	| 0.14 (0.14)    	| -0.13 – 0.41  	| 0.299   	|                	|               	|         	|                	|               	|        	|
+| Speciespikeperch:seasonspring_I  	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001  	| -1.06 (0.27)   	| -1.58 – -0.54 	| <0.001  	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001  	| -2.23 (0.28)   	| -2.77 – -1.68 	| <0.001 	|
+| Specieswels:seasonspring_I       	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001  	| -5.47 (0.27)   	| -6.00 – -4.95 	| <0.001  	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001  	| -6.78 (0.28)   	| -7.32 – -6.23 	| <0.001 	|
+| Speciespikeperch:seasonspring_II 	| -2.02 (0.52)   	| -3.04 – -1.01 	| <0.001  	| -2.03 (0.52)   	| -3.04 – -1.02 	| <0.001  	| -2.77 (0.55)   	| -3.85 – -1.69 	| <0.001  	| -2.78 (0.55)   	| -3.85 – -1.70 	| <0.001 	|
+| Specieswels:seasonspring_II      	| -1.89 (0.49)   	| -2.86 – -0.93 	| <0.001  	| -1.90 (0.49)   	| -2.86 – -0.93 	| <0.001  	| -2.89 (0.52)   	| -3.91 – -1.86 	| <0.001  	| -2.89 (0.52)   	| -3.92 – -1.86 	| <0.001 	|
+| Speciespikeperch:seasonsummer    	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001  	| -2.44 (0.24)   	| -2.90 – -1.98 	| <0.001  	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001  	| -3.24 (0.25)   	| -3.73 – -2.75 	| <0.001 	|
+| Specieswels:seasonsummer         	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001  	| -6.08 (0.24)   	| -6.55 – -5.62 	| <0.001  	| -7.03 (0.25)   	| -7.52 – -6.54 	| <0.001  	| -7.03 (0.25)   	| -7.51 – -6.54 	| <0.001 	|
+| Speciespikeperch:seasonwinter    	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002   	| -0.77 (0.25)   	| -1.27 – -0.27 	| 0.002   	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001  	| -1.48 (0.27)   	| -2.01 – -0.95 	| <0.001 	|
+| Specieswels:seasonwinter         	| -0.88 (0.25)   	| -1.38 – -0.39 	| <0.001  	| -0.89 (0.25)   	| -1.38 – -0.39 	| <0.001  	| -1.59 (0.27)   	| -2.12 – -1.07 	| <0.001  	| -1.60 (0.27)   	| -2.12 – -1.07 	| <0.001 	|
+| body_size                        	|                	|               	|         	| -0.00 (0.00)   	| -0.01 – 0.00  	| 0.134   	|                	|               	|         	| -0.00 (0.00)   	| -0.00 – 0.00  	| 0.180  	|
+| Random Effects                   	|                	|               	|         	|                	|               	|         	|                	|               	|         	|                	|               	|        	|
+| σ2                               	| 3.18           	|               	|         	| 3.18           	|               	|         	| 3.64           	|               	|         	| 3.64           	|               	|        	|
+| τ00                              	| 0.22 date      	|               	|         	| 0.22 date      	|               	|         	| 0.27 date      	|               	|         	| 0.27 date      	|               	|        	|
+|                                  	| 1.22 fi_fishid 	|               	|         	| 1.03 fi_fishid 	|               	|         	| 0.92 fi_fishid 	|               	|         	| 0.80 fi_fishid 	|               	|        	|
+| ICC                              	| 0.31           	|               	|         	| 0.28           	|               	|         	| 0.25           	|               	|         	| 0.23           	|               	|        	|
+| N                                	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|        	|
+|                                  	| 344 date       	|               	|         	| 344 date       	|               	|         	| 344 date       	|               	|         	| 344 date       	|               	|        	|
+| Observations                     	| 3671           	|               	|         	| 3671           	|               	|         	| 3671           	|               	|         	| 3671           	|               	|        	|
+| Marginal R2 / Conditional R2     	| 0.644 / 0.755  	|               	|         	| 0.659 / 0.756  	|               	|         	| 0.613 / 0.708  	|               	|         	| 0.626 / 0.711  	|               	|        	|
 
 ## 3. Analysis of the Species x season interaction
 
@@ -464,6 +466,8 @@ plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(meth
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_0.png "Mean_depth_date")
 
+Mean +- 1s.d.
+
 ```
 plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
 ```
@@ -494,5 +498,249 @@ labs(title = "Mean depth use and horizontal movement in three species ",
 - Wether this is indicating complete lack of vertical movement or stationarity is unlikely so it must be related to some error during the sampling process/dataset creation
 - We could partilly correct this by removing those data points or running stan_glmer, brglmer or MCMC models (**pending**)
 
+## 2) Approach 2
 
+### 2.1. Find the best conditional model for the Species x season interaction
+
+We fit s series of nested random-effects model following the formula (1|date/fi_fishid) (i.e., fi_fishid nested within date: (1|date:fi_fishid) + (1|date))
+With this model we expect that _mean_depth_ daily varies (across dates) and across _fi_fishid_ within _date_ by including the random effects of date and of a date-by-fi_fishid interaction
+Since multiple fish are measured on each date, but there is only one observation per date-fi_fishid combination, we rle out the inclusion of the (1|fi_fishid) term to the model
+
+```
+Cand.mod <- list()
+
+Cand.mod[[1]]<-lmer(mean_depth ~ 1 + Species * season + (1|date:fi_fishid) + (1|date),data = data_depth, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[2]]<-lmer(mean_depth ~ 1 + Species * season + body_size + (1|date:fi_fishid) + (1|date),data = data_depth, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[3]]<-lmer(mean_depth ~ 1 + Species * season + res_part + (1|date:fi_fishid) + (1|date),data = data_depth, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+Cand.mod[[4]]<-lmer(mean_depth ~ 1 + Species * season + body_size + res_part + (1|date:fi_fishid) + (1|date),data = data_depth, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+
+Modnames <- c("Model 1", "Model 2", "Model 3", "Model 4")
+```
+Create a model selection table based on AICc, better than AIC/BIC with small samples
+```
+aictab(cand.set = Cand.mod, modnames = Modnames)
+```
+```
+Model selection based on AICc:
+
+         K     AICc Delta_AICc AICcWt Cum.Wt   Res.LL
+Model 4 22 15830.23       0.00      1      1 -7892.98
+Model 3 21 16052.54     222.31      0      1 -8005.14
+Model 2 19 16133.89     303.66      0      1 -8047.84
+Model 1 18 16260.17     429.94      0      1 -8111.99
+```
+There is no need for further comparions as **Model 4** is significantly separated in terms of AICc from the second best model
+
+### 2.2. Compare best-fit models
+
+We compare the first two nested models (within 2 Delta_AICc) to test wether _body_size_ is important or not
+
+```
+m4<-lmer(mean_depth ~ 1 + Species * season + body_size + res_part + (1|date:fi_fishid) + (1|date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+m3<-lmer(mean_depth ~ 1 + Species * season + res_part + (1|date:fi_fishid) + (1|date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+Export table from candidate models set
+
+```
+tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
+              dv.labels = c("Model 1", "Model 2","Model 3","Model 4"),
+               string.pred = "Variable",
+               string.p = "P" , use.viewer = TRUE)
+```
+|                                  	| Model 1             	|               	|        	| Model 2             	|               	|        	| Model 3             	|               	|        	| Model 4             	|               	|        	|
+|----------------------------------	|---------------------	|---------------	|--------	|---------------------	|---------------	|--------	|---------------------	|---------------	|--------	|---------------------	|---------------	|--------	|
+| Variable                         	| Estimates           	| CI            	| P      	| Estimates           	| CI            	| P      	| Estimates           	| CI            	| P      	| Estimates           	| CI            	| P      	|
+| (Intercept)                      	| 6.32 (0.26)         	| 5.80 – 6.84   	| <0.001 	| 3.27 (0.19)         	| 2.91 – 3.64   	| <0.001 	| 3.18 (0.17)         	| 2.85 – 3.52   	| <0.001 	| 5.64 (0.26)         	| 5.12 – 6.15   	| <0.001 	|
+| Speciespikeperch                 	| 0.66 (0.22)         	| 0.22 – 1.09   	| 0.003  	| 2.49 (0.20)         	| 2.11 – 2.88   	| <0.001 	| 2.80 (0.20)         	| 2.42 – 3.19   	| <0.001 	| 1.47 (0.22)         	| 1.03 – 1.91   	| <0.001 	|
+| Specieswels                      	| 6.98 (0.19)         	| 6.61 – 7.35   	| <0.001 	| 6.46 (0.19)         	| 6.08 – 6.84   	| <0.001 	| 6.82 (0.20)         	| 6.44 – 7.21   	| <0.001 	| 7.30 (0.20)         	| 6.91 – 7.68   	| <0.001 	|
+| seasonspring_I                   	| -2.25 (0.26)        	| -2.76 – -1.74 	| <0.001 	| -2.20 (0.27)        	| -2.73 – -1.68 	| <0.001 	| -1.82 (0.28)        	| -2.37 – -1.28 	| <0.001 	| -1.82 (0.27)        	| -2.35 – -1.28 	| <0.001 	|
+| seasonspring_II                  	| -1.70 (0.48)        	| -2.64 – -0.76 	| <0.001 	| -2.07 (0.49)        	| -3.04 – -1.10 	| <0.001 	| -1.93 (0.51)        	| -2.93 – -0.92 	| <0.001 	| -1.63 (0.50)        	| -2.62 – -0.65 	| 0.001  	|
+| seasonsummer                     	| -0.29 (0.23)        	| -0.75 – 0.16  	| 0.205  	| -0.27 (0.24)        	| -0.74 – 0.20  	| 0.262  	| -0.19 (0.25)        	| -0.68 – 0.29  	| 0.440  	| -0.24 (0.24)        	| -0.71 – 0.24  	| 0.335  	|
+| seasonwinter                     	| -0.65 (0.25)        	| -1.13 – -0.16 	| 0.009  	| -0.70 (0.26)        	| -1.20 – -0.20 	| 0.006  	| -0.42 (0.26)        	| -0.93 – 0.10  	| 0.115  	| -0.32 (0.26)        	| -0.83 – 0.19  	| 0.213  	|
+| body_size                        	| -0.00 (0.00)        	| -0.00 – -0.00 	| <0.001 	|                     	|               	|        	|                     	|               	|        	| -0.00 (0.00)        	| -0.00 – -0.00 	| <0.001 	|
+| res_partmiddle                   	| 0.98 (0.11)         	| 0.76 – 1.20   	| <0.001 	| 0.75 (0.12)         	| 0.52 – 0.98   	| <0.001 	|                     	|               	|        	|                     	|               	|        	|
+| res_parttributary                	| -0.63 (0.11)        	| -0.84 – -0.41 	| <0.001 	| -0.71 (0.11)        	| -0.93 – -0.48 	| <0.001 	|                     	|               	|        	|                     	|               	|        	|
+| res_partupper                    	| 0.71 (0.11)         	| 0.49 – 0.93   	| <0.001 	| 0.26 (0.11)         	| 0.04 – 0.48   	| 0.021  	|                     	|               	|        	|                     	|               	|        	|
+| Speciespikeperch:seasonspring_I  	| -1.46 (0.30)        	| -2.04 – -0.87 	| <0.001 	| -1.53 (0.31)        	| -2.13 – -0.92 	| <0.001 	| -2.18 (0.31)        	| -2.79 – -1.57 	| <0.001 	| -2.20 (0.31)        	| -2.80 – -1.60 	| <0.001 	|
+| Specieswels:seasonspring_I       	| -5.71 (0.30)        	| -6.30 – -5.12 	| <0.001 	| -5.87 (0.31)        	| -6.48 – -5.26 	| <0.001 	| -6.70 (0.32)        	| -7.32 – -6.08 	| <0.001 	| -6.66 (0.31)        	| -7.27 – -6.06 	| <0.001 	|
+| Speciespikeperch:seasonspring_II 	| -3.10 (0.58)        	| -4.23 – -1.97 	| <0.001 	| -2.72 (0.60)        	| -3.89 – -1.54 	| <0.001 	| -3.06 (0.61)        	| -4.27 – -1.86 	| <0.001 	| -3.29 (0.60)        	| -4.47 – -2.11 	| <0.001 	|
+| Specieswels:seasonspring_II      	| -3.64 (0.55)        	| -4.72 – -2.56 	| <0.001 	| -3.40 (0.57)        	| -4.51 – -2.28 	| <0.001 	| -3.67 (0.58)        	| -4.81 – -2.52 	| <0.001 	| -3.91 (0.57)        	| -5.03 – -2.79 	| <0.001 	|
+| Speciespikeperch:seasonsummer    	| -2.70 (0.26)        	| -3.21 – -2.18 	| <0.001 	| -2.78 (0.27)        	| -3.32 – -2.25 	| <0.001 	| -3.22 (0.28)        	| -3.77 – -2.67 	| <0.001 	| -3.19 (0.27)        	| -3.73 – -2.66 	| <0.001 	|
+| Specieswels:seasonsummer         	| -6.27 (0.27)        	| -6.79 – -5.74 	| <0.001 	| -6.41 (0.28)        	| -6.95 – -5.87 	| <0.001 	| -6.98 (0.28)        	| -7.53 – -6.43 	| <0.001 	| -6.90 (0.27)        	| -7.44 – -6.36 	| <0.001 	|
+| Speciespikeperch:seasonwinter    	| -1.00 (0.29)        	| -1.57 – -0.44 	| <0.001 	| -1.00 (0.30)        	| -1.59 – -0.42 	| 0.001  	| -1.45 (0.30)        	| -2.04 – -0.85 	| <0.001 	| -1.53 (0.30)        	| -2.12 – -0.95 	| <0.001 	|
+| Specieswels:seasonwinter         	| -1.69 (0.28)        	| -2.25 – -1.13 	| <0.001 	| -1.60 (0.29)        	| -2.18 – -1.02 	| <0.001 	| -1.98 (0.30)        	| -2.57 – -1.39 	| <0.001 	| -2.14 (0.30)        	| -2.72 – -1.57 	| <0.001 	|
+| Random Effects                   	|                     	|               	|        	|                     	|               	|        	|                     	|               	|        	|                     	|               	|        	|
+| σ2                               	| 2.27                	|               	|        	| 2.19                	|               	|        	| 1.90                	|               	|        	| 1.75                	|               	|        	|
+| τ00                              	| 1.85 date:fi_fishid 	|               	|        	| 2.22 date:fi_fishid 	|               	|        	| 2.77 date:fi_fishid 	|               	|        	| 2.73 date:fi_fishid 	|               	|        	|
+|                                  	| 0.16 date           	|               	|        	| 0.16 date           	|               	|        	| 0.22 date           	|               	|        	| 0.23 date           	|               	|        	|
+| ICC                              	| 0.07                	|               	|        	| 0.07                	|               	|        	| 0.11                	|               	|        	| 0.12                	|               	|        	|
+| N                                	| 344 date            	|               	|        	| 344 date            	|               	|        	| 344 date            	|               	|        	| 344 date            	|               	|        	|
+|                                  	| 13 fi_fishid        	|               	|        	| 13 fi_fishid        	|               	|        	| 13 fi_fishid        	|               	|        	| 13 fi_fishid        	|               	|        	|
+| Observations                     	| 3671                	|               	|        	| 3671                	|               	|        	| 3671                	|               	|        	| 3671                	|               	|        	|
+| Marginal R2 / Conditional R2     	| 0.763 / 0.779       	|               	|        	| 0.763 / 0.779       	|               	|        	| 0.774 / 0.798       	|               	|        	| 0.790 / 0.814       	|               	|        	|
+
+## 3. Analysis of the Species x season interaction
+
+### 3.1. Summarise of best-fit model
+
+```
+summ(m4,  center = TRUE, scale = TRUE, n.sd = 2)
+```
+```
+MODEL INFO:
+Observations: 3671
+Dependent Variable: mean_depth
+Type: Mixed effects linear regression
+
+MODEL FIT:
+AIC = 15778.63, BIC = 15915.21
+Pseudo-R² (fixed effects) = 0.76
+Pseudo-R² (total) = 0.78
+
+FIXED EFFECTS:
+-------------------------------------------------------------------------------
+                                          Est.   S.E.   t val.      d.f.      p
+-------------------------------------- ------- ------ -------- --------- ------
+(Intercept)                               3.61   0.18    19.85   3253.83   0.00
+Speciespikeperch                          0.66   0.22     2.97   3396.75   0.00
+Specieswels                               6.98   0.19    36.79   3349.53   0.00
+seasonspring_I                           -2.25   0.26    -8.65   2909.69   0.00
+seasonspring_II                          -1.70   0.48    -3.54   3578.90   0.00
+seasonsummer                             -0.29   0.23    -1.27   2997.69   0.20
+seasonwinter                             -0.65   0.25    -2.63   3128.53   0.01
+body_size                                -2.49   0.16   -15.77   3392.32   0.00
+res_partmiddle                            0.98   0.11     8.72   3616.46   0.00
+res_parttributary                        -0.63   0.11    -5.71   3561.71   0.00
+res_partupper                             0.71   0.11     6.27   3557.77   0.00
+Speciespikeperch:seasonspring_I          -1.46   0.30    -4.90   3360.54   0.00
+Specieswels:seasonspring_I               -5.71   0.30   -18.93   3360.96   0.00
+Speciespikeperch:seasonspring_II         -3.10   0.58    -5.36   3345.20   0.00
+Specieswels:seasonspring_II              -3.64   0.55    -6.62   3352.99   0.00
+Speciespikeperch:seasonsummer            -2.70   0.26   -10.23   3371.43   0.00
+Specieswels:seasonsummer                 -6.27   0.27   -23.40   3370.99   0.00
+Speciespikeperch:seasonwinter            -1.00   0.29    -3.50   3391.05   0.00
+Specieswels:seasonwinter                 -1.69   0.28    -5.95   3384.61   0.00
+-------------------------------------------------------------------------------
+
+p values calculated using Satterthwaite d.f.
+
+RANDOM EFFECTS:
+------------------------------------------
+     Group         Parameter    Std. Dev.
+---------------- ------------- -----------
+ date:fi_fishid   (Intercept)     1.36
+      date        (Intercept)     0.40
+    Residual                      1.51
+------------------------------------------
+
+Grouping variables:
+----------------------------------
+     Group        # groups   ICC
+---------------- ---------- ------
+ date:fi_fishid     3671     0.43
+      date          344      0.04
+----------------------------------
+
+Continuous predictors are mean-centered and scaled by 2 s.d.
+```
+
+### 3.2. Calculate Level-2 and Level-3 ICC indices
+
+:books:`library(easystats)`
+```
+iccm.1st <- icc(m4)
+print(iccm.1st)
+print(iccm.1st, comp = "var")
+```
+```
+# Intraclass Correlation Coefficient
+
+     Adjusted ICC: 0.065
+  Conditional ICC: 0.015
+
+# Intraclass Correlation Coefficient
+
+     Adjusted ICC: 0.065
+  Conditional ICC: 0.015
+```
+Between levels 1 and 2
+```
+sum(get_re_var(m4)) / (sum(get_re_var(m4)) + get_re_var(m4, "sigma_2"))
+```
+Between levels 2 and 3
+```
+get_re_var(m4)[2] / sum(get_re_var(m4))
+```
+
+### 3.3. Pairwise comparisons
+
+```
+emmeans(m4, pairwise ~ Species, pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+```
+$emmeans
+ Species   emmean    SE   df lower.CL upper.CL
+ pike        2.90 0.123 3557     2.66     3.14
+ pikeperch   1.90 0.116 3454     1.68     2.13
+ wels        6.41 0.102 3152     6.21     6.62
+
+Results are averaged over the levels of: season, res_part
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+ contrast         estimate    SE   df t.ratio p.value
+ pike - pikeperch    0.993 0.183 3396   5.435 <.0001
+ pike - wels        -3.518 0.137 3375 -25.692 <.0001
+ pikeperch - wels   -4.511 0.184 3401 -24.531 <.0001
+
+Results are averaged over the levels of: season, res_part
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 3 estimates
+```
+- In contrast to the previous results (Approach 1) differences between _pike_ and _pikeperch_ are now significant
+- This result suggests that the inclusion of _body_size_ with respect to the former best-fit model contributes to explain marginal mean depth differencesand shouldnt be dropped form the model
+- Next, we will analyse those differences accounting for _body_size_ and _res_part_
+
+### 3.4. Plot main-effects
+
+```
+plot(Effect(c("Species", "season"), m4),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Mean_depth_date](/Plots/Mean_depth_date_02.png "Mean_depth_date")
+
+### 3.5. Plot marginal effects
+
+```
+plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("season", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_03.png "Mean_depth_date")
+
+```
+plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_04.png "Mean_depth_date")
+
+- We see that the minimum and maximum values intervals are narrowed with respect to previous model plots
+- Though not there is no interaction in this model between _body_size_ or _res_part_ we may see how these variables are affecting the Cohen estimates (i.e., marginal means)
+
+```
+plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("res_part", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_05.png "Mean_depth_date")
+
+```
+plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("res_part", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_06.png "Mean_depth_date")
+
+```
+plot_model(m4, mdrt.values = "meansd", type = "pred", terms = c("body_size", "Species")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_07.png "Mean_depth_date")
+
+```
+plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("body_size", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_08.png "Mean_depth_date")
 
