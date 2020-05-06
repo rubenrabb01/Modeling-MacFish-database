@@ -388,8 +388,6 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 
 :books:`library(effects)`
 ```
-
-```
 plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_2.png "Mean_depth_date")
