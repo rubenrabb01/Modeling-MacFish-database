@@ -19,6 +19,7 @@ colnames(data_depth)[3] <- "body_size"
 colnames(data_depth)[5] <- "Species"
 data_depth$fi_fishid <- as.factor(data_depth$fi_fishid)
 data_depth$Species <- as.factor(data_depth$Species)
+data_depth$season <- as.factor(data_depth$season)
 ```
 Order by _fi_fishid_ and _date_ and delete duplicate rows
 ```
@@ -319,8 +320,8 @@ tab_model(m3,m4,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 | Specieswels:seasonwinter         	| -0.88 (0.25)   	| -1.38 – -0.39 	| <0.001  	| -0.89 (0.25)   	| -1.38 – -0.39 	| <0.001  	| -1.59 (0.27)   	| -2.12 – -1.07 	| <0.001  	| -1.60 (0.27)   	| -2.12 – -1.07 	| <0.001 	|
 | body_size                        	|                	|               	|         	| -0.00 (0.00)   	| -0.01 – 0.00  	| 0.134   	|                	|               	|         	| -0.00 (0.00)   	| -0.00 – 0.00  	| 0.180  	|
 | Random Effects                   	|                	|               	|         	|                	|               	|         	|                	|               	|         	|                	|               	|        	|
-| σ2                               	| 3.18           	|               	|         	| 3.18           	|               	|         	| 3.64           	|               	|         	| 3.64           	|               	|        	|
-| τ00                              	| 0.22 date      	|               	|         	| 0.22 date      	|               	|         	| 0.27 date      	|               	|         	| 0.27 date      	|               	|        	|
+| s2                               	| 3.18           	|               	|         	| 3.18           	|               	|         	| 3.64           	|               	|         	| 3.64           	|               	|        	|
+| t00                              	| 0.22 date      	|               	|         	| 0.22 date      	|               	|         	| 0.27 date      	|               	|         	| 0.27 date      	|               	|        	|
 |                                  	| 1.22 fi_fishid 	|               	|         	| 1.03 fi_fishid 	|               	|         	| 0.92 fi_fishid 	|               	|         	| 0.80 fi_fishid 	|               	|        	|
 | ICC                              	| 0.31           	|               	|         	| 0.28           	|               	|         	| 0.25           	|               	|         	| 0.23           	|               	|        	|
 | N                                	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|         	| 13 fi_fishid   	|               	|        	|
@@ -463,8 +464,6 @@ plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(meth
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_0.png "Mean_depth_date")
 
-Mean +- 1s.d.
-
 ```
 plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
 ```
@@ -567,8 +566,8 @@ tab_model(m4,m3,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  
 | Speciespikeperch:seasonwinter    	| -1.00 (0.29)        	| -1.57 – -0.44 	| <0.001 	| -1.00 (0.30)        	| -1.59 – -0.42 	| 0.001  	| -1.45 (0.30)        	| -2.04 – -0.85 	| <0.001 	| -1.53 (0.30)        	| -2.12 – -0.95 	| <0.001 	|
 | Specieswels:seasonwinter         	| -1.69 (0.28)        	| -2.25 – -1.13 	| <0.001 	| -1.60 (0.29)        	| -2.18 – -1.02 	| <0.001 	| -1.98 (0.30)        	| -2.57 – -1.39 	| <0.001 	| -2.14 (0.30)        	| -2.72 – -1.57 	| <0.001 	|
 | Random Effects                   	|                     	|               	|        	|                     	|               	|        	|                     	|               	|        	|                     	|               	|        	|
-| σ2                               	| 2.27                	|               	|        	| 2.19                	|               	|        	| 1.90                	|               	|        	| 1.75                	|               	|        	|
-| τ00                              	| 1.85 date:fi_fishid 	|               	|        	| 2.22 date:fi_fishid 	|               	|        	| 2.77 date:fi_fishid 	|               	|        	| 2.73 date:fi_fishid 	|               	|        	|
+| s2                               	| 2.27                	|               	|        	| 2.19                	|               	|        	| 1.90                	|               	|        	| 1.75                	|               	|        	|
+| t00                              	| 1.85 date:fi_fishid 	|               	|        	| 2.22 date:fi_fishid 	|               	|        	| 2.77 date:fi_fishid 	|               	|        	| 2.73 date:fi_fishid 	|               	|        	|
 |                                  	| 0.16 date           	|               	|        	| 0.16 date           	|               	|        	| 0.22 date           	|               	|        	| 0.23 date           	|               	|        	|
 | ICC                              	| 0.07                	|               	|        	| 0.07                	|               	|        	| 0.11                	|               	|        	| 0.12                	|               	|        	|
 | N                                	| 344 date            	|               	|        	| 344 date            	|               	|        	| 344 date            	|               	|        	| 344 date            	|               	|        	|
@@ -741,3 +740,236 @@ plot_model(m4,  mdrt.values = "meansd", type = "pred", terms = c("body_size", "s
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_08.png "Mean_depth_date")
 
+## 3. Effects of body size and reservoir parts on mean depth use
+
+Taking into account the former fitted models, we explore the interaction effects of reservoir parts and body size on mean depth use
+
+### 3.1. How does mean depth vary with body size between species?
+
+Fit a model including the _Species x body_size_ interaction
+```
+m_sp_size<-lmer(mean_depth ~ 1 + Species * body_size + (1|date:fi_fishid) + (1|date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+
+Compare with a model without the interaction term
+```
+m_sp_size_nint<-update(m_sp_size,.~.-  Species : body_size)
+```
+```
+anova(m_sp_size, m_sp_size_nint)
+```
+```
+Models:
+m_sp_size_nint: mean_depth ~ Species + body_size + (1 | date:fi_fishid) + (1 |
+m_sp_size_nint:     date)
+m_sp_size: mean_depth ~ 1 + Species * body_size + (1 | date:fi_fishid) +
+m_sp_size:     (1 | date)
+               npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m_sp_size_nint    7 17689 17733 -8837.6    17675
+m_sp_size         9 17569 17625 -8775.5    17551 124.15  2  < 2.2e-16 ***
+```
+The interaction term improves the model fit over a model without it
+
+Pairwise comparisons
+```
+emmeans(m_sp_size, pairwise ~ Species * body_size, pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+```
+$emmeans
+ Species   body_size emmean    SE   df lower.CL upper.CL
+ pike            877   2.82 0.205 2050     2.41     3.22
+ pikeperch       877  -1.78 0.430 3669    -2.63    -0.94
+ wels            877   6.45 0.155  883     6.14     6.75
+
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+ contrast                                           estimate    SE   df t.ratio p.value
+ pike,876.763824570962 - pikeperch,876.763824570962     4.60 0.449 3342  10.253 <.0001
+ pike,876.763824570962 - wels,876.763824570962         -3.63 0.199 3344 -18.294 <.0001
+ pikeperch,876.763824570962 - wels,876.763824570962    -8.23 0.428 3337 -19.243 <.0001
+
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 3 estimates
+```
+- Differences are significant between species with average body size
+
+Fit the interaction model with a gamma distribution
+```
+m_sp_size_gamma<-glmer(mean_depth ~ 1 + Species * body_size + (1|date:fi_fishid) + (1|date),data = data_depth, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+
+Simple slope analysis of the Species x body size interaction
+```
+probe_interaction(m_sp_size_gamma, pred = body_size, modx = Species, plot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE ,x.label = "Body size (cm)", y.label = "Mean depth (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on mean depth use")
+```
+```
+SIMPLE SLOPES ANALYSIS
+
+When Species = wels:
+
+                               Est.   S.E.      t val.      p
+--------------------------- ------- ------ ----------- ------
+Slope of body_size            -0.00   0.00      -35.08   0.00
+Conditional intercept          1.49   0.00   163185.05   0.00
+
+When Species = pikeperch:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of body_size            -0.00   0.00    -6.95   0.00
+Conditional intercept          0.01   0.15     0.10   0.92
+
+When Species = pike:
+
+                               Est.   S.E.   t val.      p
+--------------------------- ------- ------ -------- ------
+Slope of body_size            -0.00   0.00    -1.27   0.20
+Conditional intercept          0.72   0.06    12.04   0.00
+```
+
+- The slopes of _body_size_ are significant (p < 0.05) and negative in _wels_ and _pikeperch_ but not _pike_ suggesting conditional effects of larger body sizes on decreased mean depth only in those species
+
+```
+p<-interact_plot(m_sp_size_gamma, pred = body_size, modx = Species, pplot.points = FALSE, cond.int = TRUE, interval = TRUE,jnplot = FALSE, ,x.label = "Body size (cm)", y.label = "Mean depth (m)",legend.main="Species", modx.labels=c("pike","pikeperch","wels"),main.title = "Effects of body size on mean depth use")
+p + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE) + theme_classic()
+```
+
+![Mean_depth_date](/Plots/Mean_depth_date_09.png "Mean_depth_date")
+
+### 3.2. How does mean depth vary between species and reservoir parts?
+
+Fit a model including the _Species x res_part_ interaction
+```
+m_sp_res<-lmer(mean_depth ~ 1 + Species * res_part + (1|date:fi_fishid) + (1|date),data = data_depth, REML=F, control=lmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit)
+```
+Compare with a model without the interaction term
+
+```
+m_sp_res_nint<-update(m_season_size,.~.-  Species : res_part)
+```
+```
+anova(m_sp_res, m_sp_res_nint)
+```
+```
+Models:
+m_sp_res_nint: mean_depth ~ season + body_size + (1 | date:fi_fishid) + (1 |
+m_sp_res_nint:     date) + season:body_size
+m_sp_res: mean_depth ~ 1 + Species * res_part + (1 | date:fi_fishid) +
+m_sp_res:     (1 | date)
+              npar   AIC   BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m_sp_res_nint   13 17682 17763 -8828.2    17656
+m_sp_res        15 17093 17186 -8531.7    17063 592.99  2  < 2.2e-16 ***
+```
+The interaction term improves the model fit over a model without it
+
+Pairwise comparisons
+
+```
+emmeans(m_sp_res, pairwise ~ Species * res_part, pbkrtest.limit = 10000, lmerTest.limit = 10000)
+```
+$emmeans
+ Species   res_part  emmean    SE   df lower.CL upper.CL
+ pike      dam         3.31 0.275 3527     2.77     3.85
+ pikeperch dam         2.89 0.166 1723     2.57     3.22
+ wels      dam         7.82 0.192 2397     7.44     8.19
+ pike      middle      2.76 0.184 2211     2.40     3.12
+ pikeperch middle      5.21 0.164 1647     4.89     5.53
+ wels      middle      6.49 0.154 1386     6.19     6.79
+ pike      tributary   2.11 0.190 2349     1.74     2.49
+ pikeperch tributary   3.31 0.145 1117     3.03     3.59
+ wels      tributary   3.47 0.145 1108     3.18     3.75
+ pike      upper       2.49 0.281 3545     1.94     3.04
+ pikeperch upper       3.64 0.143 1098     3.35     3.92
+ wels      upper       6.46 0.150 1256     6.17     6.75
+
+Degrees-of-freedom method: kenward-roger
+Confidence level used: 0.95
+
+$contrasts
+ contrast                               estimate    SE   df t.ratio p.value
+ pike,dam - pikeperch,dam                 0.4148 0.288 3389   1.441 0.9553
+ pike,dam - wels,dam                     -4.5095 0.307 3418 -14.712 <.0001
+ pike,dam - pike,middle                   0.5505 0.304 3422   1.812 0.8118
+ pike,dam - pikeperch,middle             -1.9027 0.289 3413  -6.575 <.0001
+ pike,dam - wels,middle                  -3.1831 0.284 3413 -11.208 <.0001
+ pike,dam - pike,tributary                1.1933 0.304 3405   3.927 0.0050
+ pike,dam - pikeperch,tributary          -0.0042 0.277 3401  -0.015 1.0000
+ pike,dam - wels,tributary               -0.1609 0.276 3400  -0.583 1.0000
+ pike,dam - pike,upper                    0.8142 0.370 3425   2.201 0.5490
+ pike,dam - pikeperch,upper              -0.3284 0.276 3396  -1.188 0.9899
+ pike,dam - wels,upper                   -3.1541 0.280 3400 -11.283 <.0001
+ pikeperch,dam - wels,dam                -4.9244 0.213 3405 -23.151 <.0001
+ pikeperch,dam - pike,middle              0.1357 0.205 3384   0.661 1.0000
+ pikeperch,dam - pikeperch,middle        -2.3175 0.188 3397 -12.309 <.0001
+ pikeperch,dam - wels,middle             -3.5979 0.179 3395 -20.048 <.0001
+ pikeperch,dam - pike,tributary           0.7785 0.210 3387   3.708 0.0114
+ pikeperch,dam - pikeperch,tributary     -0.4190 0.170 3383  -2.471 0.3588
+ pikeperch,dam - wels,tributary          -0.5757 0.170 3402  -3.382 0.0351
+ pikeperch,dam - pike,upper               0.3993 0.296 3418   1.347 0.9727
+ pikeperch,dam - pikeperch,upper         -0.7432 0.170 3384  -4.367 0.0008
+ pikeperch,dam - wels,upper              -3.5689 0.175 3385 -20.435 <.0001
+ wels,dam - pike,middle                   5.0600 0.228 3411  22.235 <.0001
+ wels,dam - pikeperch,middle              2.6069 0.210 3407  12.386 <.0001
+ wels,dam - wels,middle                   1.3265 0.205 3431   6.461 <.0001
+ wels,dam - pike,tributary                5.7028 0.231 3400  24.705 <.0001
+ wels,dam - pikeperch,tributary           4.5054 0.199 3450  22.586 <.0001
+ wels,dam - wels,tributary                4.3486 0.201 3468  21.677 <.0001
+ wels,dam - pike,upper                    5.3237 0.310 3416  17.153 <.0001
+ wels,dam - pikeperch,upper               4.1812 0.196 3410  21.344 <.0001
+ wels,dam - wels,upper                    1.3555 0.199 3406   6.797 <.0001
+ pike,middle - pikeperch,middle          -2.4532 0.203 3388 -12.112 <.0001
+ pike,middle - wels,middle               -3.7336 0.196 3397 -19.039 <.0001
+ pike,middle - pike,tributary             0.6428 0.228 3421   2.823 0.1705
+ pike,middle - pikeperch,tributary       -0.5547 0.189 3405  -2.943 0.1266
+ pike,middle - wels,tributary            -0.7114 0.188 3413  -3.780 0.0088
+ pike,middle - pike,upper                 0.2637 0.307 3423   0.858 0.9995
+ pike,middle - pikeperch,upper           -0.8789 0.188 3393  -4.677 0.0002
+ pike,middle - wels,upper                -3.7046 0.193 3402 -19.231 <.0001
+ pikeperch,middle - wels,middle          -1.2804 0.176 3398  -7.255 <.0001
+ pikeperch,middle - pike,tributary        3.0960 0.209 3407  14.790 <.0001
+ pikeperch,middle - pikeperch,tributary   1.8985 0.171 3438  11.094 <.0001
+ pikeperch,middle - wels,tributary        1.7418 0.171 3447  10.210 <.0001
+ pikeperch,middle - pike,upper            2.7168 0.293 3412   9.261 <.0001
+ pikeperch,middle - pikeperch,upper       1.5743 0.168 3403   9.352 <.0001
+ pikeperch,middle - wels,upper           -1.2514 0.172 3391  -7.285 <.0001
+ wels,middle - pike,tributary             4.3764 0.202 3404  21.711 <.0001
+ wels,middle - pikeperch,tributary        3.1789 0.162 3437  19.683 <.0001
+ wels,middle - wels,tributary             3.0222 0.162 3459  18.611 <.0001
+ wels,middle - pike,upper                 3.9972 0.289 3416  13.841 <.0001
+ wels,middle - pikeperch,upper            2.8547 0.158 3392  18.011 <.0001
+ wels,middle - wels,upper                 0.0290 0.166 3428   0.175 1.0000
+ pike,tributary - pikeperch,tributary    -1.1975 0.194 3406  -6.177 <.0001
+ pike,tributary - wels,tributary         -1.3542 0.195 3425  -6.950 <.0001
+ pike,tributary - pike,upper             -0.3791 0.314 3441  -1.209 0.9884
+ pike,tributary - pikeperch,upper        -1.5217 0.193 3396  -7.873 <.0001
+ pike,tributary - wels,upper             -4.3474 0.198 3402 -21.975 <.0001
+ pikeperch,tributary - wels,tributary    -0.1567 0.145 3374  -1.080 0.9955
+ pikeperch,tributary - pike,upper         0.8183 0.286 3437   2.861 0.1554
+ pikeperch,tributary - pikeperch,upper   -0.3242 0.151 3427  -2.150 0.5862
+ pikeperch,tributary - wels,upper        -3.1499 0.157 3438 -20.095 <.0001
+ wels,tributary - pike,upper              0.9751 0.286 3442   3.408 0.0324
+ wels,tributary - pikeperch,upper        -0.1675 0.149 3423  -1.123 0.9937
+ wels,tributary - wels,upper             -2.9932 0.158 3470 -18.903 <.0001
+ pike,upper - pikeperch,upper            -1.1425 0.283 3415  -4.031 0.0033
+ pike,upper - wels,upper                 -3.9682 0.286 3414 -13.875 <.0001
+ pikeperch,upper - wels,upper            -2.8257 0.153 3390 -18.422 <.0001
+
+Degrees-of-freedom method: kenward-roger
+P value adjustment: tukey method for comparing a family of 12 estimates
+```
+
+Plot main-effects
+
+```
+plot(Effect(c("Species", "res_part"), m_sp_res),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
+```
+![Mean_depth_date](/Plots/Mean_depth_date_1.png "Mean_depth_date")
+
+Plot marginal effects
+
+```
+plot_model(m_sp_res, mdrt.values = "meansd", type = "pred", terms = c("Species", "res_part")) + geom_smooth(method=glmer, se=TRUE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_2.png "Mean_depth_date")
