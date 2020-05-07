@@ -974,3 +974,15 @@ Plot marginal effects
 plot_model(m_sp_res, mdrt.values = "meansd", type = "pred", terms = c("Species", "res_part")) + geom_smooth(method=glmer, se=TRUE, fullrange=TRUE)+ theme_classic()
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_2.png "Mean_depth_date")
+
+### 3.3. How does mean depth across reservoir parts and seasons?
+
+Fit a three-way interaction model including the _Species x res_part x season_ interaction
+```
+m_sp_res_season_gamma<-glmer(mean_depth ~ 1 + Species * res_part * season  + (1|date:fi_fishid) + (1|date),data = data_depth, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+plot_model(m_sp_res_season_gamma, mdrt.values = "meansd", type = "pred", terms = c("season", "Species", "res_part")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_3.png "Mean_depth_date")
+
