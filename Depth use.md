@@ -982,7 +982,18 @@ Fit a three-way interaction model including the _Species x res_part x season_ in
 m_sp_res_season_gamma<-glmer(mean_depth ~ 1 + Species * res_part * season  + (1|date:fi_fishid) + (1|date),data = data_depth, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
 ```
 ```
-plot_model(m_sp_res_season_gamma, mdrt.values = "meansd", type = "pred", terms = c("season", "Species", "res_part")) + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+plot_model(m_sp_res_season_gamma, mdrt.values = "meansd", type = "pred", terms = c("season", "Species", "res_part"))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_3.png "Mean_depth_date")
 
+Now we fit a three-way interaction model but changing the random-effects structure following the formula (1|Species/fi_fishid) (i.e., fi_fishid nested within Species: (1|Species:fi_fishid) + (1|Species))
+- With this model we expect that _mean_depth_ varies between species and across fish of the same species so accounting for variability between and within species
+- Since there are multiple fish of each species and several observations per species-fi_fishid combination, we include (1|fi_fishid) term to the model
+
+```
+m_sp_res_season_gamma_1<-glmer(mean_depth ~ 1 + Species * res_part * season  + (1|Species:fi_fishid) + (1|Species) + (1|fi_fishid),data = data_depth, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
+```
+```
+plot_model(m_sp_res_season_gamma_1, type = "pred", terms = c("season", "Species","res_part")) + geom_smooth(method=glmer, se=TRUE, fullrange=TRUE)+ theme_classic()
+```
+![Mean_depth_date](/Plots/Mean_depth_date_4.png "Mean_depth_date")
