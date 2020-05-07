@@ -288,9 +288,9 @@ Model 2: mean_depth ~ 1 + Species * season + res_part + (1 | fi_fishid) +
 
 Export table from candidate models set
 
-:books:`library(sjPlot)`
-:books:`library(sjstats)`
-:books:`library(sjmisc)`
+:books:`library(sjPlot)`  
+:books:`library(sjstats)`  
+:books:`library(sjmisc)`  
 ```
 tab_model(m3,m4,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
               dv.labels = c("Model 1", "Model 2","Model 3","Model 4"),
