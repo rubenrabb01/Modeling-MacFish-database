@@ -73,6 +73,42 @@ corrplot(corr,method="number")
 ```
 ![Dist_range_season](/Plots/Dist_range_corr.png "Dist_range_season")
 
+## Classify distance rate predictors through building of decision trees
+
+Grow a decision tree to the data of seasonal distance range
+
+- We build a **rpart** model using _dist.range_ as a continous response
+- In this model each node shows:
+  - The predicted value of mean depth
+  - The percentage of observations in the node
+
+### Grow a decision tree with species, body size and reservoir parts as predictors
+
+```
+tree_depth<- rpart(dist.range ~ 1 + Species + body_size + dam + middle + tributary + upper , data = data_distr_season, control = rpart.control(cp = 0.005))
+```
+```
+rpart.rules(tree_depth)
+```
+```
+dist.range
+        530 when tributary <  1       & dam <  2      & middle <  43
+       1095 when tributary <  1       & dam >=      2 & middle <  10 & upper <  2
+       1409 when tributary <  1       & dam <  2      & middle >= 43
+       1530 when tributary is 1 to 21 & dam <  1
+       2320 when tributary <  1       & dam >=      2 & middle >= 10 & upper <  2
+       3041 when tributary >=      21 & dam <  1
+       3901 when tributary <  1       & dam >=      2                & upper >= 2
+       3934 when tributary is 1 to  6 & dam >=      1
+       4856 when tributary >=       6 & dam is 1 to 4
+       6516 when tributary >=       6 & dam >=      4
+```
+```
+rpart.plot(tree_depth, type = 4, extra = 101, branch.lty = 3, box.palette = "RdYlGn")
+```
+
+![Dist_range_season](/Plots/Dist_range_tree.png "Dist_range_season")
+
 ## Fit Mixed-Effects Models (LMM) to the data of seasonal distance range and use of reservoir parts
 
 ### 1. Find the best unconditional model fitted via REML
