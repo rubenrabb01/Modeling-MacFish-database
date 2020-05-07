@@ -869,6 +869,7 @@ Pairwise comparisons
 ```
 emmeans(m_sp_res, pairwise ~ Species * res_part, pbkrtest.limit = 10000, lmerTest.limit = 10000)
 ```
+```
 $emmeans
  Species   res_part  emmean    SE   df lower.CL upper.CL
  pike      dam         3.31 0.275 3527     2.77     3.85
