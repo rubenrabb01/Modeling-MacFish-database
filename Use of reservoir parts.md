@@ -775,8 +775,9 @@ Threshold coefficients:
 1|2   -1.026      2.142  -0.479
 2|3    1.257      2.142   0.587
 ```
-As before, distance range is significantly related to reservoir use in pikeperch relative to perk; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below). However, horizontal movement does not relate to the probability of visiting higher river area in pike
-whereas it does relative to lower river areas in wels
+- As before, distance range is significantly related to reservoir use in pikeperch relative to perk; i.e., since the estimate is + the probability to move towards upper and tributaries area increase with horizontal momvement (see the increasing trend, upper, in the first plot below)
+- However, horizontal movement does not relate to the probability of visiting higher river area in _pike_
+whereas it does relative to lower river areas in _wels_
 ```
 plot(Effect(c("fi_species", "ranged2d"), m9),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
@@ -877,8 +878,11 @@ plot(allEffects(m3,xlevels=list(body_size=seq(405,1660,length=50),fi_species=c("
 ```
 ![Res_part_use](/Plots/Res_part_use_75.png "Res_part_use")
 
-From the plot we see that larger body in _wels_ is related to less probability of excursion to tributary whilst highest at middle and upper parts of the river. In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced staying at dam instead
-For pike, there is  strong tendency for excursion in tributary while dam is reduced with larger body size. If we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
+From the plot we see that:
+- Larger body size in _wels_ is related to a less probability of excursion to tributary whilst it keeps highest at middle and upper parts of the river
+- In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced increasing the dam use
+- For _pike_, there is  strong tendency for excursion in tributary while dam is reduced with larger body size
+**Note** that if we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
 
 ## Model fit by season: AUTUMN
 
