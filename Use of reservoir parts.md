@@ -882,6 +882,7 @@ From the plot we see that:
 - Larger body size in _wels_ is related to a less probability of excursion to tributary whilst it keeps highest at middle and upper parts of the river
 - In _pikeperch_ the relationship is also negative (i.e., less use of tributary) but the excursions to middle and upper parts are mostly reduced increasing the dam use
 - For _pike_, there is  strong tendency for excursion in tributary while dam is reduced with larger body size
+
 **Note** that if we want to see the effects of _pike_ (against _wels_ or _pikeperch_), re-fit and run the model changing the reference level before
 
 ## Model fit by season: AUTUMN
