@@ -74,20 +74,6 @@ hist(data_depth$mean_depth, breaks = 20)
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ```
 ```
-ggplot(data_depth, aes(x=date, y=mean_depth , color=Species)) + geom_point() + geom_smooth(method=glmer, se=FALSE, fullrange=TRUE) + theme_minimal() +
-labs(title = "Plot of mean depth use in three fish species ",
-     x = "Date",
-     y = "Mean depth (m)",
-     color="Species") +
-      theme(plot.title = element_text(hjust = 0.5, size = 12,face = "bold"),
-      plot.subtitle = element_text(hjust = 0.5,size = 11),
-      text=element_text(size=12)) + scale_color_brewer(palette="Dark2") +
-      scale_fill_manual(values = cbPalette) +
-      theme(legend.background = element_rect(fill = "white"),legend.key = element_rect(fill = "white", color = NA),legend.key.size = unit(0.5, "cm"),legend.key.width = unit(0.5,"cm"))
-```
-![Mean_depth](/Plots/Mean_depth_date.png "Mean_depth")
-
-```
 ggplot(data_depth, aes(x = date, y = mean_depth, colour = Species)) +  geom_line()  + theme_classic()
 ```
 ![Mean_depth](/Plots/Mean_depth_date_sp.png "Mean_depth")
