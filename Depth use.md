@@ -36,7 +36,6 @@ data_depth
 | 12562: 	| T449319_1 	| 23/03/2018 	| 4.527633   	| spring_II 	| 1070      	| 7700        	| M      	| wels      	| 04-jun    	| upper    	|
 | 12563: 	| T449319_1 	| 23/03/2018 	| 4.527633   	| spring_II 	| 1070      	| 7700        	| M      	| wels      	| 04-jun    	| middle   	|
 
-
 ## Data exploration
 
 Describe the variable _mean_depth _
@@ -69,17 +68,27 @@ hist(data_depth$mean_depth, breaks = 20)
 :books:`library(ggplot2)`  
 :books:`library(colorRamps)`  
 :books:`library(ggeffects)`  
-
 ```
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ```
 ```
-ggplot(data_depth, aes(x = date, y = mean_depth, colour = Species)) +  geom_line()  + theme_classic()
+ggplot(data_depth, aes(x = date, y = mean_depth, colour = Species)) +
+                   geom_line() +
+                   labs(x ="", y = "mean depth (m)") +
+                   theme_classic()
 ```
 ![Mean_depth](/Plots/Mean_depth_date_sp.png "Mean_depth")
 
 - We see that between August and November 2017 _wels_ show many data points with equal values, which is indicating complete lack of vertical movement (i.e., stationarity)
 - With these data points the best option would be to compute _stan_glmer_, _brglm_ or _MCMC_ models (**pending**)
+
+```
+ggplot(data_depth, aes(res_part, mean_depth)) +
+                   geom_boxplot(aes(fill = fi_fishid)) +
+                   labs(x ="", y = "mean depth (m)") +
+                   theme(legend.position = "top")
+```
+![Mean_depth](/Plots/Mean_depth_date_id.png "Mean_depth")
 
 ## 1. Classify mean depth predictors through building of decision trees
 
@@ -414,20 +423,16 @@ plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE,
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_00.png "Mean_depth_date")
 
-### 3.5. Plot marginal effects
+### 3.4. Plot marginal effects
 
 ```
-plot_model(m3, type = "pred", terms = c("season", "Species")) + geom_smooth(method=lmer, se=FALSE, fullrange=TRUE)+ theme_classic()
+ggplot(data_depth, aes(Species, mean_depth)) +
+                   geom_boxplot(aes(fill = season)) +
+                   theme(legend.position = "top") +
+                   labs(x ="Species", y = "mean depth (m)") +
+                   scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07", "#52854C", "#293352"))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_0.png "Mean_depth_date")
-
-```
-plot_model(m3,  mdrt.values = "meansd", type = "pred", terms = c("Species", "season")) + geom_smooth(method=lmer, se=FALSE, fullrange=TRUE)+ theme_classic()
-```
-![Mean_depth_date](/Plots/Mean_depth_date_01.png "Mean_depth_date")
-
-- While these results are not totally wrong the close-to-zero p-values might suggest there might be an issue of perfect separation
-- Fitting a gamma model in this case would not solve the problem as convergence still occurs
 
 ## 4. How does mean depth vary with body size between species?
 
@@ -591,6 +596,15 @@ plot(Effect(c("Species", "res_part"), m_sp_res_gamma),lines=list(multiline=TRUE)
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_1.png "Mean_depth_date")
 
+```
+ggplot(data_depth, aes(Species, mean_depth)) +
+                   geom_boxplot(fill = "#F4EDCA", color = "#D16103") +
+                   geom_boxplot(aes(fill = res_part)) +
+                   theme(legend.position = "top") +
+                   scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07", "#52854C", "#293352"))
+```
+![Mean_depth_date](/Plots/Mean_depth_date_11.png "Mean_depth_date")
+
 #### 5.2. Fit a three way interaction model _Species x res_part x season_
 
 ```
@@ -709,5 +723,4 @@ Threshold coefficients:
 plot(Effect(c("Species", "body_size"), m_pelg_zone_order_bs),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_range_date_5.png "Mean_depth_date")
-
 
