@@ -198,6 +198,7 @@ m_id_sp: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | Species)
 m_id      17 56743 56869 -28354    56709
 m_id_sp   18 56745 56879 -28354    56709     0  1          1
 ```
+```
 anova(m_id,m_id_date)
 ```
 ```
@@ -209,6 +210,7 @@ m_id_date: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | date)
 m_id        17 56743 56869 -28354    56709
 m_id_date   18 55504 55638 -27734    55468 1240.6  1  < 2.2e-16 ***
 ```
+```
 anova(m_id_sp,m_id_date)
 ```
 ```
@@ -219,6 +221,7 @@ m_id_date: mean_depth ~ 1 + Species * season + (1 | fi_fishid) + (1 | date)
           npar   AIC   BIC logLik deviance  Chisq Df Pr(>Chisq)
 m_id_sp     18 56745 56879 -28354    56709
 m_id_date   18 55504 55638 -27734    55468 1240.6  0  < 2.2e-16 ***
+```
 ```
 anova(m_id_date,m_id_sp_date)
 ```
@@ -720,7 +723,5 @@ Threshold coefficients:
 plot(Effect(c("Species", "body_size"), m_pelg_zone_order_bs),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_range_date_5.png "Mean_depth_date")
-
-
 
 
