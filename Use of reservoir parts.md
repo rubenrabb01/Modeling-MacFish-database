@@ -59,6 +59,17 @@ Intitial plot of use of reservoir part by season
 
 ```
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
+```
+ggplot(data_depth, aes(x = date, fill = res_part)) +
+                   geom_bar(pelg_zone = "pelg_zone") +
+                   scale_fill_manual(values = cbPalette) +
+                   theme_minimal()+
+                   facet_wrap(~Species)
+```
+![Res_part_use](/Plots/Res_part_use_00.png "Res_part_use")
+
+```
 ggplot(data_poglm, aes(x = season, fill = res_part)) +
                    geom_bar(season = "season") +
                    scale_fill_manual(values = cbPalette) +
