@@ -57,9 +57,8 @@ Intitial plot of use of reservoir part by season
 :books:`library(ggplot2)`  
 :books:`library(ggeffects)`  
 
-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
 ```
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ggplot(data_poglm, aes(x = season, fill = res_part)) +
                    geom_bar(season = "season") +
                    scale_fill_manual(values = cbPalette) +
