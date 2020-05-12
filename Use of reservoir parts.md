@@ -62,10 +62,9 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 ```
 ```
 ggplot(data_depth, aes(x = date, fill = res_part)) +
-                   geom_bar(pelg_zone = "pelg_zone") +
+                   geom_bar(mapping = aes(x = date, fill = res_part), position = "fill") +
                    scale_fill_manual(values = cbPalette) +
-                   theme_minimal()+
-                   facet_wrap(~Species)
+                   theme_minimal()
 ```
 ![Res_part_use](/Plots/Res_part_use_00.png "Res_part_use")
 
