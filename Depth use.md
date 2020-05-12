@@ -65,9 +65,9 @@ hist(data_depth$mean_depth, breaks = 20)
 
 ## Intitial plots of depth use based on mean depth and mean depth range
 
-:books:`library(ggplot2)`  
-:books:`library(colorRamps)`  
-:books:`library(ggeffects)`  
+:books:`library(ggplot2)`
+:books:`library(colorRamps)`
+:books:`library(ggeffects)`
 ```
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ```
@@ -78,6 +78,23 @@ ggplot(data_depth, aes(x = date, y = mean_depth, colour = Species)) +
                    theme_classic()
 ```
 ![Mean_depth](/Plots/Mean_depth_date_sp.png "Mean_depth")
+
+```
+ggplot(data_depth,aes(x=date,y=mean_depth))+
+  stat_density_2d(geom = "raster", aes(fill = stat(density)), contour = FALSE)+
+  scale_fill_gradientn(colours = terrain.colors(10))+
+  geom_point(size = 0.01, col = "black")+
+  geom_vline(xintercept = as.Date("2017-11-27"), color = "white", size=0.5)+
+  labs(x ="", y = "mean depth (m)")+
+  facet_wrap(~Species)+
+  theme_bw()+ theme(
+    text = element_text(size=15),
+    axis.text.x = element_text(angle=45, hjust=1),
+    panel.grid = element_blank(),
+    strip.background = element_blank(),
+    legend.title=element_blank())
+```
+![Mean_depth](/Plots/Mean_depth_date_sp_1.png "Mean_depth")
 
 - We see that between August and November 2017 _wels_ show many data points with equal values, which is indicating complete lack of vertical movement (i.e., stationarity)
 - With these data points the best option would be to compute _stan_glmer_, _brglm_ or _MCMC_ models (**pending**)
@@ -102,8 +119,8 @@ Grow a decision tree to the data of depth use
 ### 1.1. Grow a decision tree with species and season as predictors
 
 
-:books:`library(rpart)`  
-:books:`library(rpart.plot)`  
+:books:`library(rpart)`
+:books:`library(rpart.plot)`
 
 ```
 tree_depth<- rpart(mean_depth ~ 1 + Species + season, data = data_depth, control = rpart.control(cp = 0.005))
@@ -314,9 +331,9 @@ Model 2: mean_depth ~ 1 + Species * season + res_part + (1 | fi_fishid) +
 
 Export table from candidate models set
 
-:books:`library(sjPlot)`  
-:books:`library(sjstats)`  
-:books:`library(sjmisc)`  
+:books:`library(sjPlot)`
+:books:`library(sjstats)`
+:books:`library(sjmisc)`
 ```
 tab_model(m3,m4,m1,m2, transform = NULL, collapse.ci = F,  auto.label = FALSE,  show.se = TRUE,collapse.se = T,
               dv.labels = c("Model 1", "Model 2","Model 3","Model 4"),
@@ -415,8 +432,8 @@ P value adjustment: tukey method for comparing a family of 3 estimates
 
 ### 3.3. Plot main-effects
 
-:books:`library(effects)`  
-:books:`library(colorRamps)`  
+:books:`library(effects)`
+:books:`library(colorRamps)`
 
 ```
 plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
@@ -723,4 +740,5 @@ Threshold coefficients:
 plot(Effect(c("Species", "body_size"), m_pelg_zone_order_bs),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_range_date_5.png "Mean_depth_date")
+
 
