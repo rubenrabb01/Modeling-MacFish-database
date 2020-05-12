@@ -51,6 +51,16 @@ _The fitted models will serve to test the hypothesis that pike, pikeperch and we
   - Middle: "1" (Fish move from dam)
   - Upper: "2" (Fish cover long distance from dam)
   - Tributary: "3" (Maximum displacement from dam (high prey activity - predation))
+  
+Intitial plot of use of reservoir part by season
+```
+ggplot(data_poglm, aes(x = season, fill = res_part)) +
+                   geom_bar(season = "season") +
+                   scale_fill_manual(values = cbPalette) +
+                   theme_minimal()+
+                   facet_wrap(~Species)
+```
+![Res_part_use](/Plots/Res_part_use_0.png "Res_part_use")
 
 ### 1. Fit a series of null (intercepts-only) _POGLMMs_ and compare their random-effects structure
 
