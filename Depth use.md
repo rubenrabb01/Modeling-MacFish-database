@@ -65,9 +65,9 @@ hist(data_depth$mean_depth, breaks = 20)
 
 ## Intitial plots of depth use based on mean depth and mean depth range
 
-:books:`library(ggplot2)`
-:books:`library(colorRamps)`
-:books:`library(ggeffects)`
+:books:`library(ggplot2)`  
+:books:`library(colorRamps)`  
+:books:`library(ggeffects)`  
 ```
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ```
