@@ -1,4 +1,4 @@
-# How does distance travel range seasonally change?
+# How does distance travel range change seasonally?
 
 ## Create a dataframe including seasonal range and reservoir parts
 
