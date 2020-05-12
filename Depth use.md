@@ -589,7 +589,7 @@ Results are averaged over the levels of: res_part
 Results are given on the log (not the response) scale.
 P value adjustment: tukey method for comparing a family of 3 estimates
 ```
-Plot main-effects
+**Plot main and marginal effects**
 
 ```
 plot(Effect(c("Species", "res_part"), m_sp_res_gamma),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
