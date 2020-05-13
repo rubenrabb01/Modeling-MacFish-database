@@ -1,3 +1,5 @@
+
+
 # How does distance range change monthly?
 
 ## Create a dataframe including monthly range and reservoir parts
@@ -96,21 +98,39 @@ rho_1 <- start_value_rho(m_gam_1, plot = TRUE, lag = 2)
 m_gam_1_autoc <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho_1, AR.start = data_distr$start.event)
 ```
 
-#### 1.4. Summary table of model
+#### 1.4. Summary of model m_gam_1
 
+```
+summary(m_gam_1)
+```
+```
+Family: gaussian
+Link function: identity
+
+Formula:
+dist.range ~ s(month, by = Species, sp = 0.1) + s(fi_fishid,
+    bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   2037.8      164.9   12.35   <2e-16 ***
 ---
-title: "gamtab"
-author: "me"
-date: "today"
-output: html_document
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                             edf Ref.df     F  p-value
+s(month):Speciespike       5.117  6.241 3.318  0.00315 **
+s(month):Speciespikeperch  4.750  5.821 3.900  0.00108 **
+s(month):Specieswels       5.678  6.847 5.997 4.05e-06 ***
+s(fi_fishid)              22.709 30.000 3.368 4.11e-12 ***
 ---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-table:
-
-```{r table1, echo=FALSE, results="asis"}
-gamtabs(m_gam_1, caption='Summary of m1', type = "HTML")
+R-sq.(adj) =  0.389   Deviance explained = 47.1%
+GCV = 2.0472e+06  Scale est. = 1.7672e+06  n = 287
 ```
 
+**See summary table**
 ```
 gamtabs(m_gam_1, caption="Summaty of m_gam_1", comment=FALSE, type='html')
 ```
@@ -129,7 +149,7 @@ gamtabs(m_gam_1, caption="Summaty of m_gam_1", comment=FALSE, type='html')
    <a name=tab.gam></a>
 </table>
 
-#### 1.4. Plot model
+#### 1.5. Plot model
 
 :books:`library(ggplot2)`
 :books:`library(grid)`
@@ -206,5 +226,12 @@ plot_smooth(m_gam_1, view="month", cond=list(Species="wels"), rug=FALSE, add=TRU
 legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
 ```
 ![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
+
+
+
+
+
+
+
 
 
