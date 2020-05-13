@@ -18,6 +18,7 @@ Create a new ordered response variable for _res_part_ with a four-point scale (0
 ```
 data_poglm$res_part_order <- revalue(data_poglm$res_part,c("dam"="0", "middle"="1", "upper"="2", "tributary"="3"))
 colnames(data_poglm)[5] <- "body_size"
+data_poglm <- as.data.frame(data_poglm)
 data_poglm
 ```
 | fi_fishid | date       | season | species   | res_part  | res_part_order | ranged2d  | meand2d   | mean_depth | body_size | ca_lat_catch c | ca_lon_catch |
