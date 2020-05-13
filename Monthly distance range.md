@@ -1,7 +1,4 @@
 
-
-# How does distance range change monthly?
-
 ## Create a dataframe including monthly range and reservoir parts
 
 :books:`library(lubridate)`
@@ -132,7 +129,7 @@ GCV = 2.0472e+06  Scale est. = 1.7672e+06  n = 287
 
 **See summary table**
 ```
-gamtabs(m_gam_1, caption="Summaty of m_gam_1", comment=FALSE, type='html')
+gamtabs(m_gam_1, caption="Summary of m_gam_1", comment=FALSE, type='html')
 ```
 
 <!-- html table generated in R 3.6.3 by xtable 1.8-4 package -->
@@ -148,6 +145,26 @@ gamtabs(m_gam_1, caption="Summaty of m_gam_1", comment=FALSE, type='html')
   <tr> <td> s(fi_fishid) </td> <td align="right"> 22.7090 </td> <td align="right"> 30.0000 </td> <td align="right"> 3.3681 </td> <td align="right"> &lt; 0.0001 </td> </tr>
    <a name=tab.gam></a>
 </table>
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrrr}
+   \hline
+A. parametric coefficients & Estimate & Std. Error & t-value & p-value \\
+  (Intercept) & 2037.7990 & 164.9471 & 12.3543 & $<$ 0.0001 \\
+   \hline
+B. smooth terms & edf & Ref.df & F-value & p-value \\
+  s(month):Speciespike & 5.1173 & 6.2406 & 3.3179 & 0.0031 \\
+  s(month):Speciespikeperch & 4.7500 & 5.8212 & 3.8995 & 0.0011 \\
+  s(month):Specieswels & 5.6781 & 6.8473 & 5.9966 & $<$ 0.0001 \\
+  s(fi\_fishid) & 22.7090 & 30.0000 & 3.3681 & $<$ 0.0001 \\
+   \hline
+\end{tabular}
+\caption{Summary of m_gam_1}
+\label{tab.gam}
+\end{table}
+
 
 #### 1.5. Plot model
 
@@ -226,9 +243,6 @@ plot_smooth(m_gam_1, view="month", cond=list(Species="wels"), rug=FALSE, add=TRU
 legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
 ```
 ![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
-
-
-
 
 
 
