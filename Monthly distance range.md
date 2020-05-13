@@ -2,8 +2,8 @@
 
 ## Create a dataframe including monthly range and reservoir parts
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -73,10 +73,10 @@ hist(data_distr$dist.range, breaks = 20)
 ```
 ![Dist_range](/Plots/Dist_range_month_hist.png "Dist_range")
 
-## Fit GAMM models to data of monthly distance range
+## Build GAMM models to data of monthly distance range
 
-:books:`library(itsadug)`  
-:books:`library(mgcv)`  
+:books:`library(itsadug)`
+:books:`library(mgcv)`
 
 ### 1. Model 1
 
@@ -96,32 +96,56 @@ rho_1 <- start_value_rho(m_gam_1, plot = TRUE, lag = 2)
 m_gam_1_autoc <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho_1, AR.start = data_distr$start.event)
 ```
 
-#### 1.4. Plot model for each species
+#### 1.4. Summary table of model
 
-:books:`library(ggplot2)`  
-:books:`library(grid)`  
-:books:`library(visreg)`  
-:books:`library(splines)`  
-:books:`library(animation)`  
-:books:`library(gratia)`  
+---
+title: "gamtab"
+author: "me"
+date: "today"
+output: html_document
+---
+
+table:
+
+```{r table1, echo=FALSE, results="asis"}
+gamtabs(m_gam_1, caption='Summary of m1', type = "HTML")
+```
 
 ```
-visreg(m_gam_1, "month", "Species", ylab="Distance range [m]")      # add  gg=TRUE for combined ggplot by species
+gamtabs(m_gam_1, caption="Summaty of m_gam_1", comment=FALSE, type='html')
+```
+
+<!-- html table generated in R 3.6.3 by xtable 1.8-4 package -->
+<!-- Wed May 13 09:26:11 2020 -->
+<table border=1>
+<caption align="bottom"> Summary of m1 </caption>
+  <tr> <td> A. parametric coefficients </td> <td align="right"> Estimate </td> <td align="right"> Std. Error </td> <td align="right"> t-value </td> <td align="right"> p-value </td> </tr>
+  <tr> <td> (Intercept) </td> <td align="right"> 2037.7990 </td> <td align="right"> 164.9471 </td> <td align="right"> 12.3543 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+   <tr> <td> B. smooth terms </td> <td align="right"> edf </td> <td align="right"> Ref.df </td> <td align="right"> F-value </td> <td align="right"> p-value </td> </tr>
+  <tr> <td> s(month):Speciespike </td> <td align="right"> 5.1173 </td> <td align="right"> 6.2406 </td> <td align="right"> 3.3179 </td> <td align="right"> 0.0031 </td> </tr>
+  <tr> <td> s(month):Speciespikeperch </td> <td align="right"> 4.7500 </td> <td align="right"> 5.8212 </td> <td align="right"> 3.8995 </td> <td align="right"> 0.0011 </td> </tr>
+  <tr> <td> s(month):Specieswels </td> <td align="right"> 5.6781 </td> <td align="right"> 6.8473 </td> <td align="right"> 5.9966 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+  <tr> <td> s(fi_fishid) </td> <td align="right"> 22.7090 </td> <td align="right"> 30.0000 </td> <td align="right"> 3.3681 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+   <a name=tab.gam></a>
+</table>
+
+#### 1.4. Plot model
+
+:books:`library(ggplot2)`
+:books:`library(grid)`
+:books:`library(visreg)`
+:books:`library(splines)`
+:books:`library(animation)`
+:books:`library(gratia)`
+
+**Plot partial effects**
+```
+par(mfrow=c(1, 4))
+plot(m_gam_1, shade = TRUE)
 ```
 ![Dist_range_month](/Plots/Dist_range_month_1.png "Dist_range_month")
 
-- We see how the distance range changes with time differently in each species
-
-Let see these effects in more detail
-```
-layout(matrix(1:2, nrow = 1))
-plot(m_gam_1, shade = TRUE)
-```
-![Dist_range_month](/Plots/Dist_range_month_1_pike_pikeperch.png "Dist_range_month")
-
-![Dist_range_month](/Plots/Dist_range_month_1_wels.png "Dist_range_month")
-
-In these plots we see that:
+In these plots we see how the distance range changes with time differently in each species:
  - For _pike_ the peak of distance range is around the last month
  - For _pikeperch_ the distance range is maximum the first month but decreases the following two months
  - For _wels_ the lowest distance range is between months 5 and 8
@@ -155,11 +179,32 @@ ggplot () +
 ```
 ![Dist_range_month](/Plots/Dist_range_month_2.png "Dist_range_month")
 
+**Plot summed effects surfaces (smooth) for each species**
+
 ```
-layout(matrix(1:2, nrow = 1))
-vis.gam(m_gam_1,ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Predicted distance range [m]", main = "Distance range per month")
-vis.gam(m_gam_1, main = "Species by month", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+layout(matrix(2:1, nrow = 2))
+vis.gam(m_gam_1,ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "", main = "")
+vis.gam(m_gam_1, main = "Distance range per month", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
 ```
 ![Dist_range_month](/Plots/Dist_range_month_3.png "Dist_range_month")
+
+**Compared summed effects surfaces (smooth) with and without random effects**
+
+```
+par(mfrow=c(1,3), cex=1.1)
+
+plot_smooth(m_gam_1, view="month", cond=list(Species="pike"), rug=FALSE, ylim=c(0,7700), print.summary=FALSE, ylab = "Distance range [m]", main='m_gam_1: month, Species=pike')
+plot_smooth(m_gam_1, view="month", cond=list(Species="pike"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+
+plot_smooth(m_gam_1, view="month", cond=list(Species="pikeperch"), rug=FALSE, ylim=c(0,7700), print.summary=FALSE, ylab = "Distance range [m]", main='m_gam_1: month, Species=pikeperch')
+plot_smooth(m_gam_1, view="month", cond=list(Species="pikeperch"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+
+plot_smooth(m_gam_1, view="month", cond=list(Species="wels"), rug=FALSE, ylim=c(0,7700), print.summary=FALSE, ylab = "Distance range [m]", main='m_gam_1: month, Species=wels')
+plot_smooth(m_gam_1, view="month", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+```
+![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
 
 
