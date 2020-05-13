@@ -2,8 +2,8 @@
 
 ## Create a dataframe including reservoir parts
 
-:books:`library(plyr)`
-:books:`library(dplyr)`
+:books:`library(plyr)`  
+:books:`library(dplyr)`  
 
 Subset preference of reservoir parts and merge with the full 'data' dataset
 ```
