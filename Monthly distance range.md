@@ -2,8 +2,8 @@
 
 ## Create a dataframe including monthly range and reservoir parts
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -75,8 +75,8 @@ hist(data_distr$dist.range, breaks = 20)
 
 ## Fit GAMM models to data of monthly distance range
 
-:books:`library(itsadug)`  
-:books:`library(mgcv)`  
+:books:`library(itsadug)`
+:books:`library(mgcv)`
 
 ### 1. Model 1
 
@@ -98,12 +98,12 @@ m_gam_1_autoc <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs
 
 #### 1.4. Plot model for each species
 
-:books:`library(ggplot2)`  
-:books:`library(grid)`  
-:books:`library(visreg)`  
-:books:`library(splines)`  
-:books:`library(animation)`  
-:books:`library(gratia)`  
+:books:`library(ggplot2)`
+:books:`library(grid)`
+:books:`library(visreg)`
+:books:`library(splines)`
+:books:`library(animation)`
+:books:`library(gratia)`
 
 ```
 visreg(m_gam_1, "month", "Species", ylab="Distance range [m]")      # add  gg=TRUE for combined ggplot by species
