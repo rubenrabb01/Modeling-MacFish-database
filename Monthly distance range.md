@@ -1,8 +1,10 @@
 
+# How does distance range change monthly?
+
 ## Create a dataframe including monthly range and reservoir parts
 
-:books:`library(lubridate)`
-:books:`library(plyr)`
+:books:`library(lubridate)`  
+:books:`library(plyr)`  
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -74,8 +76,8 @@ hist(data_distr$dist.range, breaks = 20)
 
 ## Build GAMM models to data of monthly distance range
 
-:books:`library(itsadug)`
-:books:`library(mgcv)`
+:books:`library(itsadug)`  
+:books:`library(mgcv)`  
 
 ### 1. Model 1
 
@@ -146,36 +148,16 @@ gamtabs(m_gam_1, caption="Summary of m_gam_1", comment=FALSE, type='html')
    <a name=tab.gam></a>
 </table>
 
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{lrrrr}
-   \hline
-A. parametric coefficients & Estimate & Std. Error & t-value & p-value \\
-  (Intercept) & 2037.7990 & 164.9471 & 12.3543 & $<$ 0.0001 \\
-   \hline
-B. smooth terms & edf & Ref.df & F-value & p-value \\
-  s(month):Speciespike & 5.1173 & 6.2406 & 3.3179 & 0.0031 \\
-  s(month):Speciespikeperch & 4.7500 & 5.8212 & 3.8995 & 0.0011 \\
-  s(month):Specieswels & 5.6781 & 6.8473 & 5.9966 & $<$ 0.0001 \\
-  s(fi\_fishid) & 22.7090 & 30.0000 & 3.3681 & $<$ 0.0001 \\
-   \hline
-\end{tabular}
-\caption{Summary of m_gam_1}
-\label{tab.gam}
-\end{table}
-
-
 #### 1.5. Plot model
 
-:books:`library(ggplot2)`
-:books:`library(grid)`
-:books:`library(visreg)`
-:books:`library(splines)`
-:books:`library(animation)`
-:books:`library(gratia)`
+:books:`library(ggplot2)`  
+:books:`library(grid)`  
+:books:`library(visreg)`  
+:books:`library(splines)`  
+:books:`library(animation)`  
+:books:`library(gratia)`  
 
-**Plot partial effects**
+**Plot partial effects** of the three dimensional smooths (i.e., Species )
 ```
 par(mfrow=c(1, 4))
 plot(m_gam_1, shade = TRUE)
@@ -244,7 +226,7 @@ legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red")
 ```
 ![Dist_range_month](/Plots/Dist_range_month_4.png "Dist_range_month")
 
-
+**Note** that since there is no interaction surface in this model the summed effects (with R.E.) equal the partial effects plotted above
 
 
 
