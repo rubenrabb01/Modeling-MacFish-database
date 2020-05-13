@@ -1,10 +1,9 @@
-
 # How does distance range change monthly?
 
 ## Create a dataframe including monthly range and reservoir parts
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -76,8 +75,8 @@ hist(data_distr$dist.range, breaks = 20)
 
 ## Build GAMM models to data of monthly distance range
 
-:books:`library(itsadug)`  
-:books:`library(mgcv)`  
+:books:`library(itsadug)`
+:books:`library(mgcv)`
 
 ### 1. Model 1
 
@@ -150,18 +149,24 @@ gamtabs(m_gam_1, caption="Summary of m_gam_1", comment=FALSE, type='html')
 
 #### 1.5. Plot model
 
-:books:`library(ggplot2)`  
-:books:`library(grid)`  
-:books:`library(visreg)`  
-:books:`library(splines)`  
-:books:`library(animation)`  
-:books:`library(gratia)`  
+:books:`library(ggplot2)`
+:books:`library(grid)`
+:books:`library(visreg)`
+:books:`library(splines)`
+:books:`library(animation)`
+:books:`library(gratia)`
 
 **Plot partial effects** of the three dimensional smooths (i.e., Species )
 ```
 par(mfrow=c(1, 4))
 plot(m_gam_1, shade = TRUE)
 ```
+Alternatively plot with:
+```
+draw(m_gam_1, ncol = 2)  # library "gratia"
+visreg(m_gam_2, "month", "Species", ylab="Distance range [m]")
+```
+
 ![Dist_range_month](/Plots/Dist_range_month_1.png "Dist_range_month")
 
 In these plots we see how the distance range changes with time differently in each species:
@@ -228,6 +233,22 @@ legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red")
 
 **Note** that since there is no interaction surface in this model the summed effects (with R.E.) equal the partial effects plotted above
 
+### 2. Model 2 (body size)
 
+#### 2.1. Fit a model including body size as predictor and one random term specifying for fish identity
 
+This time we will use the _bam_ function to fit the gam model
+```
+m_gam_2 <- bam(dist.range ~ Species + s(month, k = 3) + s(month, by = Species, k = 3) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr)
+```
+#### 2.2. Set autocorrelation of data points
+
+```
+rho_2 <- start_value_rho(m_gam_2, plot = TRUE, lag = 2)
+```
+#### 2.3. Fit autocorrelation model
+
+```
+m_gam_2_autoc <- bam(dist.range ~ Species + s(month, k = 3) + s(month, by = Species, k = 3) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho_2, AR.start = data_distr$start.event)
+```
 
