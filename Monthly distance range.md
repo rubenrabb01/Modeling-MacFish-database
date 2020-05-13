@@ -2,8 +2,8 @@
 
 ## Create a dataframe including monthly range and reservoir parts
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 To do this, create a new monthly range dataframe (see page "Common code") but this time including reservoir parts (the first three steps are the same as in previous code)
 ```
@@ -75,8 +75,8 @@ hist(data_distr$dist.range, breaks = 20)
 
 ## Build GAMM models to data of monthly distance range
 
-:books:`library(itsadug)`  
-:books:`library(mgcv)`  
+:books:`library(itsadug)`
+:books:`library(mgcv)`
 
 ### 1. Model 1
 
@@ -149,12 +149,12 @@ gamtabs(m_gam_1, caption="Summary of m_gam_1", comment=FALSE, type='html')
 
 #### 1.5. Plot model
 
-:books:`library(ggplot2)`  
-:books:`library(grid)`  
-:books:`library(visreg)`  
-:books:`library(splines)`  
-:books:`library(animation)`  
-:books:`library(gratia)`  
+:books:`library(ggplot2)`
+:books:`library(grid)`
+:books:`library(visreg)`
+:books:`library(splines)`
+:books:`library(animation)`
+:books:`library(gratia)`
 
 **Plot partial effects** of the three dimensional smooths (i.e., Species )
 ```
@@ -206,7 +206,7 @@ ggplot () +
 **Plot summed effects surfaces (smooth) for each species**
 
 ```
-layout(matrix(2:1, nrow = 2))
+layout(matrix(2:1, nrow = 1))
 vis.gam(m_gam_1,ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "", main = "")
 vis.gam(m_gam_1, main = "Distance range per month", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
 ```
@@ -251,4 +251,3 @@ rho_2 <- start_value_rho(m_gam_2, plot = TRUE, lag = 2)
 ```
 m_gam_2_autoc <- bam(dist.range ~ Species + s(month, k = 3) + s(month, by = Species, k = 3) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho_2, AR.start = data_distr$start.event)
 ```
-
