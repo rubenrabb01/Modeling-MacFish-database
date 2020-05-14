@@ -164,7 +164,7 @@ plot(m_gam_1, shade = TRUE)
 Alternatively plot with:
 ```
 draw(m_gam_1, ncol = 2)  # library "gratia"
-visreg(m_gam_2, "month", "Species", ylab="Distance range [m]")
+visreg(m_gam_1, "month", "Species", ylab="Distance range [m]")
 ```
 
 ![Dist_range_month](/Plots/Dist_range_month_1.png "Dist_range_month")
