@@ -187,7 +187,7 @@ the existence of duplicated measures of the variable _mean_depth_ between single
 
 ### 2.1. Find the best conditional model for the Species x season interaction
 
-:books:`library(lmtest)`  
+:books:`library(lmtest)`
 
 Fit nested intercept-only models with Gamma distribution including all potentially relevant random-effects and compare them with LRT
 
@@ -664,13 +664,58 @@ Results are averaged over the levels of: res_part
 Results are given on the log (not the response) scale.
 P value adjustment: tukey method for comparing a family of 3 estimates
 ```
-**Plot main and marginal effects**
+**Plot main effects**
 
 ```
 plot(Effect(c("Species", "res_part"), m_sp_res_gamma),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_1.png "Mean_depth_date")
 
+**Compute Marginal effects**
+```
+ggpredict(m_sp_res_gamma, terms = c("Species","res_part"))
+```
+```
+# Predicted values of mean_depth
+# x = Species
+
+# res_part = dam
+
+x         | Predicted
+---------------------
+pike      |      3.19
+pikeperch |      3.54
+wels      |      6.23
+
+# res_part = middle
+
+x         | Predicted
+---------------------
+pike      |      2.99
+pikeperch |      4.20
+wels      |      5.69
+
+# res_part = tributary
+
+x         | Predicted
+---------------------
+pike      |      3.54
+pikeperch |      2.31
+wels      |      1.96
+
+# res_part = upper
+
+x         | Predicted
+---------------------
+pike      |      3.37
+pikeperch |      3.49
+wels      |      4.97
+
+Adjusted for:
+* fi_fishid = 0 (population-level)
+```
+
+**Plot marginal effects**
 ```
 ggplot(data_depth, aes(Species, mean_depth)) +
                    geom_boxplot(fill = "#F4EDCA", color = "#D16103") +
@@ -681,7 +726,7 @@ ggplot(data_depth, aes(Species, mean_depth)) +
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_11.png "Mean_depth_date")
 
-#### 5.2. Fit a three way interaction model _Species x res_part x season_
+#### 5.2. Fit a three-way interaction model _Species x res_part x season_
 
 ```
 m_sp_res_season_gamma<-glmer(mean_depth ~ 1 + Species * res_part * season  + (1|Species:fi_fishid) + (1|Species) + (1|fi_fishid),data = data_depth, control=glmerControl(check.nobs.vs.nlev = "ignore",check.nobs.vs.rankZ = "ignore",check.nobs.vs.nRE="ignore"), na.action=na.omit,family="Gamma"(link='log'))
@@ -799,4 +844,3 @@ Threshold coefficients:
 plot(Effect(c("Species", "body_size"), m_pelg_zone_order_bs),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_range_date_5.png "Mean_depth_date")
-
