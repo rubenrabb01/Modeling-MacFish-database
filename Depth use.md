@@ -66,7 +66,6 @@ hist(data_depth$mean_depth, breaks = 20)
 ## Intitial plots of depth use based on mean depth and mean depth range
 
 :books:`library(ggplot2)`  
-:books:`library(colorRamps)`  
 :books:`library(ggeffects)`  
 ```
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -188,7 +187,7 @@ the existence of duplicated measures of the variable _mean_depth_ between single
 
 ### 2.1. Find the best conditional model for the Species x season interaction
 
-:books:`library(lmtest)`
+:books:`library(lmtest)`  
 
 Fit nested intercept-only models with Gamma distribution including all potentially relevant random-effects and compare them with LRT
 
@@ -429,18 +428,77 @@ Results are averaged over the levels of: season, res_part
 Degrees-of-freedom method: asymptotic
 P value adjustment: tukey method for comparing a family of 3 estimates
 ```
+Alternatively use the _ggeffects_ library to calculate simple LSM
+```
+ggemmeans(m3, terms = "Species")
+```
 
 ### 3.3. Plot main-effects
 
 :books:`library(effects)`  
-:books:`library(colorRamps)`  
+:books:`library(ggeffects)`  
 
 ```
 plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE, layout=c(1, 1))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_00.png "Mean_depth_date")
 
-### 3.4. Plot marginal effects
+### 3.4. Compute Marginal effects
+
+```
+ggpredict(m3, terms = c("Species","season"))
+```
+```
+# Predicted values of mean_depth
+# x = Species
+
+# season = autumn
+
+x         | Predicted |   SE |       95% CI
+-------------------------------------------
+pike      |      3.38 | 0.34 | [2.72, 4.05]
+pikeperch |      5.78 | 0.40 | [5.00, 6.56]
+wels      |      9.06 | 0.29 | [8.50, 9.63]
+
+# season = spring_I
+
+x         | Predicted |   SE |       95% CI
+-------------------------------------------
+pike      |      2.14 | 0.35 | [1.46, 2.82]
+pikeperch |      2.72 | 0.41 | [1.92, 3.51]
+wels      |      1.67 | 0.30 | [1.09, 2.25]
+
+# season = spring_II
+
+x         | Predicted |   SE |       95% CI
+-------------------------------------------
+pike      |      1.68 | 0.39 | [0.91, 2.45]
+pikeperch |      1.54 | 0.46 | [0.64, 2.44]
+wels      |      4.93 | 0.34 | [4.27, 5.60]
+
+# season = summer
+
+x         | Predicted |   SE |       95% CI
+-------------------------------------------
+pike      |      3.58 | 0.34 | [2.92, 4.24]
+pikeperch |      3.18 | 0.40 | [2.40, 3.96]
+wels      |      2.77 | 0.29 | [2.20, 3.33]
+
+# season = winter
+
+x         | Predicted |   SE |       95% CI
+-------------------------------------------
+pike      |      3.67 | 0.34 | [3.01, 4.33]
+pikeperch |      3.87 | 0.40 | [3.08, 4.65]
+wels      |      8.53 | 0.29 | [7.97, 9.09]
+
+Adjusted for:
+*  res_part = dam
+* fi_fishid = 0 (population-level)
+*      date = 0 (population-level)
+```
+
+### 3.5. Plot marginal effects
 
 ```
 ggplot(data_depth, aes(Species, mean_depth)) +
@@ -617,6 +675,7 @@ plot(Effect(c("Species", "res_part"), m_sp_res_gamma),lines=list(multiline=TRUE)
 ggplot(data_depth, aes(Species, mean_depth)) +
                    geom_boxplot(fill = "#F4EDCA", color = "#D16103") +
                    geom_boxplot(aes(fill = res_part)) +
+                   labs(x ="Species", y = "mean depth (m)") +
                    theme(legend.position = "top") +
                    scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07", "#52854C", "#293352"))
 ```
@@ -740,5 +799,4 @@ Threshold coefficients:
 plot(Effect(c("Species", "body_size"), m_pelg_zone_order_bs),lines=list(multiline=TRUE), rug = FALSE, layout=c(2, 2))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_range_date_5.png "Mean_depth_date")
-
 
