@@ -443,7 +443,7 @@ plot(Effect(c("Species", "season"), m3),lines=list(multiline=TRUE), rug = FALSE,
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_00.png "Mean_depth_date")
 
-### 3.4. Compute Marginal effects
+### 3.4. Calculate predicted values of mean depth
 
 ```
 ggpredict(m3, terms = c("Species","season"))
@@ -500,6 +500,10 @@ Adjusted for:
 
 ### 3.5. Plot marginal effects
 
+Compute marginal effects with:
+```
+ggeffect(m3, terms = c("Species","season"))
+```
 ```
 ggplot(data_depth, aes(Species, mean_depth)) +
                    geom_boxplot(aes(fill = season)) +
@@ -508,6 +512,7 @@ ggplot(data_depth, aes(Species, mean_depth)) +
                    scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07", "#52854C", "#293352"))
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_0.png "Mean_depth_date")
+
 
 ## 4. How does mean depth vary with body size between species?
 
@@ -671,7 +676,7 @@ plot(Effect(c("Species", "res_part"), m_sp_res_gamma),lines=list(multiline=TRUE)
 ```
 ![Mean_depth_date](/Plots/Mean_depth_date_1.png "Mean_depth_date")
 
-**Compute Marginal effects**
+**Calculate predicted values of mean depth**
 ```
 ggpredict(m_sp_res_gamma, terms = c("Species","res_part"))
 ```
