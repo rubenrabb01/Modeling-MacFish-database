@@ -90,7 +90,3 @@ data_distr_day <- data_distr_day %>% add_count(date)
 time_day_full <- 341
 ```
 
-## 2. Subset data to fit a gam model
-```
-matrix_gam <- data.table(Dist_dam = data_distr_day_sub[, distfromdam], daily = rep(1:time_min_day, time_day_full), Species = data_distr_day_sub[, Species], Id = data_distr_day_sub[, fi_fishid], weekly = data_distr_day_sub[, week_day_num])
-```
