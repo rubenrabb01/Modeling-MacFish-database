@@ -625,9 +625,6 @@ plot_diff(m_gam_9_re_bs_ti, view="weekly",
 ```
 ![Dist_f_dam](/Plots/Dist_f_dam_6.png "Dist_f_dam")
 
-**Plot surface and one-dimensional differences in daily distance form dam between the three species**
-```
-
 # Complete time series analysis
 
 ## 1. Prepare a complete dataset with imputation of missing cases
@@ -637,7 +634,7 @@ plot_diff(m_gam_9_re_bs_ti, view="weekly",
 :books:`library(zoo)`
 :books:`library(forecast)`
 
-Now, we consider the full dataset which needs to be transformed prior to analysis
+Now we consider the full dataset which needs to be transformed prior to analysis
 ```
 data_distrdw <- merge(dist2dam.dt, fish.info, by= c("fi_fishid"))
 data_distrdw <- data_distrdw[with(data_distrdw, order(date)),]
@@ -833,3 +830,5 @@ The results suggest that:
 - Weekly differences in distance from dam are significant in the three species
 - This model improves the R-squared value a bit but it is still low
 - We should try an autoregressive model by including the autocorrelation structure (daily)
+
+## 4. Plot model
