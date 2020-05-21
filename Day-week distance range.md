@@ -535,7 +535,6 @@ visreg(m_gam_9_re_bs_ti, "daily", "weekly", ylab="Distance range [m]")
 visreg2d(m_gam_9_re_bs_ti, x="daily", y="weekly", plot.type="persp")
 visreg2d(m_gam_9_re_bs_ti, x="daily", y="weekly", plot.type="image")
 ```
-```
 
 Extract coefficients for random intercepts and plot for each individual
 ```
