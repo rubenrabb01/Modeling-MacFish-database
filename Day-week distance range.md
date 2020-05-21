@@ -107,7 +107,6 @@ data_distrdw_sub_GAM <- data.table(Dist_dam = data_distrdw_sub[, distfromdam], d
 ### 2.1. Model 1: Daily and Weekly distance from dam
 
 We fit a GAM model wit predictor variables _daily_ and _weekly_ as smoothing functions (cubic splines and p-splines, respectively) and knots specifying unique case values for daily observartions and weekly number of days
-
 ```
 m_gam_1 <- gam(Dist_dam ~ s(daily, bs = "cr", k = time_min_day) + s(weekly, bs = "ps", k = 7), data = data_distrdw_sub_GAM, family = gaussian)
 ```
@@ -145,7 +144,6 @@ GCV = 4.1752e+06  Scale est. = 4.1751e+06  n = 704161
 ### 2.2. Model 2: Daily by Weekly distance from dam (interaction)
 
 Fit a model that incorporates a smooth function to both _daily_ and _weekly_ with a tensor product interaction by using the _te_ function
-
 ```
 m_gam_2 <- bam(Dist_dam ~ te(daily, weekly, bs = c("cr", "ps")), data = data_distrdw_sub_GAM, family = gaussian, na.action=na.omit)
 ```
@@ -178,8 +176,7 @@ fREML = 6.3663e+06  Scale est. = 4.1729e+06  n = 704161
 
 ### 2.3. Model 3: Daily by Weekly distance from dam (interaction), grouped by Species
 
-Now lets take model **m_gam_2** and include species as a grouping factor to interact with the smooths functions of the independent variables
-
+Now, lets take model **m_gam_2** and include species as a grouping factor to interact with the smooths functions of the independent variables
 ```
 m_gam_3 <- bam(Dist_dam ~ te(daily, weekly, bs = c("cr", "ps"), by=Species), data = data_distrdw_sub_GAM, family = gaussian, na.action=na.omit)
 ```
@@ -259,7 +256,7 @@ fREML = 5.7545e+06  Scale est. = 7.3367e+05  n = 704161
 
 ### 3.2. Model 5 (RE): Daily and Weekly distance from dam (interaction), grouped by Species with tensor product
 
-Now we include a tensor product to the smooth functions of previous model **m_gam_4_re**
+Now, we include a tensor product to the smooth functions of previous model **m_gam_4_re**
 ```
 m_gam_5_re<-bam(Dist_dam ~ te(daily, by = Species, sp = 0.1) + te(weekly, by = Species, bs = "ps", k = 7) + s(Id, bs = "re"), data = data_distrdw_sub_GAM, family = gaussian, na.action=na.omit)
 ```
@@ -625,7 +622,7 @@ The total number of observations in the complete dataset is given by:
 nrow(data_distrdw)
 ```
 
-Since 31 individuals are in the dataset the exact number of days is:
+Since there are 31 individuals in the dataset the exact number of days is:
 ```
 nrow(data_distrdw)/(1440*31)
 ```
@@ -733,3 +730,17 @@ The results suggest that:
 - Daily differences in distance from dam are not significant in _pike_ and _wels_ but they are in _pikeperch_
 - Weekly differences in distance from dam are significant in the three species
 - This model improves the R-squared value a bit but it is still low
+
+**Plot partial effects and estimates of the three dimensional smooths (i.e., the grouping predictor "Species" )**
+```
+par(mfrow=c(2, 2))
+plot(m_gam_9_re_bs_ti_total, shade = TRUE)
+```
+Alternatively plot with:
+```
+draw(m_gam_9_re_bs_ti_total, ncol = 2)  # library "gratia"
+visreg(m_gam_9_re_bs_ti_total, "daily", "weekly", ylab="Distance from dam[m]")
+visreg2d(m_gam_9_re_bs_ti_total, x="daily", y="weekly", plot.type="persp")
+visreg2d(m_gam_9_re_bs_ti_total, x="daily", y="weekly", plot.type="image")
+visreg(fit, "daily", "Species", gg=TRUE, ylab="Distance from dam[m]")
+```
