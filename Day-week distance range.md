@@ -77,12 +77,11 @@ num_days
 1 2018-04-11 2017-04-27  349 days
 2 2018-04-10 2017-04-27  348 days
 ```
-
-However, this gives the complete dates without accounting for missing days.
-The actual total number of days is 341 and 31 for the subsetted dataset, which will be stored in object _time_day_sub_.
-The number of observations per day is 1089 and will be stored in object _time_min_day_.
-The number of observations in the subset is given by the number of rows corresponding to a period of 31-day measures.
-The number of days in the subset is 31, which is the number of rows divided by the number of observations per day
+- This gives the complete dates without accounting for missing days
+- The actual total number of days is 341 and 31 for the subsetted dataset, which will be stored in object _time_day_sub_
+- The number of observations per day is 1089 and will be stored in object _time_min_day_
+- The number of observations in the subset is given by the number of rows corresponding to a period of 31-day measures
+- The number of days in the subset is 31, which is the number of rows divided by the number of observations per day
 
 ```
 time_day_sub <- with(data_distrdw_sub, ave(as.numeric(date), fi_fishid, FUN = function(x) length(unique(x))))
@@ -536,22 +535,99 @@ visreg(m_gam_9_re_bs_ti, "daily", "weekly", ylab="Distance range [m]")
 visreg2d(m_gam_9_re_bs_ti, x="daily", y="weekly", plot.type="persp")
 visreg2d(m_gam_9_re_bs_ti, x="daily", y="weekly", plot.type="image")
 ```
+```
 
+Extract coefficients for random intercepts and plot for each individual
+```
+re <- get_random(m_gam_9_re_bs_ti)
+```
+```
+par(mfrow=c(1,1))
+barplot(re[[1]])
+abline(h=5)
+```
 ![Dist_f_dam](/Plots/Dist_f_dam_1.png "Dist_f_dam")
 
-In these plots we see how the distance range changes with time differently in each species:
- - For _pike_ the peak of distance range is around the last month
- - For _pikeperch_ the distance range is maximum the first month but decreases the following two months
- - For _wels_ the lowest distance range is between months 5 and 8
-
-**Plot summed effects surfaces (smooth) for each species**
-
+**Plot random effects estimates of daily and weekly distance from dam
 ```
-layout(matrix(2:1, nrow = 1))
-vis.gam(m_gam_1,ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "", main = "")
-vis.gam(m_gam_1, main = "Distance range per month", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+par(mfrow=c(1,3))
+plot(m_gam_9_re_bs_ti, select=c(2), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti, select=c(3), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti, select=c(4), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
 ```
 ![Dist_f_dam](/Plots/Dist_f_dam_2.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot(m_gam_9_re_bs_ti, select=c(5), ylim=c(0,500))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti, select=c(6), ylim=c(0,500))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti, select=c(7), ylim=c(0,500))
+title(main="Random smooths")
+abline(h=0)
+```
+![Dist_f_dam](/Plots/Dist_f_dam_3.png "Dist_f_dam")
+
+**Plot surface and one-dimensional differences in daily and weekly distance form dam between the three species**
+```
+par(mfrow=c(1,3))
+plot_diff2(m_gam_9_re_bs_ti, view=c("daily","weekly"),
+        comp=list(Species=c("pike", "pikeperch")),
+        zlim=c(-5,7.5),
+        main='Difference pike-pikeperch',
+        print.summary=FALSE)
+plot_diff2(m_gam_9_re_bs_ti, view=c("daily","weekly"),
+        comp=list(Species=c("pikeperch", "wels")),
+        zlim=c(-5,7.5),
+        main='Difference pikeperch-wels',
+        print.summary=FALSE)
+plot_diff2(m_gam_9_re_bs_ti, view=c("daily","weekly"),
+        comp=list(Species=c("pike", "wels")),
+        zlim=c(-5,7.5),
+        main='Difference pike-wels',
+        print.summary=FALSE)
+```
+![Dist_f_dam](/Plots/Dist_f_dam_4.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot_diff(m_gam_9_re_bs_ti, view="daily",
+        comp=list(Species=c("pike", "pikeperch")),
+        main='Daily difference in distance from dam between pike and pikeperch')
+plot_diff(m_gam_9_re_bs_ti, view="daily",
+        comp=list(Species=c("pikeperch", "wels")),
+        main='Daily difference in distance from dam between pikeperch and wels')
+plot_diff(m_gam_9_re_bs_ti, view="daily",
+        comp=list(Species=c("pike", "wels")),
+        main='Daily difference in distance from dam between pike and wels')
+```
+![Dist_f_dam](/Plots/Dist_f_dam_5.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot_diff(m_gam_9_re_bs_ti, view="weekly",
+        comp=list(Species=c("pike", "pikeperch")),
+        main='Daily difference in distance from dam between pike and pikeperch')
+plot_diff(m_gam_9_re_bs_ti, view="weekly",
+        comp=list(Species=c("pikeperch", "wels")),
+        main='Daily difference in distance from dam between pikeperch and wels')
+plot_diff(m_gam_9_re_bs_ti, view="weekly",
+        comp=list(Species=c("pike", "wels")),
+        main='Daily difference in distance from dam between pike and wels')
+```
+![Dist_f_dam](/Plots/Dist_f_dam_6.png "Dist_f_dam")
+
+**Plot surface and one-dimensional differences in daily distance form dam between the three species**
+```
 
 # Complete time series analysis
 
@@ -685,9 +761,9 @@ We see that the R-squared value has significantly decreased compared to the last
 
 ### 3.2. Model 9 (RE): Daily by Weekly distance from dam (interaction), grouped by Species with body size as a covariate
 
-Now we re-fit the previous winning model
+Now we re-fit the previous winning model changing the chunk parameter to the total number of observations/day
 ```
-m_gam_9_re_bs_ti_total <- bam(Dist_dam ~  s(body_size) + s(daily, bs = "cr", k = period, by=Species) + s(weekly, bs = "ps", k = 7, by=Species) + ti(daily, weekly, bs = c("cr", "ps"), by= Species)+ s(Id, bs = "re"), data = data_distrdw_GAM, family = gaussian, na.action=na.omit)
+m_gam_9_re_bs_ti_total <- bam(Dist_dam ~  s(body_size) + s(daily, bs = "cr", k = 1440, by=Species) + s(weekly, bs = "ps", k = 7, by=Species) + ti(daily, weekly, bs = c("cr", "ps"), by= Species)+ s(Id, bs = "re"), data = data_distrdw_GAM, family = gaussian, na.action=na.omit)
 ```
 ```
 summary(m_gam_9_re_bs_ti_total)
@@ -697,7 +773,7 @@ Family: gaussian
 Link function: identity
 
 Formula:
-Dist_dam ~ s(body_size) + s(daily, bs = "cr", k = period, by = Species) +
+Dist_dam ~ s(body_size) + s(daily, bs = "cr", k = 1440, by = Species) +
     s(weekly, bs = "ps", k = 7, by = Species) + ti(daily, weekly,
     bs = c("cr", "ps"), by = Species) + s(Id, bs = "re")
 
@@ -726,21 +802,35 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 R-sq.(adj) =  0.649   Deviance explained = 64.9%
 fREML = 1.3043e+08  Scale est. = 1.5349e+06  n = 15271667
 ```
+
+Extract root variance components
+```
+gam.vcomp(m_gam_9_re_bs_ti_total)
+```
+```
+Standard deviations and 0.95 confidence intervals:
+
+                                        std.dev        lower        upper
+s(body_size)                       9.791565e+00 6.030228e+00 1.589902e+01
+s(daily):Speciespike               1.268528e-04 1.267810e-04 1.269246e-04
+s(daily):Speciespikeperch          2.352179e-03 9.777672e-04 5.658550e-03
+s(daily):Specieswels               2.657937e-04 6.570815e-06 1.075152e-02
+s(weekly):Speciespike              2.746067e+03 1.476850e+03 5.106060e+03
+s(weekly):Speciespikeperch         1.059774e+04 5.702031e+03 1.969684e+04
+s(weekly):Specieswels              1.083072e+04 5.827423e+03 2.012976e+04
+ti(daily,weekly):Speciespike1      9.210012e+00 4.957012e+00 1.711199e+01
+ti(daily,weekly):Speciespike2      1.506590e+00 8.215237e-01 2.762932e+00
+ti(daily,weekly):Speciespikeperch1 4.116024e+00 1.052920e+00 1.609017e+01
+ti(daily,weekly):Speciespikeperch2 1.299507e+00 5.221944e-01 3.233889e+00
+ti(daily,weekly):Specieswels1      1.057097e+01 5.847578e+00 1.910971e+01
+ti(daily,weekly):Specieswels2      1.949875e+00 1.122361e+00 3.387513e+00
+s(Id)                              3.049559e+03 2.332171e+03 3.987618e+03
+scale                              1.238912e+03 1.238473e+03 1.239352e+03
+
+Rank: 14/15
+```
 The results suggest that:
 - Daily differences in distance from dam are not significant in _pike_ and _wels_ but they are in _pikeperch_
 - Weekly differences in distance from dam are significant in the three species
 - This model improves the R-squared value a bit but it is still low
-
-**Plot partial effects and estimates of the three dimensional smooths (i.e., the grouping predictor "Species" )**
-```
-par(mfrow=c(2, 2))
-plot(m_gam_9_re_bs_ti_total, shade = TRUE)
-```
-Alternatively plot with:
-```
-draw(m_gam_9_re_bs_ti_total, ncol = 2)  # library "gratia"
-visreg(m_gam_9_re_bs_ti_total, "daily", "weekly", ylab="Distance from dam[m]")
-visreg2d(m_gam_9_re_bs_ti_total, x="daily", y="weekly", plot.type="persp")
-visreg2d(m_gam_9_re_bs_ti_total, x="daily", y="weekly", plot.type="image")
-visreg(fit, "daily", "Species", gg=TRUE, ylab="Distance from dam[m]")
-```
+- We should try an autoregressive model by including the autocorrelation structure (daily)
