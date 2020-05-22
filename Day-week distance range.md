@@ -6,8 +6,8 @@ In this part, daily and weekly seasonalities are descomposed as predictor variab
 
 ## Create a dataset of daily and weekly distance range for each species
 
-:books:`library(lubridate)`
-:books:`library(plyr)`
+:books:`library(lubridate)`  
+:books:`library(plyr)`  
 
 Taking the main dataset _dist2dam.dt_, filter by individuals having more than 89 days of measures
 ```
@@ -95,8 +95,8 @@ time_day_full_sub <- time_min_day_full_sub / time_min_day
 
 ## 2. Build GAM models fitted to data of daily and weekly distance range from dam
 
-:books:`library(itsadug)`
-:books:`library(mgcv)`
+:books:`library(itsadug)`  
+:books:`library(mgcv)`  
 
 First, let further subset data to fit GAM models more easily
 ```
@@ -457,8 +457,8 @@ After running all these models we have clear that:
 
 ## 4. Model selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
 
 Create a list of candidate GAMM models
 ```
@@ -516,12 +516,12 @@ Form results of the winning model we can see that:
 
 ## 5. Plot model
 
-:books:`library(ggplot2)`
-:books:`library(grid)`
-:books:`library(visreg)`
-:books:`library(splines)`
-:books:`library(animation)`
-:books:`library(gratia)`
+:books:`library(ggplot2)`  
+:books:`library(grid)`  
+:books:`library(visreg)`  
+:books:`library(splines)`  
+:books:`library(animation)`  
+:books:`library(gratia)`  
 
 **Plot partial effects and estimates of the three dimensional smooths (i.e., the grouping predictor "Species" )**
 ```
