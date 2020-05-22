@@ -829,6 +829,133 @@ The results suggest that:
 - Daily differences in distance from dam are not significant in _pike_ and _wels_ but they are in _pikeperch_
 - Weekly differences in distance from dam are significant in the three species
 - This model improves the R-squared value a bit but it is still low
-- We should try an autoregressive model by including the autocorrelation structure (daily)
+- We should try an autoregressive model by including the autocorrelation structure
 
 ## 4. Plot model
+
+**Plot partial effects and estimates of the three dimensional smooths (i.e., the grouping predictor "Species")**
+```
+plot_parametric(m_gam_9_re_bs_ti_total, pred=list(Species=c("pike", "pikeperch", "wels")), cond=list(weekly=0, Dist_dam=0), rm.ranef=TRUE, print.summary=FALSE)
+```
+![Dist_range_month](/Plots/Dist_range_month_71.png "Dist_range_month")
+
+** Plot partial effects for body size by daily distance from dam**
+```
+layout(matrix(1:3, nrow = 1))
+pvisgam(m_gam_9_re_bs_ti_total, rug=FALSE, select=8, color = "cm",main='Species=pike', cex.axis=1.5, cex.lab=1.5)
+pvisgam(m_gam_9_re_bs_ti_total, select=9, rug=FALSE, color = "cm", main='Species=pikperch', cex.axis=1.5, cex.lab=1.5)
+pvisgam(m_gam_9_re_bs_ti_total, select=10, rug=FALSE,color = "cm",  main='Species=wels', cex.axis=1.5, cex.lab=1.5)
+```
+![Dist_range_month](/Plots/Dist_range_month_72.png "Dist_range_month")
+
+**Plot summed effects surfaces (smooth) for each species**
+```
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=8, cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=9, cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=10, cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+```
+![Dist_range_month](/Plots/Dist_f_dam_73.png "Dist_range_month")
+
+```
+layout(matrix(1:6, nrow = 2))
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=8, cond=list(Species='pike'), main = "pike", plot.type = "persp", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='pike'), main = "pike", n.grid = 50, theta = 35, phi = 32, zlab = "", ticktype = "detailed", color = "topo")
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=9, cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "persp", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 50, theta = 35, phi = 32, zlab = "", ticktype = "detailed", color = "topo")
+pvisgam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), select=10, cond=list(Species='wels'), main = "wels", plot.type = "persp", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_9_re_bs_ti_total, view=c("daily","weekly"), cond=list(Species='wels'), main = "wels", n.grid = 50, theta = 35, phi = 32, zlab = "", ticktype = "detailed", color = "topo")
+```
+![Dist_range_month](/Plots/Dist_f_dam_74.png "Dist_range_month")
+
+**Plot random effects estimates of daily and weekly distance from dam**
+```
+par(mfrow=c(1,3))
+plot(m_gam_9_re_bs_ti_total, select=c(2), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti_total, select=c(3), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti_total, select=c(4), ylim=c(-20,20))
+title(main="Random smooths")
+abline(h=0)
+```
+![Dist_f_dam](/Plots/Dist_f_dam_7.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot(m_gam_9_re_bs_ti_total, select=c(5), ylim=c(-600,600))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti_total, select=c(6), ylim=c(-600,600))
+title(main="Random smooths")
+abline(h=0)
+plot(m_gam_9_re_bs_ti_total, select=c(7), ylim=c(-600,600))
+title(main="Random smooths")
+abline(h=0)
+```
+![Dist_f_dam](/Plots/Dist_f_dam_8.png "Dist_f_dam")
+
+**Plot surface and one-dimensional differences in daily and weekly distance form dam between the three species**
+```
+par(mfrow=c(1,3))
+plot_diff2(m_gam_9_re_bs_ti_total, view=c("daily","weekly"),
+        comp=list(Species=c("pike", "pikeperch")),
+        zlim=c(-5,7.5), nlevels=20, n.grid=30,
+        main='Difference pike-pikeperch',
+        print.summary=FALSE)
+plot_diff2(m_gam_9_re_bs_ti_total, view=c("daily","weekly"),
+        comp=list(Species=c("pikeperch", "wels")),
+        zlim=c(-5,7.5), nlevels=20, n.grid=30,
+        main='Difference pikeperch-wels',
+        print.summary=FALSE)
+plot_diff2(m_gam_9_re_bs_ti_total, view=c("daily","weekly"),
+        comp=list(Species=c("pike", "wels")),
+        zlim=c(-5,7.5), nlevels=20, n.grid=30,
+        main='Difference pike-wels',
+        print.summary=FALSE)
+```
+![Dist_f_dam](/Plots/Dist_f_dam_9.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot_diff(m_gam_9_re_bs_ti_total, view="daily",
+        comp=list(Species=c("pike", "pikeperch")),
+        main='Daily difference in distance from dam between pike and pikeperch')
+plot_diff(m_gam_9_re_bs_ti_total, view="daily",
+        comp=list(Species=c("pikeperch", "wels")),
+        main='Daily difference in distance from dam between pikeperch and wels')
+plot_diff(m_gam_9_re_bs_ti_total, view="daily",
+        comp=list(Species=c("pike", "wels")),
+        main='Daily difference in distance from dam between pike and wels')
+```
+![Dist_f_dam](/Plots/Dist_f_dam_10.png "Dist_f_dam")
+
+```
+par(mfrow=c(1,3))
+plot_diff(m_gam_9_re_bs_ti_total, view="weekly",
+        comp=list(Species=c("pike", "pikeperch")),
+        main='Daily difference in distance from dam between pike and pikeperch')
+plot_diff(m_gam_9_re_bs_ti_total, view="weekly",
+        comp=list(Species=c("pikeperch", "wels")),
+        main='Daily difference in distance from dam between pikeperch and wels')
+plot_diff(m_gam_9_re_bs_ti_total, view="weekly",
+        comp=list(Species=c("pike", "wels")),
+        main='Daily difference in distance from dam between pike and wels')
+```
+![Dist_f_dam](/Plots/Dist_f_dam_11.png "Dist_f_dam")
+
+
+# Daily and weekly dstance from dam by season
+
+Because of the high computation time in the models with the _Species*season_ interaction we split the dataset into five seasons and analyze time series separately
+
+## SPRING I
+
+```
+spring_I <- subset(data_distrdw,season=="winter")
+```
