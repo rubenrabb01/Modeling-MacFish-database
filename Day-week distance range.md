@@ -839,7 +839,7 @@ plot_parametric(m_gam_9_re_bs_ti_total, pred=list(Species=c("pike", "pikeperch",
 ```
 ![Dist_range_month](/Plots/Dist_range_month_71.png "Dist_range_month")
 
-** Plot partial effects for body size by daily distance from dam**
+**Plot partial effects for body size by daily distance from dam**
 ```
 layout(matrix(1:3, nrow = 1))
 pvisgam(m_gam_9_re_bs_ti_total, rug=FALSE, select=8, color = "cm",main='Species=pike', cex.axis=1.5, cex.lab=1.5)
