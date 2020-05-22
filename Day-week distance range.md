@@ -50,7 +50,7 @@ data_distrdw
 | 9523633: 	| T449276_1 	| 11/04/2018 3:13 	| 7.35     	| 461884.8   	| 5409746     	| 1703.599    	| FALSE  	| winter   	| 11/04/2018 	| 237      	| 0.1645833  	| 344       	| 1030     	| 6150        	| F      	| wels      	| 4            	| Thursday 	|
 | 9523634: 	| T449276_1 	| 11/04/2018 3:14 	| 7.35     	| 461884.8   	| 5409746     	| 1703.599    	| FALSE  	| winter   	| 11/04/2018 	| 237      	| 0.1645833  	| 344       	| 1030     	| 6150        	| F      	| wels      	| 4            	| Thursday 	|
 
-### Subset data based on last month of observations and store information in new variables for further model building
+#### Subset data based on last month of observations and store information in new variables for further model building
 
 ```
 pikeperch <- unique(data_distrdw[, Species])      # only pikeperch data
