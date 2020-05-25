@@ -629,10 +629,10 @@ plot_diff(m_gam_9_re_bs_ti, view="weekly",
 
 ## 1. Prepare a complete dataset with imputation of missing cases
 
-:books:`library(tidyverse)`
-:books:`library(fable)`
-:books:`library(zoo)`
-:books:`library(forecast)`
+:books:`library(tidyverse)`  
+:books:`library(fable)`  
+:books:`library(zoo)`  
+:books:`library(forecast)`  
 
 Now we consider the full dataset which needs to be transformed prior to analysis
 ```
