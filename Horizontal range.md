@@ -144,11 +144,13 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 :books:`library(AICcmodavg)`
 
 #### Based on AICc
+
 ```
 Cand.mod <- list(m_gam_sp1,m_gam_sp2,m_gam_sp3,m_gam_sp4,m_gam_sp5,m_gam_sp6,m_gam_sp7,m_gam_sp8)
 
 Cand.mod.glm <- lapply(Cand.mod, glm.convert)
 aictab(cand.set = Cand.mod.glm, second.ord = TRUE)
+```
 ```
 Model selection based on AICc:
 
@@ -163,7 +165,7 @@ Mod6 120 71411.30    1481.58   0.00   1.00 -35583.99
 Mod8 120 71411.44    1481.72   0.00   1.00 -35584.06
 ```
 
-Compare three best-fit models
+Compare the three best-fit models
 ```
 lrtest(m_gam_sp4,m_gam_sp2)
 ```
@@ -204,6 +206,7 @@ The interaction model **m_gam_sp2** is preferred to both single terms models
 ```
 AIC(m_gam_sp1,m_gam_sp2,m_gam_sp3,m_gam_sp4,m_gam_sp5,m_gam_sp6,m_gam_sp7,m_gam_sp8)
 ```
+```
                  df      AIC
 m_gam_sp1  47.12400 71411.09
 m_gam_sp2 138.86651 69918.33
@@ -213,7 +216,7 @@ m_gam_sp6  51.58551 71411.97
 m_gam_sp7 142.06060 69925.00
 m_gam_sp8  52.36334 71412.02
 ```
-Again model **m_gam_sp2** is preferred (lowest AIC)
+Again, model **m_gam_sp2** is preferred (lowest AIC)
 
 **Note:** Comparing these models with GCV.Cp (re-fitting models with method=" GCV.Cp" instead "REML" the results are the same)
 
