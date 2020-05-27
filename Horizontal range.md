@@ -270,6 +270,19 @@ Form results of the winning model we can see that:
 
 ### 2.5. Plot model
 
+**Plot summed effects surfaces (smooth) for the three species**
+
+```
+layout(matrix(1:3, nrow = 1))
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=8, cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=9, cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=10, cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
+```
+![Horiz_range](/Plots/Horiz_range_4.png "Horiz_range")
+
 **Plot surface and one-dimensional seasonal and weekly differences in horizontal range**
 ```
 layout(matrix(1:6, nrow = 2))
@@ -298,20 +311,8 @@ plot_diff(m_gam_sp2, view="seasonally",
         comp=list(Species=c("pike", "wels")),
         main='Seasonal differences pike-wels')
 ```
-![Horiz_range](/Plots/Horiz_range_4.png "Horiz_range")
-
-**Plot summed effects surfaces (smooth) for the three species**
-
-```
-layout(matrix(1:3, nrow = 1))
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
-pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=8, cond=list(Species='pike'), main = "pike", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
-pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=9, cond=list(Species='pikeperch'), main = "pikeperch", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
-pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=10, cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
-```
 ![Horiz_range](/Plots/Horiz_range_5.png "Horiz_range")
+
 
 
 
