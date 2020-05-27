@@ -82,18 +82,20 @@ hist(data_distr$dist.range, breaks = 20)
 
 #### 1.1. Fit a simple model including Species and one random term specifying for fish identity
 
+```
 m_gam_1 <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs = "re"), data=data_distr)
+```
 
 #### 1.2. Set autocorrelation of data points
 
 ```
-rho_1 <- start_value_rho(m_gam_1, plot = TRUE, lag = 2)
+rho <- start_value_rho(m_gam_1, plot = TRUE, lag = 2)
 ```
 
 #### 1.3. Fit autocorrelation model
 
 ```
-m_gam_1_autoc <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho_1, AR.start = data_distr$start.event)
+m_gam_1_ar1 <- gam(dist.range ~ s(month, by=Species, sp=0.1) + s(fi_fishid, bs = "re"), family = gaussian, data = data_distr, rho = rho, AR.start = data_distr$start.event)
 ```
 
 #### 1.4. Summary of model m_gam_1
@@ -106,8 +108,7 @@ Family: gaussian
 Link function: identity
 
 Formula:
-dist.range ~ s(month, by = Species, sp = 0.1) + s(fi_fishid,
-    bs = "re")
+dist.range ~ s(month, by = Species, sp = 0.1) + s(fi_fishid, bs = "re")
 
 Parametric coefficients:
             Estimate Std. Error t value Pr(>|t|)
