@@ -1,8 +1,7 @@
-
 ## Create a dataset of daily and weekly distance range for each species
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 Add info for each species and order by date
 ```
@@ -41,9 +40,6 @@ data_longit
 | 8845:00:00 	| T449208_1 	| 11/04/2018 	| 0        	| 1467.4694 	| 560      	| 1483        	| M      	| pikeperch 	| spring_II 	| 0.42781114   	| 84.07252       	| 29398.32    	| 4            	| Thursday  	| 5          	|
 | 8846:00:00 	| T449276_1 	| 11/04/2018 	| 640.4041 	| 1383.3969 	| 1030     	| 6150        	| F      	| wels      	| spring_II 	| -1.16616183  	| 399.93036      	| 99324.82    	| 4            	| Thursday  	| 5          	|
 
-
-Plot time-series by species and individual
-```
 
 Plot horizontal range by date
 ```
@@ -313,3 +309,7 @@ vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), mai
 pvisgam(m_gam_sp2, view=c("weekly","seasonally"), select=10, cond=list(Species='wels'), main = "wels", plot.type = "contour", color = "terrain", contour.col = "black", lwd = 2)
 ```
 ![Horiz_range](/Plots/Horiz_range_5.png "Horiz_range")
+
+
+
+
