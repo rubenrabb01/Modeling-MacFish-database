@@ -284,36 +284,24 @@ gradientLegend(valRange=c(28,35), pos=.15)
 **Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"),
-        comp=list(Species=c("pike", "pikeperch")),
-        main='Week by season difference pike-pikeperch',
+plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
-plot_diff(m_gam_sp2, view="seasonally",
-        comp=list(Species=c("pike", "pikeperch")),
-        main='Seasonal difference pike-pikeperch')
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"),
-        comp=list(Species=c("pikeperch", "wels")),
-        main='Week by season difference pikeperch-wels',
+plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
+plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
-plot_diff(m_gam_sp2, view="seasonally",
-        comp=list(Species=c("pikeperch", "wels")),
-        main='Seasonal difference pikeperch-wels')
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"),
-        comp=list(Species=c("pike", "wels")),
-        main='Week by season difference pike-wels',
+plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
+plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
-plot_diff(m_gam_sp2, view="seasonally",
-        comp=list(Species=c("pike", "wels")),
-        main='Seasonal difference pike-wels')
+plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
 ```
 ![Horiz_range](/Plots/Horiz_range_5.png "Horiz_range")
 
@@ -434,7 +422,7 @@ te(as.numeric(daily),seasonally):Specieswels      12.203002  12.977134   11.9882
 
 **Summary table** of the winning model
 ```
-gamtabs(m_gam_sp2_daily, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
+gamtabs(m_gam_sp2_daily, caption="Summary of m_gam_sp2_daily", comment=FALSE, type='html')
 ```
 <table border=1>
 <caption align="bottom"> Summary of m_gam_sp2 </caption>
