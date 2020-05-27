@@ -485,15 +485,9 @@ legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red")
 **Plot surface and one-dimensional daily/seasonal differences in horizontal range between the three species**
 ```
 layout(matrix(1:3, nrow = 1))
-plot_diff(m_gam_sp2_daily, view="seasonally",
-        comp=list(Species=c("pike", "pikeperch")),
-        main='Seasonal difference pike-pikeperch')
-plot_diff(m_gam_sp2_daily, view="seasonally",
-        comp=list(Species=c("pikeperch", "wels")),
-        main='Seasonal difference pikeperch-wels')
-plot_diff(m_gam_sp2_daily, view="seasonally",
-        comp=list(Species=c("pike", "wels")),
-        main='Seasonal difference pike-wels')
+plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
+plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
+plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
 ```
 ![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
 
