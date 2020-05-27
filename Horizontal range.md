@@ -455,8 +455,7 @@ Form results of the winning model we can see that:
 
 ### Plot model
 
-**Plot summed effects surfaces (smooth) for the three species**
-
+**Plot summed effects surfaces of season and daily smooths for the three species**
 ```
 layout(matrix(1:3, nrow = 1))
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 420, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
@@ -498,7 +497,7 @@ plot_diff(m_gam_sp2_daily, view="seasonally",
 ```
 ![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
 
-**Plot smooth 3D surfaces**
+**Plot 3D smooth surfaces**
 ```
 layout(matrix(1:3, nrow = 2))
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "")
@@ -506,62 +505,5 @@ vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikepe
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), main = "pike", plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "")
 ```
 ![Horiz_range](/Plots/Horiz_range_9.png "Horiz_range")
-
-**Plot fitted data of daily and seasonal range predicted by the model**
-
-```
-data_m_gam_sp2_daily <- visreg(m_gam_sp2_daily, "daily", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
-#plot(data_m_gam_sp2_daily, plot.type="rgl") + theme_bw()
-```
-```
-ggplot () +
-  scale_fill_manual (breaks = c ("pike", "pikeperch", "wels"), values = c("#E7B800", "#00AFBB", "#293352"), labels = c ("pike", "pikeperch", "wels")) +
-  scale_color_manual (breaks = c ("pike", "pikeperch", "wels"), values = c("#E7B800", "#00AFBB", "#293352"), labels = c ("pike", "pikeperch", "wels")) +
-  geom_ribbon (data = data_m_gam_sp2_daily$fit, aes (x = daily, ymin = visregLwr, ymax = visregUpr, fill = Species), alpha = 0.4, colour = "grey", size = 0.2) +
-  geom_line (data = data_m_gam_sp2_daily$fit, aes (x = daily, y = visregFit, colour = Species), size = 1.1) +
-  scale_y_continuous (limits = c (-80, 100), breaks = c (-100, -50, 0, 50, 100), labels = c (-100, -50, 0, 50, 100)) +
-  labs (x = "\ndaily", y = expression (atop ("Horizontal range [m]")), colour = "Species", fill = "Species") +
-  theme_bw () +
-  theme (panel.grid.major.x = element_blank (),
-         panel.grid.minor.x = element_blank (),
-         panel.grid.major.y = element_blank (),
-         panel.grid.minor.y = element_blank (),
-         legend.position = c (0.15, 0.85),
-         legend.direction = "vertical",
-         legend.title = element_text (colour = "black", size = 16),
-         legend.text = element_text (colour = "black", size = 14),
-         axis.line = element_line (),
-         axis.title = element_text (colour = "black", size = 16),
-         axis.text = element_text (colour = "black", size = 14))
-```
-![Horiz_range](/Plots/Horiz_range_10.png "Horiz_range")
-
-```
-data_m_gam_sp2_season <- visreg(m_gam_sp2_daily, "seasonally", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
-#plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
-```
-```
-ggplot () +
-  scale_fill_manual (breaks = c ("pike", "pikeperch", "wels"), values = c("#E7B800", "#00AFBB", "#293352"), labels = c ("pike", "pikeperch", "wels")) +
-  scale_color_manual (breaks = c ("pike", "pikeperch", "wels"), values = c("#E7B800", "#00AFBB", "#293352"), labels = c ("pike", "pikeperch", "wels")) +
-  geom_ribbon (data = data_m_gam_sp2_season$fit, aes (x = seasonally, ymin = visregLwr, ymax = visregUpr, fill = Species), alpha = 0.4, colour = "grey", size = 0.2) +
-  geom_line (data = data_m_gam_sp2_season$fit, aes (x = seasonally, y = visregFit, colour = Species), size = 1.1) +
-  scale_y_continuous (limits = c (-60, 100), breaks = c (-100, -50, 0, 50, 100), labels = c (-100, -50, 0, 50, 100)) +
-  labs (x = "\nseasonally", y = expression (atop ("Horizontal range [m]")), colour = "Species", fill = "Species") +
-  theme_bw () +
-  theme (panel.grid.major.x = element_blank (),
-         panel.grid.minor.x = element_blank (),
-         panel.grid.major.y = element_blank (),
-         panel.grid.minor.y = element_blank (),
-         legend.position = c (0.15, 0.85),
-         legend.direction = "vertical",
-         legend.title = element_text (colour = "black", size = 16),
-         legend.text = element_text (colour = "black", size = 14),
-         axis.line = element_line (),
-         axis.title = element_text (colour = "black", size = 16),
-         axis.text = element_text (colour = "black", size = 14))
-```
-![Horiz_range](/Plots/Horiz_range_11.png "Horiz_range")
-
 
 
