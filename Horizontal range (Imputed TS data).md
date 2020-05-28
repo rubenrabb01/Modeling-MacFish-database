@@ -1,6 +1,6 @@
 ## 1. Impute missing time series data
 
-Based on the previously created dataset _data_longit_sub_ (_see_ _Horizontal_range.md_), we complete the time series inserting rows for missing _daily_ values (ie., date) and, for each individual, replace missing values using LOCF (Last Observation Carried Forward)
+Based on the previously created dataset (see _Horizontal_range.md_), we complete the time series inserting rows for missing _daily_ values (ie., date) and, for each individual, replace missing values using LOCF (Last Observation Carried Forward)
 ```
 data_longit_sub_complete<- data_longit_sub %>% complete(Id, daily) %>% fill(everything())
 data_longit_sub_complete<-as.data.frame(data_longit_sub_complete)
