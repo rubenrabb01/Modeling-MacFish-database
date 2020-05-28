@@ -77,7 +77,8 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data
 
 ### 2.2. Fit a global GAMM model for seasonality in horizontal range
 
-We fit a model including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
+- Fit a model including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
+- Specify bs = "cc" for cyclic cubic regression splines so that seasons line up
 ```
 m_gam_season<- bam(sqrt(ranged2d+1) ~ te(seasonally, bs = "cc", by=Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
 ```
