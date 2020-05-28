@@ -237,6 +237,7 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 :books:`library(MASS)`  
 :books:`library(AICcmodavg)`  
+:books:`library(lmtest)`  
 
 #### Based on AIC
 ```
@@ -358,7 +359,7 @@ gamtabs(m_gam_sp2, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
 </table>
 
 We can see that:
-- The _weekly_ by _season_ interaction is significant to response variable only in _pike_ and marginally significant in _pikeperch_
+- The _weekly_ by _seasonally_ interaction is significant to response variable only in _pike_ whilst it is marginally significant in _pikeperch_
 - There is significant inter-individual variation within sesions
 - There is high variability between individuals of the three species
 - If we fit a model adding an random term _s(Id, bs = 're')_, the term is not significant and undersmooths; finally, the model is not preferred
@@ -385,7 +386,7 @@ vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='wels'), plo
 We see that:
 - In _pike_, the highest peak occurs in Spring II and when _weekly_ has value 7 (Sunday)
 - In _pikeperch_, the highest peak is in Spring I and nearly highest within _weekly_ values 1-3 (Monday to Wednesday)
-- In _wels_, the highest peak is in Spring I and mostly on Monday
+- In _wels_, the highest peak is in Spring I, mostly occurring on Monday
 
 **Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
 ```
@@ -411,7 +412,7 @@ plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pike", "wels")), ma
 ```
 ![Horiz_range](/Plots/Horiz_range_5.png "Horiz_range")
 
-### How would dimensional terms change if we consider cyclical variation in horizontal range?
+### How would dimensional terms change if we would consider cyclical variation in horizontal range?
 
 Now we re-fit the previous best-fit model using cyclic cubic splines with both _weekly_ (values from 1 to 7) and _seasonally_ (cycles from 1 to 5) as predictors to account for cyclic seasonality in horizontal range
 ```
@@ -428,7 +429,7 @@ te(weekly,seasonally):Speciespike       2.498980     15   40.50594 1.180850e-01
 te(weekly,seasonally):Speciespikeperch  1.729180     15  218.89610 1.031670e-02
 te(weekly,seasonally):Specieswels       5.262844     15   68.55215 1.369554e-01
 ```
-- In contrast to previous model we see now that the _weekly_ by _season_ interaction is significant only in _pikeperch_
+- In contrast to previous model now we see that the _weekly_ by _season_ interaction is significant only in _pikeperch_
 - Lets plot the model to see differences with non-cyclic splines
 
 ### Plot model
@@ -665,5 +666,3 @@ plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
 Now lets see if adding autoregressive correlation terms improves the overall fit of previous models
 
 #### 2.5.1. Autocorrelation model 1
-
-First we add to the model an ARMA process for residuals which will be nested within each season with argument **corARMA(form = ~ 1|Seasonally)** so not account for residual variation season to season
