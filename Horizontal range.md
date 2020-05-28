@@ -1,7 +1,7 @@
 ## Create a dataset of daily and weekly distance range for each species
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 Add info for each species and order by date
 ```
@@ -66,7 +66,7 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 
 ## 2. Build GAMM models and conduct model-selection
 
-:books:`library(mgcv)`  
+:books:`library(mgcv)`
 
 ### 2.1. Create a new dataset
 
@@ -75,12 +75,14 @@ First, lets subset horizontal range data into a new dataset _data_longit_sub_ fo
 data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data_longit[, Species], Id = data_longit[, fi_fishid], weekly = data_longit[, week_day_num], season = data_longit[, season], seasonally = data_longit[, season_num], daily = data_longit[, date], body_size = data_longit[, ca_tl_mm])
 ```
 
-### 2.2. Fit a global GAMM model for seasonality in horizontal range
+### 2.2. Fit a global GAMM model with uncorrelated errors to seasonality data
 
-- Fit a model including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
-- Specify bs = "cc" for cyclic cubic regression splines so that seasons line up
+- Fit a model assuming all observations are indpependent and including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
+- We set k for the variable _seasonally_ to 5, which is the number of unique values
+- Include a simple random term for subject identity
+- Horizontal range might be expected to vary cyclically across seasons so we need to specify bs = "cc"  (i.e., cyclic cubic regression splines), hence, seasonally shows no discontinuity between Spring I and Spring II and both ends line up
 ```
-m_gam_season<- bam(sqrt(ranged2d+1) ~ te(seasonally, bs = "cc", by=Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_season<- bam(sqrt(ranged2d+1) ~ s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
 ```
 ```
 summary(m_gam_season)
@@ -90,7 +92,7 @@ Family: gaussian
 Link function: identity
 
 Formula:
-sqrt(ranged2d + 1) ~ te(seasonally, bs = "cc", by = Species) +
+sqrt(ranged2d + 1) ~ s(seasonally, bs = "cc", k = 5, by = Species) +
     s(Id, bs = "re")
 
 Parametric coefficients:
@@ -100,11 +102,11 @@ Parametric coefficients:
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Approximate significance of smooth terms:
-                                   edf Ref.df      F  p-value
-te(seasonally):Speciespike       2.689      3  97.15 1.23e-15 ***
-te(seasonally):Speciespikeperch  2.884      3 281.67  < 2e-16 ***
-te(seasonally):Specieswels       2.824      3  27.97 1.48e-08 ***
-s(Id)                           29.531     30  67.25  < 2e-16 ***
+                                  edf Ref.df      F  p-value
+s(seasonally):Speciespike       2.689      3  97.15 1.23e-15 ***
+s(seasonally):Speciespikeperch  2.884      3 281.67  < 2e-16 ***
+s(seasonally):Specieswels       2.824      3  27.97 1.48e-08 ***
+s(Id)                          29.531     30  67.25  < 2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -118,14 +120,99 @@ draw(m_gam_season, ncol = 2)
 
 - We see that the r-squared value is too low and we should search a more suitable model
 
-### 2.3. Fit GAMM models for week and season seaonality
+### 2.3. Fit a GAMM model with uncorrelated errors to weekly and seasonality data
 
-- Fit models using both week (values from 1 to 7) and season (cycles from 1 to 5) as predictors to account for seasonality
-- Include a simple random term for subject identity
-- Include body size as a predictor
+Now we set k for _weekly_ to 7
+```
+m_gam_week_season<- bam(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+```
+```
+summary(m_gam_week_season)
+```
+```
+Family: gaussian
+Link function: identity
+
+Formula:
+sqrt(ranged2d + 1) ~ s(weekly, bs = "cc", k = 7) + s(seasonally,
+    bs = "cc", k = 5, by = Species) + s(Id, bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   26.476      1.219   21.73   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                  edf Ref.df       F  p-value
+s(weekly)                       1.654      5   0.918   0.0443 *
+s(seasonally):Speciespike       2.689      3  97.161 1.21e-15 ***
+s(seasonally):Speciespikeperch  2.884      3 281.761  < 2e-16 ***
+s(seasonally):Specieswels       2.825      3  28.115 1.36e-08 ***
+s(Id)                          29.531     30  67.275  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.211   Deviance explained = 21.5%
+-REML =  35804  Scale est. = 188.49    n = 8846
+```
+```
+draw(m_gam_week_season, ncol = 2)
+```
+![Horiz_range](/Plots/Horiz_range_31.png "Horiz_range")
+
+- A slightly better fit model
+
+### 2.4. Fit a global GAMM model with uncorrelated errors to daily and seasonality data
+
+Now we set k for _weekly_ to 7
+```
+m_gam_daily_season<- bam(sqrt(ranged2d+1) ~ s(as.numeric(daily)) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+```
+```
+summary(m_gam_daily_season)
+```
+```
+Family: gaussian
+Link function: identity
+
+Formula:
+sqrt(ranged2d + 1) ~ s(as.numeric(daily)) + s(seasonally, bs = "cc",
+    k = 5, by = Species) + s(Id, bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   26.509      1.208   21.94   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                  edf Ref.df      F  p-value
+s(as.numeric(daily))            7.447  8.353 14.127  < 2e-16 ***
+s(seasonally):Speciespike       2.046  3.000  3.522  0.00148 **
+s(seasonally):Speciespikeperch  2.857  3.000 48.522  < 2e-16 ***
+s(seasonally):Specieswels       2.574  3.000  6.190 1.81e-05 ***
+s(Id)                          29.528 30.000 67.221  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.221   Deviance explained = 22.5%
+-REML =  35755  Scale est. = 186.07    n = 8846
+```
+```
+draw(m_gam_daily_season, ncol = 2)
+```
+![Horiz_range](/Plots/Horiz_range_32.png "Horiz_range")
+
+- These three models explain only little variation in horizontal range, thus we need to conduct further model search
+
+### 2.5. Fit GAMM models for week and season seaonality
+
+- Fit models with both _weekly_ and _seasonally_ as predictors variables to account for seasonality
+- Include body size as a predictor variable and additional random terms for season and species
 - Forecast models add a main effect for Species allowing the shape of the smooths to vary between _perk_, _pikeperch_ and _wels_
-- Add an interaction (5 models) between season and week to account for changes in amount of seasonality over time
-- Add a tensor product interaction term in presence of smooth functions for main-effects using the _ti_ function
+- Add an interaction (5 out of 8 models) between season and week to account for changes in amount of seasonality over time
+- Add a tensor product interaction term in presence of smooth functions for main-effects using the _ti_ function (1 out of 8 models)
 ```
 m_gam_sp1 <- bam(sqrt(ranged2d+1) ~ s(seasonally, by = Species, sp = 0.1, k = 5) + s(weekly,  by = Species, bs = "ps", k = 7) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
 m_gam_sp2 <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(weekly, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
@@ -140,8 +227,8 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`  
-:books:`library(AICcmodavg)`  
+:books:`library(MASS)`
+:books:`library(AICcmodavg)`
 
 #### Based on AIC
 ```
@@ -259,48 +346,53 @@ gamtabs(m_gam_sp2, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
    <a name=tab.gam></a>
 </table>
 
-Form results of the winning model we can see that:
-- The _weekly_ by _season_ interaction is significant to response variable only in _pike_
-- There is inter-individual variation within sesions
+We can see that:
+- The _weekly_ by _season_ interaction is significant to response variable only in _pike_ and marginally significant in _pikeperch_
+- There is significant inter-individual variation within sesions
 - There is high variability between individuals of the three species
-- If we fit a model adding an random term _s(Id, bs = 're')_ to the model, the term is not significant and undersmooths; finally, the model is not preferred
+- If we fit a model adding an random term _s(Id, bs = 're')_, the term is not significant and undersmooths; finally, the model is not preferred
 
 ### Plot model
 
-:books:`library(itsadug)`  
-:books:`library(rgl)`  
+:books:`library(itsadug)`
+:books:`library(rgl)`
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(28,48), pos=.15)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(14,24), pos=.15)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(28,35), pos=.15)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
 ```
 ![Horiz_range](/Plots/Horiz_range_4.png "Horiz_range")
+
+We see that:
+- In _pike_, the highest peak occurs in Spring II and when _weekly_ has value 7 (Sunday)
+- In _pikeperch_, the highest peak is in Spring I and nearly highest within _weekly_ values 1-3 (Monday to Wednesday)
+- In _wels_, the highest peak is in Spring I and mostly on Monday
 
 **Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
+plot_diff2(m_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
+plot_diff2(m_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
-plot_diff2(m_gam_sp2, view=c("weekly","seasonally"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
+plot_diff2(m_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
@@ -309,7 +401,71 @@ plot_diff(m_gam_sp2, view="seasonally", comp=list(Species=c("pike", "wels")), ma
 ```
 ![Horiz_range](/Plots/Horiz_range_5.png "Horiz_range")
 
-### 2.4. Fit GAMM models for daily and seasonal changes
+### How would dimensional terms change if we consider cyclical variation in horizontal range?
+
+Now we re-fit the previous best-fit mode using cyclic cubic regression splines with both _weekly_ (values from 1 to 7) and _seasonally_ (cycles from 1 to 5) as predictors to account for cyclic seasonality in horizontal range
+```
+m_gam_sp2_cyclic <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(weekly, seasonally, bs = "cc", by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+```
+```
+summary(m_gam_sp2_cyclic)$s.table
+```
+```
+                                             edf Ref.df          F      p-value
+s(Species,Id)                          21.837242     30 1111.06088 3.381889e-11
+s(season,Id)                           97.350379    130  103.74409 3.790050e-03
+te(weekly,seasonally):Speciespike       2.498980     15   40.50594 1.180850e-01
+te(weekly,seasonally):Speciespikeperch  1.729180     15  218.89610 1.031670e-02
+te(weekly,seasonally):Specieswels       5.262844     15   68.55215 1.369554e-01
+```
+- In contrast to previous model we see now that the _weekly_ by _season_ interaction is significant only in _pikeperch_
+- Lets plot the model to see differences with non-cyclic splines
+
+**Plot model**
+```
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,48), pos=.15)
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(14,24), pos=.15)
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,35), pos=.15)
+vis.gam(m_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+```
+![Horiz_range](/Plots/Horiz_range_6.png "Horiz_range")
+
+We see that:
+- In _pike_, the highest peak occurs between Winter and Spring II, nearly every day of the week but slihtly higest on Tuesday and Wednesday
+- In _pikeperch_, the highest peak is in Summer
+- In _wels_, there are tow peaks, both in Spring I and Spring II, with maximum values excluding weekends
+
+**Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
+```
+layout(matrix(1:6, nrow = 2))
+plot_diff2(m_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
+plot_diff2(m_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
+plot_diff2(m_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
+```
+![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
+
+### 2.4. Fit GAMM models with uncorrelated errors to data of daily and seasonal changes
 
 Now we fit models using both daily and season as predictors to account for seasonality
 ```
@@ -396,7 +552,7 @@ Model 2: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
 1 151.71 -34692
 2 151.32 -34692 -0.39081 0.0073  < 2.2e-16 ***
 ```
-Once again, the interaction model **m_gam_sp2** is preferred and we see that the addition of _body_size_ does not improve overall model fit
+Once again, the interaction model **m_gam_sp2_daily** is preferred and we see that the addition of _body_size_ does not improve overall model fit
 
 ### Summary of best-fit model
 
@@ -448,17 +604,19 @@ Form results of the winning model we can see that:
 **Plot summed effects surfaces of season and daily smooths for the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(-80,80), pos=.85)
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(10,65), pos=.85)
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(-60,120), pos=.85)
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("seasonally","daily"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
 ```
-![Horiz_range](/Plots/Horiz_range_6.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
+
+- We see that in the three species, the highest peak occurs in Spring I and when _Daily_ values are near 17630 (i.e., 2018-04-09 )
 
 **Plot summed effects surfaces (smooth) with and without random effects**
 ```
@@ -473,7 +631,7 @@ plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=F
 plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
 legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
 ```
-![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_9.png "Horiz_range")
 
 **Plot surface and one-dimensional daily/seasonal differences in horizontal range between the three species**
 ```
@@ -482,5 +640,15 @@ plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "pikep
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
 ```
-![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_10.png "Horiz_range")
+
+Alternatively, plot fitted model values (daily/seasonally) with following code:
+```
+data_m_gam_sp2_daily <- visreg(m_gam_sp2_daily, "daily", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
+plot(data_m_gam_sp2_daily, plot.type="rgl") + theme_bw()
+data_m_gam_sp2_season <- visreg(m_gam_sp2_daily, "seasonally", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
+plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
+```
+
+### 2.5. Fit GAMM models with correlated errors to data of daily and seasonal changes
 
