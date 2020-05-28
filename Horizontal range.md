@@ -1,7 +1,7 @@
 ## Create a dataset of daily and weekly distance range for each species
 
-:books:`library(lubridate)`
-:books:`library(plyr)`
+:books:`library(lubridate)`  
+:books:`library(plyr)`  
 
 Add info for each species and order by date
 ```
@@ -66,7 +66,7 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 
 ## 2. Build GAMM models and conduct model-selection
 
-:books:`library(mgcv)`
+:books:`library(mgcv)`  
 
 ### 2.1. Create a new dataset
 
@@ -139,8 +139,8 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
 
 #### Based on AIC
 ```
@@ -266,18 +266,21 @@ Form results of the winning model we can see that:
 
 ### Plot model
 
-:books:`library(itsadug)`
-:books:`library(rgl)`
+:books:`library(itsadug)`  
+:books:`library(rgl)`  
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
-layout(matrix(1:3, nrow = 1))
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 400, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(28,48), pos=.15)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 400, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(14,24), pos=.15)
-vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 400, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(28,35), pos=.15)
+vis.gam(m_gam_sp2, view=c("weekly","seasonally"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
 ```
 ![Horiz_range](/Plots/Horiz_range_4.png "Horiz_range")
 
@@ -322,7 +325,6 @@ m_gam_sp8_daily <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr"
 ### Model-selection
 
 #### Based on AIC
-
 ```
 AIC(m_gam_sp1_daily,m_gam_sp2_daily,m_gam_sp3_daily,m_gam_sp4_daily,m_gam_sp5_daily,m_gam_sp6_daily,m_gam_sp7_daily,m_gam_sp8_daily)
 ```
@@ -340,7 +342,6 @@ m_gam_sp8_daily  63.17117 71202.77
 Model **m_gam_sp2_daily** is preferred (lowest AIC)
 
 #### Based on AICc
-
 ```
 Cand.mod <- list(m_gam_sp1_daily,m_gam_sp2_daily,m_gam_sp3_daily,m_gam_sp4_daily,m_gam_sp5_daily,m_gam_sp6_daily,m_gam_sp7_daily,m_gam_sp8_daily)
 
