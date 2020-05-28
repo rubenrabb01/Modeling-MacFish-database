@@ -49,6 +49,11 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 R-sq.(adj) =  0.285   Deviance explained = 28.8%
 -REML =  42963  Scale est. = 181.83    n = 10664
 ```
+
+### Plot model
+
+:books:`library(gratia)`
+
 ```
 draw(m_imp_gam_season, ncol = 2)
 ```
@@ -58,7 +63,8 @@ draw(m_imp_gam_season, ncol = 2)
 
 ### 2.3. Fit a GAMM model with uncorrelated errors to weekly and seasonality data
 
-Now we set k for _weekly_ to 7
+- Now we set k to 7 and 5 for both _weekly_ and _seasonally, respectively
+- Note that _weekly_ refers to day of the week
 ```
 m_imp_gam_week_season<- bam(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
 ```
@@ -66,7 +72,6 @@ m_imp_gam_week_season<- bam(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(se
 summary(m_imp_gam_week_season)
 ```
 ```
-
 Family: gaussian
 Link function: identity
 
@@ -93,6 +98,9 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 R-sq.(adj) =  0.288   Deviance explained = 29.1%
 -REML =  42947  Scale est. = 181.08    n = 10664
 ```
+
+### Plot model
+
 ```
 draw(m_imp_gam_week_season, ncol = 2)
 ```
@@ -102,7 +110,6 @@ draw(m_imp_gam_week_season, ncol = 2)
 
 ### 2.4. Fit a GAMM model with uncorrelated errors to daily and seasonality data
 
-Now we set k for _weekly_ to 7
 ```
 m_imp_gam_daily_season<- bam(sqrt(ranged2d+1) ~ s(as.numeric(daily)) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
 ```
@@ -281,11 +288,7 @@ gamtabs(m_imp_gam_sp2, caption="Summary of m_imp_gam_sp2", comment=FALSE, type='
    <a name=tab.gam></a>
 </table>
 
-We can see that:
-- The _weekly_ by _season_ interaction is significant to response variable only in _pike_ and marginally significant in _pikeperch_
-- There is significant inter-individual variation within sesions
-- There is high variability between individuals of the three species
-- If we fit a model adding an random term _s(Id, bs = 're')_, the term is not significant and undersmooths; finally, the model is not preferred
+- We can see that the _weekly_ by _seasonally_ interaction is significant in _pike_ and _pikeperch_ whilst it is marginally significant in _wels_
 
 ### Plot model
 
@@ -308,26 +311,26 @@ vis.gam(m_imp_gam_sp2, view=c("seasonally","weekly"), cond=list(Species='wels'),
 ![Horiz_range](/Plots/Horiz_range_4_imputed.png "Horiz_range")
 
 We see that:
-- In _pike_, the highest peak occurs in Spring II and when _weekly_ has value 7 (Sunday)
-- In _pikeperch_, the highest peak is in Spring I and nearly highest within _weekly_ values 1-3 (Monday to Wednesday)
-- In _wels_, the highest peak is in Spring I and mostly on Monday
+- In _pike_, the highest peak occurs in Spring II and mostly on weekend
+- In _pikeperch_, the highest peak is in Spring I and between Monday to Wednesday
+- In _wels_, the highest peak is in Spring I and Monday
 
 **Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
+plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week day by season difference pike-pikeperch',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_imp_gam_sp2, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
-plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
+plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week day by season difference pikeperch-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_imp_gam_sp2, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
-plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
+plot_diff2(m_imp_gam_sp2, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week day by season difference pike-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
@@ -336,9 +339,9 @@ plot_diff(m_imp_gam_sp2, view="seasonally", comp=list(Species=c("pike", "wels"))
 ```
 ![Horiz_range](/Plots/Horiz_range_5_imputed.png "Horiz_range")
 
-### How would dimensional terms change if we consider cyclical variation in horizontal range?
+### How would dimensional terms change if we would consider cyclical variation in horizontal range?
 
-Now we re-fit the previous best-fit mode using cyclic cubic regression splines with both _weekly_ (values from 1 to 7) and _seasonally_ (cycles from 1 to 5) as predictors to account for cyclic seasonality in horizontal range
+Now we re-fit the previous best-fit mode using cyclic cubic splines with both _weekly_ (values from 1 to 7) and _seasonally_ (cycles from 1 to 5) as predictors to account for cyclic seasonality in horizontal range
 ```
 m_imp_gam_sp2_cyclic <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(weekly, seasonally, bs = "cc", by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
 ```
@@ -353,10 +356,10 @@ te(weekly,seasonally):Speciespike       10.767547     15  619.80842 1.532268e-06
 te(weekly,seasonally):Speciespikeperch   8.336153     15   87.26920 8.708008e-04
 te(weekly,seasonally):Specieswels        5.531690     15   72.85423 2.524844e-01
 ```
-- In contrast to previous model we see now that the _weekly_ by _season_ interaction is significant only in _pikeperch_
+- In contrast to non-imputed data now we see that the _weekly_ by _season_ interaction is significant both in _pike_ and _pikeperch_
 - Lets plot the model to see differences with non-cyclic splines
 
-**Plot model**
+### Plot model
 ```
 layout(matrix(1:6, nrow = 2))
 vis.gam(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
@@ -379,19 +382,19 @@ We see that:
 **Plot surface and one-dimensional weekly/seasonal differences in horizontal range between the three species**
 ```
 layout(matrix(1:6, nrow = 2))
-plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week by season difference pike-pikeperch',
+plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "pikeperch")), main='Week day by season difference pike-pikeperch',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_imp_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
-plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week by season difference pikeperch-wels',
+plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pikeperch", "wels")), main='Week day by season difference pikeperch-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
         print.summary=FALSE)
 plot_diff(m_imp_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
-plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week by season difference pike-wels',
+plot_diff2(m_imp_gam_sp2_cyclic, view=c("seasonally","weekly"), comp=list(Species=c("pike", "wels")), main='Week day by season difference pike-wels',
         transform.view = TRUE,
         color = "heat",
         n.grid = 420,
@@ -513,7 +516,7 @@ te(as.numeric(daily),seasonally):Speciespikeperch  8.03303   9.034624    7.55912
 te(as.numeric(daily),seasonally):Specieswels      14.27979  15.300527   11.112362 1.793698e-27
 ```
 
-**Summary table** of the winning model
+**Summary table**
 ```
 gamtabs(m_imp_gam_sp2_daily, caption="Summary of m_imp_gam_sp2_daily", comment=FALSE, type='html')
 ```
@@ -532,7 +535,7 @@ gamtabs(m_imp_gam_sp2_daily, caption="Summary of m_imp_gam_sp2_daily", comment=F
 
 Form results of the winning model we can see that:
 - The _daily_ by _season_ interaction is significant to response variable in the three species
-- The percentage of explained variance is more than 10% higher than with the non-imputed dataset
+- The percentage of explained variance is more than 10% higher than with the non-imputed data
 
 ### Plot model
 
@@ -589,3 +592,5 @@ plot(data_m_imp_gam_sp2_daily, plot.type="rgl") + theme_bw()
 ### 2.5. Fit GAMM models with correlated errors to data of daily and seasonal changes
 
 Now lets see if adding autoregressive correlation terms improves the overall fit of previous models
+
+#### 2.5.1. Autocorrelation model 1
