@@ -77,9 +77,9 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data
 
 ### 2.2. Fit a global GAMM model for seasonality in horizontal range
 
-We fit a model including a smooth term for season grouped by Species and one-random term added
+We fit a model including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
 ```
-m_gam_season<- bam(sqrt(ranged2d+1) ~ te(seasonally, bs = c("cr", "ps"), by=Species)+ s(Id, bs = "re"), data = data_longit_sub_GAM, family = gaussian, na.action=na.omit)
+m_gam_season<- bam(sqrt(ranged2d+1) ~ te(seasonally, bs = "cc", by=Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
 ```
 ```
 summary(m_gam_season)
@@ -89,26 +89,26 @@ Family: gaussian
 Link function: identity
 
 Formula:
-sqrt(ranged2d + 1) ~ te(seasonally, bs = c("cr", "ps"), by = Species) +
+sqrt(ranged2d + 1) ~ te(seasonally, bs = "cc", by = Species) +
     s(Id, bs = "re")
 
 Parametric coefficients:
             Estimate Std. Error t value Pr(>|t|)
-(Intercept)   26.530      1.219   21.75   <2e-16 ***
+(Intercept)   26.476      1.219   21.72   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Approximate significance of smooth terms:
-                                   edf Ref.df     F  p-value
-te(seasonally):Speciespike       3.716  3.957 42.89  < 2e-16 ***
-te(seasonally):Speciespikeperch  3.898  3.994 41.68  < 2e-16 ***
-te(seasonally):Specieswels       3.351  3.790 19.69 5.33e-15 ***
-s(Id)                           29.533 30.000 67.98  < 2e-16 ***
+                                   edf Ref.df      F  p-value
+te(seasonally):Speciespike       2.689      3  97.15 1.23e-15 ***
+te(seasonally):Speciespikeperch  2.884      3 281.67  < 2e-16 ***
+te(seasonally):Specieswels       2.824      3  27.97 1.48e-08 ***
+s(Id)                           29.531     30  67.25  < 2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-R-sq.(adj) =  0.221   Deviance explained = 22.4%
-fREML =  35581  Scale est. = 186.24    n = 8806
+R-sq.(adj) =  0.211   Deviance explained = 21.4%
+-REML =  35805  Scale est. = 188.58    n = 8846
 ```
 ```
 draw(m_gam_season, ncol = 2)
