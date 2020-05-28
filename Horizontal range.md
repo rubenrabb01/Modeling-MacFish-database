@@ -66,7 +66,6 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 
 ## 2. Build GAMM models and conduct model-selection
 
-:books:`library(itsadug)`
 :books:`library(mgcv)`
 
 ### 2.1. Create a new dataset
@@ -144,7 +143,6 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 :books:`library(AICcmodavg)`
 
 #### Based on AIC
-
 ```
 AIC(m_gam_sp1,m_gam_sp2,m_gam_sp3,m_gam_sp4,m_gam_sp5,m_gam_sp6,m_gam_sp7,m_gam_sp8)
 ```
@@ -163,7 +161,6 @@ Model **m_gam_sp2** is preferred (lowest AIC)
 **Note:** Comparing these models with GCV.Cp (re-fitting models with method=" GCV.Cp" instead "REML" the results are the same)
 
 #### Based on AICc
-
 ```
 Cand.mod <- list(m_gam_sp1,m_gam_sp2,m_gam_sp3,m_gam_sp4,m_gam_sp5,m_gam_sp6,m_gam_sp7,m_gam_sp8)
 
@@ -268,6 +265,9 @@ Form results of the winning model we can see that:
 - If we fit a model adding an random term _s(Id, bs = 're')_ to the model, the term is not significant and undersmooths; finally, the model is not preferred
 
 ### Plot model
+
+:books:`library(itsadug)`
+:books:`library(rgl)`
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
@@ -445,23 +445,18 @@ Form results of the winning model we can see that:
 
 **Plot summed effects surfaces of season and daily smooths for the three species**
 ```
-layout(matrix(1:3, nrow = 1))
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 420, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
 gradientLegend(valRange=c(-80,80), pos=.85)
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 420, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
-gradientLegend(valRange=c(10,65), pos=.85)
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 420, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
-gradientLegend(valRange=c(-60,120), pos=.85)
-```
-![Horiz_range](/Plots/Horiz_range_6.png "Horiz_range")
-
-```
-layout(matrix(1:3, nrow = 1))
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(10,65), pos=.85)
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(-60,120), pos=.85)
 vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
 ```
-![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_6.png "Horiz_range")
 
 **Plot summed effects surfaces (smooth) with and without random effects**
 ```
@@ -476,7 +471,7 @@ plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=F
 plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
 legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
 ```
-![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
 
 **Plot surface and one-dimensional daily/seasonal differences in horizontal range between the three species**
 ```
@@ -485,6 +480,5 @@ plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "pikep
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
 ```
-![Horiz_range](/Plots/Horiz_range_9.png "Horiz_range")
-
+![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
 
