@@ -455,6 +455,14 @@ gradientLegend(valRange=c(-60,120), pos=.85)
 ```
 ![Horiz_range](/Plots/Horiz_range_6.png "Horiz_range")
 
+```
+layout(matrix(1:3, nrow = 1))
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+```
+![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
+
 **Plot summed effects surfaces (smooth) with and without random effects**
 ```
 par(mfrow=c(1,3), cex=1.1)
@@ -468,7 +476,7 @@ plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=F
 plot_smooth(m_gam_sp2_daily, view="seasonally", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, ylim=c(0,7700), print.summary=FALSE, xpd=TRUE)
 legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
 ```
-![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
 
 **Plot surface and one-dimensional daily/seasonal differences in horizontal range between the three species**
 ```
@@ -476,15 +484,6 @@ layout(matrix(1:3, nrow = 1))
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
 plot_diff(m_gam_sp2_daily, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
-```
-![Horiz_range](/Plots/Horiz_range_8.png "Horiz_range")
-
-**Plot 3D smooth surfaces**
-```
-layout(matrix(1:3, nrow = 2))
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pike'), main = "pike", plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "")
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='pikeperch'), main = "pike", plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "")
-vis.gam(m_gam_sp2_daily, view=c("daily","seasonally"), cond=list(Species='wels'), main = "pike", plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "")
 ```
 ![Horiz_range](/Plots/Horiz_range_9.png "Horiz_range")
 
