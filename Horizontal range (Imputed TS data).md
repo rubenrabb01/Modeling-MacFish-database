@@ -9,7 +9,7 @@ data_longit_sub_complete$day_num <- lapply(data_longit_sub_complete$daily, ts, s
 
 ## 2. Build GAMM models and conduct model-selection
 
-:books:`library(mgcv)`
+:books:`library(mgcv)`  
 
 ### 2.2. Fit a global GAMM model with uncorrelated errors to seasonality data
 
@@ -52,7 +52,7 @@ R-sq.(adj) =  0.285   Deviance explained = 28.8%
 
 ### Plot model
 
-:books:`library(gratia)`
+:books:`library(gratia)`  
 
 ```
 draw(m_imp_gam_season, ncol = 2)
@@ -171,8 +171,9 @@ m_imp_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", 
 
 ### Model-selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
+:books:`library(lmtest)`  
 
 #### Based on AIC
 ```
@@ -292,8 +293,8 @@ gamtabs(m_imp_gam_sp2, caption="Summary of m_imp_gam_sp2", comment=FALSE, type='
 
 ### Plot model
 
-:books:`library(itsadug)`
-:books:`library(rgl)`
+:books:`library(itsadug)`  
+:books:`library(rgl)`  
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
