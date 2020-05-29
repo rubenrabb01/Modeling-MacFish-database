@@ -954,3 +954,4 @@ ggplot(data = data_longit_sub,
 ![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
 
 ### Differences between species averages
+
