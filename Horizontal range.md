@@ -683,13 +683,6 @@ plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
 - With this approach we expect to get better estimates of parameter uncertainity
 - For models including a tensor product smooths we use the function _t2_ instead of _te/ti_ (not allowed in brms)
 
-In this representation, the wiggly parts of the spline basis are treated as a random effect and their associated variance parameter controls the degree of wiggliness of the fitted spline.
-
-:books:`library(brms)`   
-:books:`library(bayesplot)`   
-:books:`library(rstanarm)`   
-:books:`library(loo)`   
-
 ### 3.1. Fit a Bayesian GAMM model for seasonality data
 
 We re-fit the previous model **m_gam_season** with the following specifications:
@@ -699,6 +692,11 @@ We re-fit the previous model **m_gam_season** with the following specifications:
 - Samples thinned (thin=10) to deal with strong autocorrelation in the chains
 - Set fitted chains to 2
 - Set _adapt_delta_ to 0.99 (increase from default values as in a fisrt run there is a warning about divergent transitions after warmup)
+
+:books:`library(brms)`   
+:books:`library(bayesplot)`   
+:books:`library(rstanarm)`   
+:books:`library(loo)`   
 
 ```
 m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
