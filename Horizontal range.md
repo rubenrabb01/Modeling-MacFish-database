@@ -2,8 +2,8 @@
 
 ## 1. Prepare dataset with daily and seasonally distance range
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 Add info for each species and order by date
 ```
@@ -83,7 +83,7 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data
 - Include a simple random term for subject identity
 - Horizontal range might be expected to vary cyclically across seasons so we need to specify bs = "cc"  (i.e., cyclic cubic regression splines), hence, seasonally shows no discontinuity between Spring I and Spring II and both ends line up
 
-:books:`library(mgcv)`  
+:books:`library(mgcv)`
 
 ```
 m_gam_season<- bam(sqrt(ranged2d+1) ~ s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
@@ -120,7 +120,7 @@ R-sq.(adj) =  0.211   Deviance explained = 21.4%
 
 ### Plot model
 
-:books:`library(gratia)`  
+:books:`library(gratia)`
 
 ```
 draw(m_gam_season, ncol = 2)
@@ -251,9 +251,9 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`  
-:books:`library(AICcmodavg)`  
-:books:`library(lmtest)`  
+:books:`library(MASS)`
+:books:`library(AICcmodavg)`
+:books:`library(lmtest)`
 
 #### Based on AIC
 ```
@@ -356,7 +356,7 @@ te(weekly,seasonally):Specieswels       5.880048   6.879601    1.480415 1.650919
 
 **Summary table**
 
-:books:`library(itsadug)`  
+:books:`library(itsadug)`
 
 ```
 gamtabs(m_gam_sp2, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
@@ -382,7 +382,7 @@ We can see that:
 
 ### Plot model
 
-:books:`library(rgl)`  
+:books:`library(rgl)`
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
@@ -677,16 +677,18 @@ data_m_gam_sp2_season <- visreg(m_gam_sp2_daily, "seasonally", by = "Species", b
 plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
 ```
 
-## 3. Build GAMM models using a Bayesian approach
+## 3. Build GAMM models using MCMC to perform Bayesian estimation
 
 - Keeping the smooth specification, we re-fit previous GAMM models with Bayesian estimators using the _brm_ function in package **brms**
+- With this approach we expect to get better estimates of parameter uncertainity
 - For models including a tensor product smooths we use the function _t2_ instead of _te/ti_ (not allowed in brms)
 
 In this representation, the wiggly parts of the spline basis are treated as a random effect and their associated variance parameter controls the degree of wiggliness of the fitted spline.
 
-:books:`library(brms)`  
-:books:`library(rstanarm)`  
-:books:`library(loo)`  
+:books:`library(brms)`
+:books:`library(bayesplot)`
+:books:`library(rstanarm)`
+:books:`library(loo)`
 
 ### 3.1. Fit a Bayesian GAMM model for seasonality data
 
@@ -740,6 +742,9 @@ Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
+
+**How is compared with the non-Bayesian version**
+
 ```
 gam.vcomp(m_gam_week_season, rescale = FALSE)
 ```
@@ -756,6 +761,14 @@ scale                          13.72901857 13.52772063 13.9333119
 
 Rank: 6/6
 ```
+
+Non-Bayesian vs. Bayesian posterior means and 95% (Confidence/Credible) Intervals for the variable _seasonally_:
+- _pike_: 0.99[0.43, 2.28] vs. 1.96[0.59, 6.62]
+- _pikeperch_: 2.02[0.88, 4.65] vs. 3.59[1.24, 10.92]
+- _wels_: 1.07[0.44, 2.58] vs. 6.96[5.43, 8.98]
+
+### Plot model
+
 ```
 cond_smooths <- conditional_smooths(m_gam_week_season_bayes)
 ```
@@ -765,6 +778,10 @@ plot(cond_smooths) + theme_bw()
 ![Horiz_range](/Plots/Horiz_range_11.png "Horiz_range")
 
 ![Horiz_range](/Plots/Horiz_range_12.png "Horiz_range")
+
+We can see that:
+- The estimated smooth for the Bayesian version of this model looks about the same as its non-Bayesian version
+- The marginal_smooths() function is effectively the equivalent of the plot() method for mgcv-based GAMs.
 
 ### Model diagnostics
 
@@ -826,7 +843,6 @@ plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE
 In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
 
 **Plot posterior predictive check**
-
 ```
 prop_zero <- function(y) mean(y == 0)
 (prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
@@ -835,7 +851,7 @@ prop_zero <- function(y) mean(y == 0)
 
 **Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
 
-**Plot empirical cumulative distribution function (obs. and random draws from the model posterior)
+**Plot empirical cumulative distribution function (obs. and random draws from the model posterior)**
 ```
 pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
 ```
@@ -940,4 +956,3 @@ ggplot(data = data_longit_sub,
 ![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
 
 ### Differences between species averages
-
