@@ -680,3 +680,262 @@ plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
 Now lets see if adding autoregressive correlation terms improves the overall fit of previous models
 
 #### 2.5.1. Autocorrelation model 1
+
+####
+
+### 2.5. Fit GAMM models with Bayesian estimators
+
+In this section we fit bayesian GAMM models using the _brm_ function
+
+:books:`library(brm)`
+:books:`library(rstanarm)`
+:books:`library(loo)`
+
+### Fit model
+```
+m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
+          data = data_longit_sub,
+          family = gaussian(),
+          cores = 4, seed = 17,
+          iter = 4000, warmup = 1000, thin = 10, refresh = 0,
+          control = list(adapt_delta = 0.99))
+
+### Model summary
+
+```
+summary(m_gam_week_season_bayes)
+```
+```
+ Family: gaussian
+  Links: mu = identity; sigma = identity
+Formula: sqrt(ranged2d + 1) ~ s(weekly, bs = "cc", k = 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")
+   Data: data_longit_sub (Number of observations: 8846)
+Samples: 4 chains, each with iter = 4000; warmup = 1000; thin = 10;
+         total post-warmup samples = 1200
+
+Smooth Terms:
+                                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sds(sweekly_1)                         0.15      0.15     0.01     0.47 1.00     1093     1062
+sds(sseasonallySpeciespike_1)          1.96      1.91     0.59     6.62 1.00     1093     1060
+sds(sseasonallySpeciespikeperch_1)     3.59      2.56     1.24    10.92 1.00     1060     1170
+sds(sseasonallySpecieswels_1)          2.07      1.72     0.65     6.78 1.00     1090     1098
+sds(sId_1)                             6.96      0.91     5.43     8.98 1.00      872      936
+
+Population-Level Effects:
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    26.56      1.26    24.11    29.09 1.00      787      955
+
+Family Specific Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma    13.73      0.10    13.54    13.93 1.00     1272     1009
+
+Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+```
+```
+gam.vcomp(m_gam_week_season, rescale = FALSE)
+```
+```
+Standard deviations and 0.95 confidence intervals:
+
+                                   std.dev       lower      upper
+s(weekly)                       0.08380344  0.02202344  0.3188883
+s(seasonally):Speciespike       0.98816336  0.42820469  2.2803739
+s(seasonally):Speciespikeperch  2.02012546  0.87719342  4.6522315
+s(seasonally):Specieswels       1.07050797  0.44343540  2.5843388
+s(Id)                           6.73191819  5.20586818  8.7053150
+scale                          13.72901857 13.52772063 13.9333119
+
+Rank: 6/6
+```
+```
+cond_smooths <- conditional_smooths(m_gam_week_season_bayes)
+```
+```
+plot(cond_smooths) + theme_bw()
+```
+![Horiz_range](/Plots/Horiz_range_11.png "Horiz_range")
+
+![Horiz_range](/Plots/Horiz_range_12.png "Horiz_range")
+
+mcmc_plot(m_gam_week_season_bayes, pars = c("s(weekly)", "sds(seasonally)")) + xlim(c(-0.5, 0.5))
+
+### Model diagnostics
+
+- We use Pareto-smoothed importance sampling LOO Cross-Validation for model checking
+- First, create a loo object and return an object of class _pareto_k_table_ (matrix form "Count", "Proportion", and "Min. n_eff")
+
+```
+loo<-loo(m_gam_week_season_bayes)
+pareto_k_table(loo)
+loo
+```
+```
+Computed from 1200 by 8846 log-likelihood matrix
+
+         Estimate    SE
+elpd_loo -35747.4  74.1
+p_loo        44.2   0.8
+looic     71494.7 148.2
+------
+Monte Carlo SE of elpd_loo is 0.2.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+Returns an integer vector indicating which observations have Pareto k estimates above threshold
+```
+pareto_k_ids(loo, threshold = 0.5)
+```
+
+Returns a vector of the estimated Pareto k parameters
+```
+pareto_k_values(loo)
+```
+
+Returns a vector of the estimated PSIS effective sample sizes
+```
+psis_n_eff_values(loo)
+```
+
+Returns the Monte Carlo standard error (MCSE) estimate for PSIS-LOO. MCSE will be NA if any Pareto k values are above threshold
+```
+mcse_loo(loo, threshold = 0.7)
+```
+```
+0.1971972
+```
+
+**Plot estimates and PSIS diagnostic**
+
+```
+plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
+```
+![Horiz_range](/Plots/Horiz_range_121.png "Horiz_range")
+
+![Horiz_range](/Plots/Horiz_range_122.png "Horiz_range")
+
+### Posterior predictive checks
+
+In addition to LOO CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
+
+**Plot posterior predictive check**
+
+```
+prop_zero <- function(y) mean(y == 0)
+(prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
+#pp_check(m_gam_week_season_bayes)
+```
+![Horiz_range](/Plots/Horiz_range_13.png "Horiz_range")
+
+**Plot empirical cumulative distribution function (obs. and random draws from the model posterior)
+
+```
+pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
+```
+![Horiz_range](/Plots/Horiz_range_14.png "Horiz_range")
+
+### Extract the posterior draws for all parameters
+
+```
+sims <- as.matrix(m_gam_week_season_bayes)
+dim(sims)
+```
+```
+[1] 4000   174
+```
+```
+para_name <- colnames(sims)
+```
+
+**Obtain fi_species-level varying intercept a_j**
+
+draws for overall mean
+```
+mu_a_sims <- as.matrix(m_gam_week_season_bayes, pars = "(Intercept)")
+```
+
+draws for 3 fi_species-level error
+```
+fish_err <- as.matrix(m_gam_week_season_bayes,regex_pars = "b\\[\\(Intercept\\) Species\\:")
+```
+
+draws for 3 species varying intercepts
+```
+fish_inter <- as.numeric(mu_a_sims) + fish_err
+```
+
+**Obtain sigma_y and sigma_alpha^2**
+
+draws for sigma_y
+```
+signma_y <- as.matrix(m_gam_week_season_bayes, pars = "sigma")
+```
+
+draws for sigma_alpha^2
+```
+sigma_alpha <- as.matrix(m_gam_week_season_bayes, pars = "Sigma[Species:(Intercept),(Intercept)]")
+```
+
+### Calculate means, SD, medians and 95% credible intervals of varying intercepts
+
+We summarize the posterior probability distribution of the 4,000 estimates (draws) for α1 examining their quantiles
+
+Posterior mean of each alpha
+
+```
+a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)
+```
+
+Posterior SD of each alpha
+```
+a_sd <- apply(X = fish_inter, MARGIN = 2, FUN = sd)
+```
+
+Posterior median and 95% credible interval
+```
+a_quant <- apply(X = fish_inter, MARGIN = 2, FUN = quantile, probs = c(0.025, 0.50, 0.975))
+a_quant <- data.frame(t(a_quant))
+names(a_quant) <- c("X2.5.", "X50.", "X97.5.")
+```
+
+**Combine summary statistics of posterior simulation draws**
+
+```
+a_df <- data.frame(a_mean, a_sd, a_quant)
+round(head(a_df), 2)
+```
+```
+                                  a_mean a_sd  Q2.5   Q50 Q97.5
+b_Intercept                        53.12 2.51 48.22 53.09 58.18
+sds_sweekly_1                      26.71 1.28 24.28 26.69 29.26
+sds_sseasonallySpeciespike_1       28.52 2.28 25.45 28.22 33.28
+sds_sseasonallySpeciespikeperch_1  30.15 2.85 26.48 29.52 37.54
+sds_sseasonallySpecieswels_1       28.63 2.16 25.43 28.30 34.14
+sds_sId_1                          33.52 1.61 30.69 33.37 36.88
+```
+
+### Caterpillar plot for all fish intercepts
+
+Sort dataframe containing an estimated alpha mean and sd for every fi_species
+```
+a_df <- a_df[order(a_df$a_mean), ]
+a_df$a_rank <- c(1 : dim(a_df)[1]) # a vector of fi_species rank
+```
+
+Plot fish-level alphas posterior mean and 95% credible interval
+```
+ggplot(data = data_longit_sub,
+       aes(x = a_rank, y = a_mean)) +
+       geom_pointrange(aes(ymin = X2.5., max = X97.5.), position = position_jitter(width = 0.1, height = 0)) +
+       geom_hline(yintercept = mean(a_df$a_mean), size = 0.5, col = "red") +
+       scale_x_continuous("Rank", breaks = seq(from = 0, to = 80, by = 5)) +
+       scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
+       theme_bw( base_family = "serif")
+```
+![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
+
+### Differences between species averages
+
+
