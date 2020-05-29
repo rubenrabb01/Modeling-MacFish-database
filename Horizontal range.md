@@ -692,6 +692,7 @@ In this section we fit bayesian GAMM models using the _brm_ function
 :books:`library(loo)`
 
 ### Fit model
+
 ```
 m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
           data = data_longit_sub,
@@ -699,6 +700,7 @@ m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) 
           cores = 4, seed = 17,
           iter = 4000, warmup = 1000, thin = 10, refresh = 0,
           control = list(adapt_delta = 0.99))
+```
 
 ### Model summary
 
@@ -937,5 +939,6 @@ ggplot(data = data_longit_sub,
 ![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
 
 ### Differences between species averages
+
 
 
