@@ -2,8 +2,8 @@
 
 ## 1. Prepare dataset with daily and seasonally distance range
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 Add info for each species and order by date
 ```
@@ -68,8 +68,6 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 
 ## 2. Build GAMM models and conduct model-selection
 
-:books:`library(mgcv)`  
-
 ### 2.1. Create a new dataset
 
 First, lets subset horizontal range data into a new dataset _data_longit_sub_ for easing models fitting
@@ -79,10 +77,14 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data
 
 ### 2.2. Fit a global GAMM model with uncorrelated errors to seasonality data
 
-- Fit a model assuming all observations are indpependent and including a smooth term for seasonallity grouped by Species and add one-random term added for subject identity
+- Fit a model assuming all observations are indpependent and including a smooth term for seasonallity grouped by Species
+- Add one random-term added for subject identity
 - We set k for the variable _seasonally_ to 5, which is the number of unique values for each season
 - Include a simple random term for subject identity
 - Horizontal range might be expected to vary cyclically across seasons so we need to specify bs = "cc"  (i.e., cyclic cubic regression splines), hence, seasonally shows no discontinuity between Spring I and Spring II and both ends line up
+
+:books:`library(mgcv)`
+
 ```
 m_gam_season<- bam(sqrt(ranged2d+1) ~ s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
 ```
@@ -118,7 +120,7 @@ R-sq.(adj) =  0.211   Deviance explained = 21.4%
 
 ### Plot model
 
-:books:`library(gratia)`  
+:books:`library(gratia)`
 
 ```
 draw(m_gam_season, ncol = 2)
@@ -249,9 +251,9 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`  
-:books:`library(AICcmodavg)`  
-:books:`library(lmtest)`  
+:books:`library(MASS)`
+:books:`library(AICcmodavg)`
+:books:`library(lmtest)`
 
 #### Based on AIC
 ```
@@ -354,7 +356,7 @@ te(weekly,seasonally):Specieswels       5.880048   6.879601    1.480415 1.650919
 
 **Summary table**
 
-:books:`library(itsadug)`  
+:books:`library(itsadug)`
 
 ```
 gamtabs(m_gam_sp2, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
@@ -380,7 +382,7 @@ We can see that:
 
 ### Plot model
 
-:books:`library(rgl)`  
+:books:`library(rgl)`
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
@@ -675,23 +677,26 @@ data_m_gam_sp2_season <- visreg(m_gam_sp2_daily, "seasonally", by = "Species", b
 plot(data_m_gam_sp2_season, plot.type="rgl") + theme_bw()
 ```
 
-### 2.5. Fit GAMM models with correlated errors to data of daily and seasonal changes
+## 3. Build GAMM models using a Bayesian approach
 
-Now lets see if adding autoregressive correlation terms improves the overall fit of previous models
+- Keeping the smooth specification, we re-fit previous GAMM models with Bayesian estimators using the _brm_ function in package **brms**
+- For models including a tensor product smooths we use the function _t2_ instead of _te/ti_ (not allowed in brms)
 
-#### 2.5.1. Autocorrelation model 1
+In this representation, the wiggly parts of the spline basis are treated as a random effect and their associated variance parameter controls the degree of wiggliness of the fitted spline.
 
-####
-
-### 2.5. Fit GAMM models with Bayesian estimators
-
-In this section we fit bayesian GAMM models using the _brm_ function
-
-:books:`library(brm)`
+:books:`library(brms)`
 :books:`library(rstanarm)`
 :books:`library(loo)`
 
-### Fit model
+### 3.1. Fit a Bayesian GAMM model for seasonality data
+
+We re-fit the previous model **m_gam_season** with the following specifications:
+- Set MCMC samples to 4000 iterations (increase from default values as in a first run we obtain a warning about parts of the model not converging)
+- Set chains to default (lowering this value is likely related to previous warning message)
+- Set priors to default values
+- Samples thinned (thin=10) to deal with strong autocorrelation in the chains
+- Set fitted chains to 2
+- Set _adapt_delta_ to 0.99 (increase from default values as in a fisrt run there is a warning about divergent transitions after warmup)
 
 ```
 m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
@@ -761,8 +766,6 @@ plot(cond_smooths) + theme_bw()
 
 ![Horiz_range](/Plots/Horiz_range_12.png "Horiz_range")
 
-mcmc_plot(m_gam_week_season_bayes, pars = c("s(weekly)", "sds(seasonally)")) + xlim(c(-0.5, 0.5))
-
 ### Model diagnostics
 
 - We use Pareto-smoothed importance sampling LOO Cross-Validation for model checking
@@ -814,29 +817,29 @@ mcse_loo(loo, threshold = 0.7)
 ```
 plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
 ```
-![Horiz_range](/Plots/Horiz_range_121.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_13.png "Horiz_range")
 
-![Horiz_range](/Plots/Horiz_range_122.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_14.png "Horiz_range")
 
 ### Posterior predictive checks
 
-In addition to LOO CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
+In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
 
 **Plot posterior predictive check**
 
 ```
 prop_zero <- function(y) mean(y == 0)
 (prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
-#pp_check(m_gam_week_season_bayes)
 ```
-![Horiz_range](/Plots/Horiz_range_13.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
+
+**Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
 
 **Plot empirical cumulative distribution function (obs. and random draws from the model posterior)
-
 ```
 pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
 ```
-![Horiz_range](/Plots/Horiz_range_14.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_16.png "Horiz_range")
 
 ### Extract the posterior draws for all parameters
 
@@ -882,20 +885,19 @@ sigma_alpha <- as.matrix(m_gam_week_season_bayes, pars = "Sigma[Species:(Interce
 
 ### Calculate means, SD, medians and 95% credible intervals of varying intercepts
 
-We summarize the posterior probability distribution of the 4,000 estimates (draws) for α1 examining their quantiles
+We summarize the posterior probability distribution of the 4,000 estimates (draws) for a1 examining their quantiles
 
-Posterior mean of each alpha
-
+**Posterior mean of each alpha**
 ```
 a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)
 ```
 
-Posterior SD of each alpha
+**Posterior SD of each alpha**
 ```
 a_sd <- apply(X = fish_inter, MARGIN = 2, FUN = sd)
 ```
 
-Posterior median and 95% credible interval
+**Posterior median and 95% credible interval**
 ```
 a_quant <- apply(X = fish_inter, MARGIN = 2, FUN = quantile, probs = c(0.025, 0.50, 0.975))
 a_quant <- data.frame(t(a_quant))
@@ -903,7 +905,6 @@ names(a_quant) <- c("X2.5.", "X50.", "X97.5.")
 ```
 
 **Combine summary statistics of posterior simulation draws**
-
 ```
 a_df <- data.frame(a_mean, a_sd, a_quant)
 round(head(a_df), 2)
@@ -926,7 +927,7 @@ a_df <- a_df[order(a_df$a_mean), ]
 a_df$a_rank <- c(1 : dim(a_df)[1]) # a vector of fi_species rank
 ```
 
-Plot fish-level alphas posterior mean and 95% credible interval
+**Plot fish-level alphas posterior mean and 95% credible interval**
 ```
 ggplot(data = data_longit_sub,
        aes(x = a_rank, y = a_mean)) +
@@ -936,9 +937,7 @@ ggplot(data = data_longit_sub,
        scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
        theme_bw( base_family = "serif")
 ```
-![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
 
 ### Differences between species averages
-
-
 
