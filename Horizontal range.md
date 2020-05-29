@@ -840,20 +840,20 @@ plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE
 
 In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
 
-**Plot posterior predictive check**
+### Posterior predictive checks
+
+In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
+
+**Plot posterior predictive check (left) and empirical cumulative distribution (obs. and random draws from the model posterior) (right)**
+
 ```
 prop_zero <- function(y) mean(y == 0)
 (prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
+pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
 ```
 ![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
 
 **Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
-
-**Plot empirical cumulative distribution function (obs. and random draws from the model posterior)**
-```
-pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
-```
-![Horiz_range](/Plots/Horiz_range_16.png "Horiz_range")
 
 ### Extract the posterior draws for all parameters
 
