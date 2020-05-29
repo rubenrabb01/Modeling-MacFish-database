@@ -1,3 +1,5 @@
+# Analysis of range of distances for horizontal movement using imputed data 
+
 ## 1. Impute missing time series data
 
 Based on the previously created dataset (see _Horizontal_range.md_), we complete the time series inserting rows for missing _daily_ values (ie., date) and, for each individual, replace missing values using LOCF (Last Observation Carried Forward)
