@@ -955,3 +955,4 @@ ggplot(data = data_longit_sub,
 
 ### Differences between species averages
 
+ 
