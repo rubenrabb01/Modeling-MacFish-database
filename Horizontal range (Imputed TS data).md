@@ -106,6 +106,18 @@ draw(m_imp_gam_week_season, ncol = 2)
 ```
 ![Horiz_range](/Plots/Horiz_range_31_imputed.png "Horiz_range")
 
+**Plot surface and one-dimensional seasonal differences in horizontal range**
+
+Lets check differences in _seasonally_ smooth surfaces between species
+
+```
+layout(matrix(1:3, nrow = 1))
+plot_diff(m_imp_gam_week_season, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
+plot_diff(m_imp_gam_week_season, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
+plot_diff(m_imp_gam_week_season, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
+```
+![Horiz_range](/Plots/Horiz_range_32_imputed.png "Horiz_range")
+
 - A slightly better fit model
 
 ### 2.4. Fit a GAMM model with uncorrelated errors to daily and seasonality data
@@ -146,11 +158,11 @@ R-sq.(adj) =  0.293   Deviance explained = 29.6%
 ```
 draw(m_imp_gam_daily_season, ncol = 2)
 ```
-![Horiz_range](/Plots/Horiz_range_32_imputed.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_33_imputed.png "Horiz_range")
 
 - These three models explain only little variation in horizontal range, thus we need to conduct further model search
 
-### 2.5. Fit GAMM models for week and season seaonality
+### 2.5. Fit GAMM models for week day/season seasonality descomposition
 
 - Fit models with both _weekly_ and _seasonally_ as predictors variables to account for seasonality
 - Include body size as a predictor variable and additional random terms for season and species
