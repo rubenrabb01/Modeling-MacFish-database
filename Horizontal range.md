@@ -1,4 +1,4 @@
-# Analysis of range of distance for horizontal movement
+# Analysis of range of distances for horizontal movement
 
 ## 1. Prepare dataset with daily and seasonally distance range
 
