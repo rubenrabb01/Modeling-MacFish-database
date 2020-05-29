@@ -1,4 +1,6 @@
-## Prepare dataset with daily and seasonally distance range
+# Analysis of range of distance for horizontal movement
+
+## 1. Prepare dataset with daily and seasonally distance range
 
 :books:`library(lubridate)`  
 :books:`library(plyr)`  
