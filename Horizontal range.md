@@ -226,7 +226,7 @@ draw(m_gam_daily_season, ncol = 2)
 
 - These three models explain only little variation in horizontal range, thus we need to conduct further model search
 
-### 2.5. Fit GAMM models for week and season seaonality
+### 2.5. Fit GAMM models for week day/season seasonality descomposition
 
 - Fit models with both _weekly_ and _seasonally_ as predictors variables to account for seasonality
 - Include body size as a predictor variable and additional random terms for season and species
