@@ -170,6 +170,18 @@ draw(m_gam_week_season, ncol = 2)
 ```
 ![Horiz_range](/Plots/Horiz_range_31.png "Horiz_range")
 
+**Plot surface and one-dimensional seasonal differences in horizontal range**
+
+Lets check differences in _seasonally_ smooth surfaces between species
+
+```
+layout(matrix(1:3, nrow = 1))
+plot_diff(m_gam_week_season, view="seasonally", comp=list(Species=c("pike", "pikeperch")), main='Seasonal difference pike-pikeperch')
+plot_diff(m_gam_week_season, view="seasonally", comp=list(Species=c("pikeperch", "wels")), main='Seasonal difference pikeperch-wels')
+plot_diff(m_gam_week_season, view="seasonally", comp=list(Species=c("pike", "wels")), main='Seasonal difference pike-wels')
+```
+![Horiz_range](/Plots/Horiz_range_32.png "Horiz_range")
+
 - A slightly better fit model
 
 ### 2.4. Fit a GAMM model with uncorrelated errors to daily and seasonality data
@@ -210,7 +222,7 @@ R-sq.(adj) =  0.221   Deviance explained = 22.5%
 ```
 draw(m_gam_daily_season, ncol = 2)
 ```
-![Horiz_range](/Plots/Horiz_range_32.png "Horiz_range")
+![Horiz_range](/Plots/Horiz_range_33.png "Horiz_range")
 
 - These three models explain only little variation in horizontal range, thus we need to conduct further model search
 
