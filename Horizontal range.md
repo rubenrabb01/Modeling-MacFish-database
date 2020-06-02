@@ -827,7 +827,7 @@ The table shows us a summary of Pareto k diagnostic, which is used to assess the
   - If k < 0.5, then the corresponding component of _elpd_loo_ is estimated with high accuracy
   - If 0.5 < k < 0.7 the accuracy is lower, but still ok
   - If k > 0.7, then importance sampling is not able to provide useful estimate for that component/observation
-- _elpd_loo_ SE is computed by using the standard deviation of the N components and multiplying by sqrt(N). This SE is a coarse description of our uncertainty about the predictive performance for unknown future data. When N is small or there is severe model misspecification, the current SE estimate is overoptimistic and the actual SE can even be twice as large (_Vehtari, Gelman, and Gabry, 2017_)
+- _elpd_loo_ SE is computed by using the standard deviation of the N components and multiplying by sqrt(N). This SE is a coarse description of our uncertainty about the predictive performance for unknown future data. When N is small or there is severe model misspecification, the current SE estimate is overoptimistic and the actual SE can even be twice as large
 - _p_loo_ (effective number of parameters) is the difference between _elpd_loo_ and the non-cross-validated log posterior predictive density. It describes how much more difficult it is to predict future data than the observed data
   - p_loo < N and p_loo < p, where p is the total number of parameters in the model, indicates a well-specified model
   - p_loo > N or p_loo > p indicates that the model has very weak predictive capability and may indicate a severe model misspecification
@@ -870,5 +870,19 @@ plot(loo, diagnostic = c("k", "n_eff"), label_points = TRUE, main = "PSIS diagno
 
 As pointed before, we see that data are in general easy to predict with k values below 0.2 at any data point and does not seem to be there any grouping or cluster structure regarding data ordering
 
+### Posterior predictive checks
+
+In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
+
+**Plot posterior predictive (left) and empirical cumulative distribution (obs. and random draws from the model posterior) (right)**
+
+```
+prop_zero <- function(y) mean(y == 0)
+(prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
+pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
+```
+![Horiz_range](/Plots/Horiz_range_16.png "Horiz_range")
+
+**Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
+
 ** Plot marginal posterior predictive checks**
- 
