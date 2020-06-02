@@ -2,8 +2,8 @@
 
 ## 1. Prepare dataset with daily and seasonally distance range
 
-:books:`library(lubridate)`  
-:books:`library(plyr)`  
+:books:`library(lubridate)`
+:books:`library(plyr)`
 
 Add info for each species and order by date
 ```
@@ -83,7 +83,7 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data
 - Include a simple random term for subject identity
 - Horizontal range might be expected to vary cyclically across seasons so we need to specify bs = "cc"  (i.e., cyclic cubic regression splines), hence, seasonally shows no discontinuity between Spring I and Spring II and both ends line up
 
-:books:`library(mgcv)`  
+:books:`library(mgcv)`
 
 ```
 m_gam_season<- bam(sqrt(ranged2d+1) ~ s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
@@ -230,7 +230,7 @@ draw(m_gam_daily_season, ncol = 2)
 
 - These three models explain only little variation in horizontal range, thus we need to conduct further model search
 
-### 2.5. Fit GAMM models for week day/season seasonality descomposition
+### 2.5. Fit GAMM models for descomposition of week day/season seasonality
 
 - Fit models with both _weekly_ and _seasonally_ as predictors variables to account for seasonality
 - Include body size as a predictor variable and additional random terms for season and species
@@ -251,9 +251,9 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`  
-:books:`library(AICcmodavg)`  
-:books:`library(lmtest)`  
+:books:`library(MASS)`
+:books:`library(AICcmodavg)`
+:books:`library(lmtest)`
 
 #### Based on AIC
 ```
@@ -356,7 +356,7 @@ te(weekly,seasonally):Specieswels       5.880048   6.879601    1.480415 1.650919
 
 **Summary table**
 
-:books:`library(itsadug)`  
+:books:`library(itsadug)`
 
 ```
 gamtabs(m_gam_sp2, caption="Summary of m_gam_sp2", comment=FALSE, type='html')
@@ -382,7 +382,7 @@ We can see that:
 
 ### Plot model
 
-:books:`library(rgl)`  
+:books:`library(rgl)`
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
@@ -492,7 +492,7 @@ plot_diff(m_gam_sp2_cyclic, view="seasonally", comp=list(Species=c("pike", "wels
 ```
 ![Horiz_range](/Plots/Horiz_range_7.png "Horiz_range")
 
-### 2.4. Fit GAMM models with uncorrelated errors to data of daily and seasonal changes
+### 2.6. Fit GAMM models with uncorrelated errors to data of daily and seasonal changes
 
 Now we fit models using both daily and season as predictors to account for seasonality
 ```
@@ -693,10 +693,10 @@ We re-fit the previous model **m_gam_season** with the following specifications:
 - Set fitted chains to 2
 - Set _adapt_delta_ to 0.99 (increase from default values as in a fisrt run there is a warning about divergent transitions after warmup)
 
-:books:`library(brms)`   
-:books:`library(bayesplot)`   
-:books:`library(rstanarm)`   
-:books:`library(loo)`   
+:books:`library(brms)`
+:books:`library(bayesplot)`
+:books:`library(rstanarm)`
+:books:`library(loo)`
 
 ```
 m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
@@ -741,7 +741,7 @@ and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-**How is compared with the non-Bayesian version**
+**How is compared with the non-Bayesian version**?
 
 ```
 gam.vcomp(m_gam_week_season, rescale = FALSE)
@@ -761,6 +761,7 @@ Rank: 6/6
 ```
 
 Non-Bayesian vs. Bayesian posterior means and 95% (Confidence/Credible) Intervals for the variable _seasonally_:
+
 - _pike_: 0.99[0.43, 2.28] vs. 1.96[0.59, 6.62]
 - _pikeperch_: 2.02[0.88, 4.65] vs. 3.59[1.24, 10.92]
 - _wels_: 1.07[0.44, 2.58] vs. 6.96[5.43, 8.98]
@@ -781,15 +782,32 @@ We can see that:
 - The estimated smooth for the Bayesian version of this model looks about the same as its non-Bayesian version
 - The marginal_smooths() function is effectively the equivalent of the plot() method for mgcv-based GAMs.
 
-### Model diagnostics
-
-- We use Pareto-smoothed importance sampling LOO Cross-Validation for model checking
-- First, create a loo object and return an object of class _pareto_k_table_ (matrix form "Count", "Proportion", and "Min. n_eff")
-
+**Plot estimates**
 ```
-loo<-loo(m_gam_week_season_bayes)
+plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
+```
+![Horiz_range](/Plots/Horiz_range_13.png "Horiz_range")
+
+![Horiz_range](/Plots/Horiz_range_14.png "Horiz_range")
+
+### Model diagnostics using Pareto k estimates
+
+We use Pareto-smoothed importance sampling Leave-one-out Cross-Validation (PSIS-LOO-CV) for checking model validity and estimates reliability
+
+**What is Pareto k estimate?** (ref. _Vehtari, Gelman, and Gabry, 2017a,b)_
+
+- It is a diagnostic for Pareto smoothed importance sampling (PSIS) , which is used to compute components of the Bayesian LOO-CV (or LOO) estimate of the expected log pointwise predictive density (i.e., _elpd_loo_, see below)
+- In importance-sampling LOO, the full posterior distribution is used as the proposal distribution
+- The Pareto k diagnostic estimates how far an individual LOO distribution is from the full distribution
+- If leaving out an observation changes the posterior too much then importance sampling is not able to give reliable estimate
+- Pareto k is also useful as a measure of influence of an observation. Highly influential observations have high k values. Very high k values often indicate model misspecification, outliers or mistakes in data processing
+
+Create a _loo_ object and return an object of class _pareto_k_table_ (matrix form "Count", "Proportion", and "Min. n_eff")
+```
+loo <- loo(m_gam_week_season_bayes)
+loo <- loo(m_gam_week_season_bayes, save_psis = TRUE)
 pareto_k_table(loo)
-loo
+print(loo)
 ```
 ```
 Computed from 1200 by 8846 log-likelihood matrix
@@ -804,6 +822,21 @@ Monte Carlo SE of elpd_loo is 0.2.
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
+The table shows us a summary of Pareto k diagnostic, which is used to assess the reliability of the estimates. Lets check what the different parameters mean:
+- _elpd_loo_ estimate is  the Bayesian LOO estimate of the expected log predictive density (ELPD) and is a sum of N individual pointwise log predictive densities
+  - If k < 0.5, then the corresponding component of _elpd_loo_ is estimated with high accuracy
+  - If 0.5 < k < 0.7 the accuracy is lower, but still ok
+  - If k > 0.7, then importance sampling is not able to provide useful estimate for that component/observation
+- _elpd_loo_ SE is computed by using the standard deviation of the N components and multiplying by sqrt(N). This SE is a coarse description of our uncertainty about the predictive performance for unknown future data. When N is small or there is severe model misspecification, the current SE estimate is overoptimistic and the actual SE can even be twice as large (_Vehtari, Gelman, and Gabry, 2017_)
+- _p_loo_ (effective number of parameters) is the difference between _elpd_loo_ and the non-cross-validated log posterior predictive density. It describes how much more difficult it is to predict future data than the observed data
+  - p_loo < N and p_loo < p, where p is the total number of parameters in the model, indicates a well-specified model
+  - p_loo > N or p_loo > p indicates that the model has very weak predictive capability and may indicate a severe model misspecification
+- _looic_ is the LOO Information Criterion (LOOIC), which is equivalent to AIC and is used to estimate ELPD for a new dataset
+
+Our results show that the k estimates are reliable indicating non-significant differences between leave-one-out and full posteriors:
+ - All Pareto k estimates are lower than 0.5 indicating high accuracy of the ELPD estimates
+ - _p_loo_ estimate is 44.2 which is lower that the total number of parameters, which is 53, indicating a well-specified model
+
 Returns an integer vector indicating which observations have Pareto k estimates above threshold
 ```
 pareto_k_ids(loo, threshold = 0.5)
@@ -827,132 +860,15 @@ mcse_loo(loo, threshold = 0.7)
 0.1971972
 ```
 
-**Plot estimates and PSIS diagnostic**
+**Plot PSIS-LOO Pareto k diagnostics**
 
+We plot the _loo_ object for the distribution of k values in the observed data used to fit the model
 ```
-plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE, main = "PSIS diagnostic plot")
-```
-![Horiz_range](/Plots/Horiz_range_13.png "Horiz_range")
-
-![Horiz_range](/Plots/Horiz_range_14.png "Horiz_range")
-
-### Posterior predictive checks
-
-In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
-
-### Posterior predictive checks
-
-In addition to LOO-CV, here we test the proportion of 1s predicted by the model and compare them to the observed number of 1s
-
-**Plot posterior predictive check (left) and empirical cumulative distribution (obs. and random draws from the model posterior) (right)**
-
-```
-prop_zero <- function(y) mean(y == 0)
-(prop_zero_test1 <- pp_check(m_gam_week_season_bayes, plotfun = "stat", stat = "prop_zero"))
-pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
+plot(loo, diagnostic = c("k", "n_eff"), label_points = TRUE, main = "PSIS diagnostic plot")
 ```
 ![Horiz_range](/Plots/Horiz_range_15.png "Horiz_range")
 
-**Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
+As pointed before, we see that data are in general easy to predict with k values below 0.2 at any data point and does not seem to be there any grouping or cluster structure regarding data ordering
 
-### Extract the posterior draws for all parameters
-
-```
-sims <- as.matrix(m_gam_week_season_bayes)
-dim(sims)
-```
-```
-[1] 4000   174
-```
-```
-para_name <- colnames(sims)
-```
-
-**Obtain fi_species-level varying intercept a_j**
-
-draws for overall mean
-```
-mu_a_sims <- as.matrix(m_gam_week_season_bayes, pars = "(Intercept)")
-```
-
-draws for 3 fi_species-level error
-```
-fish_err <- as.matrix(m_gam_week_season_bayes,regex_pars = "b\\[\\(Intercept\\) Species\\:")
-```
-
-draws for 3 species varying intercepts
-```
-fish_inter <- as.numeric(mu_a_sims) + fish_err
-```
-
-**Obtain sigma_y and sigma_alpha^2**
-
-draws for sigma_y
-```
-signma_y <- as.matrix(m_gam_week_season_bayes, pars = "sigma")
-```
-
-draws for sigma_alpha^2
-```
-sigma_alpha <- as.matrix(m_gam_week_season_bayes, pars = "Sigma[Species:(Intercept),(Intercept)]")
-```
-
-### Calculate means, SD, medians and 95% credible intervals of varying intercepts
-
-We summarize the posterior probability distribution of the 4,000 estimates (draws) for a1 examining their quantiles
-
-**Posterior mean of each alpha**
-```
-a_mean <- apply(X = fish_inter, MARGIN = 2, FUN = mean)
-```
-
-**Posterior SD of each alpha**
-```
-a_sd <- apply(X = fish_inter, MARGIN = 2, FUN = sd)
-```
-
-**Posterior median and 95% credible interval**
-```
-a_quant <- apply(X = fish_inter, MARGIN = 2, FUN = quantile, probs = c(0.025, 0.50, 0.975))
-a_quant <- data.frame(t(a_quant))
-names(a_quant) <- c("X2.5.", "X50.", "X97.5.")
-```
-
-**Combine summary statistics of posterior simulation draws**
-```
-a_df <- data.frame(a_mean, a_sd, a_quant)
-round(head(a_df), 2)
-```
-```
-                                  a_mean a_sd  Q2.5   Q50 Q97.5
-b_Intercept                        53.12 2.51 48.22 53.09 58.18
-sds_sweekly_1                      26.71 1.28 24.28 26.69 29.26
-sds_sseasonallySpeciespike_1       28.52 2.28 25.45 28.22 33.28
-sds_sseasonallySpeciespikeperch_1  30.15 2.85 26.48 29.52 37.54
-sds_sseasonallySpecieswels_1       28.63 2.16 25.43 28.30 34.14
-sds_sId_1                          33.52 1.61 30.69 33.37 36.88
-```
-
-### Caterpillar plot for all fish intercepts
-
-Sort dataframe containing an estimated alpha mean and sd for every fi_species
-```
-a_df <- a_df[order(a_df$a_mean), ]
-a_df$a_rank <- c(1 : dim(a_df)[1]) # a vector of fi_species rank
-```
-
-**Plot fish-level alphas posterior mean and 95% credible interval**
-```
-ggplot(data = data_longit_sub,
-       aes(x = a_rank, y = a_mean)) +
-       geom_pointrange(aes(ymin = X2.5., max = X97.5.), position = position_jitter(width = 0.1, height = 0)) +
-       geom_hline(yintercept = mean(a_df$a_mean), size = 0.5, col = "red") +
-       scale_x_continuous("Rank", breaks = seq(from = 0, to = 80, by = 5)) +
-       scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
-       theme_bw( base_family = "serif")
-```
-![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
-
-### Differences between species averages
-
+** Plot marginal posterior predictive checks**
  
