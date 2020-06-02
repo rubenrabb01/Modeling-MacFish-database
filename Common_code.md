@@ -70,6 +70,84 @@ condition <- lm(ca_weight_g~ca_tl_mm, mean.ranged2d, na.action=na.exclude)
 summary(condition)
 mean.ranged2d$r3_condition<-rstandard(condition)
 ```
+
+### Extract daily data of temperature in 0-5 m of water column
+
+Extract all temperatures
+```
+select.temp <-paste("SELECT hd_timestamp_utc, hd_temperature, hl_logger_sn FROM teri.hobosessiondata;", sep = "")
+temperature <- data.table(dbGetQuery(con, select.temp, stringsAsFactors = F))
+
+Extract hobo info
+```
+select.logger<- paste("SELECT hl_logger_sn, hde_depth FROM teri.hobodeployment;", sep = "")
+logger.info <- data.table(dbGetQuery(con, select.logger, stringsAsFactors = F))
+```
+
+Substract only loggers in depth less than 5 m
+```
+logger_sub <-logger.info[hde_depth < 5,]
+```
+
+Subset temp only from these loggers
+```
+temp_sub <- temperature[hl_logger_sn %in% c(unique(logger_sub$hl_logger_sn)), ]
+temp_sub[, date := as.Date(hd_timestamp_utc)]
+```
+
+Calculate mean daily temp from desired loggers
+```
+day_temp <- temp_sub[,.(day_temp = mean(hd_temperature)), by = .(date)]
+```
+
+Merge daily temp data with range of distances data
+```
+mean.ranged2d <- merge(mean.ranged2d, day_temp, by= c("date"))
+```
+
+### Estimate moon phase by day
+
+:books:`library(lunar)`
+
+```
+mean.ranged2d[, lunar_phase := lunar.phase(date, name = F)]
+```
+
+### Calculate day length
+
+:books:`library(maptools)`
+
+Dates for which day length will be calculated, latitude and longitude of Rimov
+```
+day_length <- data.table(date = unique(dist2dam.dt$date), lat = 48.8500431, lon = 14.4908489)
+setkey(day_length, date)
+```
+
+Calculation of sunrise time for each day
+```
+day_length[, sunrise := sunriset(cbind(lon, lat), as.POSIXct(date, tz = "UTC"), direction="sunrise", POSIXct.out=TRUE)$time]
+```
+
+Calculation of sunset time for each day
+```
+day_length[, sunset := sunriset(cbind(lon, lat), as.POSIXct(date, tz = "UTC"), direction="sunset", POSIXct.out=TRUE)$time]
+```
+
+Difference between sunset and sunrise time is day length
+```
+day_length[, day_length := as.numeric(difftime(sunset, sunrise, units = "hours"))]
+```
+
+Extraction of day length, using date can be merged with other tables
+```
+day_length_sub <- day_length[,.(date, day_length)]
+```
+
+Merge day length data with range of distances data
+```
+mean.ranged2d <- merge(mean.ranged2d, day_length_sub, by= c("date"))
+```
+
 ### Calculation of overall longitudinal range from mean daily distance from a dam 
 
 ```
