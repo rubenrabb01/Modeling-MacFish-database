@@ -77,6 +77,7 @@ Extract all temperatures
 ```
 select.temp <-paste("SELECT hd_timestamp_utc, hd_temperature, hl_logger_sn FROM teri.hobosessiondata;", sep = "")
 temperature <- data.table(dbGetQuery(con, select.temp, stringsAsFactors = F))
+```
 
 Extract hobo info
 ```
