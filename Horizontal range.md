@@ -792,7 +792,7 @@ We use Pareto-smoothed importance sampling Leave-one-out Cross-Validation (PSIS-
 
 **What is Pareto k estimate?**
 
-_Vehtari, Gelman, and Gabry, 2017a,b)_:
+_Vehtari, Gelman, and Gabry (2017a,b)_:
 - It is a diagnostic for Pareto smoothed importance sampling (PSIS) , which is used to compute components of the Bayesian LOO-CV (or LOO) estimate of the expected log pointwise predictive density (i.e., _elpd_loo_, see below)
 - In importance-sampling LOO, the full posterior distribution is used as the proposal distribution
 - The Pareto k diagnostic estimates how far an individual LOO distribution is from the full distribution
@@ -882,5 +882,21 @@ pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
 
 **Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
 
-** Plot marginal posterior predictive checks**
+**Plot LOO-CV marginal posterior predictive checks (LOO-PIT)**
+
+_Gabry et al (2018)_
+- LOO-PIT values are cumulative probabilities for the dependent variable computed using the LOO marginal predictive distributions
+- For a good model, the distribution of LOO-PIT values should be uniform when compared to independently generated samples (each the same size as our dataset) from the standard uniform distribution
+
+```
+loo_pit <- posterior_predict(m_gam_week_season_bayes)
+ppc_loo_pit_overlay(
+     y = data_longit_sub$ranged2d,
+     yrep = loo_pit,
+     lw = weights(loo$psis_object))
+```
+![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
+
+- We see that the distribution (dark blue line) of LOO-PIT values for our model is irregular and has many values close to 0 indicating that the model is under-dispersed compared to the data
+- We should try another model to reduce nder-dispersion
 
