@@ -622,9 +622,7 @@ gamtabs(m_gam_sp2_daily, caption="Summary of m_gam_sp2_daily", comment=FALSE, ty
    <a name=tab.gam></a>
 </table>
 
-We can see that:
-- The _daily_ by _season_ interaction is significant to response variable in the three species
-- The percentage of explained variance is still too low
+We can see that the _daily_ by _season_ interaction is significant to response variable in the three species but the percentage of explained variance is still too low
 
 ### Plot model
 
@@ -778,9 +776,7 @@ plot(cond_smooths) + theme_bw()
 
 ![Horiz_range](/Plots/Horiz_range_12.png "Horiz_range")
 
-We can see that:
-- The estimated smooth for the Bayesian version of this model looks about the same as its non-Bayesian version
-- The marginal_smooths() function is effectively the equivalent of the plot() method for mgcv-based GAMs.
+We can see that the estimated smooth for the Bayesian version of this model looks about the same as its non-Bayesian version
 
 **Plot estimates**
 ```
@@ -794,8 +790,9 @@ plot(m_gam_week_season_bayes, diagnostic = c("k", "n_eff"), label_points = FALSE
 
 We use Pareto-smoothed importance sampling Leave-one-out Cross-Validation (PSIS-LOO-CV) for checking model validity and estimates reliability
 
-**What is Pareto k estimate?** (ref. _Vehtari, Gelman, and Gabry, 2017a,b)_
+**What is Pareto k estimate?**
 
+_Vehtari, Gelman, and Gabry, 2017a,b)_:
 - It is a diagnostic for Pareto smoothed importance sampling (PSIS) , which is used to compute components of the Bayesian LOO-CV (or LOO) estimate of the expected log pointwise predictive density (i.e., _elpd_loo_, see below)
 - In importance-sampling LOO, the full posterior distribution is used as the proposal distribution
 - The Pareto k diagnostic estimates how far an individual LOO distribution is from the full distribution
@@ -822,7 +819,7 @@ Monte Carlo SE of elpd_loo is 0.2.
 All Pareto k estimates are good (k < 0.5).
 See help('pareto-k-diagnostic') for details.
 ```
-The table shows us a summary of Pareto k diagnostic, which is used to assess the reliability of the estimates. Lets check what the different parameters mean:
+The table shows a summary of Pareto k diagnostic, which is used to assess the reliability of the estimates. Lets check what the different parameters mean (sensu _Vehtari, Gelman, and Gabry, 2017a,b)_:
 - _elpd_loo_ estimate is  the Bayesian LOO estimate of the expected log predictive density (ELPD) and is a sum of N individual pointwise log predictive densities
   - If k < 0.5, then the corresponding component of _elpd_loo_ is estimated with high accuracy
   - If 0.5 < k < 0.7 the accuracy is lower, but still ok
@@ -852,7 +849,7 @@ Returns a vector of the estimated PSIS effective sample sizes
 psis_n_eff_values(loo)
 ```
 
-Returns the Monte Carlo standard error (MCSE) estimate for PSIS-LOO. MCSE will be NA if any Pareto k values are above threshold
+Returns the Monte Carlo standard error (MCSE) estimate for PSIS-LOO
 ```
 mcse_loo(loo, threshold = 0.7)
 ```
@@ -886,3 +883,4 @@ pp_check(m_gam_week_season_bayes, type = "ecdf_overlay")
 **Note:** You can run also the same plot with: `pp_check(m_gam_week_season_bayes)`
 
 ** Plot marginal posterior predictive checks**
+
