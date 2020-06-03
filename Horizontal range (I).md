@@ -910,7 +910,7 @@ ppc_loo_pit_overlay(
 ![Horiz_range](/Plots/Horiz_range_17.png "Horiz_range")
 
 - We see that the distribution (dark blue line) of LOO-PIT values for our model is irregular and has many values close to 0 indicating that the model is under-dispersed compared to the data
-- We should try another model to reduce nder-dispersion
+- We should try another model to reduce under-dispersion
 
 ### Extract the posterior draws for all parameters
 
