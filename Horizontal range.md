@@ -5,18 +5,18 @@
 :books:`library(lubridate)`
 :books:`library(plyr)`
 
-Add info for each species and order by date
+**Add info for each species and order by date**
 ```
 data_longit<-mean.ranged2d[with(mean.ranged2d, order(date)),]
 ```
 
-Create a new numeric variable _week_num_ for day of the week based on _date_ (i.e., day)
+**Create a new numeric variable _week_num_ for day of the week based on _date_ (i.e., day)**
 ```
 data_longit$date <- as.Date(data_longit$date)
 data_longit$week_day_num <- wday(data_longit$date)
 ```
 
-Transform and recode week and season variables
+**Transform and recode week and season variables**
 ```
 data_longit<-as.data.table(data_longit)
 data_longit[, week_day := as.factor(car::recode(week_day_num, "'1'='Monday';'2'='Tuesday';'3'='Wednesday';'4'='Thursday'; '5'='Friday';'6'='Saturday';'7'='Sunday'"))]
@@ -28,20 +28,19 @@ data_longit[, season_num := as.factor(car::recode(season, "'spring_I'='1';'summe
 data_longit$season_num<-as.numeric(data_longit$season_num)
 data_longit
 ```
-|            	| fi_fishid 	| date       	| ranged2d 	| meand2d   	| ca_tl_mm 	| ca_weight_g 	| fi_sex 	| Species   	| season    	| r3_condition 	| diff_mean_dist 	| cum_displac 	| week_day_num 	| week_day  	| season_num 	|
-|------------	|-----------	|------------	|----------	|-----------	|----------	|-------------	|--------	|-----------	|-----------	|--------------	|----------------	|-------------	|--------------	|-----------	|------------	|
-| 1:00       	| T449310_1 	| 27/04/2017 	| 0        	| 5122.2007 	| 405      	| 523         	| M      	| pikeperch 	| spring_I  	| 1.13081917   	| 0              	| 0           	| 5            	| Friday    	| 1          	|
-| 2:00       	| T449317_1 	| 27/04/2017 	| 536.8212 	| 5454.211  	| 415      	| 560         	| M      	| pikeperch 	| spring_I  	| 1.07782806   	| 0              	| 0           	| 5            	| Friday    	| 1          	|
-| 3:00       	| T449202_1 	| 27/04/2017 	| 682.8973 	| 4841.78   	| 430      	| 605         	| M      	| pikeperch 	| spring_I  	| 0.9951284    	| 0              	| 0           	| 5            	| Friday    	| 1          	|
-| 4:00       	| T449207_1 	| 27/04/2017 	| 266.7728 	| 3700.87   	| 500      	| 750         	| X      	| pike      	| spring_I  	| 0.58931601   	| 0              	| 0           	| 5            	| Friday    	| 1          	|
-| 5:00       	| T449287_1 	| 27/04/2017 	| 223.4977 	| 498.5292  	| 595      	| 765         	| X      	| pike      	| spring_I  	| -0.01703585  	| 0              	| 0           	| 5            	| Friday    	| 1          	|
-| ---        	|           	|            	|          	|           	|          	|             	|        	|           	|           	|              	|                	|             	|              	|           	|            	|
-| 8842:00:00 	| T449203_1 	| 10/04/2018 	| 0        	| 4523.1547 	| 1160     	| 10900       	| X      	| pike      	| spring_II 	| -0.54832184  	| 1351.76269     	| 220749.98   	| 3            	| Wednesday 	| 5          	|
-| 8843:00:00 	| T449268_1 	| 10/04/2018 	| 0        	| 5026.984  	| 1620     	| 25100       	| M      	| wels      	| spring_II 	| 0.83998846   	| 0              	| 133369.99   	| 3            	| Wednesday 	| 5          	|
-| 8844:00:00 	| T449207_1 	| 11/04/2018 	| 0        	| 3052.8224 	| 500      	| 750         	| X      	| pike      	| spring_II 	| 0.58931601   	| 674.61169      	| 46138.93    	| 4            	| Thursday  	| 5          	|
-| 8845:00:00 	| T449208_1 	| 11/04/2018 	| 0        	| 1467.4694 	| 560      	| 1483        	| M      	| pikeperch 	| spring_II 	| 0.42781114   	| 84.07252       	| 29398.32    	| 4            	| Thursday  	| 5          	|
-| 8846:00:00 	| T449276_1 	| 11/04/2018 	| 640.4041 	| 1383.3969 	| 1030     	| 6150        	| F      	| wels      	| spring_II 	| -1.16616183  	| 399.93036      	| 99324.82    	| 4            	| Thursday  	| 5          	|
-
+|            	| date       	| fi_fishid 	| ranged2d 	| meand2d   	| ca_tl_mm 	| ca_weight_g 	| fi_sex 	| Species   	| month 	| season    	| r3_condition 	| diff_mean_dist 	| cum_displac 	| lunar_phase 	| day_temp  	| day_length 	| week_day_num 	| week_day  	| season_num 	|
+|------------	|------------	|-----------	|----------	|-----------	|----------	|-------------	|--------	|-----------	|-------	|-----------	|--------------	|----------------	|-------------	|-------------	|-----------	|------------	|--------------	|-----------	|------------	|
+| 1:00       	| 27/04/2017 	| T449310_1 	| 0        	| 5122.2007 	| 405      	| 523         	| M      	| pikeperch 	| 4     	| spring_I  	| 1.13081917   	| 0              	| 0           	| 0.2880857   	| 8.990546  	| 14.38599   	| 5            	| Friday    	| 1          	|
+| 2:00       	| 27/04/2017 	| T449317_1 	| 536.8212 	| 5454.211  	| 415      	| 560         	| M      	| pikeperch 	| 4     	| spring_I  	| 1.07782806   	| 0              	| 0           	| 0.2880857   	| 8.990546  	| 14.38599   	| 5            	| Friday    	| 1          	|
+| 3:00       	| 27/04/2017 	| T449202_1 	| 682.8973 	| 4841.78   	| 430      	| 605         	| M      	| pikeperch 	| 4     	| spring_I  	| 0.9951284    	| 0              	| 0           	| 0.2880857   	| 8.990546  	| 14.38599   	| 5            	| Friday    	| 1          	|
+| 4:00       	| 27/04/2017 	| T449207_1 	| 266.7728 	| 3700.87   	| 500      	| 750         	| X      	| pike      	| 4     	| spring_I  	| 0.58931601   	| 0              	| 0           	| 0.2880857   	| 8.990546  	| 14.38599   	| 5            	| Friday    	| 1          	|
+| 5:00       	| 27/04/2017 	| T449287_1 	| 223.4977 	| 498.5292  	| 595      	| 765         	| X      	| pike      	| 4     	| spring_I  	| -0.01703585  	| 0              	| 0           	| 0.2880857   	| 8.990546  	| 14.38599   	| 5            	| Friday    	| 1          	|
+| ---        	|            	|           	|          	|           	|          	|             	|        	|           	|       	|           	|              	|                	|             	|             	|           	|            	|              	|           	|            	|
+| 8842:00:00 	| 10/04/2018 	| T449203_1 	| 0        	| 4523.1547 	| 1160     	| 10900       	| X      	| pike      	| 4     	| spring_II 	| -0.54832184  	| 1351.76269     	| 220749.98   	| 5.2165586   	| 10.744387 	| 13.40729   	| 3            	| Wednesday 	| 5          	|
+| 8843:00:00 	| 10/04/2018 	| T449268_1 	| 0        	| 5026.984  	| 1620     	| 25100       	| M      	| wels      	| 4     	| spring_II 	| 0.83998846   	| 0              	| 133369.99   	| 5.2165586   	| 10.744387 	| 13.40729   	| 3            	| Wednesday 	| 5          	|
+| 8844:00:00 	| 11/04/2018 	| T449207_1 	| 0        	| 3052.8224 	| 500      	| 750         	| X      	| pike      	| 4     	| spring_II 	| 0.58931601   	| 674.61169      	| 46138.93    	| 5.4293273   	| 14.411435 	| 13.46584   	| 4            	| Thursday  	| 5          	|
+| 8845:00:00 	| 11/04/2018 	| T449208_1 	| 0        	| 1467.4694 	| 560      	| 1483        	| M      	| pikeperch 	| 4     	| spring_II 	| 0.42781114   	| 84.07252       	| 29398.32    	| 5.4293273   	| 14.411435 	| 13.46584   	| 4            	| Thursday  	| 5          	|
+| 8846:00:00 	| 11/04/2018 	| T449276_1 	| 640.4041 	| 1383.3969 	| 1030     	| 6150        	| F      	| wels      	| 4     	| spring_II 	| -1.16616183  	| 399.93036      	| 99324.82    	| 5.4293273   	| 14.411435 	| 13.46584   	| 4            	| Thursday  	| 5          	|
 
 Plot horizontal range by date
 ```
@@ -72,7 +71,17 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 
 First, lets subset horizontal range data into a new dataset _data_longit_sub_ for easing models fitting
 ```
-data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d], Species = data_longit[, Species], Id = data_longit[, fi_fishid], weekly = data_longit[, week_day_num], season = data_longit[, season], seasonally = data_longit[, season_num], daily = data_longit[, date], body_size = data_longit[, ca_tl_mm])
+data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d],
+                                         Species = data_longit[, Species],
+                                         Id = data_longit[, fi_fishid],
+                                         weekly = data_longit[, week_day_num],
+                                         season = data_longit[, season],
+                                         seasonally = data_longit[, season_num],
+                                         daily = data_longit[, date],
+                                         body_size = data_longit[, ca_tl_mm],
+                                         lunar_phase = data_longit[, lunar_phase],
+                                         day_temp = data_longit[, day_temp],
+                                         day_length = data_longit[, day_length])
 ```
 
 ### 2.2. Fit a global GAMM model with uncorrelated errors to seasonality data
@@ -899,4 +908,129 @@ ppc_loo_pit_overlay(
 
 - We see that the distribution (dark blue line) of LOO-PIT values for our model is irregular and has many values close to 0 indicating that the model is under-dispersed compared to the data
 - We should try another model to reduce nder-dispersion
+
+### Extract the posterior draws for all parameters
+
+```
+sims <- as.matrix(m_gam_week_season_bayes)
+dim(sims)
+```
+```
+[1] 4000   174
+```
+```
+post_all <- colnames(sims)
+```
+
+**Obtain Species-level varying intercept**
+
+draws for overall mean
+```
+draws_mean <- as.matrix(m_gam_week_season_bayes, pars = "(Intercept)")
+```
+
+draws for 3 Species-level error
+```
+draws_sp_error <- as.matrix(m_gam_week_season_bayes,regex_pars = "b\\[\\(Intercept\\) Species\\:")
+```
+
+draws for 3 Species varying intercepts
+```
+draws_sp_inter <- as.numeric(draws_mean) + draws_sp_error
+```
+
+**Obtain sigma and sigma_alpha^2**
+
+draws for sigma
+```
+draws_sigma <- as.matrix(m_gam_week_season_bayes, pars = "sigma")
+```
+
+draws for sigma.alpha_sq
+```
+draws_sigma.alpha_sq <- as.matrix(m_gam_week_season_bayes, pars = "Sigma[Species:(Intercept),(Intercept)]")
+```
+
+### Calculate means, SD, medians and 95% credible intervals of varying intercepts
+
+We summarize the posterior probability distribution of the 4,000 estimates (draws) for a1 examining their quantiles
+
+**Posterior mean of each alpha**
+```
+post_mean <- apply(X = draws_sp_inter, MARGIN = 2, FUN = mean)
+```
+
+**Posterior SD of each alpha**
+```
+post_sd <- apply(X = draws_sp_inter, MARGIN = 2, FUN = sd)
+```
+
+**Posterior median and 95% credible interval**
+```
+post_median <- apply(X = draws_sp_inter, MARGIN = 2, FUN = quantile, probs = c(0.025, 0.50, 0.975))
+post_CI <- data.frame(t(post_median))
+names(post_CI) <- c("X2.5.", "X50.", "X97.5.")
+```
+
+**Combine summary statistics of posterior simulation draws**
+```
+post_sims_stats <- data.frame(post_mean, post_sd, post_CI)
+round(head(post_sims_stats), 2)
+```
+```
+                                  post_mean post_sd X2.5.  X50. X97.5.
+b_Intercept                           53.12    2.51 48.22 53.09  58.18
+sds_sweekly_1                         26.71    1.28 24.28 26.69  29.26
+sds_sseasonallySpeciespike_1          28.52    2.28 25.45 28.22  33.28
+sds_sseasonallySpeciespikeperch_1     30.15    2.85 26.48 29.52  37.54
+sds_sseasonallySpecieswels_1          28.63    2.16 25.43 28.30  34.14
+sds_sId_1                             33.52    1.61 30.69 33.37  36.88
+```
+
+### Plot fish-level alphas posterior mean and 95% credible interval
+
+:books:`library(ggplot2)`
+:books:`library(gridExtra)`
+:books:`library(grid)`
+
+Sort dataframe containing an estimated alpha mean and sd for every Species
+```
+post_sims_stats <- post_sims_stats[order(post_sims_stats$post_mean), ]
+post_sims_stats$post_rank <- c(1 : dim(post_sims_stats)[1]) # a vector of Species rank
+```
+
+Select Species specific ranks and store it in separate df
+```
+post_sims_stats_pike <- post_sims_stats[c(21,32,33,34),]
+post_sims_stats_pikperch <- post_sims_stats[c(13,16,36,40),]
+post_sims_stats_wels <- post_sims_stats[c(15,17,31,35),]
+```
+```
+p_pike <- ggplot(data = post_sims_stats_pike,
+          aes(x = post_rank, y = post_mean)) +
+          geom_pointrange(aes(ymin = X2.5., max = X97.5.), position = position_jitter(width = 0.1, height = 0)) +
+          geom_hline(yintercept = mean(post_sims_stats_pike$post_mean), size = 0.5, col = "red") +
+          scale_x_continuous("Rank(pike)", breaks = seq(from = 0, to = 80, by = 5)) +
+          scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
+          theme_bw( base_family = "serif")
+
+p_pikeperch <- ggplot(data = post_sims_stats_pikperch,
+               aes(x = post_rank, y = post_mean)) +
+               geom_pointrange(aes(ymin = X2.5., max = X97.5.), position = position_jitter(width = 0.1, height = 0)) +
+               geom_hline(yintercept = mean(post_sims_stats_pikperch$post_mean), size = 0.5, col = "red") +
+               scale_x_continuous("Rank(pikeperch)", breaks = seq(from = 0, to = 80, by = 5)) +
+               scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
+               theme_bw( base_family = "serif")
+
+p_wels <- ggplot(data = post_sims_stats_wels,
+          aes(x = post_rank, y = post_mean)) +
+          geom_pointrange(aes(ymin = X2.5., max = X97.5.), position = position_jitter(width = 0.1, height = 0)) +
+          geom_hline(yintercept = mean(post_sims_stats_wels$post_mean), size = 0.5, col = "red") +
+          scale_x_continuous("Rank(wels)", breaks = seq(from = 0, to = 80, by = 5)) +
+          scale_y_continuous(expression(paste("varying intercept, ", alpha[j]))) +
+          theme_bw( base_family = "serif")
+
+grid.arrange(p_pike, p_pikeperch, p_wels, nrow = 1)
+```
+![Horiz_range](/Plots/Horiz_range_18.png "Horiz_range")
 
