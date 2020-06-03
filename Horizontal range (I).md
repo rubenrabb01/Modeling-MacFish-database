@@ -58,16 +58,16 @@ ggplot(data_longit_sub, aes(x = date, y = ranged2d, colour = fi_fishid)) +
 First, lets subset horizontal range data into a new dataset _data_longit_sub_ for easing models fitting
 ```
 data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d],
-                                         Species = data_longit[, Species],
-                                         Id = data_longit[, fi_fishid],
-                                         weekly = data_longit[, week_day_num],
-                                         season = data_longit[, season],
-                                         seasonally = data_longit[, season_num],
-                                         daily = data_longit[, date],
-                                         body_size = data_longit[, ca_tl_mm],
-                                         lunar_phase = data_longit[, lunar_phase],
-                                         day_temp = data_longit[, day_temp],
-                                         day_length = data_longit[, day_length])
+                              Species = data_longit[, Species],
+                              Id = data_longit[, fi_fishid],
+                              weekly = data_longit[, week_day_num],
+                              season = data_longit[, season],
+                              seasonally = data_longit[, season_num],
+                              daily = data_longit[, date],
+                              body_size = data_longit[, ca_tl_mm],
+                              lunar_phase = data_longit[, lunar_phase],
+                              day_temp = data_longit[, day_temp],
+                              day_length = data_longit[, day_length])
 ```
 ```
 data_longit_sub
