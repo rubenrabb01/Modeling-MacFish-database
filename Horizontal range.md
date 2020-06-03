@@ -2,8 +2,8 @@
 
 ## 1. Prepare dataset with daily and seasonally distance range
 
-:books:`library(lubridate)`
-:books:`library(plyr)`
+:books:`library(lubridate)`  
+:books:`library(plyr)`  
 
 **Add info for each species and order by date**
 ```
@@ -92,7 +92,7 @@ data_longit_sub <- data.table(ranged2d = data_longit[, ranged2d],
 - Include a simple random term for subject identity
 - Horizontal range might be expected to vary cyclically across seasons so we need to specify bs = "cc"  (i.e., cyclic cubic regression splines), hence, seasonally shows no discontinuity between Spring I and Spring II and both ends line up
 
-:books:`library(mgcv)`
+:books:`library(mgcv)`  
 
 ```
 m_gam_season<- bam(sqrt(ranged2d+1) ~ s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
@@ -129,7 +129,7 @@ R-sq.(adj) =  0.211   Deviance explained = 21.4%
 
 ### Plot model
 
-:books:`library(gratia)`
+:books:`library(gratia)`  
 
 ```
 draw(m_gam_season, ncol = 2)
@@ -260,9 +260,9 @@ m_gam_sp8 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(seasonally, bs = "cr", k = 
 
 ### Model-selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
-:books:`library(lmtest)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
+:books:`library(lmtest)`  
 
 #### Based on AIC
 ```
@@ -391,7 +391,7 @@ We can see that:
 
 ### Plot model
 
-:books:`library(rgl)`
+:books:`library(rgl)`  
 
 **Plot summed effects surfaces (smooth) for the three species**
 ```
@@ -700,10 +700,10 @@ We re-fit the previous model **m_gam_season** with the following specifications:
 - Set fitted chains to 2
 - Set _adapt_delta_ to 0.99 (increase from default values as in a fisrt run there is a warning about divergent transitions after warmup)
 
-:books:`library(brms)`
-:books:`library(bayesplot)`
-:books:`library(rstanarm)`
-:books:`library(loo)`
+:books:`library(brms)`  
+:books:`library(bayesplot)`  
+:books:`library(rstanarm)`  
+:books:`library(loo)`  
 
 ```
 m_gam_week_season_bayes <- brm(bf(sqrt(ranged2d+1) ~ s(weekly, bs = "cc", k= 7) + s(seasonally, bs = "cc", k = 5, by = Species) + s(Id, bs = "re")),
@@ -989,9 +989,9 @@ sds_sId_1                             33.52    1.61 30.69 33.37  36.88
 
 ### Plot fish-level alphas posterior mean and 95% credible interval
 
-:books:`library(ggplot2)`
-:books:`library(gridExtra)`
-:books:`library(grid)`
+:books:`library(ggplot2)`  
+:books:`library(gridExtra)`  
+:books:`library(grid)`  
 
 Sort dataframe containing an estimated alpha mean and sd for every Species
 ```
