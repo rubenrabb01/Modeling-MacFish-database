@@ -17,13 +17,13 @@ With the inclusion of new variables we want to classify them based on their impo
 :books:`library(randomForestExplainer)`
 :books:`library(randomForestSRC)`
 
-### Set the random seed to be reproducible
+### 1.1. Set the random seed to be reproducible
 
 ```
 set.seed(500)
 ```
 
-### Create training and test sets
+### 1.2. Create training and test sets
 
 Split data according to random samples into 60% training and 40% test datasets
 ```
@@ -38,13 +38,15 @@ data_longit_sub.train <- data_longit_sub[data_longit_sub.train_ind, ]
 data_longit_sub.test <- data_longit_sub[-data_longit_sub.train_ind, ]
 ```
 
-### Grow regression tree forest
+### 1.3. Grow regression tree forest
 
 ```
 model.rf<-randomForest(sqrt(ranged2d+1) ~ body_size + day_length + day_temp + lunar_phase + Species + season + weekly + seasonally, data = data_longit_sub.train,importance=TRUE,ntree=500, mtry=15,do.trace=100)
 ```
 
-### Summary of tree forest
+### 1.4. Summary of tree forest
+
+In the following link you can view a complete report of the [Random Forest output](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
 
 ```
 print(model.rf)
@@ -60,12 +62,127 @@ No. of variables tried at each split: 8
 ```
 **Note** that if we included subject identity _Id_ in the tree model the % of variance explained would increase by ~8 %. However, provided that variation between individuals is expected to be high, and that _Id_ is a random-effects term, including that variable has confounding effects for variable classification
 
-### Plot variable importance
+### 1.4.1. Variable importance
 
 ```
 # plot(model.rf)
 # varImpPlot(model.rf,sort = T, main="Variable Importance", n.var=8)
+variable.imp <- data.frame(importance(model.rf))
+variable.imp$Variables <- row.names(variable.imp)
+```
+
+Order variables from best to worse MSE
+```
+print(variable.imp[order(variable.imp$X.IncMSE ,decreasing = T),])
+```
+```
+             X.IncMSE IncNodePurity   Variables
+body_size   278.64809     460904.91   body_size
+day_temp    112.81204     300561.98    day_temp
+day_length  108.10442     287815.93  day_length
+Species      58.96291      51158.85     Species
+season       58.06306      52670.37      season
+lunar_phase  36.85303     188701.82 lunar_phase
+seasonally   23.48321      14506.37  seasonally
+weekly      -15.19021      89594.85      weekly
+```
+
+Order according to Node Purity
+```
+print(variable.imp[order(variable.imp$IncNodePurity ,decreasing = T),])
+```
+```
+             X.IncMSE IncNodePurity   Variables
+body_size   278.64809     460904.91   body_size
+day_temp    112.81204     300561.98    day_temp
+day_length  108.10442     287815.93  day_length
+lunar_phase  36.85303     188701.82 lunar_phase
+weekly      -15.19021      89594.85      weekly
+season       58.06306      52670.37      season
+Species      58.96291      51158.85     Species
+seasonally   23.48321      14506.37  seasonally
+```
+
+Create a data frame with various measures of importance of variables in the random forest
+```
+importance_frame <- measure_importance(model.rf)
+save(importance_frame, file = "importance_frame.rda")
+load("importance_frame.rda")
+importance_frame
+```
+```
+     variable mean_min_depth no_of_nodes mse_increase node_purity_increase no_of_trees times_a_root   p_value
+1   body_size          0.000      130228   205.610949            460904.91         500          500 0.9998216
+2  day_length          2.138      234528   105.880126            287815.93         500            0 0.0000000
+3    day_temp          2.970      230287   110.109965            300561.98         500            0 0.0000000
+4 lunar_phase          3.714      244839    13.388058            188701.82         500            0 0.0000000
+5      season          1.970       13851    47.948352             52670.37         500            0 1.0000000
+6  seasonally          4.968       13611     7.550513             14506.37         500            0 1.0000000
+7     Species          3.610       12784    47.175310             51158.85         500            0 1.0000000
+8      weekly          4.658      171366    -3.895798             89594.85         500            0 0.0000000
+```
+
+**Plot Relations between measures of importance**
 
 ```
-[Random Forest Summary](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
+plot_importance_ggpairs(importance_frame)  # or use model.rf (but takes longer)
+```
+![Horiz_range](/Plots/Horiz_range_II_0.png "Horiz_range")
+
+**Plot Relations between rankings according to different measures**
+
+```
+plot_importance_rankings(importance_frame) # or use model.rf (but takes longer)
+```
+![Horiz_range](/Plots/Horiz_range_II_01.png "Horiz_range")
+
+### 1.4.2. Multi-way importance plots
+
+In the first plot variables are ranked according to the best scores in relation to three importance measures derived from the forest tree:
+- Mean depth of first split on the variable
+- Number of trees in which the root is split on the variable
+- The total number of nodes in the forest that split on that variable
+
+In the second multi-way importance plot the importance measures used take into account the predictive capability of a variable and wether it has a significant effect on the response based on its p-value
+
+```
+multi_way_imp_1 <- plot_multi_way_importance(importance_frame, size_measure = "no_of_nodes")   or use model.rf (but takes longer)
+multi_way_imp_2 <- plot_multi_way_importance(importance_frame, x_measure = "mse_increase", y_measure = "node_purity_increase", size_measure = "p_value", no_of_labels = 5)
+grid.arrange(multi_way_imp_1, multi_way_imp_2, nrow = 1)
+```
+![Horiz_range](/Plots/Horiz_range_II_1.png "Horiz_range")
+
+- We see that _body_size_ is ranked high and separated from the remaining variables, which match the previous importance frame
+
+### 1.4.3. Distribution of minimal depth
+
+Calculate minimal depth for each variable among the forest trees
+```
+min_depth_frame <- min_depth_distribution(model.rf)
+save(min_depth_frame, file = "min_depth_frame.rda")
+load("min_depth_frame.rda")
+head(min_depth_frame, n = 10)
+```
+```
+   tree    variable minimal_depth
+1     1   body_size             0
+2     1  day_length             3
+3     1    day_temp             3
+4     1 lunar_phase             4
+5     1      season             2
+6     1  seasonally             4
+7     1     Species             2
+8     1      weekly             4
+9     2   body_size             0
+10    2  day_length             2
+```
+
+**Plot minimal depth distribution**
+
+```
+plot_min_depth_distribution(model.rf)
+```
+![Horiz_range](/Plots/Horiz_range_II_2.png "Horiz_range")
+
+- We see that the mean of the distribution of minimal depth is lowest for body_size with zero trees in which that variable was used for splitting
 
