@@ -67,5 +67,5 @@ No. of variables tried at each split: 8
 # varImpPlot(model.rf,sort = T, main="Variable Importance", n.var=8)
 
 ```
-
+[Random Forest Summary!](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
 
