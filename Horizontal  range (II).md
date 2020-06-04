@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`
-:books:`library(randomForestExplainer)`
-:books:`library(randomForestSRC)`
+:books:`library(randomForest)`  
+:books:`library(randomForestExplainer)`  
+:books:`library(randomForestSRC)`  
 
 ### 1.1. Set the random seed to be reproducible
 
