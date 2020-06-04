@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`  
-:books:`library(randomForestExplainer)`  
-:books:`library(randomForestSRC)`  
+:books:`library(randomForest)`
+:books:`library(randomForestExplainer)`
+:books:`library(randomForestSRC)`
 
 ### 1.1. Set the random seed to be reproducible
 
@@ -186,3 +186,21 @@ plot_min_depth_distribution(model.rf)
 
 - We see that the mean of the distribution of minimal depth is lowest for body_size with zero trees in which that variable was used for splitting
 
+### 1.4.4. Variable interactions
+
+```
+(vars <- important_variables(importance_frame, k = 5, measures = c("mean_min_depth", "no_of_trees"))) # or use model.rf (but takes longer)
+interactions_frame <- min_depth_interactions(model.rf, vars)
+save(interactions_frame, file = "interactions_frame.rda")
+load("interactions_frame.rda")
+head(interactions_frame[order(interactions_frame$occurrences, decreasing = TRUE), ])
+```
+
+**Plot variable interactions**
+
+In this plot it is reported the 30 top interactions according to mean of conditional minimal depth – a generalization of minimal depth that measures the depth of the second variable in a tree of which the first variable is a root (a subtree of a tree from the forest). In order to be comparable to normal minimal depth 1 is subtracted so that 0 is the minimum.
+
+```
+plot_min_depth_interactions(interactions_frame)
+```
+![Horiz_range](/Plots/Horiz_range_II_3.png "Horiz_range")
