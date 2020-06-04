@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`  
-:books:`library(randomForestExplainer)`  
-:books:`library(randomForestSRC)`  
+:books:`library(randomForest)`
+:books:`library(randomForestExplainer)`
+:books:`library(randomForestSRC)`
 
 ### 1.1. Set the random seed to be reproducible
 
@@ -41,18 +41,19 @@ data_longit_sub.test <- data_longit_sub[-data_longit_sub.train_ind, ]
 ### 1.3. Grow regression tree forest
 
 ```
-model.rf<-randomForest(sqrt(ranged2d+1) ~ body_size + day_length + day_temp + lunar_phase + Species + season + weekly + seasonally, data = data_longit_sub.train,importance=TRUE,ntree=500, mtry=15,do.trace=100)
+model.rf<-randomForest(sqrt(ranged2d+1) ~ body_size + day_length + day_temp + lunar_phase + Species + season + weekly + seasonally,
+                                          data = data_longit_sub.train,
+                                          importance=TRUE,
+                                          ntree=500, mtry=15, do.trace=100)
 ```
 
 ### 1.4. Summary of tree forest
-
-In the following link you can view a complete report of the [Random Forest output](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
 
 ```
 print(model.rf)
 
 Call:
- randomForest(formula = sqrt(ranged2d + 1) ~ body_size + day_length +      day_temp + lunar_phase + Species + season + weekly + seasonally,      data = data_longit_sub.train, importance = TRUE, ntree = 500,      mtry = 15, do.trace = 100)
+ randomForest(formula = sqrt(ranged2d + 1) ~ body_size + day_length + day_temp + lunar_phase + Species + season + weekly + seasonally, data = data_longit_sub.train, importance = TRUE, ntree = 500, mtry = 15, do.trace = 100)
                Type of random forest: regression
                      Number of trees: 500
 No. of variables tried at each split: 8
@@ -146,13 +147,13 @@ In the first plot variables are ranked according to the best scores in relation 
 In the second multi-way importance plot the importance measures used take into account the predictive capability of a variable and wether it has a significant effect on the response based on its p-value
 
 ```
-multi_way_imp_1 <- plot_multi_way_importance(importance_frame, size_measure = "no_of_nodes")   or use model.rf (but takes longer)
+multi_way_imp_1 <- plot_multi_way_importance(importance_frame, size_measure = "no_of_nodes")   # or use model.rf (but takes longer)
 multi_way_imp_2 <- plot_multi_way_importance(importance_frame, x_measure = "mse_increase", y_measure = "node_purity_increase", size_measure = "p_value", no_of_labels = 5)
 grid.arrange(multi_way_imp_1, multi_way_imp_2, nrow = 1)
 ```
 ![Horiz_range](/Plots/Horiz_range_II_1.png "Horiz_range")
 
-- We see that _body_size_ is ranked high and separated from the remaining variables, which match the previous importance frame
+- We see that _body_size_ is ranked high and far from the remaining variables, which actually match the previous importance frame
 
 ### 1.4.3. Distribution of minimal depth
 
@@ -188,6 +189,7 @@ plot_min_depth_distribution(model.rf)
 
 ### 1.4.4. Variable interactions
 
+Create a data frame of potential interactions ordered from more to less important in terms of frequency in the tree foerest
 ```
 (vars <- important_variables(importance_frame, k = 5, measures = c("mean_min_depth", "no_of_trees"))) # or use model.rf (but takes longer)
 interactions_frame <- min_depth_interactions(model.rf, vars)
@@ -198,9 +200,44 @@ head(interactions_frame[order(interactions_frame$occurrences, decreasing = TRUE)
 
 **Plot variable interactions**
 
-In this plot it is reported the 30 top interactions according to mean of conditional minimal depth – a generalization of minimal depth that measures the depth of the second variable in a tree of which the first variable is a root (a subtree of a tree from the forest). In order to be comparable to normal minimal depth 1 is subtracted so that 0 is the minimum.
-
+In this plot:
+- The 20 interactions that appeared most frequently are reported according to the mean of conditional minimal depth – a generalization of minimal depth that measures the depth of the second variable in a tree of which the first variable is a root (a subtree of a tree from the forest)
+- The horizontal line shows the minimal value of the depicted statistic among interactions for which it was calculated
+- The interactions considered are ones with the following variables as first (root variables): and all possible values of the second variable
 ```
 plot_min_depth_interactions(interactions_frame)
 ```
 ![Horiz_range](/Plots/Horiz_range_II_3.png "Horiz_range")
+
+It is worth highlighting the occurrence of the _body_size_x _day_length_ interaction which appears with high frquency across the tree forest
+
+### 1.4.5. Predict horizontal range
+
+```
+pred <- predict(model.rf, newdata = data_longit_sub.test)
+table(pred, data_longit_sub.test$ranged2d)
+data_longit_sub.train$predicted.response <- predict(model.rf, data_longit_sub.train)
+print(importance(model.rf,type = 2))
+```
+
+**Plot interactions predictions**
+
+We further explore the most frequent interactions by plotting predictions of the forest for each term in the interaction
+```
+p1 <- plot_predict_interaction(model.rf, grid = 1000, data_longit_sub.train, "body_size", "day_length")
+p2 <- plot_predict_interaction(model.rf, grid = 1000, data_longit_sub.train, "body_size","day_temp")
+p3 <- plot_predict_interaction(model.rf, grid = 1000, data_longit_sub.train, "body_size","lunar_phase")
+grid.arrange(p1, p2, p3, nrow = 1)
+```
+![Horiz_range](/Plots/Horiz_range_II_4.png "Horiz_range")
+
+To highligh from the most frequent interaction _day_length x body_size_:
+  - The predicted horizontal range is highest when body size is 700-800 cm and day length is inferior to 9
+  - On the other hand, horizontal range is lowest when body size is smaller than 500 cm or between 1500-1600 almost independently of fay length
+
+### 1.4.6. Report random forest analysis
+
+```
+explain_forest(model.rf, interactions = TRUE, data = data_longit_sub)
+```
+In the following link you can view a complete report generated of the [Random Forest tree output](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
