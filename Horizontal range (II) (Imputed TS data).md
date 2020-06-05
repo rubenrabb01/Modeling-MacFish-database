@@ -282,7 +282,6 @@ Cand.mod <- list(m_gam_complete_1,m_gam_complete_2,m_gam_complete_3,m_gam_comple
 
 Cand.mod.glm <- lapply(Cand.mod, glm.convert)
 aictab(cand.set = Cand.mod.glm, second.ord = TRUE)
-
 ```
 ```
 Model selection based on AICc:
