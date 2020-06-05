@@ -1,4 +1,4 @@
-# Analysis of range of distances for horizontal movement (II)
+# Analysis of range of distances for horizontal movement using impu (II)
 
 This section is a follow-up to the analysis of horizontal range data where the process for GAMM models building and selection of importance variables is about the same with minor differences regarding:
 - The definition of smooths terms and surface interactions change with the addition of new variables:
@@ -210,7 +210,7 @@ plot_min_depth_interactions(interactions_frame)
 ```
 ![Horiz_range](/Plots/Horiz_range_II_imputed_3.png "Horiz_range")
 
-It is worth highlighting the occurrence of the _body_size_x _day_length_ interaction which appears with high frquency across the tree forest
+As with non-imputed data the _body_size_x _day_length_ interaction appears with high frequency
 
 ### 1.4.5. Predict horizontal range
 
@@ -232,7 +232,7 @@ grid.arrange(p1, p2, p3, nrow = 1)
 ```
 ![Horiz_range](/Plots/Horiz_range_II_imputed_4.png "Horiz_range")
 
-From the most frequent interaction _day_length x body_size_ we need to highlight that:
+From the most frequent interaction _day_length x body_size_ there is to highlight that:
   - The predicted horizontal range is highest when body size is 700-800 cm and day length is inferior to 9
   - On the other hand, horizontal range is lowest when body size is smaller than 500 cm or between 1500-1600 almost independently of day length
 
@@ -246,28 +246,27 @@ In the following link you can view a complete report of the [Random Forest outpu
 ## 2. Build GAMM models with uncorrelated errors and conduct model-selection
 
 - Fit several models assuming all observations are independent
-- Include a smooth term for seasonallity grouped by Species using rank 5 P-spline marginals (k=5)
+- Include smooth terms for _seasonally_ and _daily_ grouped by Species using rank 5 P-spline marginals (k=5)
 - Add one random-term for subject identity
 - Add an interaction between factors season and Species
-- Add a tensor product interaction term in presence of smooth functions for main-effects using the _ti_ function (1 out of 8 models)
-- Horizontal range might be expected to vary cyclically across seasons so for models with the variable _seasonally_ we specify bs = "cc" to indicate continuity between Spring I and Spring II
 - Based on previous classification of variable importance and interactions we include a _te_ term to create a tensor product smooth of three variables that are seemingly related in their effects on the response variable
+- We include a tensor product for _day_length x body_size_ interaction (see interactions plot above)
 
 ### Fit GAMM models
 
 ```
 m_gam_complete_1 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(seasonally, bs = "cr", k = 5, by = Species) + s(day_temp) + te(seasonally,lunar_phase,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_2 <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(seasonally,lunar_phase,day_length,bs="ps",k=5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_2 <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(lunar_phase,day_length,bs="ps",k=5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
 m_gam_complete_3 <- bam(sqrt(ranged2d+1) ~ s(day_length)  + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(day_temp,lunar_phase, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
 m_gam_complete_4 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(body_size, day_length, day_temp, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
 m_gam_complete_5 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(seasonally, bs = "cr", k = 5, by = Species) + s(day_temp) + te(lunar_phase,day_length,day_temp,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_6 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(lunar_phase,day_length,day_temp,bs=c("tp","cr"), d=c(2,1), k=c(20,5), by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_7 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(lunar_phase) + te(lunar_phase,seasonally,day_temp,bs="ps",k=5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_8 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(day_length, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_9 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(as.numeric(daily), day_length, bs = "ps", k = 5, by = Species) + te(day_temp, as.numeric(daily), bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_10 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(seasonally, lunar_phase, bs = "ps", k = 5, by = Species) + te(day_temp, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_11 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp) + te(lunar_phase,day_length,day_temp,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
-m_gam_complete_12 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp, by = Species) + te(lunar_phase,day_length,day_temp,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_6 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(lunar_phase,day_temp,day_length,bs=c("tp","cr"), d=c(2,1), k=c(20,5), by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_7 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(lunar_phase) + te(lunar_phase,day_temp,seasonally,bs="ps",k=5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_8 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(body_size, day_length,bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_9 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(day_temp,as.numeric(daily), bs = "ps", k = 5, by = Species) + te(lunar_phase, as.numeric(daily), bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_10 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(lunar_phase,seasonally, bs = "ps", k = 5, by = Species) + te(day_temp, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_11 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp) + te(lunar_phase,day_temp,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
+m_gam_complete_12 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp, by = Species) + te(lunar_phase,day_temp,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
 ```
 
 ### Model-selection
@@ -292,12 +291,12 @@ Mod12 686 82531.19       2.03   0.24   0.90 -40532.36
 Mod5  682 82533.05       3.89   0.10   1.00 -40537.85
 Mod1  547 82619.09      89.93   0.00   1.00 -40732.91
 Mod4  422 82647.66     118.50   0.00   1.00 -40884.40
-Mod2  653 82663.97     134.81   0.00   1.00 -40636.32
 Mod3  631 82814.49     285.33   0.00   1.00 -40736.49
-Mod6  358 84711.03    2181.87   0.00   1.00 -41985.04
-Mod9  192 84740.95    2211.79   0.00   1.00 -42174.94
+Mod2  353 83063.96     534.81   0.00   1.00 -41166.86
+Mod6  358 84771.33    2242.17   0.00   1.00 -42015.19
+Mod9  191 84816.27    2287.11   0.00   1.00 -42213.63
 Mod7  424 85031.97    2502.81   0.00   1.00 -42074.39
-Mod8  143 85061.44    2532.28   0.00   1.00 -42385.76
+Mod8  122 85132.45    2603.29   0.00   1.00 -42442.80
 Mod10 185 85136.98    2607.82   0.00   1.00 -42380.21
 ```
 
@@ -338,7 +337,8 @@ Model 2: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
 1 278.63 -40955
 2 281.43 -40954 2.7963 2.1882     0.5343
 ```
-The first three models are nested and the best one is the reduced form, **m_gam_complete_11**, excluding both _Species x seasonally_ and _Species x day_temp_ non-significant interaction terms from the other model formulas
+- The first three models are nested and the best one is the reduced form, **m_gam_complete_11**, excluding both _Species x seasonally_ and _Species x day_temp_ (non-significant) interaction terms from other model formulas
+- We see that the model with the tensor product _day_length_ by _body_size_ is not selected between the best models despite the interaction had high occurrence in the RF interactions frame
 
 ### Summary of best-fit model
 
@@ -454,18 +454,37 @@ gamtabs(m_gam_complete_11_drop, caption="Summary of m_gam_complete_sp2", comment
 
 ### Plot model
 
+**Plot summed effects surfaces (smooth) with and without random effects**
+```
+par(mfrow=c(1,3), cex=1.1)
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pike')
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pikeperch')
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=wels')
+plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE,  print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+```
+![Horiz_range](/Plots/Horiz_range_II_imputed_9.png "Horiz_range")
+
+**Plot fitted model values (day length)**
+
+```
+data_m_gam_complete_11_drop <- visreg(m_gam_complete_11_drop, "day_length", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
+plot(data_m_gam_complete_11_drop, plot.type="rgl") + theme_bw()
+```
+![Horiz_range](/Plots/Horiz_range_II_imputed_10.png "Horiz_range")
+
+**Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_, _pikeperch_ and _wels_**
+
 ```
 plot(m_gam_complete_11_drop)
 ```
-**Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_**
-
 ![Horiz_range](/Plots/Horiz_range_II_imputed_51.png "Horiz_range")
 
-**Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_**
-
 ![Horiz_range](/Plots/Horiz_range_II_imputed_52.png "Horiz_range")
-
-**Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_**
 
 ![Horiz_range](/Plots/Horiz_range_II_imputed_53.png "Horiz_range")
 
@@ -543,25 +562,3 @@ plot_diff2(m_gam_complete_11_drop, view=c("day_length","day_temp"), comp=list(Sp
 plot_diff(m_gam_complete_11_drop, view="day_length", comp=list(Species=c("pike", "wels")), main='Day length difference pike-wels')
 ```
 ![Horiz_range](/Plots/Horiz_range_II_imputed_8.png "Horiz_range")
-
-**Plot summed effects surfaces (smooth) with and without random effects**
-```
-par(mfrow=c(1,3), cex=1.1)
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pike')
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
-legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pikeperch')
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
-legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=wels')
-plot_smooth(m_gam_complete_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE,  print.summary=FALSE, xpd=TRUE)
-legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
-```
-![Horiz_range](/Plots/Horiz_range_II_imputed_9.png "Horiz_range")
-
-Alternatively, plot fitted model values (daily/seasonally) with following code:
-```
-data_m_gam_complete_11_drop <- visreg(m_gam_complete_11_drop, "day_length", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
-plot(data_m_gam_complete_11_drop, plot.type="rgl") + theme_bw()
-```
-![Horiz_range](/Plots/Horiz_range_II_imputed_10.png "Horiz_range")
