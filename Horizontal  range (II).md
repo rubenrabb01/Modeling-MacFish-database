@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`  
-:books:`library(randomForestExplainer)`  
-:books:`library(randomForestSRC)`  
+:books:`library(randomForest)`
+:books:`library(randomForestExplainer)`
+:books:`library(randomForestSRC)`
 
 ### 1.1. Set the random seed to be reproducible
 
@@ -231,13 +231,332 @@ grid.arrange(p1, p2, p3, nrow = 1)
 ```
 ![Horiz_range](/Plots/Horiz_range_II_4.png "Horiz_range")
 
-To highligh from the most frequent interaction _day_length x body_size_:
+From the most frequent interaction _day_length x body_size_ we need to highlight that:
   - The predicted horizontal range is highest when body size is 700-800 cm and day length is inferior to 9
-  - On the other hand, horizontal range is lowest when body size is smaller than 500 cm or between 1500-1600 almost independently of fay length
+  - On the other hand, horizontal range is lowest when body size is smaller than 500 cm or between 1500-1600 almost independently of day length
 
 ### 1.4.6. Report random forest analysis
 
 ```
 explain_forest(model.rf, interactions = TRUE, data = data_longit_sub)
 ```
-In the following link you can view a complete report generated of the [Random Forest tree output](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
+In the following link you can view a complete report of the [Random Forest output](http://172.21.3.20:8787/files/Teri_longit_move/Your_forest_explained.html)
+
+## 2. Build GAMM models with uncorrelated errors and conduct model-selection
+
+- Fit several models assuming all observations are independent
+- Include smooth terms for _seasonally_ and _daily_ grouped by Species using rank 5 P-spline marginals (k=5)
+- Add one random-term for subject identity
+- Add an interaction between factors season and Species
+- Based on previous classification of variable importance and interactions we include a _te_ term to create a tensor product smooth of three variables that are seemingly related in their effects on the response variable
+- We include a tensor product for _day_length x body_size_ interaction (see interactions plot above)
+
+### Fit GAMM models
+
+```
+m_gam_1 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(seasonally, bs = "cr", k = 5, by = Species) + s(day_temp) + te(seasonally,lunar_phase,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_2 <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(lunar_phase,day_length,bs="ps",k=5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_3 <- bam(sqrt(ranged2d+1) ~ s(day_length)  + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(day_temp,lunar_phase, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_4 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(body_size, day_length, day_temp, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_5 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(seasonally, bs = "cr", k = 5, by = Species) + s(day_temp) + te(lunar_phase,day_length,day_temp,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_6 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(lunar_phase,day_temp,day_length,bs=c("tp","cr"), d=c(2,1), k=c(20,5), by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_7 <- bam(sqrt(ranged2d+1) ~ Species * season + s(Id, bs = "re") + s(lunar_phase) + te(lunar_phase,day_temp,seasonally,bs="ps",k=5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_8 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + te(body_size, day_length,bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_9 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(day_temp,as.numeric(daily), bs = "ps", k = 5, by = Species) + te(lunar_phase, as.numeric(daily), bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_10 <- bam(sqrt(ranged2d+1) ~ s(Id, bs = "re") + s(body_size) + s(lunar_phase) + s(day_temp) + te(lunar_phase,seasonally, bs = "ps", k = 5, by = Species) + te(day_temp, seasonally, bs = "ps", k = 5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_11 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp) + te(lunar_phase,day_temp,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+m_gam_12 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(day_temp, by = Species) + te(lunar_phase,day_temp,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub, method = "REML")
+```
+
+### Model-selection
+
+:books:`library(MASS)`
+:books:`library(AICcmodavg)`
+:books:`library(lmtest)`
+
+```
+Cand.mod <- list(m_gam_1,m_gam_2,m_gam_3,m_gam_4,m_gam_5,m_gam_6,m_gam_7,m_gam_8,m_gam_9,m_gam_10,m_gam_11,m_gam_12)
+
+Cand.mod.glm <- lapply(Cand.mod, glm.convert)
+aictab(cand.set = Cand.mod.glm, second.ord = TRUE)
+```
+```
+Model selection based on AICc:
+
+        K     AICc Delta_AICc AICcWt Cum.Wt        LL
+Mod11 670 69550.33       0.00   0.69   0.69 -34050.17
+Mod5  682 69552.24       1.91   0.26   0.95 -34037.06
+Mod12 686 69555.56       5.23   0.05   1.00 -34034.02
+Mod1  548 69586.68      36.35   0.00   1.00 -34209.08
+Mod3  631 69648.34      98.01   0.00   1.00 -34144.62
+Mod4  422 69754.13     203.80   0.00   1.00 -34433.87
+Mod2  353 69758.15     207.82   0.00   1.00 -34511.36
+Mod8  122 70999.16    1448.83   0.00   1.00 -35375.86
+Mod6  358 71086.27    1535.94   0.00   1.00 -35169.99
+Mod9  191 71118.71    1568.38   0.00   1.00 -35364.12
+Mod7  424 71185.63    1635.30   0.00   1.00 -35147.42
+Mod10 185 71189.88    1639.55   0.00   1.00 -35405.97
+```
+
+Compare the three best-fit models
+```
+lrtest(m_gam_11,m_gam_5)
+```
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(day_temp) + te(lunar_phase,
+    day_temp, day_length, bs = "ps", k = 5, by = Species) + s(Id,
+    bs = "re")
+Model 2: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(seasonally, bs = "cr", k = 5,
+    by = Species) + s(day_temp) + te(lunar_phase, day_length,
+    day_temp, bs = "ps", k = 5, by = Species) + s(Id, bs = "re")
+     #Df LogLik      Df Chisq Pr(>Chisq)
+1 248.01 -34501
+2 229.28 -34498 -18.722   6.3     0.9971
+```
+```
+lrtest(m_gam_11,m_gam_12)
+```
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(day_temp) + te(lunar_phase,
+    day_temp, day_length, bs = "ps", k = 5, by = Species) + s(Id,
+    bs = "re")
+Model 2: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(day_temp, by = Species) + te(lunar_phase,
+    day_temp, day_length, bs = "ps", k = 5, by = Species) + s(Id,
+    bs = "re")
+     #Df LogLik      Df  Chisq Pr(>Chisq)
+1 248.01 -34501
+2 242.97 -34500 -5.0415 0.7669     0.9791
+```
+- The first three models are nested and the best one is the reduced form, **m_gam_11**, excluding both _Species x seasonally_ and _Species x day_temp_ (non-significant) interaction terms from other model formulas
+- We see that the model with the tensor product _day_length_ by _body_size_ is not selected between the best models despite the interaction had high occurrence in the RF interactions frame
+
+### Summary of best-fit model
+
+```
+summary(m_gam_11)
+```
+```
+Family: gaussian
+Link function: identity
+
+Formula:
+sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(day_temp) + te(lunar_phase,
+    day_temp, day_length, bs = "ps", k = 5, by = Species) + s(Id,
+    bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   26.263      1.125   23.34   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                                        edf  Ref.df       F  p-value
+s(body_size)                                          1.634   1.641   3.573  0.08853 .
+s(Species,Id)                                        15.202  29.000 516.050  0.00515 **
+s(season,Id)                                         97.128 129.000  69.024  0.00082 ***
+s(day_temp)                                           1.221   1.299   1.716  0.18823
+te(lunar_phase,day_temp,day_length):Speciespike      31.999  39.314   2.391 4.02e-06 ***
+te(lunar_phase,day_temp,day_length):Speciespikeperch 34.546  41.528   4.154  < 2e-16 ***
+te(lunar_phase,day_temp,day_length):Specieswels      31.016  38.115   5.337  < 2e-16 ***
+s(Id)                                                 4.758  29.000  86.139  0.31791
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Rank: 669/670
+R-sq.(adj) =  0.387   Deviance explained = 40.2%
+-REML =  34848  Scale est. = 146.56    n = 8846
+```
+
+We can see that:
+- The interaction term is significant in the three species
+- the smooth terms for _body_size_, _day_term_ and the random-effects _Id_ are not significant so we should compare best-fit model to a model without those terms
+
+### Remove non-significant terms and compare with the larger model
+
+```
+m_gam_11_drop <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(lunar_phase,day_length,day_temp,bs="ps",k=5, by = Species), family = gaussian, data = data_longit_sub, method = "REML")
+```
+```
+lrtest(m_gam_11,m_gam_11_drop)
+```
+```
+Likelihood ratio test
+
+Model 1: sqrt(ranged2d + 1) ~ s(body_size) + s(Species, Id, bs = "re") +
+    s(season, Id, bs = "re") + s(day_temp) + te(lunar_phase,
+    day_temp, day_length, bs = "ps", k = 5, by = Species) + s(Id,
+    bs = "re")
+Model 2: sqrt(ranged2d + 1) ~ s(Species, Id, bs = "re") + s(season, Id,
+    bs = "re") + te(lunar_phase, day_length, day_temp, bs = "ps",
+    k = 5, by = Species)
+     #Df LogLik      Df  Chisq Pr(>Chisq)
+1 248.01 -34501
+2 233.18 -34501 -14.827 1.0917          1
+```
+
+We see that dropping the non-significant smooth predictors doesnt change overall fit of the model (same r-squared) and the reduced model is preferred
+
+### Summary of final selected model
+
+View GCV and EDF estimates
+```
+summary(m_gam_11_drop)$sp.criterion
+```
+```
+   REML
+34851.53
+attr(,"Dp")
+[1] 4411.99
+```
+```
+summary(m_gam_11_drop)$s.table
+```
+```
+                                                          edf    Ref.df           F      p-value
+s(Species,Id)                                        22.25455  30.00000 1117.316952 2.264447e-12
+s(season,Id)                                         96.49780 130.00000   92.788212 2.121805e-03
+te(lunar_phase,day_length,day_temp):Speciespike      32.00720  39.33682    3.989553 1.615793e-15
+te(lunar_phase,day_length,day_temp):Speciespikeperch 34.49028  41.47867    4.362169 6.664108e-19
+te(lunar_phase,day_length,day_temp):Specieswels      32.06779  39.19729    6.619267 1.164325e-33
+```
+
+**Summary table**
+
+:books:`library(itsadug)`
+
+```
+gamtabs(m_gam_11_drop, caption="Summary of m_gam_11_drop", comment=FALSE, type='html')
+```
+<table border=1>
+<caption align="bottom"> Summary of m_gam_11_drop </caption>
+  <tr> <td> A. parametric coefficients </td> <td align="right"> Estimate </td> <td align="right"> Std. Error </td> <td align="right"> t-value </td> <td align="right"> p-value </td> </tr>
+  <tr> <td> (Intercept) </td> <td align="right"> 26.1539 </td> <td align="right"> 1.2034 </td> <td align="right"> 21.7331 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+   <tr> <td> B. smooth terms </td> <td align="right"> edf </td> <td align="right"> Ref.df </td> <td align="right"> F-value </td> <td align="right"> p-value </td> </tr>
+  <tr> <td> s(Species,Id) </td> <td align="right"> 22.2546 </td> <td align="right"> 30.0000 </td> <td align="right"> 1117.3170 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+  <tr> <td> s(season,Id) </td> <td align="right"> 96.4978 </td> <td align="right"> 130.0000 </td> <td align="right"> 92.7882 </td> <td align="right"> 0.0021 </td> </tr>
+  <tr> <td> te(lunar_phase,day_length,day_temp):Speciespike </td> <td align="right"> 32.0072 </td> <td align="right"> 39.3368 </td> <td align="right"> 3.9896 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+  <tr> <td> te(lunar_phase,day_length,day_temp):Speciespikeperch </td> <td align="right"> 34.4903 </td> <td align="right"> 41.4787 </td> <td align="right"> 4.3622 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+  <tr> <td> te(lunar_phase,day_length,day_temp):Specieswels </td> <td align="right"> 32.0678 </td> <td align="right"> 39.1973 </td> <td align="right"> 6.6193 </td> <td align="right"> &lt; 0.0001 </td> </tr>
+   <a name=tab.gam></a>
+</table>
+
+### Plot model
+
+**Plot summed effects surfaces (smooth) with and without random effects**
+```
+par(mfrow=c(1,3), cex=1.1)
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pike')
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="pike"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=pikeperch')
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="pikeperch"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE, print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, ylim=c(-10,80), print.summary=FALSE, ylab = "Horizontal range [m]", main='Day length, Species=wels')
+plot_smooth(m_gam_11_drop, view="day_length", cond=list(Species="wels"), rug=FALSE, add=TRUE, col='red', rm.ranef=TRUE,  print.summary=FALSE, xpd=TRUE)
+legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red"), lwd=2, bty='n')
+```
+![Horiz_range](/Plots/Horiz_range_II_5.png "Horiz_range")
+
+**Plot fitted model values (day length)**
+
+```
+data_m_gam_11_drop <- visreg(m_gam_11_drop, "day_length", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
+plot(data_m_gam_11_drop, plot.type="rgl") + theme_bw()
+```
+![Horiz_range](/Plots/Horiz_range_II_6.png "Horiz_range")
+
+**Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_, _pikeperch_ and _wels_**
+
+```
+plot(m_gam_11_drop)
+```
+![Horiz_range](/Plots/Horiz_range_II_61.png "Horiz_range")
+
+![Horiz_range](/Plots/Horiz_range_II_62.png "Horiz_range")
+
+![Horiz_range](/Plots/Horiz_range_II_63.png "Horiz_range")
+
+**Plot summed effects surfaces of _day_length_ by _lunar_phase_ smooths for the three species**
+```
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,48), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(14,24), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,35), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+```
+![Horiz_range](/Plots/Horiz_range_II_7.png "Horiz_range")
+
+**Plot summed effects surfaces of _day_length_ by _day_temp_ smooths for the three species**
+
+```
+layout(matrix(1:6, nrow = 2))
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,48), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='pike'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='pikeperch'), main = "pikeperch", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(14,24), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='pikeperch'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='wels'), main = "wels", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
+gradientLegend(valRange=c(28,35), pos=.15)
+vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='wels'), plot.type="rgl", ticktype="detailed",color="topo", n.grid = 50, theta=-35, zlab = "Horizontal range [m]")
+```
+![Horiz_range](/Plots/Horiz_range_II_8.png "Horiz_range")
+
+We see that:
+- In _pike_, the highest peak occurs when _day_length_ is above 16 and lunar phase 3-6
+- In _pikeperch_, the highest peak occurs  when _day_length_ is 16 and lunar phase 5-6
+- In _wels_, the highest peak occurs  when _day_length_ is above 16 and lunar phase 2-4
+
+**Plot surface and one-dimensional _day_length_ by _lunar_phase_ and _day_temp_ differences in horizontal range between the three species**
+```
+layout(matrix(1:9, nrow = 3))
+plot_diff2(m_gam_11_drop, view=c("day_length","lunar_phase"), comp=list(Species=c("pike", "pikeperch")), main='Day length by lunar phase difference pike-pikeperch',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff2(m_gam_11_drop, view=c("day_length","day_temp"), comp=list(Species=c("pike", "pikeperch")), main='Day length by water temperature difference pike-pikeperch',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_11_drop, view="day_length", comp=list(Species=c("pike", "pikeperch")), main='Day length difference pike-pikeperch')
+plot_diff2(m_gam_11_drop, view=c("day_length","lunar_phase"), comp=list(Species=c("pikeperch", "wels")), main='Day length by lunar phase difference pikeperch-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff2(m_gam_11_drop, view=c("day_length","day_temp"), comp=list(Species=c("pikeperch", "wels")), main='Day length by water temperature difference pikeperch-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_11_drop, view="day_length", comp=list(Species=c("pikeperch", "wels")), main='Day length difference pikeperch-wels')
+plot_diff2(m_gam_11_drop, view=c("day_length","lunar_phase"), comp=list(Species=c("pike", "wels")), main='Day length by lunar phase difference pike-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff2(m_gam_11_drop, view=c("day_length","day_temp"), comp=list(Species=c("pike", "wels")), main='Day length by water temperature difference pike-wels',
+        transform.view = TRUE,
+        color = "heat",
+        n.grid = 420,
+        print.summary=FALSE)
+plot_diff(m_gam_11_drop, view="day_length", comp=list(Species=c("pike", "wels")), main='Day length difference pike-wels')
+```
+![Horiz_range](/Plots/Horiz_range_II_9.png "Horiz_range")
