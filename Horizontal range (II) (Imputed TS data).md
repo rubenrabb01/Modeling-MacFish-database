@@ -7,6 +7,9 @@ This section is a follow-up to the analysis of horizontal range data where the p
   - Day length
 - Weekly temporal trends are not accounted for by in the models
 
+**IMPORTANT NOTE:**  This data using the complete time series inserts rows for missing daily values and, for each individual, replace missing values using LOCF (Last Observation Carried Forward). However,
+The imputation of missing cases for variables like _day_length_ adds values that do not correspond to the actual dates matching rows of this variable. For example, if 1-Jun corresponds a day_length 0f 14 and there are missing dates after this, next days to 1-Jun could share the exact value of 4 for day_length but not from a specific date in which day_length should be higher and the added value continues to be 14.
+
 ## 1. Classification of variables using Random Forest
 
 With the inclusion of new variables we want to classify them based on their importance for which we use a ML recursive partitioning method such as Random Forest. The aims are:
