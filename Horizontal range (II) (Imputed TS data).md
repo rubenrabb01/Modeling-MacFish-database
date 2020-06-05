@@ -1,4 +1,4 @@
-# Analysis of range of distances for horizontal movement using impu (II)
+# Analysis of range of distances for horizontal movement using imputed data (II)
 
 This section is a follow-up to the analysis of horizontal range data where the process for GAMM models building and selection of importance variables is about the same with minor differences regarding:
 - The definition of smooths terms and surface interactions change with the addition of new variables:
@@ -438,7 +438,7 @@ te(lunar_phase,day_length,day_temp):Specieswels      43.82333  51.91737    6.493
 :books:`library(itsadug)`
 
 ```
-gamtabs(m_gam_complete_11_drop, caption="Summary of m_gam_complete_sp2", comment=FALSE, type='html')
+gamtabs(m_gam_complete_11_drop, caption="Summary of m_gam_complete_11_drop", comment=FALSE, type='html')
 ```
 <table border=1>
 <caption align="bottom"> Summary of m_gam_complete_sp2 </caption>
