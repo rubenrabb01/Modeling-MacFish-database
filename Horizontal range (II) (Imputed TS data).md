@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`
-:books:`library(randomForestExplainer)`
-:books:`library(randomForestSRC)`
+:books:`library(randomForest)`  
+:books:`library(randomForestExplainer)`  
+:books:`library(randomForestSRC)`  
 
 ### 1.1. Set the random seed to be reproducible
 
@@ -254,6 +254,8 @@ In the following link you can view a complete report of the [Random Forest outpu
 
 ### Fit GAMM models
 
+:books:`library(mgcv)`
+
 ```
 m_gam_complete_1 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(season, Id, bs = 're') + s(seasonally, bs = "cr", k = 5, by = Species) + s(day_temp) + te(seasonally,lunar_phase,day_length,bs="ps",k=5, by = Species)+ s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
 m_gam_complete_2 <- bam(sqrt(ranged2d+1) ~ s(Species, Id, bs = 're') + s(season, Id, bs = 're') + te(lunar_phase,day_length,bs="ps",k=5, by = Species) + s(Id, bs = "re"), family = gaussian, data = data_longit_sub_complete, method = "REML")
@@ -271,9 +273,9 @@ m_gam_complete_12 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = '
 
 ### Model-selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
-:books:`library(lmtest)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
+:books:`library(lmtest)`  
 
 ```
 Cand.mod <- list(m_gam_complete_1,m_gam_complete_2,m_gam_complete_3,m_gam_complete_4,m_gam_complete_5,m_gam_complete_6,m_gam_complete_7,m_gam_complete_8,m_gam_complete_9,m_gam_complete_10,m_gam_complete_11,m_gam_complete_12)
@@ -562,3 +564,4 @@ plot_diff2(m_gam_complete_11_drop, view=c("day_length","day_temp"), comp=list(Sp
 plot_diff(m_gam_complete_11_drop, view="day_length", comp=list(Species=c("pike", "wels")), main='Day length difference pike-wels')
 ```
 ![Horiz_range](/Plots/Horiz_range_II_imputed_8.png "Horiz_range")
+
