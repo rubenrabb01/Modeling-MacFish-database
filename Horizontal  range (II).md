@@ -13,9 +13,9 @@ With the inclusion of new variables we want to classify them based on their impo
 - Estimate which variables have more weight on average on horizontal range values
 - Rule out those variables with higher mean minimal depth (or less MSE increase) thoughout the tree forest
 
-:books:`library(randomForest)`
-:books:`library(randomForestExplainer)`
-:books:`library(randomForestSRC)`
+:books:`library(randomForest)`  
+:books:`library(randomForestExplainer)`  
+:books:`library(randomForestSRC)`  
 
 ### 1.1. Set the random seed to be reproducible
 
@@ -270,9 +270,9 @@ m_gam_12 <- bam(sqrt(ranged2d+1) ~ s(body_size) + s(Species, Id, bs = 're') + s(
 
 ### Model-selection
 
-:books:`library(MASS)`
-:books:`library(AICcmodavg)`
-:books:`library(lmtest)`
+:books:`library(MASS)`  
+:books:`library(AICcmodavg)`  
+:books:`library(lmtest)`  
 
 ```
 Cand.mod <- list(m_gam_1,m_gam_2,m_gam_3,m_gam_4,m_gam_5,m_gam_6,m_gam_7,m_gam_8,m_gam_9,m_gam_10,m_gam_11,m_gam_12)
@@ -432,7 +432,7 @@ te(lunar_phase,day_length,day_temp):Specieswels      32.06779  39.19729    6.619
 
 **Summary table**
 
-:books:`library(itsadug)`
+:books:`library(itsadug)`    
 
 ```
 gamtabs(m_gam_11_drop, caption="Summary of m_gam_11_drop", comment=FALSE, type='html')
@@ -468,7 +468,6 @@ legend('bottomleft', legend=c("with R.E.","without R.E."), col=c("black", "red")
 ![Horiz_range](/Plots/Horiz_range_II_5.png "Horiz_range")
 
 **Plot fitted model values (day length)**
-
 ```
 data_m_gam_11_drop <- visreg(m_gam_11_drop, "day_length", by = "Species", breaks = c ("pike", "pikeperch", "wels"), gg = TRUE, overlay = TRUE, jitter = TRUE, lwd = 0.5, rug = FALSE, partial = FALSE, plot = FALSE)
 plot(data_m_gam_11_drop, plot.type="rgl") + theme_bw()
@@ -476,7 +475,6 @@ plot(data_m_gam_11_drop, plot.type="rgl") + theme_bw()
 ![Horiz_range](/Plots/Horiz_range_II_6.png "Horiz_range")
 
 **Plot _day_length_ x _lunar_phase_ x _day_temp in _pike_, _pikeperch_ and _wels_**
-
 ```
 plot(m_gam_11_drop)
 ```
@@ -502,7 +500,6 @@ vis.gam(m_gam_11_drop, view=c("day_length","lunar_phase"), cond=list(Species='we
 ![Horiz_range](/Plots/Horiz_range_II_7.png "Horiz_range")
 
 **Plot summed effects surfaces of _day_length_ by _day_temp_ smooths for the three species**
-
 ```
 layout(matrix(1:6, nrow = 2))
 vis.gam(m_gam_11_drop, view=c("day_length","day_temp"), cond=list(Species='pike'), main = "pike", n.grid = 450, plot.type = "contour", color = "topo", contour.col = "black", lwd = 2)
