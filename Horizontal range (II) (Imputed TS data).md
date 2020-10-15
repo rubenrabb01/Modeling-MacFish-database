@@ -458,6 +458,8 @@ gamtabs(m_gam_complete_11_drop, caption="Summary of m_gam_complete_11_drop", com
 
 ### Plot model
 
+:books:`library(visreg)`
+
 **Plot summed effects surfaces (smooth) with and without random effects**
 ```
 par(mfrow=c(1,3), cex=1.1)
